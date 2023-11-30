@@ -40,7 +40,7 @@ export default function ConfigurationReviewView(props: Props) {
           }}
         />
 
-        <Grid container spacing={3}>
+        <Grid container spacing={5}>
           <Grid item md={8}>
             <OrderDetail />
           </Grid>

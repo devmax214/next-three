@@ -12,6 +12,7 @@ import {
   TableRow,
   TextField,
   Typography,
+  IconButton,
 } from "@mui/material";
 import { secondaryFont } from "@/theme/typography";
 import Image from "@/components/image";
@@ -19,6 +20,8 @@ import TableHead from "@mui/material/TableHead";
 import EditIcon from "@/components/icons/icon-edit";
 import React from "react";
 import CartDeleteIcon from "@/components/icons/icon-cart-delete";
+import * as styles from './styles';
+import CloseIcon from "@/components/icons/icon-close";
 
 const sizes = [
   { items: 2, label: "XS" },
@@ -38,10 +41,17 @@ const prices = [
 type Props = {};
 
 export default function OrderDetail(props: Props) {
+  const [showSummary, setShowSummary] = React.useState(true);
+
+  const handleShowSummary = () => {
+    setShowSummary(false);
+  };
+
   const renderLeft = (
     <>
       <Typography
         sx={{
+          mb: 0.5,
           fontSize: 16,
           color: "#292F3D",
           fontFamily: secondaryFont.style.fontFamily,
@@ -59,7 +69,7 @@ export default function OrderDetail(props: Props) {
         </Typography>
       </Typography>
 
-      <Stack alignItems="center" gap={2} py={2}>
+      <Stack alignItems="center" gap={2} py={3}>
         <Image src="/images/customize/front.png" sx={{ width: 144 }} />
         <Image src="/images/customize/back.png" sx={{ width: 144 }} />
       </Stack>
@@ -79,12 +89,18 @@ export default function OrderDetail(props: Props) {
         Size selection
       </Typography>
 
-      <Box component="div" sx={{ bgcolor: "#EDE9DC", p: 2 }}>
+      <Box component="div" sx={{ 
+        bgcolor: "#EDE9DC", 
+        p: 2,
+        position: 'relative',
+        display: showSummary ? 'block': 'block',
+      }}>
         <Typography
           sx={{
             fontSize: 10,
             color: "#5C6166",
             fontFamily: secondaryFont.style.fontFamily,
+            pt: 1,
           }}
         >
           Some damage may occur during the dyeing and post-production of your
@@ -93,17 +109,31 @@ export default function OrderDetail(props: Props) {
           extra garments to any sizes that require an exact quantity. Typical
           under-delivery rate is 3-5% in total.
         </Typography>
+        <IconButton
+          sx={{
+            position: "absolute",
+            right: 10,
+            top: 10,
+            width: 8,
+            height: 8,
+            p: 0,
+            cursor: "pointer",
+          }}
+          onClick={handleShowSummary}
+        >
+          <CloseIcon />
+        </IconButton>
       </Box>
 
       <Stack direction="row" gap={3} my={2}>
         <Stack direction="row" gap={1}>
           {sizes.map((size, index) => (
             <Stack key={index} alignItems="center" justifyContent="center">
-              <Typography sx={{ fontSize: 14, color: "#5C6166" }}>
+              <Typography sx={{ fontSize: 14, color: "#5C6166", fontWeight: 500 }}>
                 {size.label}
               </Typography>
 
-              <TextField size="small" type="number" defaultValue={size.items} />
+              <TextField size="small" type="number" defaultValue={size.items} sx={{ lineHeight: '1rem' }} />
             </Stack>
           ))}
         </Stack>
@@ -121,21 +151,21 @@ export default function OrderDetail(props: Props) {
   );
 
   const renderPrice = (
-    <Stack direction="row" gap={2} my={2}>
+    <Stack direction="row" gap={2} my={2.5}>
       <TableContainer sx={{ width: 1 }}>
         <Table>
           <TableHead sx={{ px: 2, py: 1 }}>
-            <TableCell sx={{ py: 1, fontSize: 12 }}>From </TableCell>
-            <TableCell sx={{ py: 1, fontSize: 12 }}>Price per item </TableCell>
+            <TableCell sx={styles.tableCell(false, false)}>From </TableCell>
+            <TableCell sx={styles.tableCell(false, false)}>Price per item </TableCell>
           </TableHead>
           <TableBody>
             {prices.map((price, index) => (
-              <TableRow key={index} sx={{ borderTop: "1px solid #EDE9DC" }}>
-                <TableCell sx={{ py: 1, fontSize: 12 }}>
+              <TableRow key={index} sx={{ }}>
+                <TableCell sx={styles.tableCell(index === 0, index !== 0)}>
                   {price.items} items
                 </TableCell>
-                <TableCell sx={{ py: 1, fontSize: 12 }}>
-                  {price.price}{" "}
+                <TableCell sx={styles.tableCell(index === 0, index !== 0)}>
+                  {price.price} &euro;
                 </TableCell>
               </TableRow>
             ))}
@@ -144,8 +174,8 @@ export default function OrderDetail(props: Props) {
       </TableContainer>
 
       <Stack sx={{ flexShrink: 0, pt: 1 }}>
-        <Typography sx={{ fontSize: 12 }}>Price per item</Typography>{" "}
-        <Typography sx={{ fontSize: 14, fontWeight: 600 }}>12,50 €</Typography>
+        <Typography sx={{ fontSize: 12, height: 25 }}>Price per item</Typography>{" "}
+        <Typography sx={{ fontSize: 14, fontWeight: 600, pt: 1 }}>12,50 &euro;</Typography>
       </Stack>
     </Stack>
   );
@@ -154,11 +184,11 @@ export default function OrderDetail(props: Props) {
     <>
       <Stack alignItems="end" py={2}>
         <Stack>
-          <Typography sx={{ fontSize: 12, color: "#292F3D", fontWeight: 500 }}>
+          <Typography sx={{ fontSize: 12, color: "#292F3D", fontWeight: 500, pb: 1 }}>
             Subtotal
           </Typography>
           <Typography sx={{ fontSize: 14, color: "#292F3D", fontWeight: 600 }}>
-            204,50 €
+            204,50 &euro;
           </Typography>
         </Stack>
       </Stack>
@@ -167,20 +197,20 @@ export default function OrderDetail(props: Props) {
 
       <Stack direction="row" gap={4} py={1}>
         <Stack>
-          <Typography sx={{ fontSize: 12, color: "#ACB1B8" }}>
+          <Typography sx={{ fontSize: 11, color: "#ACB1B8", fontWeight: 500, px: 2 }}>
             Total weight
           </Typography>
-          <Typography sx={{ fontSize: 12, color: "#5C6166" }}>
+          <Typography sx={{ fontSize: 12, color: "#5C6166", fontWeight: 500, px: 2 }}>
             2.7 kg
           </Typography>
         </Stack>
 
         <Stack>
-          <Typography sx={{ fontSize: 12, color: "#ACB1B8" }}>
-            Total weight
+          <Typography sx={{ fontSize: 11, color: "#ACB1B8", fontWeight: 500, px: 2 }}>
+            Load time
           </Typography>
-          <Typography sx={{ fontSize: 12, color: "#5C6166" }}>
-            2.7 kg
+          <Typography sx={{ fontSize: 12, color: "#5C6166", fontWeight: 500, px: 2 }}>
+            top 2-4 weeks
           </Typography>
         </Stack>
       </Stack>
@@ -188,16 +218,16 @@ export default function OrderDetail(props: Props) {
   );
 
   return (
-    <Card sx={{ bgcolor: "#ffffff", p: 4 }}>
+    <Card sx={{ ...styles.card, width: 730 }}>
       <Grid container spacing={2}>
         <Grid item md={5}>
           {renderLeft}
 
-          <Divider sx={{ borderColor: "#ACB1B8", borderWidth: 1.5 }} />
+          <Divider sx={{ borderColor: "#ACB1B8", borderWidth: 1 }} />
 
           <Stack direction="row" justifyContent="space-between">
             <Button
-              sx={{ fontSize: 12, color: "#F05A4A" }}
+              sx={{ fontSize: 12, color: "#F05A4A", fontWeight: 500 }}
               startIcon={
                 <CartDeleteIcon
                   color="#F05A4A"
@@ -209,7 +239,7 @@ export default function OrderDetail(props: Props) {
             </Button>
 
             <Button
-              sx={{ fontSize: 12 }}
+              sx={{ fontSize: 12, fontWeight: 500 }}
               startIcon={<EditIcon sx={{ width: 13.4, height: 16 }} />}
             >
               Edit
@@ -221,7 +251,7 @@ export default function OrderDetail(props: Props) {
 
           {renderPrice}
 
-          <Divider sx={{ borderColor: "#ACB1B8", borderWidth: 1.5 }} />
+          <Divider sx={{ borderColor: "#ACB1B8", borderWidth: 1 }} />
 
           {renderOther}
         </Grid>
