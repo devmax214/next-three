@@ -9,6 +9,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
+import { useFrame } from "@react-three/fiber";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -106,10 +107,11 @@ export default function Model(props: JSX.IntrinsicElements["group"]) {
 
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
-  const [texture, setTexture] = useState(loader.load(customize.embellishment.file)) as any;
+  const [texture, setTexture] = useState(new THREE.Texture()) as any;
 
   useEffect(() => {
-    setTexture(loader.load(customize.embellishment.file));
+    if (customize.embellishment.file)
+      setTexture(loader.load(customize.embellishment.file));
   }, [customize.embellishment.file]);
 
   useEffect(() => {
@@ -196,6 +198,12 @@ export default function Model(props: JSX.IntrinsicElements["group"]) {
   useEffect(() => {
     setCords(customize.cord);
   }, [customize.cord])
+
+  useFrame(state => {
+    if (customize.tag.visible) {
+      state.camera.position.set(0, 0, 2.5);
+    }
+  })
 
   return (
     <group {...props} dispose={null}>

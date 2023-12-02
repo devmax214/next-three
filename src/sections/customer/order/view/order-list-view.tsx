@@ -28,7 +28,6 @@ export default function OrderListView({ orders }: Props) {
   const router = useRouter();
 
   const table = useTable({ defaultOrderBy: "id" });
-  console.log(orders)
 
   return (
     <>
@@ -60,6 +59,7 @@ export default function OrderListView({ orders }: Props) {
                 <OrderTableRow
                   key={index}
                   index={index}
+                  no={table.page * table.rowsPerPage + index + 1}
                   row={t}
                   onTrackingRow={() =>
                     router.push(PATH_SHOP.customer.order.track("orderId"))

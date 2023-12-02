@@ -23,12 +23,12 @@ export default function Section1({ mode = "colored" }: Props) {
               item
               xs={12}
               md={6}
-              // sx={{
-              //   display: "flex",
-              //   flexDirection: "column",
-              //   alignItems: "center",
-              //   justifyContent: "center",
-              // }}
+            // sx={{
+            //   display: "flex",
+            //   flexDirection: "column",
+            //   alignItems: "center",
+            //   justifyContent: "center",
+            // }}
             >
               <Typography
                 sx={{

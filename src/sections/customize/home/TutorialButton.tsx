@@ -48,6 +48,9 @@ export default function TutorialButton(props: Props) {
             url="https://www.youtube.com/watch?v=oUFJJNQGwhk"
             width="100%"
             height="100%"
+            style={{
+              borderRadius: 10
+            }}
           />
         </Wrapper>
       </Modal>

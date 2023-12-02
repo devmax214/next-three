@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
+import { useFrame } from "@react-three/fiber";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -72,10 +73,11 @@ export default function OversizeManModel(props: JSX.IntrinsicElements["group"]) 
 
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
-  const [texture, setTexture] = useState(loader.load(customize.embellishment.file)) as any;
+  const [texture, setTexture] = useState(new THREE.Texture()) as any;
 
   useEffect(() => {
-    setTexture(loader.load(customize.embellishment.file));
+    if (customize.embellishment.file)
+      setTexture(loader.load(customize.embellishment.file));
   }, [customize.embellishment.file]);
 
   useEffect(() => {
@@ -134,6 +136,12 @@ export default function OversizeManModel(props: JSX.IntrinsicElements["group"]) 
       setTagName(`print-label_${customize.tag.color ? "black" : "white"}`);
     }
   }, [customize.tag])
+
+  useFrame(state => {
+    if (customize.tag.visible) {
+      state.camera.position.set(0, 0, 2.5);
+    }
+  })
 
   return (
     <group {...props} dispose={null}>

@@ -119,5 +119,6 @@ export const PATH_CONFIGURATOR = {
   shippingPolicy: "/shipping-policy",
   contact: "/contact",
   checkout: "/checkout",
-  quote: "/quote"
+  quote: "/quote",
+  order: "/order"
 };

@@ -10,7 +10,8 @@ type ICustomizeTagItem = {
   edit: boolean,
   neck: boolean,
   color: boolean,
-  size: string
+  size: string,
+  file: any
 };
 
 type IEmbellishmentItem = {
@@ -55,6 +56,7 @@ export type CustomizeContextProps = ICustomizeQuoteItem & {
   onTagColorChange: () => void;
   onTagSizeChange: (size: string) => void;
   onTagEditVisible: () => void;
+  onTagSelectFile: (file: any) => void;
   onEmbelEditVisible: () => void;
   onEmbelSelectType: (type: string) => void;
   onEmbelSelectSize: (size: number) => void;
@@ -65,7 +67,7 @@ export type CustomizeContextProps = ICustomizeQuoteItem & {
   onEmbelChangePosition: (position: any) => void;
   onEmbelChangeReqText: (value: string) => void;
   onEmbelChangeTextureText: (value: string) => void;
-  onEmbelChnageFont: (value: string) => void;
+  onEmbelChangeFont: (value: string) => void;
   onCordTypeChange: (value: string) => void;
   onCordTipChange: (value: string) => void;
   onCareLabelChange: (value: number) => void;

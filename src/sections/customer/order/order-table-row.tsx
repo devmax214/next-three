@@ -14,9 +14,9 @@ import { secondaryFont } from "@/theme/typography";
 import ListItemText from "@mui/material/ListItemText";
 import { format } from "date-fns";
 
-type Props = { index: number; row: IOrderItem; onTrackingRow: VoidFunction };
+type Props = { no: number, index: number; row: IOrderItem; onTrackingRow: VoidFunction };
 
-export default function OrderTableRow({ index, row, onTrackingRow }: Props) {
+export default function OrderTableRow({ no, index, row, onTrackingRow }: Props) {
   const { _id, createdAt, status } = row;
 
   const renderReview = (
@@ -100,7 +100,7 @@ export default function OrderTableRow({ index, row, onTrackingRow }: Props) {
 
   return (
     <TableRow sx={{ bgcolor: index % 2 === 0 ? "transparent" : "#EDE9DC" }}>
-      <TableCell>{index + 1}</TableCell>
+      <TableCell>{no}</TableCell>
 
       <TableCell>
         <Typography

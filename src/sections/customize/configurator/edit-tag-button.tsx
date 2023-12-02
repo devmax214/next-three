@@ -101,6 +101,14 @@ export default function EditTagButton(props: Props) {
     }
   }
 
+  const fileSelect = (ev: any) => {
+    if (ev.target.files && ev.target.files.length > 0) {
+      var userImage = ev.target.files[0];
+      var userImageURL = URL.createObjectURL(userImage);
+      context.onTagSelectFile(userImageURL);
+    }
+  }
+
   const renderLabel = (
     <Stack>
       <Stack sx={{ mb: 1, mt: 1 }} direction="row" alignItems="center">
@@ -315,7 +323,7 @@ export default function EditTagButton(props: Props) {
       <StyledHeader1>Artwork</StyledHeader1>
 
       <StyledHeader2>File</StyledHeader2>
-      <input type="file" />
+      <input type="file" onChange={fileSelect} />
     </Stack>
   );
 

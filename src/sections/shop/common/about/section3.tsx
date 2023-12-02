@@ -4,7 +4,6 @@ import { m } from "framer-motion";
 import React from "react";
 import Icon5 from "@/components/icons/home/icon5";
 import { secondaryFont } from "@/theme/typography";
-import Image from "@/components/image/image";
 
 type Props = { mode?: "colored" | "dark" };
 
@@ -173,7 +172,7 @@ export default function Section3({ mode = "colored" }: Props) {
             <Grid xs={12} md={6}>
               <Box
                 component={m.img}
-                src="/images/about2.png"
+                src="/images/about2.jpg"
                 variants={varFade().in}
                 sx={{
                   height: 1,

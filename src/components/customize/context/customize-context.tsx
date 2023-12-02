@@ -24,7 +24,8 @@ const initialState = {
     edit: true,
     neck: true,
     color: true,
-    size: "45x45"
+    size: "45x45",
+    file: null
   },
   embellishment: {
     visible: false,
@@ -125,6 +126,16 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
       }))
     }, [values.tag.visible]
   )
+
+  const onTagSelectFile = useCallback((file: any) => {
+    setValues((prevStatus: any) => ({
+      ...prevStatus,
+      tag: {
+        ...prevStatus.tag,
+        file: file
+      }
+    }))
+  }, [values.embellishment.file]);
 
   //Embellishement props
   const onEmbelEditVisible = useCallback(() => {
@@ -274,6 +285,7 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
       onTagColorChange,
       onTagSizeChange,
       onTagEditVisible,
+      onTagSelectFile,
       onEmbelEditVisible,
       onEmbelSelectType,
       onEmbelSelectSize,

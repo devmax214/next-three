@@ -4,6 +4,7 @@ import { Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
 import { isEmpty } from "lodash";
+import { useFrame } from "@react-three/fiber";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -59,39 +60,32 @@ type ContextType = Record<
 
 export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
   const customize = useCustomizeContext();
-  const groupRef = useRef();
 
   const [tagName, setTagName] = useState("");
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
-  const [texture, setTexture] = useState(loader.load(customize.embellishment.file)) as any;
+  const [texture, setTexture] = useState(new THREE.Texture()) as any;
+  const [tagTexture, setTagTexture] = useState(undefined) as any;
 
   useEffect(() => {
-    setTexture(loader.load(customize.embellishment.file));
+    if (customize.embellishment.file)
+      setTexture(loader.load(customize.embellishment.file));
   }, [customize.embellishment.file]);
 
   useEffect(() => {
-    if (customize.tag.visible) {
-    } else if (customize.embellishment.visible) {
-      if (customize.embellishment.view) {
-
-      } else {
-
-      }
-    } else {
-
-    };
-  }, [customize.tag.visible, customize.embellishment.visible, customize.embellishment.view]);
+    if (customize.tag.file)
+      setTagTexture(loader.load(customize.tag.file));
+  }, [customize.tag.file])
 
   useEffect(() => {
     var textCanvas = document.createElement("canvas");
     textCanvas.width = 200;
     textCanvas.height = 100;
     var ctx = textCanvas.getContext("2d");
-    if (ctx !== null) {
+    if (ctx !== null && customize.embellishment.font) {
       ctx.fillStyle = "black";
       ctx.font = `30px ${customize.embellishment.font}`;
-      ctx.fillText(customize.embellishment.textureText, 10, 50);
+      ctx.fillText(customize.embellishment.textureText, 0, 100);
       const myTexture = new THREE.CanvasTexture(textCanvas);
       setTexture(myTexture)
     }
@@ -121,8 +115,21 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
         return (
           <group dispose={null}>
             {keys.map((key: string, idx: number) => (
-              <mesh name={`pattern_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
-            ))}
+              idx === 0 ? (
+                <mesh name={`pattern_${idx}`} geometry={nodes[key].geometry} material={material} key={key}>
+                  {/* <Decal
+                    position={[0, 1.31, 0.15]}
+                    rotation={[0, 0, 0]}
+                    scale={0.25}
+                    map={tagTexture}
+                  // debug={true}
+                  // depthTest={true}
+                  // map-anisotropy={16}
+                  /> */}
+                </mesh>
+              ) : (
+                <mesh name={`pattern_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
+              )))}
           </group>
         )
       } else {
@@ -142,8 +149,14 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
     }
   }, [customize.tag])
 
+  useFrame(state => {
+    if (customize.tag.visible) {
+      state.camera.position.set(0, 0, 2.5);
+    }
+  })
+
   return (
-    <group ref={groupRef} position={[0, 0, 0]} {...props} dispose={null}>
+    <group position={[0, 0, 0]} {...props} dispose={null}>
       <mesh geometry={nodes.StitchMatShape_23735_Node.geometry} material={materials['Material3180.002']}>
         {customize.tag.edit ? tag() : ""}
       </mesh>

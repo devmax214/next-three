@@ -1,4 +1,5 @@
-import { useContext, useState, useEffect, useRef, Ref } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
+import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { Center, Environment, OrbitControls } from "@react-three/drei";
 import { TShartMan, HoodyMan, PantMan, ShortMan, SWEATMAN, OversizeMan } from "@/sections/customize/configurator/models";
@@ -11,15 +12,14 @@ type Props = {
 export default function ConfigurationCanvas(props: Props) {
   const customize = useContext(CustomizeContext);
   const [state, setState] = useState({});
-  const canvasRef = useRef();
 
   useEffect(() => {
     if (customize.tag.visible) {
       setState({
-        scale: [5, 5, 5],
+        scale: [10, 10, 10],
         bottom: true,
-        position: [0, 0.4, 0.4],
-        rotation: [0, 0, 0]
+        position: [-0.02, 0.4, 0.4],
+        rotation: [0.1, 0, 0]
       })
     } else if (customize.embellishment.visible) {
       if (customize.embellishment.view) {
@@ -37,10 +37,10 @@ export default function ConfigurationCanvas(props: Props) {
       setState({});
     };
   }, [customize.tag.visible, customize.embellishment.visible, customize.embellishment.view]);
+
   return (
     <Canvas
       shadows
-      ref={canvasRef}
       gl={{ preserveDrawingBuffer: true }}
       camera={{ position: [0, 0, 2.5], fov: 25 }}
       style={{ height: 600, background: "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)", borderRadius: 20 }}
@@ -49,7 +49,7 @@ export default function ConfigurationCanvas(props: Props) {
 
       <Environment files="/models/potsdamer_platz_1k.hdr" />
 
-      <Center {...state}>
+      <Center {...state} >
         {props.type === 'hoodies' ?
           <HoodyMan /> : props.type === 'pants' ?
             <PantMan /> : props.type === 'shorts' ?

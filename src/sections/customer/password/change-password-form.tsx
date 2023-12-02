@@ -6,6 +6,7 @@ import {
   Link,
   Stack,
   Typography,
+  Alert
 } from "@mui/material";
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
@@ -18,6 +19,7 @@ import EyeShowIcon from "@/components/icons/customer/icon-eye-show";
 import EyeHideIcon from "@/components/icons/customer/icon-eye-hide";
 import { secondaryFont } from "@/theme/typography";
 import { changePassword } from "@/services/customer";
+import { signOut } from "next-auth/react";
 
 const NewPasswordSchema = Yup.object().shape({
   oldPassword: Yup.string().required("Old Password is required"),
@@ -55,9 +57,18 @@ export default function ChangePasswordForm(props: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await changePassword(data);
-    } catch (error) {}
+      const result = await changePassword(data);
+      signOut();
+    } catch (error) {
+    }
   });
+
+  const clear = () => {
+    oldPassword.onToggle();
+    password.onToggle();
+    confirmPassword.onToggle();
+    methods.reset();
+  }
 
   const renderForm = (
     <>
@@ -188,6 +199,7 @@ export default function ChangePasswordForm(props: Props) {
             variant="contained"
             size="large"
             sx={{ bgcolor: "#ACB1B8", "&:hover": { bgcolor: "#550248" } }}
+            onClick={clear}
           >
             CANCEL
           </Button>

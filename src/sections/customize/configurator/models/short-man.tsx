@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
+import { useFrame } from "@react-three/fiber";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -181,6 +182,12 @@ export default function ShortManModel(props: JSX.IntrinsicElements["group"]) {
   useEffect(() => {
     setCords(customize.cord);
   }, [customize.cord])
+
+  useFrame(state => {
+    if (customize.tag.visible) {
+      state.camera.position.set(0, 0, 2.5);
+    }
+  })
 
   return (
     <group {...props} dispose={null}>

@@ -115,6 +115,7 @@ export default function EmbellishmentButton(props: Props) {
 
   const handleChange = (event: SelectChangeEvent) => {
     setFont(event.target.value as string);
+    customize.onEmbelChangeFont(event.target.value)
   };
 
   const renderImage = (
