@@ -65,7 +65,7 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
   const [texture, setTexture] = useState(new THREE.Texture()) as any;
-  const [tagTexture, setTagTexture] = useState(undefined) as any;
+  const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
 
   useEffect(() => {
     if (customize.embellishment.file)
@@ -109,23 +109,24 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
           `/models/TSHIRTWR_man/tags/Man/${tagName}/${tagName}.glb`
         ) as any;
 
-        const keys: string[] = Object.keys(nodes);
         const material: any = materials[Object.keys(materials)[0]];
-
+        let keys: string[] = Object.keys(nodes);
+        keys = keys.filter((key) => (nodes[key].isMesh));
+        
         return (
           <group dispose={null}>
             {keys.map((key: string, idx: number) => (
-              idx === 0 ? (
+              idx === (keys.length - 1) ? (
                 <mesh name={`pattern_${idx}`} geometry={nodes[key].geometry} material={material} key={key}>
-                  {/* <Decal
-                    position={[0, 1.31, 0.15]}
+                  <Decal
+                    position={[0, 0.1, 0.1]}
                     rotation={[0, 0, 0]}
-                    scale={0.25}
+                    scale={0.5}
                     map={tagTexture}
                   // debug={true}
                   // depthTest={true}
                   // map-anisotropy={16}
-                  /> */}
+                  />
                 </mesh>
               ) : (
                 <mesh name={`pattern_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />

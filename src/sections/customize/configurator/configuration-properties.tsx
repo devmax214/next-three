@@ -166,8 +166,8 @@ export default function ConfigurationProperties(props: Props) {
       <StyledTypography>Cord type</StyledTypography>
 
       <RhfSelect onChange={changeCord} value={cord} name="cord" placeholder="Selected Color">{
-        cords.map(cord => (
-          <MenuItem value={cord.key}>{cord.color}</MenuItem>
+        cords.map((cord, i) => (
+          <MenuItem value={cord.key} key={i}>{cord.color}</MenuItem>
         ))
       }</RhfSelect>
     </Box>
@@ -178,8 +178,8 @@ export default function ConfigurationProperties(props: Props) {
       <StyledTypography>Cord tip</StyledTypography>
 
       <RhfSelect name="tip" value={cordTip} onChange={changeCordTip} placeholder="Selected Color">{
-        tips.map(tip => (
-          <MenuItem value={tip.key}>{tip.color}</MenuItem>
+        tips.map((tip, i) => (
+          <MenuItem value={tip.key} key={i}>{tip.color}</MenuItem>
         ))
       }</RhfSelect>
     </Box>
