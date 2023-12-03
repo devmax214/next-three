@@ -12,4 +12,5 @@ export type ICustomizationProduct = {
   name: string;
   coverUrl: string;
   price: number;
+  images: string[];
 };

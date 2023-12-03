@@ -6,7 +6,8 @@ import { TShartMan, HoodyMan, PantMan, ShortMan, SWEATMAN, OversizeMan } from "@
 import { CustomizeContext } from '@/components/customize/context/customize-context';
 
 type Props = {
-  type: string
+  type: string;
+  id: string;
 };
 
 export default function ConfigurationCanvas(props: Props) {
@@ -40,6 +41,7 @@ export default function ConfigurationCanvas(props: Props) {
 
   return (
     <Canvas
+      id={props.id}
       shadows
       gl={{ preserveDrawingBuffer: true }}
       camera={{ position: [0, 0, 2.5], fov: 25 }}
@@ -50,11 +52,11 @@ export default function ConfigurationCanvas(props: Props) {
       <Environment files="/models/potsdamer_platz_1k.hdr" />
 
       <Center {...state} >
-        {props.type === 'hoodies' ?
-          <HoodyMan /> : props.type === 'pants' ?
-            <PantMan /> : props.type === 'shorts' ?
-              <ShortMan /> : props.type === 'sweatshirts' ?
-                <SWEATMAN /> : props.type === 'tshirts' ?
+        {props.type === 'Hoodies' ?
+          <HoodyMan /> : props.type === 'Pants' ?
+            <PantMan /> : props.type === 'Shorts' ?
+              <ShortMan /> : props.type === 'Sweatshirts' ?
+                <SWEATMAN /> : props.type === 'T-Shirts' ?
                   <TShartMan /> : <OversizeMan />}
 
       </Center>

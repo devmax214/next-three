@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormProvider, { RHFTextField } from "@/components/hook-form";
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
@@ -7,6 +8,10 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { styled } from "@mui/material/styles";
 import { secondaryFont } from "@/theme/typography";
 import { addAddress } from "@/services/customer";
+import { PATH_SHOP } from "@/routers/path";
+import { countries } from "@/@mockup/country";
+import Iconify from "@/components/iconify";
+import { RHFAutocomplete } from "@/components/hook-form";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: "14px",
@@ -31,16 +36,17 @@ const AddressSchema = Yup.object().shape({
 type Props = {};
 
 export default function AddressForm(props: Props) {
+  const { push } = useRouter();
   const defaultValues = {
-    firstname: "Alexander",
-    lastname: "Feduleev",
-    company: "VR360",
-    country: "Russia",
-    address: "Moscow",
-    apartment: "Moscow",
-    city: "Moscow",
-    postal: "3434333",
-    phone: "79689232430",
+    firstname: "",
+    lastname: "",
+    company: "",
+    country: "",
+    address: "",
+    apartment: "",
+    city: "",
+    postal: "",
+    phone: "",
   };
 
   const methods = useForm({
@@ -57,7 +63,8 @@ export default function AddressForm(props: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       await addAddress(data);
-    } catch (error) {}
+      push(PATH_SHOP.customer.address.list);
+    } catch (error) { }
   });
 
   const renderForm = (
@@ -118,6 +125,34 @@ export default function AddressForm(props: Props) {
           <Box>
             <StyledTypography>Phone</StyledTypography>
             <RHFTextField name="phone" size="small" />
+            {/* <RHFAutocomplete
+              name="phone"
+              placeholder="Select Country"
+              options={countries.map((country) => country.phone)}
+              getOptionLabel={(option) => option}
+              renderOption={(props, option) => {
+                const { code, label, phone } = countries.filter(
+                  (country) => country.phone === option
+                )[0];
+
+                if (!label) {
+                  return null;
+                }
+
+                return (
+                  <li {...props} key={label}>
+                    <Iconify
+                      key={label}
+                      icon={`circle-flags:${code.toLowerCase()}`}
+                      width={28}
+                      sx={{ mr: 1 }}
+                    />
+                    {phone}
+                  </li>
+                );
+              }}
+            /> */}
+
           </Box>
         </Grid>
       </Grid>
@@ -152,6 +187,9 @@ export default function AddressForm(props: Props) {
             width: 200,
             bgcolor: "#ACB1B8",
             "&:hover": { bgcolor: "#550248" },
+          }}
+          onClick={() => {
+            push(PATH_SHOP.customer.address.list);
           }}
         >
           CANCEL

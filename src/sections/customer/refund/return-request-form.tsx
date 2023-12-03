@@ -9,12 +9,12 @@ type Props = {};
 
 export default function ReturnRequestForm(props: Props) {
   const renderHead = (
-    <Stack gap={1}>
+    <Stack gap={2}>
       <Typography
         sx={{
           fontSize: 16,
           fontWeight: 500,
-          color: "#000",
+          color: "#292F3D",
           fontFamily: secondaryFont.style.fontFamily,
         }}
       >
@@ -35,7 +35,7 @@ export default function ReturnRequestForm(props: Props) {
   );
 
   const renderForm = (
-    <Stack gap={2}>
+    <Stack gap={2.5}>
       <RHFTextField name="order number" placeholder="Your order number" />
 
       <RHFTextField name="email" placeholder="Your email" />
@@ -55,7 +55,7 @@ export default function ReturnRequestForm(props: Props) {
           component={RouterLink}
           href={PATH_SHOP.forgot}
           underline="always"
-          sx={{ color: "#858585", textDecoration: "none", pl: 1 }}
+          sx={{ color: "#F05A4A", textDecoration: "none", pl: 1 }}
         >
           click here
         </Link>
@@ -71,21 +71,31 @@ export default function ReturnRequestForm(props: Props) {
         size="large"
         sx={{
           width: 300,
-          bgcolor: "#000000",
+          bgcolor: "#292F3D",
           color: "#fff",
           "&:hover": {
-            color: "#000000",
-            bgcolor: "#E6E6E6",
+            bgcolor: "#550248",
           },
         }}
       >
-        SEND REQUEST TO SUPPORT
+        <Typography
+          sx={{
+            fontSize: 16,
+            fontWeight: 500,
+            color: "#ffffff",
+            lineHeight: "normal",
+            fontFamily: secondaryFont.style.fontFamily,
+          }}
+        >
+          SEND REQUEST TO SUPPORT
+        </Typography>
       </Button>
+
     </Stack>
   );
 
   return (
-    <Stack gap={4} sx={{ width: "70%" }}>
+    <Stack gap={4} sx={{ width: 400 }}>
       {renderHead}
 
       {renderForm}

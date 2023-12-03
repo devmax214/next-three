@@ -100,8 +100,7 @@ export default function EmbellishmentButton(props: Props) {
   const fileSelect = (ev: any) => {
     if (ev.target.files && ev.target.files.length > 0) {
       var userImage = ev.target.files[0];
-      var userImageURL = URL.createObjectURL(userImage);
-      customize.onEmbelSelectFile(userImageURL);
+      customize.onEmbelSelectFile(userImage);
     }
   }
 

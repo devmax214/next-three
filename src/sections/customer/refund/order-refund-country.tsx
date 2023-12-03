@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Link, Stack, Typography } from "@mui/material";
 import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
 import { PATH_SHOP } from "@/routers/path";
 import { secondaryFont } from "@/theme/typography";
@@ -15,7 +15,7 @@ export default function OrderRefundFirst({ onNext }: Props) {
       <Box
         component="div"
         sx={{
-          bgcolor: "#fff",
+          bgcolor: "#F9F5EE",
           position: "relative",
         }}
       >
@@ -25,7 +25,6 @@ export default function OrderRefundFirst({ onNext }: Props) {
           }}
         >
           <CustomBreadCrumbs
-            mode="dark"
             heading="ORDER REFUND/REPLACEMENT"
             links={[
               {
@@ -43,14 +42,14 @@ export default function OrderRefundFirst({ onNext }: Props) {
             }}
           />
 
-          <Grid container spacing={4}>
+          <Grid container spacing={15}>
             <Grid item md={6}>
-              <Stack gap={4}>
+              <Stack gap={5}>
                 <Typography
                   sx={{
                     fontSize: 16,
                     fontWeight: 500,
-                    color: "#000",
+                    color: "#292F3D",
                     fontFamily: secondaryFont.style.fontFamily,
                   }}
                 >
@@ -61,6 +60,7 @@ export default function OrderRefundFirst({ onNext }: Props) {
                 <RHFAutocomplete
                   name="country"
                   placeholder="Select Country"
+                  sx={{ width: '50%' }}
                   options={countries.map((country) => country.label)}
                   getOptionLabel={(option) => option}
                   renderOption={(props, option) => {
@@ -109,7 +109,9 @@ export default function OrderRefundFirst({ onNext }: Props) {
                     You'll receive a confirmation email once your order is
                     placed, followed by a second email containing your tracking
                     information once your order has been shipped from our
-                    warehouse. Gift Card purchases don't count towards the free
+                    warehouse.
+
+                    Gift Card purchases don't count towards the free
                     shipping threshold.
                   </Typography>
                 </Stack>
@@ -178,6 +180,17 @@ export default function OrderRefundFirst({ onNext }: Props) {
                     your order number (e.g. #CS123456), the email used when
                     placing the order and your zip code ready.
                   </Typography>
+
+                  <Link
+                    href="https://www.google.com"
+                    underline="none"
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 500,
+                      color: '#F05A4A',
+                      fontFamily: secondaryFont.style.fontFamily
+                    }}
+                  >Return Portal</Link>
                 </Stack>
               </Stack>
             </Grid>
@@ -189,16 +202,25 @@ export default function OrderRefundFirst({ onNext }: Props) {
               size="large"
               sx={{
                 width: 242,
-                bgcolor: "#000000",
+                bgcolor: "#292F3D",
                 color: "#fff",
                 "&:hover": {
-                  color: "#000000",
-                  bgcolor: "#E6E6E6",
+                  bgcolor: "#550248",
                 },
               }}
               onClick={onNext}
             >
-              START REPLACEMENT
+              <Typography
+                sx={{
+                  fontSize: 16,
+                  fontWeight: 500,
+                  color: "#ffffff",
+                  lineHeight: "normal",
+                  fontFamily: secondaryFont.style.fontFamily,
+                }}
+              >
+                START REPLACEMENT
+              </Typography>
             </Button>
           </Stack>
         </Container>

@@ -108,10 +108,16 @@ export default function Model(props: JSX.IntrinsicElements["group"]) {
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
   const [texture, setTexture] = useState(new THREE.Texture()) as any;
+  const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
+
+  useEffect(() => {
+    if (customize.tag.file)
+      setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
+  }, [customize.tag.file])
 
   useEffect(() => {
     if (customize.embellishment.file)
-      setTexture(loader.load(customize.embellishment.file));
+      setTexture(loader.load(URL.createObjectURL(customize.embellishment.file)));
   }, [customize.embellishment.file]);
 
   useEffect(() => {
@@ -147,14 +153,27 @@ export default function Model(props: JSX.IntrinsicElements["group"]) {
           `/models/Hoody/tags/Man/${tagName}/${tagName}.glb`
         ) as any;
 
-        const keys: string[] = Object.keys(nodes);
         const material: any = materials[Object.keys(materials)[0]];
+        let keys: string[] = Object.keys(nodes);
+        keys = keys.filter((key) => (nodes[key].isMesh));
 
         return (
-          <group {...props} dispose={null}>
+          <group dispose={null}>
             {keys.map((key: string, idx: number) => (
-              <mesh name={`pattern_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
-            ))}
+              idx === 0 ? (
+                <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key}>
+                  <Decal
+                    position={[0, 1.614, -0.085]}
+                    rotation={[0, 0, 0]}
+                    scale={0.02}
+                    map={tagTexture}
+                    // debug={true}
+                    depthTest={true}
+                  />
+                </mesh>
+              ) : (
+                <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
+              )))}
           </group>
         )
       } else {
@@ -163,7 +182,7 @@ export default function Model(props: JSX.IntrinsicElements["group"]) {
     } catch (err) {
       console.log(err)
     }
-  }, [tagName])
+  }, [tagName, tagTexture])
 
   const cord = useCallback(() => {
     try {
@@ -206,7 +225,7 @@ export default function Model(props: JSX.IntrinsicElements["group"]) {
   })
 
   return (
-    <group {...props} dispose={null}>
+    <group position={[0, 0, 0]} {...props} dispose={null}>
       <mesh geometry={nodes.StitchMatShape_18533_Node.geometry} material={materials['Material3319.003']}>
         {customize.tag.edit ? tag() : ""}
       </mesh>

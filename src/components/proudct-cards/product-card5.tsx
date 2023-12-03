@@ -55,7 +55,7 @@ export default function ProductCard5({ product }: Props) {
   // const { id, name, coverUrl } = product;
 
   const id = "sksa3-asd-asdfa";
-  const coverUrl = product.coverUrl;
+  const coverUrl = `/uploads/${product.images[0]}`;
   const name = product.name;
 
   const linkTo = PATH_CONFIGURATOR.product.edit(id);

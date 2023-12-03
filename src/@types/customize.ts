@@ -49,6 +49,20 @@ export interface ICustomizeQuoteItem {
   washing: IWashingInstructionTagItem;
 }
 
+export interface ICustomizeItem {
+  name: string;
+  // images: string[];
+  // sizes: string[];
+  customer: string;
+  // color: string[];
+  material: string;
+  code: string;
+  price: number;
+  category: string;
+  publish: string;
+  // gender: string[]
+}
+
 export type CustomizeContextProps = ICustomizeQuoteItem & {
   onColorChange: (itemId: string) => void;
   onTagEditChange: () => void;

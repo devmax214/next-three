@@ -1,7 +1,7 @@
 import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
 import { PATH_CONFIGURATOR } from "@/routers/path";
-import React from "react";
-import { Box, Container, Grid, Button, Modal } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Container, Grid, Button, Modal, Stack, Card, IconButton, TextField } from "@mui/material";
 import VideoIcon from "@/components/icons/icon-video";
 import ConfigurationCanvas from "../configuration-canvas";
 import ConfigurationProperties from "@/sections/customize/configurator/configuration-properties";
@@ -9,14 +9,21 @@ import { CustomizeProvider } from "@/components/customize/context";
 import { useBoolean } from "@/hooks";
 import ReactPlayer from "react-player";
 import { styled } from "@mui/material/styles";
-
+import axios from "axios";
+import { endpoints } from "../../../../../global-config";
+import { uploadImage } from "@/services/upload";
+import { useCustomizeContext } from "@/components/customize/context";
+import LoadingButton from "@mui/lab/LoadingButton";
+import Iconify from "@/components/iconify";
+import { RHFTextField } from "@/components/hook-form";
+import Image from "@/components/image";
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
   left: "50%",
   top: "50%",
   width: "100%",
-  maxWidth: 900,
+  maxWidth: 1057,
   height: 557,
   transform: "translate(-50%, -50%)",
   zIndex: 99999,
@@ -39,7 +46,8 @@ type Props = {
 
 export default function ConfigurationView(props: Props) {
   const open = useBoolean();
-  const name = props.type === "tshirts" ? "T-Shirt" : props.type === 'hoodies' ? "Hoodie" : props.type === "pants" ? "Pant" : props.type === 'shorts' ? "Short" : props.type === 'oversize' ? "Oversized" : "Sweat-Shirt";
+  // const name = props.type === "T-Shirt" ? "T-Shirt" : props.type === 'Hoodies' ? "Hoodie" : props.type === "Pants" ? "Pant" : props.type === 'Shorts' ? "Short" : props.type === 'Oversize' ? "Oversized" : "Sweat-Shirt";
+  const name = props.type;
 
   return (
     <>
@@ -77,7 +85,7 @@ export default function ConfigurationView(props: Props) {
 
             <Grid container sx={{ pl: 2 }} spacing={6}>
               <Grid item md={8} xs={12}>
-                <ConfigurationCanvas {...props} />
+                <ConfigurationCanvas {...props} id="myCanvas" />
                 <Box
                   component={"div"}
                   sx={{
@@ -98,16 +106,7 @@ export default function ConfigurationView(props: Props) {
                     <VideoIcon width={16} height={11} sx={{ marginRight: '9px' }} /> Watch tutorials
                   </Button>
 
-                  <Button
-                    variant="contained"
-                    sx={{
-                      width: 210,
-                      bgcolor: "#292F3D",
-                      "&:hover": { bgcolor: "#550248" },
-                    }}
-                  >
-                    Save Customization
-                  </Button>
+                  <SaveButton {...props} />
 
                   <Modal open={open.value}>
                     <Wrapper>
@@ -144,4 +143,110 @@ export default function ConfigurationView(props: Props) {
       </CustomizeProvider >
     </>
   );
+}
+
+const SaveButton = (props: any) => {
+  const context = useCustomizeContext();
+  const cart = useBoolean();
+  const [image, setImage] = useState();
+  const [name, setName] = useState('');
+
+  const save = async () => {
+    var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
+    if (canvas) {
+      var imageData = canvas.toDataURL();
+      const res = await uploadImage(imageData);
+      const images = [];
+      images.push(res.data.path);
+      // if (context.embellishment.file) {
+      //   console.log(JSON.stringify(context.embellishment.file))
+      //   const res = await uploadImage(JSON.stringify({ image: context.embellishment.file }));
+      //   images.push(res.data.path);
+      // }
+      // if (context.tag.file) {
+      //   const res = await uploadImage(context.tag.file);
+      //   images.push(res.data.path);
+      // }
+      // console.log(images)
+      const data = {
+        images: images,
+        name: name,
+        price: Number((40 - Math.random() * 20).toFixed(0)),
+        code: '123'
+      }
+      await axios.post(endpoints.customize.list, data);
+      cart.onFalse();
+    }
+  }
+
+  const openModal = () => {
+    cart.onTrue();
+    var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
+    if (canvas) {
+      var imageData = canvas.toDataURL();
+      setImage(imageData);
+    }
+  }
+
+  const renderModal = (
+    <>
+      <Modal open={cart.value}>
+        <Wrapper>
+          <Stack alignItems="end">
+            <IconButton
+              onClick={() => {
+                cart.onFalse();
+              }}
+            >
+              <Iconify
+                icon="material-symbols:close"
+                width={{ xs: 20, md: 36 }}
+                color="#ffffff"
+              />
+            </IconButton>
+          </Stack>
+          <Card sx={{ px: 4, py: 6 }}>
+            <Grid container>
+              <Grid item md={8}>
+                <Box component={"div"} sx={{ height: 484, width: 620, background: "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)", borderRadius: 5 }}>
+                  <Image
+                    src={image}
+                    sx={{ width: 1 }}
+                  />
+                </Box>
+              </Grid>
+              <Grid item md={4} mt={3}>
+                <Stack gap={3}>
+                  {/* <RHFTextField name="name" placeholder="Product name" /> */}
+                  <TextField value={name} onChange={e => setName(e.target.value)} name="name" placeholder="Product name" size="small" />
+
+                  <LoadingButton fullWidth variant="contained" onClick={save}>
+                    SAVE
+                  </LoadingButton>
+                </Stack>
+              </Grid>
+            </Grid>
+          </Card>
+        </Wrapper>
+      </Modal>
+    </>
+  );
+
+  return (
+    <>
+      <Button
+        variant="contained"
+        sx={{
+          width: 210,
+          bgcolor: "#292F3D",
+          "&:hover": { bgcolor: "#550248" },
+        }}
+        onClick={openModal}
+      >
+        Save Customization
+      </Button>
+
+      {renderModal}
+    </>
+  )
 }

@@ -10,6 +10,7 @@ type Props = {
 };
 
 export default function GalleryListView({ galleries }: Props) {
+
   return (
     <>
       <Box

@@ -16,7 +16,11 @@ export default function RequestQuotePage(props: Props) {
         <title> Request Quote | WonderRaw</title>
       </Head>
 
-      <RequestQuoteView />
+      <RequestQuoteView {...props} />
     </>
   );
+}
+
+RequestQuotePage.getInitialProps = (query: any) => {
+  return query;
 }

@@ -31,7 +31,7 @@ export default function AddressListView({ addresses }: Props) {
           Your addresses
         </Typography>
 
-        <Divider />
+        <Divider sx={{ bgcolor: "#ACB1B8" }} />
 
         <TableContainer>
           <Table>
@@ -50,9 +50,23 @@ export default function AddressListView({ addresses }: Props) {
           href={PATH_SHOP.customer.address.create}
           variant="contained"
           size="large"
-          sx={{ width: 220 }}
+          sx={{
+            width: 220,
+            bgcolor: '#292F3D',
+            "&:hover": { bgcolor: "#550248" },
+          }}
         >
-          Add new address
+          <Typography
+            sx={{
+              fontSize: 16,
+              fontWeight: 500,
+              color: "#ffffff",
+              lineHeight: "normal",
+              fontFamily: secondaryFont.style.fontFamily,
+            }}
+          >
+            Add new address
+          </Typography>
         </Button>
       </Stack>
     </Stack>

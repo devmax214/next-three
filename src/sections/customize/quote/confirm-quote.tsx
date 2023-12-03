@@ -3,9 +3,15 @@ import { Box, Button, Typography, Grid, TableCell, TableRow, TableContainer, Tab
 import Image from "@/components/image";
 import { secondaryFont } from "@/theme/typography";
 
-type Props = { onConfirm: VoidFunction };
+type Props = {
+  onConfirm: VoidFunction;
+};
 
-export default function ConfirmQuote({ onConfirm }: Props) {
+export default function ConfirmQuote({ onConfirm, query }: Props) {
+  // const {
+  //   image, name, size, material, color, lace, tip, text, tag, embel
+  // } = query;
+
   return (
     <Box component={"div"} sx={{ textAlign: "start" }}>
       <Grid container spacing={5}>

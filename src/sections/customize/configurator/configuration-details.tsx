@@ -23,6 +23,7 @@ import { useBoolean } from "@/hooks";
 import { styled } from "@mui/material/styles";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Iconify from "@/components/iconify";
+import { useRouter } from "next/router";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
 
@@ -128,6 +129,7 @@ export default function ConfigurationDetails(props: Props) {
     </>
   );
 
+  const { push } = useRouter();
   const renderActions = (
     <Stack direction="row" spacing={2}>
       <Button
@@ -136,7 +138,13 @@ export default function ConfigurationDetails(props: Props) {
         variant="contained"
         sx={{ bgcolor: "#F05A4A", "&:hover": { bgcolor: "#6AB67A" } }}
         onClick={() => {
-          cart.onTrue();
+          // cart.onTrue();
+          push({
+            pathname: "/quote",
+            query: {
+              id: 1,
+            }
+          }, '/quote')
         }}
       >
         ADD TO CART

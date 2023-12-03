@@ -158,7 +158,7 @@ export default function ConfigurationProperties(props: Props) {
   }
 
   const requestQuote = () => {
-    push(PATH_CONFIGURATOR.order);
+    push(PATH_CONFIGURATOR.product.review(props.type));
   }
 
   const renderCardType = (

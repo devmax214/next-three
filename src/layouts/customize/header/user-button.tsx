@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { IconButton } from "@mui/material";
 import { PATH_SHOP } from "@/routers/path";
 import LoginUserIcon from "@/components/icons/icon-user-login";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 type Props = {};
 

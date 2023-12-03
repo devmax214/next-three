@@ -68,14 +68,14 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
 
   useEffect(() => {
-    if (customize.embellishment.file)
-      setTexture(loader.load(customize.embellishment.file));
-  }, [customize.embellishment.file]);
+    if (customize.tag.file)
+      setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
+  }, [customize.tag.file])
 
   useEffect(() => {
-    if (customize.tag.file)
-      setTagTexture(loader.load(customize.tag.file));
-  }, [customize.tag.file])
+    if (customize.embellishment.file)
+      setTexture(loader.load(URL.createObjectURL(customize.embellishment.file)));
+  }, [customize.embellishment.file]);
 
   useEffect(() => {
     var textCanvas = document.createElement("canvas");
@@ -112,24 +112,24 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
         const material: any = materials[Object.keys(materials)[0]];
         let keys: string[] = Object.keys(nodes);
         keys = keys.filter((key) => (nodes[key].isMesh));
-        
+
         return (
           <group dispose={null}>
             {keys.map((key: string, idx: number) => (
-              idx === (keys.length - 1) ? (
-                <mesh name={`pattern_${idx}`} geometry={nodes[key].geometry} material={material} key={key}>
+              idx === 0 ? (
+                <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key}>
                   <Decal
-                    position={[0, 0.1, 0.1]}
+                    position={[0, 1.614, -0.085]}
                     rotation={[0, 0, 0]}
-                    scale={0.5}
+                    scale={0.02}
                     map={tagTexture}
-                  // debug={true}
-                  // depthTest={true}
-                  // map-anisotropy={16}
+                    // debug={true}
+                    depthTest={true}
+
                   />
                 </mesh>
               ) : (
-                <mesh name={`pattern_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
+                <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
               )))}
           </group>
         )
@@ -139,7 +139,7 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
     } catch (err: any) {
       console.log(err);
     }
-  }, [tagName])
+  }, [tagName, tagTexture])
 
   useEffect(() => {
     if (customize.tag.neck) {

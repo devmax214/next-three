@@ -120,8 +120,15 @@ export default function PANTManModel(props: JSX.IntrinsicElements["group"]) {
   const customize = useCustomizeContext();
   const [tagName, setTagName] = useState("");
   const [cords, setCords] = useState("");
+  const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
 
-  const texture = useTexture("/models/portrait-white-man-isolated.jpg");
+  let loader = new THREE.TextureLoader();
+  loader.setCrossOrigin("");
+
+  useEffect(() => {
+    if (customize.tag.file)
+      setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
+  }, [customize.tag.file])
 
   const { nodes, materials } = useGLTF(
     "/models/PANTWR_man/PANTS_MAN.glb"
@@ -143,21 +150,35 @@ export default function PANTManModel(props: JSX.IntrinsicElements["group"]) {
           `/models/PANTWR_man/tags/Man/${tagName}/${tagName}.glb`
         ) as any;
 
-        const keys: string[] = Object.keys(nodes);
         const material: any = materials[Object.keys(materials)[0]];
+        let keys: string[] = Object.keys(nodes);
+        keys = keys.filter((key) => (nodes[key].isMesh));
 
         return (
-          <group {...props} dispose={null}>
+          <group dispose={null}>
             {keys.map((key: string, idx: number) => (
-              <mesh name={`pattern_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
-            ))}
+              idx === 0 ? (
+                <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key}>
+                  <Decal
+                    position={[0, 1.614, -0.085]}
+                    rotation={[0, 0, 0]}
+                    scale={0.02}
+                    map={tagTexture}
+                    // debug={true}
+                    depthTest={true}
+
+                  />
+                </mesh>
+              ) : (
+                <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
+              )))}
           </group>
         )
       } else return ''
     } catch (err) {
       console.log(err)
     }
-  }, [tagName])
+  }, [tagName, tagTexture])
 
   const cord = useCallback(() => {
     try {
@@ -200,7 +221,7 @@ export default function PANTManModel(props: JSX.IntrinsicElements["group"]) {
   })
 
   return (
-    <group {...props} dispose={null}>
+    <group position={[0, 0, 0]} {...props} dispose={null}>
       <mesh geometry={nodes.StitchMatShape_25119_Node.geometry} material={materials.Material3558}>
         {customize.tag.edit ? tag() : ""}
       </mesh>

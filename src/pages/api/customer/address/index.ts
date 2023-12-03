@@ -30,6 +30,12 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
       const address = await Address.create(data);
       res.status(200).json({ success: true, data: address });
       break;
+    case "DELETE":
+      const id = req.body.id;
+
+      const result = await Address.deleteOne({ _id: id });
+      res.status(200).json({ success: true, data: result });
+      break;
     default:
       break;
   }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
-import { PATH_SHOP } from "@/routers/path";
+import { PATH_CONFIGURATOR } from "@/routers/path";
 import ReturnRequestForm from "./return-request-form";
 import { secondaryFont } from "@/theme/typography";
 
@@ -13,7 +13,7 @@ export default function OrderRefundRegister(props: Props) {
       <Box
         component="div"
         sx={{
-          bgcolor: "#fff",
+          bgcolor: "#F9F5EE",
           position: "relative",
         }}
       >
@@ -23,12 +23,11 @@ export default function OrderRefundRegister(props: Props) {
           }}
         >
           <CustomBreadCrumbs
-            mode="dark"
             heading="CREATE YOUR RETURN"
             links={[
               {
                 name: "Home",
-                href: PATH_SHOP.home,
+                href: PATH_CONFIGURATOR.root,
               },
               { name: "Create your return" },
             ]}
@@ -44,6 +43,7 @@ export default function OrderRefundRegister(props: Props) {
                 fontWeight: 500,
                 color: "#5C6166",
                 fontFamily: secondaryFont.style.fontFamily,
+                width: 595
               }}
             >
               To help us find your order please enter your order number below

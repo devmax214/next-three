@@ -52,10 +52,15 @@ export const endpoints = {
     },
     password: "api/customer/password",
   },
+  customize: {
+    list: "/api/customize",
+    get: (id: string) => `/api/customize/${id}`
+  },
   order: {
     create: "/api/order",
   },
   upload: "/api/upload/file",
+  image: "/api/upload/image",
   contact: "/api/contact",
   admin: {
     category: {

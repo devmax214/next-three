@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   Box,
   Button,
@@ -18,6 +18,9 @@ import { secondaryFont } from "@/theme/typography";
 import FavoriteIcon from "@/components/icons/icon-favorite";
 import IconClose from "@/layouts/shop/header/button/icon-close";
 import { useWishListContext } from "@/components/wishlist/context/wishlist-content";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { PATH_CONFIGURATOR } from "@/routers/path";
 
 const Wrapper = styled(Box)<{
   expand: boolean;
@@ -46,9 +49,21 @@ export default function WishListButton() {
 
   const expand = useBoolean();
 
+  const { push } = useRouter();
+
+  const { status } = useSession();
+
+  const onClick = useCallback(() => {
+    if (status === "authenticated") {
+      push(PATH_CONFIGURATOR.gallery);
+    } else {
+      // push(PATH_CONFIGURATOR.);
+    }
+  }, [status]);
+
   return (
     <>
-      <IconButton onClick={wish.onTrue} disableRipple>
+      <IconButton onClick={onClick} disableRipple>
         <FavoriteIcon sx={{ width: 24, height: 24 }} />
       </IconButton>
 

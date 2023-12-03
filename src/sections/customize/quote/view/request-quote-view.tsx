@@ -6,7 +6,9 @@ import { useBoolean } from "@/hooks";
 import ConfirmQuote from "../confirm-quote";
 import QuoteForm from "../quote-form";
 
-export default function RequestQuoteView() {
+type Props = {}
+
+export default function RequestQuoteView(props: Props) {
   const quote = useBoolean();
 
   return (
@@ -43,10 +45,11 @@ export default function RequestQuoteView() {
               onConfirm={() => {
                 quote.onTrue();
               }}
+              {...props}
             />
           )}
 
-          {quote.value && <QuoteForm />}
+          {quote.value && <QuoteForm {...props} />}
         </Container>
       </Box>
     </>

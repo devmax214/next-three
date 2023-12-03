@@ -113,6 +113,7 @@ export const PATH_CONFIGURATOR = {
   product: {
     create: (id: string) => `/customize/${id}`,
     edit: (id: string) => `/customize/${id}/edit`,
+    review: (id: string) => `/customize/${id}/review`,
   },
   privacy: "/privacy",
   termsOfUse: "/terms-of-use",

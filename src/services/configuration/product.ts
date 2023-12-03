@@ -4,7 +4,7 @@ import { ICustomizationProduct } from "@/@types/configuration";
 
 export const getAllProduct = async () => {
   const response = await axios.get<ICustomizationProduct[]>(
-    endpoints.configuration.list
+    endpoints.customize.list
   );
   return response.data;
 };

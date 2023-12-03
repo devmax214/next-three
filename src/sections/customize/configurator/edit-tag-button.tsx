@@ -104,9 +104,7 @@ export default function EditTagButton(props: Props) {
   const fileSelect = (ev: any) => {
     if (ev.target.files && ev.target.files.length > 0) {
       var userImage = ev.target.files[0];
-      var userImageURL = URL.createObjectURL(userImage);
-      console.log('userImageURL', userImageURL);
-      context.onTagSelectFile(userImageURL);
+      context.onTagSelectFile(userImage);
     }
   }
 
