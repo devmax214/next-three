@@ -8,7 +8,7 @@ type Props = {
 export default function EditAddressView({ currentAddress }: Props) {
   return (
     <>
-      <AddressForm />
+      <AddressForm {...currentAddress} />
     </>
   );
 }

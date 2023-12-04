@@ -71,9 +71,9 @@ export default function OrderSummary(props: Props) {
         </StyledTypography3>
       </Card>
 
-      <Button variant="contained" fullWidth sx={{ fontSize: 14, fontWeight: 500, py: 1 }}>
+      {/* <Button variant="contained" fullWidth sx={{ fontSize: 14, fontWeight: 500, py: 1 }}>
         NEXT: INVOICE & SHIPPING
-      </Button>
+      </Button> */}
 
       <Button
         fullWidth

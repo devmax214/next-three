@@ -172,7 +172,8 @@ const SaveButton = (props: any) => {
         images: images,
         name: name,
         price: Number((40 - Math.random() * 20).toFixed(0)),
-        code: '123'
+        code: '123',
+        product: props.type
       }
       await axios.post(endpoints.customize.list, data);
       cart.onFalse();

@@ -40,7 +40,8 @@ export default function SelectColorButton(props: Props) {
   return (
     <>
       <ControlDropButton
-        label="Garment Dye"
+        label={!props.name ? "Garment Dye" : props.name}
+        isShowIcon={props.isShowIcon == undefined ? true : props.isShowIcon}
         isOpen={Boolean(popover.open)}
         onClick={popover.onOpen}
         box={<Box component={"div"} sx={{ width: 20, height: 20, mr: 1, backgroundColor: `${hsvaToHex(hsva)}`, borderRadius: 1 }} />}

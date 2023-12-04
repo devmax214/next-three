@@ -51,9 +51,20 @@ export function FeedbackListItem({ hasReview }: Props) {
             width: 168,
             bgcolor: "#292F3D",
             "&:hover": { bgcolor: "#550248" },
+            padding: "8px 16px"
           }}
         >
-          Give your review
+          <Typography
+            sx={{
+              fontSize: 14,
+              fontWeight: 500,
+              fontFamily: secondaryFont.style.fontFamily,
+              color: "#fff",
+              padding: "1px 0px 1px 0px"
+            }}
+          >
+            Give your review
+          </Typography>
         </Button>
       )}
     </Stack>
@@ -65,7 +76,7 @@ export function FeedbackListItem({ hasReview }: Props) {
       alignItems="start"
       justifyContent="space-between"
     >
-      <Stack gap={2} sx={{ width: { xs: "100", md: "70%" } }}>
+      <Stack gap={1} sx={{ width: { xs: "100", md: "75%" } }}>
         <Stack direction="row" gap={5}>
           <Typography
             sx={{
@@ -111,15 +122,26 @@ export function FeedbackListItem({ hasReview }: Props) {
           width: 168,
           bgcolor: "#ACB1B8",
           "&:hover": { bgcolor: "#550248" },
+          padding: "8px 16px"
         }}
       >
-        Delete review
+        <Typography
+            sx={{
+              fontSize: 14,
+              fontWeight: 500,
+              fontFamily: secondaryFont.style.fontFamily,
+              color: "#fff",
+              padding: "1px 0px 1px 0px"
+            }}
+          >
+            Delete review
+          </Typography>
       </Button>
     </Stack>
   );
 
   return (
-    <Stack sx={{ borderBottom: "1px solid #ACB1B8" }} py={2} gap={2}>
+    <Stack sx={{ borderBottom: "1px solid #ACB1B8", paddingLeft: '8px' }} py={2} gap={2}>
       {renderProduct}
 
       {hasReview && renderReview}

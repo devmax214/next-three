@@ -130,7 +130,6 @@ export default function ConfigurationProperties(props: Props) {
   const methods = useForm({
     defaultValues,
   });
-
   const { reset, watch, control, setValue, handleSubmit } = methods;
 
   const onSubmit = handleSubmit(async (data) => { });
@@ -518,8 +517,8 @@ export default function ConfigurationProperties(props: Props) {
         </Typography>
       </Box>
     </>
-  );
 
+  );
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack gap={3}>

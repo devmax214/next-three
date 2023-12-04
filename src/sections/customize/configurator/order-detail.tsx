@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import {
   Box,
   Button,
@@ -22,6 +23,7 @@ import React from "react";
 import CartDeleteIcon from "@/components/icons/icon-cart-delete";
 import * as styles from './styles';
 import CloseIcon from "@/components/icons/icon-close";
+import { PATH_CONFIGURATOR } from "@/routers/path";
 
 const sizes = [
   { items: 2, label: "XS" },
@@ -42,6 +44,9 @@ type Props = {};
 
 export default function OrderDetail(props: Props) {
   const [showSummary, setShowSummary] = React.useState(true);
+  const router = useRouter();
+  const slug: any = router.query.slug;
+  console.log(slug)
 
   const handleShowSummary = () => {
     setShowSummary(false);
@@ -89,11 +94,11 @@ export default function OrderDetail(props: Props) {
         Size selection
       </Typography>
 
-      <Box component="div" sx={{ 
-        bgcolor: "#EDE9DC", 
+      <Box component="div" sx={{
+        bgcolor: "#EDE9DC",
         p: 2,
         position: 'relative',
-        display: showSummary ? 'block': 'block',
+        display: showSummary ? 'block' : 'block',
       }}>
         <Typography
           sx={{
@@ -160,7 +165,7 @@ export default function OrderDetail(props: Props) {
           </TableHead>
           <TableBody>
             {prices.map((price, index) => (
-              <TableRow key={index} sx={{ }}>
+              <TableRow key={index} sx={{}}>
                 <TableCell sx={styles.tableCell(index === 0, index !== 0)}>
                   {price.items} items
                 </TableCell>
@@ -234,6 +239,7 @@ export default function OrderDetail(props: Props) {
                   sx={{ width: 13.4, height: 16 }}
                 />
               }
+              onClick={() => router.push(PATH_CONFIGURATOR.product.create(slug))}
             >
               Delete
             </Button>
@@ -241,6 +247,7 @@ export default function OrderDetail(props: Props) {
             <Button
               sx={{ fontSize: 12, fontWeight: 500 }}
               startIcon={<EditIcon sx={{ width: 13.4, height: 16 }} />}
+              onClick={() => router.push(PATH_CONFIGURATOR.product.create(slug))}
             >
               Edit
             </Button>

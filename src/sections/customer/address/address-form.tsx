@@ -35,18 +35,19 @@ const AddressSchema = Yup.object().shape({
 
 type Props = {};
 
-export default function AddressForm(props: Props) {
+export default function AddressForm(props: any) {
   const { push } = useRouter();
+
   const defaultValues = {
-    firstname: "",
-    lastname: "",
-    company: "",
-    country: "",
-    address: "",
-    apartment: "",
-    city: "",
-    postal: "",
-    phone: "",
+    firstname: props.firstname,
+    lastname: props.lastname,
+    company: props.company,
+    country: props.country,
+    address: props.address,
+    apartment: props.apartment,
+    city: props.city,
+    postal: props.postal,
+    phone: props.phone,
   };
 
   const methods = useForm({

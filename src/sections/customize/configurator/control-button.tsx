@@ -13,6 +13,7 @@ export const StyledButton = styled(ButtonBase)(({ theme }) => ({
   color: "#292F3D",
   fontWeight: 500,
   fontFamily: secondaryFont.style.fontFamily,
+  width: "100%"
 }));
 
 type Props = {
@@ -41,12 +42,16 @@ export default function ControlButton({
   );
 }
 
+
+
 export function ControlDropButton({
   label,
+  isShowIcon,
   isOpen,
   onClick,
   box,
 }: { label: string; isOpen: boolean, box: ReactElement } & ButtonBaseProps) {
+  const conIcon = isShowIcon ? (<EditIcon sx={{ width: 10, height: 12 }} />) : (<></>);
   return (
     <StyledButton onClick={onClick}>
       <Stack
@@ -59,8 +64,11 @@ export function ControlDropButton({
           {box}
           {label}
         </Stack>
-
-        <EditIcon sx={{ width: 10, height: 12 }} />
+        {
+          conIcon
+            
+        }
+        
       </Stack>
     </StyledButton>
   );

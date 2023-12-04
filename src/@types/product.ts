@@ -1,3 +1,5 @@
+import { ArrayCamera } from "three";
+
 export type IProductTableFilterValue = string | string[];
 
 export type IProductTableFilters = {

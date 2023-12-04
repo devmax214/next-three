@@ -11,7 +11,6 @@ export default async function handler(
 
   switch (method) {
     case "POST":
-      console.log(req.body);
       const customer = await Customer.create({ ...req.body });
       res.status(201).json({ success: true, data: customer });
       break;

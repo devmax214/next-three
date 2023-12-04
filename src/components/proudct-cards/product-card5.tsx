@@ -51,10 +51,9 @@ type Props = {
   product: ICustomizationProduct;
 };
 
-export default function ProductCard5({ product }: Props) {
+export default function ProductCard5({ product }: any) {
   // const { id, name, coverUrl } = product;
-
-  const id = "sksa3-asd-asdfa";
+  const id = product.product;
   const coverUrl = `/uploads/${product.images[0]}`;
   const name = product.name;
 

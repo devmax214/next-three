@@ -6,7 +6,7 @@ type Props = TextFieldProps & {
 };
 
 export default function RhfTextfield({
-  size = "small",
+  size = "medium",
   name,
   helperText,
   type,

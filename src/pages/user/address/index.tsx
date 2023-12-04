@@ -56,8 +56,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     if (session) {
       const userId = session.user?.id;
 
-      console.log(userId);
-
       await dbConnect();
 
       const res = await Address.find({ customer: userId });

@@ -6,6 +6,7 @@ interface ICustomizeItem extends Document {
   price: number;
   customer: Schema.Types.ObjectId;
   category?: Schema.Types.ObjectId;
+  product: string;
   publish: string;
   images: string[];
 }
@@ -28,6 +29,10 @@ const CustomizeSchema: Schema<ICustomizeItem> = new Schema<ICustomizeItem>(
       type: Schema.Types.ObjectId,
       ref: "Customer",
       required: true,
+    },
+    product: {
+      type: String,
+      required: true
     },
     images: {
       type: [String],

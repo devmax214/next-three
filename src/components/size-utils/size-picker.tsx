@@ -6,12 +6,14 @@ import { ISizeItem } from "@/@types/product";
 
 const SizePicker = forwardRef<HTMLDivElement, SizePickerProps>(
   ({ sizes, selected, onSelectSize, ...other }, ref) => {
+    // console.log(`sizes: `, sizes);
+    // console.log(`selected: `, selected);
     const singleSelect = typeof selected === "object";
 
     const handleSelect = useCallback(
       (size: ISizeItem) => {
         if (singleSelect) {
-          if (size._id !== selected._id) {
+          if (size !== selected.value) {
             onSelectSize(size);
           }
         } else {
@@ -29,12 +31,12 @@ const SizePicker = forwardRef<HTMLDivElement, SizePickerProps>(
       <Stack direction="row" {...other}>
         {sizes.map((size) => {
           const hasSelected = singleSelect
-            ? selected._id === size._id
+            ? selected.value === size
             : selected.includes(size);
 
           return (
             <ButtonBase
-              key={size._id}
+              key={size}
               sx={{ width: 50, height: 50 }}
               onClick={() => {
                 handleSelect(size);
@@ -58,7 +60,7 @@ const SizePicker = forwardRef<HTMLDivElement, SizePickerProps>(
                   }),
                 }}
               >
-                <Typography variant="subtitle1">{size.name}</Typography>
+                <Typography variant="subtitle1">{size}</Typography>
               </Stack>
             </ButtonBase>
           );

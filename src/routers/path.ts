@@ -121,5 +121,4 @@ export const PATH_CONFIGURATOR = {
   contact: "/contact",
   checkout: "/checkout",
   quote: "/quote",
-  order: "/order"
 };
