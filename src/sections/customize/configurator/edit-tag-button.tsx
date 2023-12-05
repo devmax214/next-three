@@ -8,6 +8,7 @@ import Option1Icon from "@/components/icons/customize/stitch/option1";
 import Option2Icon from "@/components/icons/customize/stitch/option2";
 import Option3Icon from "@/components/icons/customize/stitch/option3";
 import { CustomizeContext } from "@/components/customize/context/customize-context";
+import { useRouter } from "next/router";
 
 export const StyledHeader1 = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -53,6 +54,8 @@ export default function EditTagButton(props: Props) {
   const context = useContext(CustomizeContext);
   const [selectedTagSize, setSelectedTagSize] = useState(0);
   const [labelSize, setLabelSize] = useState(sizes);
+  const router = useRouter();
+  const type = router.query.slug;
 
   useEffect(() => {
     if (context.tag.neck) setLabelSize(sizes);
@@ -84,6 +87,11 @@ export default function EditTagButton(props: Props) {
 
   const onNeckCheck = (ev: boolean) => {
     if (ev !== context.tag.neck) {
+      if (context.tag.neck) {
+        context.onTagSizeChange("45x50");
+      } else {
+        context.onTagSizeChange("45x45");
+      }
       context.onTagNeckChange();
       setSelectedTagSize(0);
     }
@@ -171,7 +179,7 @@ export default function EditTagButton(props: Props) {
       </Stack>
       <Stack direction="row" sx={{ mx: 1 }} gap={1}>
         <FormGroup>
-          {props.type === 'oversize' || props.type === 'tshirts' || props.type === 'sweatshirts' ?
+          {type === 'Oversize' || type === 'T-Shirts' || type === 'Sweatshirts' ?
             <FormControlLabel
               sx={{ mt: -1 }}
               control={<Checkbox color="default" checked={!context.tag.neck} onClick={() => onNeckCheck(false)} disabled={!context.tag.edit} />}

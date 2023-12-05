@@ -19,6 +19,7 @@ export default function GalleryListView({ galleries }: Props) {
           bgcolor: "#F9F5EE",
           position: "relative",
           pt: { xs: 10, md: 10 },
+          height: '100%'
         }}
       >
         <Container

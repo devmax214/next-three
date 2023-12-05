@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 // @ts-ignore
 import fs from "fs";
 import { v4 as uuidv4 } from "uuid";
+import pm2 from "pm2";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,9 +12,11 @@ export default async function handler(
   switch (method) {
     case "POST":
       const fileName = await saveFile(req.body.file as any);
-      return res
-        .status(201)
-        .send({ success: true, data: { path: fileName } });
+      pm2.restart(1, err => {
+        return res
+          .status(201)
+          .send({ success: true, data: { path: fileName } });
+      })
 
     default:
       break;

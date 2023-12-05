@@ -18,6 +18,9 @@ import { secondaryFont } from "@/theme/typography";
 import { ICustomizationProduct } from "@/@types/configuration";
 import SvgColor from "@/components/svg-color";
 import { ArrowBackIosNewOutlined, ArrowForwardIosOutlined } from "@mui/icons-material";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { endpoints } from "../../../global-config";
 
 const StyledTypography1 = styled(Typography)(({ theme }) => ({
   fontSize: "14px",
@@ -52,12 +55,18 @@ type Props = {
 };
 
 export default function ProductCard5({ product }: any) {
+  const router = useRouter();
   // const { id, name, coverUrl } = product;
   const id = product.product;
   const coverUrl = `/uploads/${product.images[0]}`;
   const name = product.name;
 
   const linkTo = PATH_CONFIGURATOR.product.edit(id);
+
+  const remove = async () => {
+    const result = await axios.delete(endpoints.customize.list, { data: { id: product._id } });
+    if (result.data.success) router.push(PATH_CONFIGURATOR.gallery);
+  }
 
   return (
     <Card
@@ -254,7 +263,7 @@ export default function ProductCard5({ product }: any) {
               ))}
             </StyledSelect> */}
 
-            <IconButton>
+            <IconButton onClick={remove}>
               <SvgColor src="/icons/ic_remove.svg" />
             </IconButton>
 

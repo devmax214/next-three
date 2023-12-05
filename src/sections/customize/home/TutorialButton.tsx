@@ -1,4 +1,4 @@
-import { Box, ButtonBase, Modal, Typography } from "@mui/material";
+import { Box, ButtonBase, Modal, Typography, Button } from "@mui/material";
 import { useBoolean } from "@/hooks";
 import SvgColor from "@/components/svg-color";
 import ReactPlayer from "react-player";
@@ -10,17 +10,21 @@ const Wrapper = styled(Box)<{}>(({ theme }) => ({
   left: "50%",
   top: "50%",
   width: "100%",
-  maxWidth: 900,
+  maxWidth: 1057,
   height: 557,
   transform: "translate(-50%, -50%)",
   zIndex: 99999,
   outline: "none",
+  borderRadius: "15px",
   [theme.breakpoints.down("md")]: {
     maxWidth: "calc(100% - 20px)",
     right: 10,
     top: "50%",
     transform: "translate(-50%, -50%)",
   },
+  "iframe": {
+    borderRadius: '15px'
+  }
 }));
 
 type Props = {};
@@ -48,10 +52,21 @@ export default function TutorialButton(props: Props) {
             url="https://www.youtube.com/watch?v=oUFJJNQGwhk"
             width="100%"
             height="100%"
-            style={{
-              borderRadius: 10
-            }}
           />
+          <Button sx={{
+            position: "absolute",
+            top: 5,
+            right: 4,
+            width: 30,
+            height: 30,
+            color: '#fff',
+            fontSize: 25,
+            fontWeight: 100,
+            minWidth: 30,
+            '&:hover': {
+              bgcolor: 'transparent'
+            },
+          }} onClick={open.onFalse}>X</Button>
         </Wrapper>
       </Modal>
     </>

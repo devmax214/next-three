@@ -33,6 +33,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         .exec();
       res.status(200).json(UserCustomize);
       return res.status(200);
+
+    case "DELETE":
+      const result = await Customize.deleteOne({ _id: req.body.id });
+      res.status(200).json({ success: true });
     default:
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }

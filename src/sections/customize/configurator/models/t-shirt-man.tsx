@@ -112,6 +112,7 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
         const material: any = materials[Object.keys(materials)[0]];
         let keys: string[] = Object.keys(nodes);
         keys = keys.filter((key) => (nodes[key].isMesh));
+        const positionY = customize.tag.size.startsWith("45x45") ? 1.609 : customize.tag.size.startsWith("55") ? 1.614 : 1.615;
 
         return (
           <group dispose={null}>
@@ -119,7 +120,7 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
               idx === 0 ? (
                 <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key}>
                   <Decal
-                    position={[0, 1.614, -0.085]}
+                    position={[0, positionY, -0.085]}
                     rotation={[0, 0, 0]}
                     scale={0.02}
                     map={tagTexture}
@@ -161,7 +162,8 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
       <mesh geometry={nodes.StitchMatShape_23735_Node.geometry} material={materials['Material3180.002']}>
         {customize.tag.edit ? tag() : ""}
       </mesh>
-      <mesh geometry={nodes.StitchMatShape_24030_Node.geometry} material={materials['Material2818.002']} />
+      <mesh geometry={nodes.StitchMatShape_24030_Node.geometry} material={materials['Material2818.002']}>
+      </mesh>
       <mesh geometry={nodes.StitchMatShape_24325_Node.geometry} material={materials['Material2818.002']} />
       <mesh geometry={nodes.StitchMatShape_24515_Node.geometry} material={materials['Material2996.002']} />
       <mesh geometry={nodes.StitchMatShape_24809_Node.geometry} material={materials['Material3180.002']} />

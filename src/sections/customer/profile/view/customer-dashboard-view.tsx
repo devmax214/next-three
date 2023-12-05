@@ -10,10 +10,14 @@ import EditIcon from "@/components/icons/icon-edit";
 import React from "react";
 import { useGetProfile } from "@/services/customer";
 
-type Props = {};
+type Props = {
+  addressCnt: number,
+  orderCnt: number
+};
 
 export default function CustomerDashboardView(props: Props) {
   const { profile, profileLoading } = useGetProfile();
+  const { addressCnt, orderCnt } = props;
 
   const renderData = (
     <Grid container spacing={{ xs: 1, md: 3 }}>
@@ -28,14 +32,14 @@ export default function CustomerDashboardView(props: Props) {
         <DashboardPanel
           icon={<OrderCountIcon sx={{ width: 16, height: 13 }} />}
           label="All orders"
-          value="2"
+          value={String(orderCnt)}
         />
       </Grid>
       <Grid item xs={4} md={4}>
         <DashboardPanel
           icon={<AddressCountIcon sx={{ width: 16, height: 14 }} />}
           label="Addresses"
-          value="1"
+          value={String(addressCnt)}
         />
       </Grid>
     </Grid>

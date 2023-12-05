@@ -267,13 +267,13 @@ const linkList = [
     title: "Orders",
     href: "/user/order",
     icon: () => <OrderIcon sx={{ width: 16, height: 20 }} />,
-    count: 3,
+    // count: localStorage.getItem("userCnt") ? JSON.parse(localStorage.getItem("userCnt") as any).orderCnt : null,
   },
   {
     title: "Address",
     href: "/user/address",
     icon: () => <AddressIcon sx={{ width: 15, height: 20 }} />,
-    count: 2,
+    // count: localStorage.getItem("userCnt") ? JSON.parse(localStorage.getItem("userCnt") as any).addressCnt : null,
   },
   {
     title: "Payment methods",
