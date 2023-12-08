@@ -150,6 +150,7 @@ const SaveButton = (props: any) => {
   const cart = useBoolean();
   const [image, setImage] = useState();
   const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const save = async () => {
     var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
@@ -175,7 +176,9 @@ const SaveButton = (props: any) => {
         code: '123',
         product: props.type
       }
+
       await axios.post(endpoints.customize.list, data);
+      setLoading(false);
       cart.onFalse();
     }
   }
@@ -221,7 +224,11 @@ const SaveButton = (props: any) => {
                   {/* <RHFTextField name="name" placeholder="Product name" /> */}
                   <TextField value={name} onChange={e => setName(e.target.value)} name="name" placeholder="Product name" size="small" />
 
-                  <LoadingButton fullWidth variant="contained" onClick={save}>
+                  <LoadingButton loading={loading} fullWidth variant="contained" onClick={() => {
+                    setLoading(true);
+                    save();
+                  }
+                  }>
                     SAVE
                   </LoadingButton>
                 </Stack>

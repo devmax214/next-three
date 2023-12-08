@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Link, Stack, Typography } from "@mui/material";
 import { RHFTextField } from "@/components/hook-form";
 import { RouterLink } from "@/routers/components";
-import { PATH_SHOP } from "@/routers/path";
+import { PATH_CONFIGURATOR, PATH_SHOP } from "@/routers/path";
 import { secondaryFont } from "@/theme/typography";
 
 type Props = {};
@@ -36,11 +36,11 @@ export default function ReturnRequestForm(props: Props) {
 
   const renderForm = (
     <Stack gap={2.5}>
-      <RHFTextField name="order number" placeholder="Your order number" />
+      <RHFTextField size="small" name="order number" placeholder="Your order number" />
 
-      <RHFTextField name="email" placeholder="Your email" />
+      <RHFTextField size="small" name="email" placeholder="Your email" />
 
-      <RHFTextField name="postcode" placeholder="Your Postcode/Zip code" />
+      <RHFTextField size="small" name="postcode" placeholder="Your Postcode/Zip code" />
 
       <Typography
         sx={{
@@ -53,7 +53,7 @@ export default function ReturnRequestForm(props: Props) {
         If you have a voucher code from the seller
         <Link
           component={RouterLink}
-          href={PATH_SHOP.forgot}
+          href={PATH_CONFIGURATOR.root}
           underline="always"
           sx={{ color: "#F05A4A", textDecoration: "none", pl: 1 }}
         >

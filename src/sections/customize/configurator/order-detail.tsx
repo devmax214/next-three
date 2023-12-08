@@ -114,7 +114,7 @@ export default function OrderDetail(props: Props) {
           extra garments to any sizes that require an exact quantity. Typical
           under-delivery rate is 3-5% in total.
         </Typography>
-        <IconButton
+        {/* <IconButton
           sx={{
             position: "absolute",
             right: 10,
@@ -127,7 +127,7 @@ export default function OrderDetail(props: Props) {
           onClick={handleShowSummary}
         >
           <CloseIcon />
-        </IconButton>
+        </IconButton> */}
       </Box>
 
       <Stack direction="row" gap={3} my={2}>

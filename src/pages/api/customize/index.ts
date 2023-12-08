@@ -31,12 +31,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       const UserCustomize = await Customize.find(customize._id)
         .populate({ path: "customer" })
         .exec();
-      res.status(200).json(UserCustomize);
-      return res.status(200);
+      return res.status(200).json(UserCustomize);
 
     case "DELETE":
       const result = await Customize.deleteOne({ _id: req.body.id });
-      res.status(200).json({ success: true });
+      return res.status(200).json({ success: true });
     default:
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }

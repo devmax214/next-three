@@ -53,6 +53,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.45.2",
     "react-i18next": "^13.1.1",
+    "react-international-phone": "^4.0.4",
     "react-lazy-load-image-component": "^1.6.0",
     "react-markdown": "^8.0.7",
     "react-player": "^2.12.0",

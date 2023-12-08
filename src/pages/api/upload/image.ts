@@ -12,11 +12,10 @@ export default async function handler(
   switch (method) {
     case "POST":
       const fileName = await saveFile(req.body.file as any);
-      pm2.restart(1, err => {
-        return res
-          .status(201)
-          .send({ success: true, data: { path: fileName } });
-      })
+      pm2.restart(1, err => { });
+      return res
+        .status(201)
+        .send({ success: true, data: { path: fileName } });
 
     default:
       break;
