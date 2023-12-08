@@ -9,9 +9,8 @@ import { styled } from "@mui/material/styles";
 import { secondaryFont } from "@/theme/typography";
 import { addAddress } from "@/services/customer";
 import { PATH_SHOP } from "@/routers/path";
-import { countries } from "@/@mockup/country";
-import Iconify from "@/components/iconify";
-import { RHFAutocomplete } from "@/components/hook-form";
+import { PhoneInput } from 'react-international-phone';
+import 'react-international-phone/style.css';
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: "14px",
@@ -125,34 +124,13 @@ export default function AddressForm(props: any) {
         <Grid item xs={12} md={6}>
           <Box>
             <StyledTypography>Phone</StyledTypography>
-            <RHFTextField name="phone" size="small" />
-            {/* <RHFAutocomplete
+            {/* <RHFTextField name="phone" size="small" /> */}
+            <PhoneInput
+              defaultCountry="pr"
               name="phone"
-              placeholder="Select Country"
-              options={countries.map((country) => country.phone)}
-              getOptionLabel={(option) => option}
-              renderOption={(props, option) => {
-                const { code, label, phone } = countries.filter(
-                  (country) => country.phone === option
-                )[0];
-
-                if (!label) {
-                  return null;
-                }
-
-                return (
-                  <li {...props} key={label}>
-                    <Iconify
-                      key={label}
-                      icon={`circle-flags:${code.toLowerCase()}`}
-                      width={28}
-                      sx={{ mr: 1 }}
-                    />
-                    {phone}
-                  </li>
-                );
-              }}
-            /> */}
+              style={{ width: '100%' }}
+              inputStyle={{ width: '100%' }}
+            />
 
           </Box>
         </Grid>

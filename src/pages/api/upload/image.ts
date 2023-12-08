@@ -11,7 +11,7 @@ export default async function handler(
   const { method } = req;
   switch (method) {
     case "POST":
-      const fileName = await saveFile(req.body.file as any, req.body.isQuote as Boolean);
+      const fileName = await saveFile(req.body.file as any, req.body.isQuote as boolean);
       try {
         pm2.restart(1, (err) => {
           return res

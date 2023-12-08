@@ -5,6 +5,7 @@ export const LINKS = [
   { name: "Terms of use", href: PATH_CONFIGURATOR.termsOfUse },
   { name: "Shipping policy", href: PATH_CONFIGURATOR.shippingPolicy },
   { name: "Contact us", href: PATH_CONFIGURATOR.contact },
+  { name: "Refunds", href: PATH_CONFIGURATOR.refund }
   // { name: "Size guide", href: PATH_SHOP.about },
 ];
 
