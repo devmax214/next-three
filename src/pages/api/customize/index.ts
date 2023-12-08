@@ -38,13 +38,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       const UserCustomize = await Customize.find(new mongoose.Types.ObjectId(customizeId))
         .populate({ path: "customer" })
         .exec();
-<<<<<<< HEAD
 
       res.status(200).json(UserCustomize);
       return res.status(200);
-=======
-      return res.status(200).json(UserCustomize);
->>>>>>> 50d331c13a64f749087dd2ef3539ff39b8937e05
 
     case "DELETE":
       const result = await Customize.deleteOne({ _id: req.body.id });
