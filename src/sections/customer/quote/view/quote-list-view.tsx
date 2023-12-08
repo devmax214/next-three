@@ -1,24 +1,10 @@
 import { Table, TableBody, TableContainer } from "@mui/material";
 import QuoteTableRow from "@/sections/customer/quote/quote-table-row";
+import { ICustomizeItem } from "@/@types/customize";
 
-const quotes = [
-  {
-    seq: "#xc03k92",
-    status: "approved",
-  },
-  {
-    seq: "#xc03k92",
-    status: "review",
-  },
-  {
-    seq: "#xc03k92",
-    status: "contact",
-  },
-] as IQuoteItem[];
+type Props = { quotes: ICustomizeItem[] };
 
-type Props = {};
-
-export default function QuoteListView(props: Props) {
+export default function QuoteListView({ quotes }: Props) {
   return (
     <>
       <TableContainer>

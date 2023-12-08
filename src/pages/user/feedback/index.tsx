@@ -6,7 +6,7 @@ import Head from "next/head";
 import { FeedbackListView } from "@/sections/customer/feedback/view";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import { dbConnect, Order } from "@/helpers/db";
+import { dbConnect, Order, Rate, Product } from "@/helpers/db";
 
 FeedbackPage.getLayout = (page: React.ReactElement) => (
   <CustomerLayout
@@ -37,14 +37,14 @@ FeedbackPage.getLayout = (page: React.ReactElement) => (
 
 type Props = {};
 
-export default function FeedbackPage({ orders }: Props) {
+export default function FeedbackPage(props: Props) {
   return (
     <>
       <Head>
         <title> Feedback | WonderRaw</title>
       </Head>
 
-      <FeedbackListView />
+      <FeedbackListView {...props} />
     </>
   );
 }
@@ -59,16 +59,24 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       await dbConnect();
 
       const orders = await Order.find({ customer: userId });
-
-      return {
-        props: {
-          orders: JSON.parse(JSON.stringify(orders)),
-        },
-      };
+      
+      const rateRes = await Rate.find({ customer: userId });
+      const productRes = await Product.find({});
+      const rateList = JSON.parse(JSON.stringify(rateRes));
+      let rateHash = {};
+      rateList.forEach(row => {
+        rateHash[row.productId] = row;
+      });
+      
+      return { props: { 
+        rateHash: rateHash,
+        productList: JSON.parse(JSON.stringify(productRes)),
+        orders: JSON.parse(JSON.stringify(orders)),
+      } };
     } else {
-      return { props: { orders: [] } };
+      return { props: { rateHash: {}, productList: [], orders: [] } };
     }
   } catch (e) {
-    return { props: { orders: [] } };
+    return { props: { rateHash: {}, productList: [], orders: [] } };
   }
 };

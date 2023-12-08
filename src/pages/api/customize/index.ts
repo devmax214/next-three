@@ -2,6 +2,7 @@ import { Customize, dbConnect } from "@/helpers/db";
 import { NextApiRequest, NextApiResponse } from "next"; // export default apiHandler(handler);
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import mongoose from "mongoose";
 
 // export default apiHandler(handler);
 
@@ -23,14 +24,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(200).json(customizeProducts);
 
     case "POST":
-      const customize = await Customize.create({
-        ...req.body,
-        customer: userId
-      })
+      let customizeId = req.body.customizeId;
+      if (customizeId) {
+        await Customize.updateOne({ _id: new mongoose.Types.ObjectId(customizeId) }, { quoteState: req.body.quoteState });
+      } else {
+        const customize = await Customize.create({
+          ...req.body,
+          customer: userId
+        })
+        customizeId = customize['_id'];
+      }
 
-      const UserCustomize = await Customize.find(customize._id)
+      const UserCustomize = await Customize.find(new mongoose.Types.ObjectId(customizeId))
         .populate({ path: "customer" })
         .exec();
+
       res.status(200).json(UserCustomize);
       return res.status(200);
 

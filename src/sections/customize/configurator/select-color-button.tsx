@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CustomPopover, { usePopover } from "@/components/custom-popover";
 import { ControlDropButton } from "@/sections/customize/configurator/control-button";
 import { Box, Button, Grid, Stack, Typography, Input, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Wheel from '@uiw/react-color-wheel';
 import ShadeSlider from '@uiw/react-color-shade-slider';
-import { hsvaToHex, hsvaToRgba, ColorResult } from '@uiw/color-convert';
+import { hsvaToHex, hsvaToRgba, ColorResult, hexToHsva } from '@uiw/color-convert';
 import { useCustomizeContext } from "@/components/customize/context";
 import { secondaryFont } from "@/theme/typography";
 
@@ -27,7 +27,8 @@ export default function SelectColorButton(props: Props) {
     popover.onClose();
   };
 
-  const [hsva, setHsva] = useState({ h: 0, s: 0, v: 95, a: 1 });
+  const hexColor = props ? props.color : "";
+  const [hsva, setHsva] = useState(hexColor ? hexToHsva(props.color) : { h: 0, s: 0, v: 95, a: 1 });
 
   const changeColor = (color: ColorResult) => {
     setHsva({
@@ -37,6 +38,10 @@ export default function SelectColorButton(props: Props) {
     customize.onColorChange(hsvaToHex(color.hsva))
   }
 
+  useEffect(() => {
+    customize.onColorChange(hsvaToHex(hsva));
+  }, [hsva]);
+  
   return (
     <>
       <ControlDropButton

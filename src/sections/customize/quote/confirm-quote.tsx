@@ -7,17 +7,28 @@ type Props = {
   onConfirm: VoidFunction;
 };
 
-export default function ConfirmQuote({ onConfirm, query }: Props) {
-  // const {
-  //   image, name, size, material, color, lace, tip, text, tag, embel
-  // } = query;
+export default function ConfirmQuote({ onConfirm, query, customize }: Props) {
+
+  let customProductInfo = {
+    'img': 'img',
+    'color': 'color',
+    'size': 'size',
+    'material': 'material',
+    'lace': 'lace',
+    'lace-tip': 'laceTip',
+    'type': 'T-Shirts'
+  }
+  try {
+    customProductInfo = JSON.parse(localStorage.getItem('product-info'));
+  } catch (e) { }
+
 
   return (
     <Box component={"div"} sx={{ textAlign: "start" }}>
       <Grid container spacing={5}>
         <Grid item md={7}>
           <Box component={"div"} sx={{ mt: 5, mb: 7 }}>
-            <Image src="/images/customize/quote.jpg" />
+            <Image src={`/uploads/${customProductInfo['img']}?v=${new Date().valueOf()}`} />
           </Box>
         </Grid>
 
@@ -46,7 +57,7 @@ export default function ConfirmQuote({ onConfirm, query }: Props) {
                 mt: -3
               }}
             >
-              T-shirt
+              {customProductInfo['type']}
             </Typography>
 
             <TableContainer sx={{ mt: -5 }}>
@@ -74,7 +85,7 @@ export default function ConfirmQuote({ onConfirm, query }: Props) {
                           fontFamily: secondaryFont.style.fontFamily,
                         }}
                       >
-                        XS
+                        {customProductInfo['size']}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -100,7 +111,7 @@ export default function ConfirmQuote({ onConfirm, query }: Props) {
                           fontFamily: secondaryFont.style.fontFamily,
                         }}
                       >
-                        Option
+                        {customProductInfo['material']}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -126,7 +137,7 @@ export default function ConfirmQuote({ onConfirm, query }: Props) {
                           fontFamily: secondaryFont.style.fontFamily,
                         }}
                       >
-                        Black
+                        {customProductInfo['color']}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -152,7 +163,7 @@ export default function ConfirmQuote({ onConfirm, query }: Props) {
                           fontFamily: secondaryFont.style.fontFamily,
                         }}
                       >
-                        Option
+                        {customProductInfo['lace']}
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -178,7 +189,7 @@ export default function ConfirmQuote({ onConfirm, query }: Props) {
                           fontFamily: secondaryFont.style.fontFamily,
                         }}
                       >
-                        Option
+                        {customProductInfo['lace-tip']}
                       </Typography>
                     </TableCell>
                   </TableRow>

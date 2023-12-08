@@ -5,9 +5,13 @@ import {
   Select,
   Stack,
   Typography,
+  IconButton,
   Link,
+  Card,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Box,
+  Modal
 } from "@mui/material";
 import { RHFAutocomplete, RHFTextField } from "@/components/hook-form";
 import { styled } from "@mui/material/styles";
@@ -26,9 +30,9 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
   color: "#292F3D",
 }));
 
-type Props = { addresses: IAddressItem[]; setAddresses: (id: string) => void };
+type Props = { addresses: IAddressItem[]; setAddresses: (id: string) => void; renderModal: Element; onNewAddrSubmit: Function; onSubmit: Function };
 
-export default function ShippingAddress({ addresses, setAddresses }: Props) {
+export default function ShippingAddress({ addresses, setAddresses, renderModal, onNewAddrSubmit, onSubmit }: Props) {
   const { data: session, status } = useSession();
   const checkout = useCheckoutContext();
 
@@ -67,7 +71,10 @@ export default function ShippingAddress({ addresses, setAddresses }: Props) {
       <Stack direction={"row"} justifyContent="space-between">
         <StyledTypography sx={{ paddingTop: '6px' }}>New address</StyledTypography>
 
-        <Button variant="text">
+        <Button
+          type="button"
+          onClick={onNewAddrSubmit}
+        >
           <Stack direction={"row"} gap={1} justifyContent={"space-around"}>
             <SaveIcon width={16} height={16} sx={{ marginTop: '3px' }} />
             <Typography sx={{
@@ -115,34 +122,34 @@ export default function ShippingAddress({ addresses, setAddresses }: Props) {
           </Grid>
 
           <Grid item md={6} sx={{ pr: 0.5 }}>
-            <RHFTextField name="firstname" placeholder="First name" />
+            <RHFTextField size="small" name="firstname" placeholder="First name" />
           </Grid>
 
           <Grid item md={6}>
-            <RHFTextField name="lastname" placeholder="Last name" />
+            <RHFTextField size="small" name="lastname" placeholder="Last name" />
           </Grid>
 
           <Grid item md={12}>
-            <RHFTextField name="address" placeholder="Address" />
+            <RHFTextField size="small" name="address" placeholder="Address" />
           </Grid>
 
           <Grid item md={12}>
-            <RHFTextField
+            <RHFTextField size="small"
               name="apartment"
               placeholder="Apartment, suite, etc. (optional)"
             />
           </Grid>
 
           <Grid item md={7} sx={{ pr: 0.5 }}>
-            <RHFTextField name="city" placeholder="City" />
+            <RHFTextField size="small" name="city" placeholder="City" />
           </Grid>
 
           <Grid item md={5}>
-            <RHFTextField name="postal" placeholder="Postcode" />
+            <RHFTextField size="small" name="postal" placeholder="Postcode" />
           </Grid>
 
           <Grid item md={12}>
-            <RHFTextField name="phone" placeholder="Phone" />
+            <RHFTextField size="small" name="phone" placeholder="Phone" />
           </Grid>
         </Grid>
 
@@ -161,7 +168,8 @@ export default function ShippingAddress({ addresses, setAddresses }: Props) {
           </Button>
 
           <Button
-            type="submit"
+            type="button"
+            onClick={onSubmit}
             fullWidth
             variant="contained"
             size="large"
@@ -211,7 +219,8 @@ export default function ShippingAddress({ addresses, setAddresses }: Props) {
         </Button>
 
         <Button
-          type="submit"
+          type="button"
+          onClick={onSubmit}
           fullWidth
           variant="contained"
           size="large"
@@ -245,6 +254,7 @@ export default function ShippingAddress({ addresses, setAddresses }: Props) {
         {isLogin && renderSelectAddress}
 
         {checkout.shippingInclude ? renderNewAddress : renderNewAddress2}
+        {renderModal}
       </Stack>
     </>
   );

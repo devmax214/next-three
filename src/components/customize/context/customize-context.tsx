@@ -50,8 +50,11 @@ const initialState = {
   cordTip: "",
   text: "",
   careLabel: 0,
-  sizeLabel: 0,
-  washing: {}
+  sizeLabel: "XL",
+  washing: {},
+  material: "",
+  lace: "",
+  laceTip: "",
 }
 
 export function CustomizeProvider({ children }: CustomizeProviderProps) {
@@ -276,6 +279,27 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
     }))
   }, [values.sizeLabel]);
 
+  const onMaterialChange = useCallback((value: number) => {
+    setValues((prevStatus: any) => ({
+      ...prevStatus,
+      material: value
+    }))
+  }, [values.material]);
+
+  const onLaceChange = useCallback((value: number) => {
+    setValues((prevStatus: any) => ({
+      ...prevStatus,
+      lace: value
+    }))
+  }, [values.lace]);
+
+  const onLaceTipChange = useCallback((value: number) => {
+    setValues((prevStatus: any) => ({
+      ...prevStatus,
+      laceTip: value
+    }))
+  }, [values.laceTip]);
+
   const memoizedValue = useMemo(() => {
     return {
       ...values,
@@ -301,6 +325,9 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
       onCordTipChange,
       onCareLabelChange,
       onSizeLabelChange,
+      onMaterialChange,
+      onLaceChange,
+      onLaceTipChange,
     };
   }, [values]) as any;
 

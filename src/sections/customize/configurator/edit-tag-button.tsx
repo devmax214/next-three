@@ -65,6 +65,7 @@ export default function EditTagButton(props: Props) {
 
   const clickConfirm = () => {
     popover.onClose();
+    context.onTagEditVisible();
   };
 
   const onOpen = (ev: MouseEvent<HTMLElement>) => {

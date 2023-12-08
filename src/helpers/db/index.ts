@@ -12,3 +12,4 @@ export { default as Order } from "./models/order";
 export { default as OrderItem } from "./models/order_item";
 export { default as Coupon } from "./models/coupon";
 export { default as Customize } from "./models/customize";
+export { default as Rate } from "./models/rate";

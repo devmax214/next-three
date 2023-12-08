@@ -13,7 +13,7 @@ const AddressSchema = new mongoose.Schema<{}>(
     },
     company: {
       type: String,
-      required: true,
+      required: false,
     },
     address: {
       type: String,
@@ -28,7 +28,7 @@ const AddressSchema = new mongoose.Schema<{}>(
     },
     country: {
       type: String,
-      required: true,
+      required: false,
     },
     postal: {
       type: String,

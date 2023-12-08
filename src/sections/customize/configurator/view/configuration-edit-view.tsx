@@ -36,9 +36,12 @@ type Props = {
   type: string;
 };
 
-export default function ConfigurationEditView(props: Props) {
+export default function ConfigurationEditView({ customProduct }) {
   const open = useBoolean();
-
+  const props = {
+    ...customProduct,
+    type: customProduct.product,
+  }
   return (
     <>
       <CustomizeProvider>

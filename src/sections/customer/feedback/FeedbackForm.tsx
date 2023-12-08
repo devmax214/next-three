@@ -6,6 +6,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Image from "@/components/image";
 import { secondaryFont } from "@/theme/typography";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { addRate } from "@/services/customer";
 
 const FeedbackSchema = Yup.object().shape({
   rating: Yup.number().required("Rating is required"),
@@ -25,13 +28,20 @@ export default function FeedbackForm(props: Props) {
     defaultValues,
   });
 
+  const productId = props.productId;
+
   const {
     handleSubmit,
     control,
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {});
+  const [rate, setRate] = useState(0);
+  const router = useRouter();
+  const onSubmit = handleSubmit(async (data) => {
+    await addRate({...data, productId});
+    router.push('/user/feedback');
+  });
 
   const renderHead = (
     <Box>
@@ -78,9 +88,10 @@ export default function FeedbackForm(props: Props) {
             <Rating
               {...field}
               size="large"
-              value={Number(field.value)}
+              value={rate}
               onChange={(event, newValue) => {
                 field.onChange(newValue as number);
+                setRate(newValue as number);
               }}
               sx={{
                 '.MuiSvgIcon-root': {
@@ -134,6 +145,7 @@ export default function FeedbackForm(props: Props) {
             bgcolor: "#ACB1B8",
             "&:hover": { bgcolor: "#550248" },
           }}
+          onClick={(e) => router.push('/user/feedback')}
         >
           CANCEL
         </Button>

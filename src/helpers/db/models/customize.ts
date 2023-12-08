@@ -9,6 +9,8 @@ interface ICustomizeItem extends Document {
   product: string;
   publish: string;
   images: string[];
+  color: string;
+  quoteState: number;
 }
 
 const CustomizeSchema: Schema<ICustomizeItem> = new Schema<ICustomizeItem>(
@@ -43,6 +45,15 @@ const CustomizeSchema: Schema<ICustomizeItem> = new Schema<ICustomizeItem>(
     publish: {
       type: String,
       default: "published",
+    },
+    color: {
+      type: String,
+      default: "",
+    },
+    quoteState: {
+      type: Number,
+      required: true,
+      default: 0,
     },
   },
   { timestamps: true }

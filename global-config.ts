@@ -5,6 +5,12 @@ export const JWT_SECRET_KEY =
 
 export const HOST_API = process.env.NEXT_PUBLIC_HOST_API;
 
+export const QUOTE_STATE = {
+  review: 1,
+  approved: 2,
+  contact: 3,
+}
+
 export const endpoints = {
   auth: {
     login: "/api/auth/login",
@@ -39,6 +45,7 @@ export const endpoints = {
     bestSellers: "/api/product/sellers",
     relations: "/api/product/relations",
     detail: (id: string) => `/api/product/${id}`,
+    getByType: (type: string) => `/api/product/get/${type}`,
     list: "/api/product",
     search: "/api/product/search",
   },

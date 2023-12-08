@@ -4,6 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import FormProvider, { RHFTextField } from "@/components/hook-form";
 import { Stack } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { endpoints, QUOTE_STATE } from "../../../../global-config";
 
 const QuoteSchema = Yup.object().shape({
   email: Yup.string()
@@ -30,17 +33,22 @@ export default function QuoteForm(props: Props) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {});
+  const onSubmit = handleSubmit(async (data) => {
+    await axios.post(endpoints.customize.list, { customizeId: props.query.id, quoteState: QUOTE_STATE.review });
+    push('/quote/approved');
+  });
+  const { push } = useRouter();
 
   const renderForm = (
     <Stack gap={6} sx={{ width: 500, alignItems: "center", margin: "auto" }}>
       <Stack gap={2} sx={{ width: 1 }}>
-        <RHFTextField fullWidth name="name" placeholder="Your name" />
-        <RHFTextField fullWidth name="email" placeholder="Enter your email" />
+        <RHFTextField size="small" fullWidth name="name" placeholder="Your name" />
+        <RHFTextField size="small" fullWidth name="email" placeholder="Enter your email" />
       </Stack>
 
       <LoadingButton
-        type="submit"
+        type="button"
+        onClick={onSubmit}
         variant="contained"
         size="large"
         sx={{ width: 242 }}

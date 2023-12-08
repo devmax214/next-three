@@ -1,15 +1,18 @@
 import { Avatar, Stack, TableCell, TableRow, Typography } from "@mui/material";
-
+import { QUOTE_STATE } from "../../../../global-config";
+import { ICustomizeItem } from "@/@types/customize";
+import { getRandomValues, randomFill, randomInt } from "crypto";
 type Props = {
-  data: IQuoteItem;
+  data: ICustomizeItem;
 };
 
 export default function QuoteTableRow({ data }: Props) {
-  const { seq, status } = data;
-
+  const { quoteState } = data;
+  const seq = "1";
+  console.log(quoteState)
   const renderState = (
     <>
-      {status === "approved" && (
+      {quoteState === QUOTE_STATE.approved && (
         <Stack direction="row" alignItems="center" gap={1}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +40,7 @@ export default function QuoteTableRow({ data }: Props) {
         </Stack>
       )}
 
-      {status === "review" && (
+      {quoteState === QUOTE_STATE.review && (
         <Stack direction="row" alignItems="center" gap={1}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -58,14 +61,13 @@ export default function QuoteTableRow({ data }: Props) {
               </clipPath>
             </defs>
           </svg>
-
           <Typography sx={{ color: "#F3BC1A", fontSize: 16 }} noWrap>
             In Review
           </Typography>
         </Stack>
       )}
 
-      {status === "contact" && (
+      {quoteState === QUOTE_STATE.contact && (
         <Stack direction="row" alignItems="center" gap={1}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +104,7 @@ export default function QuoteTableRow({ data }: Props) {
   return (
     <>
       <TableRow sx={{ borderBottom: "1px solid #ACB1B8" }}>
-        <TableCell>Quote Requests {seq}</TableCell>
+        <TableCell>Quote Requests # {seq}</TableCell>
 
         <TableCell>
           <Stack direction="row">

@@ -47,6 +47,9 @@ export interface ICustomizeQuoteItem {
   careLabel: number;
   sizeLabel: number;
   washing: IWashingInstructionTagItem;
+  laceTip: string;
+  lace: string;
+  material: string;
 }
 
 export interface ICustomizeItem {
@@ -60,6 +63,7 @@ export interface ICustomizeItem {
   price: number;
   category: string;
   publish: string;
+  quoteState: number;
   // gender: string[]
 }
 
@@ -86,4 +90,7 @@ export type CustomizeContextProps = ICustomizeQuoteItem & {
   onCordTipChange: (value: string) => void;
   onCareLabelChange: (value: number) => void;
   onSizeLabelChange: (value: number) => void;
+  onMaterialChange: (value: number) => void;
+  onLaceChange: (value: number) => void;
+  onLaceTipChange: (value: number) => void;
 };

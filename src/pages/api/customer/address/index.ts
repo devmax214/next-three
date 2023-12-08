@@ -26,7 +26,7 @@ export async function handler(req: NextApiRequest, res: NextApiResponse) {
       break;
     case "POST":
       const data = { ...req.body, customer: userId };
-
+      console.log(data);
       const address = await Address.create(data);
       res.status(200).json({ success: true, data: address });
       break;

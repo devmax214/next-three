@@ -4,6 +4,7 @@ import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
 import { PATH_SHOP } from "@/routers/path";
 import Head from "next/head";
 import { FeedbackView } from "@/sections/customer/feedback/view";
+import { useRouter } from 'next/router'
 
 GiveFeedbackPage.getLayout = (page: React.ReactElement) => (
   <CustomerLayout
@@ -35,13 +36,14 @@ GiveFeedbackPage.getLayout = (page: React.ReactElement) => (
 type Props = {};
 
 export default function GiveFeedbackPage(props: Props) {
+  const router = useRouter()
   return (
     <>
       <Head>
         <title> Feedback | WonderRaw</title>
       </Head>
 
-      <FeedbackView />
+      <FeedbackView productId={router.query.id} />
     </>
   );
 }

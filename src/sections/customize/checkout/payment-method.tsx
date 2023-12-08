@@ -14,6 +14,7 @@ import { styled } from "@mui/material/styles";
 import { months, years } from "@/@mockup/others";
 import { primaryFont, secondaryFont } from "@/theme/typography";
 import PaypalIcon from '@/components/icons/checkout/icon-paypal';
+import { useCheckoutContext } from "@/components/checkout/context";
 
 const StyledTab = styled((props: TabProps) => <Tab disableRipple {...props} />)(
   ({ theme }) => ({
@@ -39,6 +40,7 @@ type Props = {
 };
 
 export default function PaymentMethod({ payment, onChange }: Props) {
+  const checkout = useCheckoutContext();
   return (
     <>
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 4 }}>
@@ -117,6 +119,7 @@ export default function PaymentMethod({ payment, onChange }: Props) {
               width: 215,
               "&:hover": { bgcolor: "#6AB67A" },
             }}
+            onClick={checkout.onBackStep}
           >
             Return to information
           </Button>

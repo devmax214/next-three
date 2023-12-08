@@ -39,7 +39,7 @@ import { PATH_CONFIGURATOR, PATH_SHOP } from "@/routers/path";
 import EditIcon from "@/components/icons/icon-edit";
 import CartDeleteIcon from "@/components/icons/icon-cart-delete";
 import { useCustomizeContext } from "@/components/customize/context/customize-context";
-import { set } from "lodash";
+import { uploadImage } from "@/services/upload";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
 
@@ -104,8 +104,9 @@ const setSelectedData = (itemName: string) => {
 }
 
 
-export default function ConfigurationDetails(props: Props) {
+export default function ConfigurationDetails(props) {
   const context = useCustomizeContext();
+
   const cart = useBoolean();
   const [washing, setWashing] = useState(true);
 
@@ -148,7 +149,10 @@ export default function ConfigurationDetails(props: Props) {
               <SizePicker
                 sizes={sizes}
                 selected={field}
-                onSelectSize={(size) => field.onChange(size as string)}
+                onSelectSize={(size) => {
+                  context.onSizeLabelChange(size)
+                  field.onChange(size as string)
+                }}
               />
             )
           }
@@ -185,7 +189,7 @@ export default function ConfigurationDetails(props: Props) {
   const laceTips = setSelectedData("lace tip");
   const materialSelect = (
     <Box component="div">
-      <RhfSelect name="material" label="Material" sx={{ fontFamily: secondaryFont.style.fontFamily, fontSize: 14, fontWeight: 500 }}>{
+      <RhfSelect name="material" label="Material" sx={{ fontFamily: secondaryFont.style.fontFamily, fontSize: 14, fontWeight: 500 }} onFocus={(e) => { context.onMaterialChange(e.target.outerText) }}>{
         materials.map(item => (
           <MenuItem value={item.key}>{item.color}</MenuItem>
         ))
@@ -199,7 +203,7 @@ export default function ConfigurationDetails(props: Props) {
 
   const laceSelect = isActiveLace ? (
     <Box component="div">
-      <RhfSelect name="lace" label="Lace">{
+      <RhfSelect name="lace" label="Lace" onFocus={(e) => { context.onLaceChange(e.target.outerText) }}>{
         laces.map(item => (
           <MenuItem value={item.key}>{item.color}</MenuItem>
         ))
@@ -207,7 +211,7 @@ export default function ConfigurationDetails(props: Props) {
     </Box>
   ) : (
     <Box component="div">
-      <RhfSelect name="lace" label="Lace" disabled>{
+      <RhfSelect name="lace" label="Lace" disabled onFocus={(e) => { context.onLaceChange(e.target.outerText) }}>{
         laces.map(item => (
           <MenuItem value={item.key}>{item.color}</MenuItem>
         ))
@@ -217,7 +221,7 @@ export default function ConfigurationDetails(props: Props) {
 
   const laceTipSelect = isActiveLace ? (
     <Box component="div">
-      <RhfSelect name="laceTip" label="Lace Tip">{
+      <RhfSelect name="laceTip" label="Lace Tip" onFocus={(e) => { context.onLaceTipChange(e.target.outerText) }}>{
         laceTips.map(item => (
           <MenuItem value={item.key}>{item.color}</MenuItem>
         ))
@@ -225,7 +229,7 @@ export default function ConfigurationDetails(props: Props) {
     </Box>
   ) : (
     <Box component="div">
-      <RhfSelect name="laceTip" label="Lace Tip" disabled>{
+      <RhfSelect name="laceTip" label="Lace Tip" disabled onFocus={(e) => { context.onLaceTipChange(e.target.outerText) }}>{
         laceTips.map(item => (
           <MenuItem value={item.key}>{item.color}</MenuItem>
         ))
@@ -239,7 +243,7 @@ export default function ConfigurationDetails(props: Props) {
         {materialSelect}
       </Grid>
       <Grid item md={6}>
-        <SelectColorButton name="Color" isShowIcon={false} />
+        <SelectColorButton name="Color" isShowIcon={false} color={props.color} />
       </Grid>
       <Grid item md={6}>
         {laceSelect}
@@ -368,12 +372,27 @@ export default function ConfigurationDetails(props: Props) {
           height: 40,
           "&:hover": { bgcolor: "#550248" }
         }}
-        onClick={() => {
-          // cart.onTrue();
+        onClick={async () => {
+          let customProductInfo = {
+            'img': props.images[0],
+            'color': context.color,
+            'size': context.sizeLabel,
+            'material': context.material,
+            'lace': context.lace,
+            'lace-tip': context.laceTip,
+            'type': productType
+          }
+          var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
+          if (canvas) {
+            var imageData = canvas.toDataURL();
+            const res = await uploadImage(imageData, true);
+            customProductInfo.img = res.data.path;
+          }
+          localStorage.setItem('product-info', JSON.stringify(customProductInfo));
           push({
             pathname: "/quote",
             query: {
-              id: 1,
+              id: props._id,
             }
           }, '/quote')
         }}

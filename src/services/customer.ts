@@ -10,6 +10,20 @@ export const addAddress = async (data: any) => {
   return response.data;
 };
 
+export const addRate = async (data: any) => {
+  const response = await axios.post('api/product/rate', data);
+
+  return response.data;
+};
+
+export const removeRate = async (rateId: any) => {
+  const response = await axios.delete(`api/product/rate`, {
+    params: {rateId}
+  });
+
+  return response.data;
+};
+
 export const getAllAddress = async () => {
   const response = await axios.get<IAddressItem[]>(
     endpoints.customer.address.list

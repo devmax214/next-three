@@ -3,12 +3,21 @@ import { secondaryFont } from "@/theme/typography";
 import Image from "@/components/image";
 import { PATH_SHOP } from "@/routers/path";
 import { RouterLink } from "@/routers/components";
+import { useRouter } from "next/router";
+import { removeRate, useGetProfile } from "@/services/customer";
 
 type Props = {
   hasReview?: boolean;
 };
 
-export function FeedbackListItem({ hasReview }: Props) {
+export function FeedbackListItem({ hasReview, product }: Props) {
+  const router = useRouter();
+  const { profile, profileLoading } = useGetProfile();
+  const onRemove = async function () {
+    await removeRate(product.rateId);
+    router.push('/user/feedback');
+  }
+
   const renderProduct = (
     <Stack
       direction={{ xs: "column", md: "row" }}
@@ -25,7 +34,7 @@ export function FeedbackListItem({ hasReview }: Props) {
               "linear-gradient(180deg, rgb(211 211 223) 0%, rgba(247,254,255,1) 100%)",
           }}
         >
-          <Image src="/images/product/product_1.png" ratio="1/1" />
+          <Image src={`/images/customize/${product.images[0]}`} ratio="1/1" />
         </Box>
 
         <Typography
@@ -36,9 +45,9 @@ export function FeedbackListItem({ hasReview }: Props) {
             fontFamily: secondaryFont.style.fontFamily,
           }}
         >
-          Women's Light Organic Tee T-Shirt
+          {product.name}
           <br />
-          24 €
+          {product.price} €
         </Typography>
       </Stack>
 
@@ -46,7 +55,7 @@ export function FeedbackListItem({ hasReview }: Props) {
         <Button
           component={RouterLink}
           variant="contained"
-          href={PATH_SHOP.customer.feedback.rating("1111")}
+          href={PATH_SHOP.customer.feedback.rating(product._id)}
           sx={{
             width: 168,
             bgcolor: "#292F3D",
@@ -86,10 +95,10 @@ export function FeedbackListItem({ hasReview }: Props) {
               color: "#292F3D",
             }}
           >
-            António Pereira
+            {profile.firstname} {profile.lastname}
           </Typography>
 
-          <Rating size="small" value={3} readOnly />
+          <Rating size="small" value={product.rating} readOnly />
         </Stack>
 
         <Typography
@@ -100,8 +109,7 @@ export function FeedbackListItem({ hasReview }: Props) {
             color: "#5C6166",
           }}
         >
-          Comfortable, stylish, and great fit! Love the design. Highly
-          recommended for casual wear. Will buy more! 5/5 stars.
+          {product.feedback}
         </Typography>
 
         <Typography
@@ -112,7 +120,7 @@ export function FeedbackListItem({ hasReview }: Props) {
             color: "#292F3D",
           }}
         >
-          23th July 2023
+          {product.date}
         </Typography>
       </Stack>
 
@@ -124,6 +132,7 @@ export function FeedbackListItem({ hasReview }: Props) {
           "&:hover": { bgcolor: "#550248" },
           padding: "8px 16px"
         }}
+        onClick={onRemove}
       >
         <Typography
             sx={{

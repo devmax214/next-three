@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
-import { Box, Container, Grid, Stack } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Container, Grid, Stack, Modal, Card, IconButton, Typography } from "@mui/material";
+import Iconify from "@/components/iconify";
 import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,6 +16,12 @@ import Contact from "./contact";
 import ShippingAddress from "./shipping-address";
 import { PATH_ADMIN_DASHBOARD } from "@/routers/path";
 import { IAddressItem } from "@/@types/customer";
+import Icon2 from '@/components/icons/auth/icon2';
+import Icon3 from '@/components/icons/auth/icon3';
+import ModalFootIcon from '@/components/icons/footer/modal';
+import { styled } from "@mui/material/styles";
+import { primaryFont, secondaryFont } from "@/theme/typography";
+import { addAddress } from "@/services/customer";
 
 const ShippingAddressSchema = Yup.object().shape({
   email: Yup.string()
@@ -29,6 +36,15 @@ const ShippingAddressSchema = Yup.object().shape({
   phone: Yup.string().required("Phone Number is required"),
   coupon: Yup.string(),
 });
+
+const Wrapper = styled(Box)<{}>(({ theme }) => ({
+  position: "absolute",
+  left: "50%",
+  top: 100,
+  transform: "translateX(-50%)",
+  width: "40%",
+  outline: "none",
+}));
 
 type Props = {
   addresses: IAddressItem[];
@@ -86,11 +102,93 @@ export default function CheckoutBilllingAddress({ addresses }: Props) {
     }
   };
 
+  const [addrSaved, setAddrSaved] = useState(false);
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       checkout.onCreateBilling(data.email, data);
     } catch (error) { }
   });
+
+  const onNewAddrSubmit = handleSubmit(async (data) => {
+    try {
+      await addAddress({ ...data, company: "company" });
+      setAddrSaved(true);
+      return;
+    } catch (error) { }
+  });
+
+  const renderModal = (
+    <>
+      <Modal open={addrSaved}>
+        <Wrapper>
+          <Card sx={{ px: 5, py: 18 }}>
+            <Box
+              component="div"
+              sx={{
+                position: "absolute",
+                left: 20,
+                top: 20,
+                width: { xs: 93, md: "20px" },
+                height: { xs: 68.55, md: "20px" },
+              }}
+            >
+              <Icon3 />
+            </Box>
+            <Box
+              component="div"
+              sx={{
+                position: "absolute",
+                left: 67,
+                top: 35,
+                width: { xs: 93, md: "12px" },
+                height: { xs: 68.55, md: "12px" },
+              }}
+            >
+              <Icon2 />
+            </Box>
+            <Box
+              component="div"
+              sx={{
+                position: "absolute",
+                right: 0,
+                bottom: 0,
+                width: { xs: 93, md: "60px" },
+                height: { xs: 68.55, md: "65px" },
+              }}
+            >
+              <ModalFootIcon />
+            </Box>
+            <Stack alignItems="end">
+              <IconButton
+                onClick={() => {
+                  setAddrSaved(false)
+                }}
+                sx={{ fontWeight: 300, position: "absolute", top: 5, right: 5 }}
+              >
+                <Iconify
+                  icon="material-symbols:close"
+                  width={{ xs: 24, md: 42 }}
+                  color="#5C6166"
+                  fontWeight={300}
+                />
+              </IconButton>
+            </Stack>
+            <Typography
+              sx={{
+                flexGrow: 1,
+                fontSize: 22,
+                fontweight: 500,
+                textAlign: "center",
+                fontFamily: secondaryFont.style.fontFamily
+              }}>
+              Address Saved
+            </Typography>
+          </Card>
+        </Wrapper>
+      </Modal>
+    </>
+  );
 
   return (
     <Box
@@ -125,7 +223,7 @@ export default function CheckoutBilllingAddress({ addresses }: Props) {
           }}
         />
 
-        <FormProvider methods={methods} onSubmit={onSubmit}>
+        <FormProvider methods={methods}>
           <Grid container spacing={35} >
             <Grid item md={6}>
               <Stack gap={4} sx={{ pl: 2.5 }}>
@@ -133,6 +231,9 @@ export default function CheckoutBilllingAddress({ addresses }: Props) {
 
                 <ShippingAddress
                   addresses={addresses}
+                  renderModal={renderModal}
+                  onNewAddrSubmit={onNewAddrSubmit}
+                  onSubmit={onSubmit}
                   setAddresses={setAddresses}
                 />
               </Stack>

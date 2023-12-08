@@ -11,10 +11,10 @@ export const uploadFile = async (file: File) => {
   return response.data;
 };
 
-export const uploadImage = async (file: any) => {
+export const uploadImage = async (file: any, isQuote: Boolean = false) => {
   const response = await axios.post(
     endpoints.image,
-    { file: file },
+    { file: file, isQuote },
     // { headers: { "Content-Type": "application/json" } }
   );
 

@@ -63,6 +63,7 @@ export default function EmbellishmentButton(props: Props) {
 
   const clickConfirm = () => {
     popover.onClose();
+    customize.onEmbelEditVisible();
   };
 
   const onOpen = (ev: MouseEvent<HTMLElement>) => {

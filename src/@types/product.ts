@@ -93,3 +93,12 @@ export type ISizeItem = {
   name: string;
   description: string;
 };
+
+export type IRateItem = {
+  _id: string;
+  productId: string;
+  customer: string;
+  rating: number;
+  feedback: string;
+  date: string;
+};
