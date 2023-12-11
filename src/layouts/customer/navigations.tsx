@@ -24,6 +24,7 @@ import QuoteIcon from "@/components/icons/customer/icon-quote";
 import Label from "@/components/label";
 import { secondaryFont } from "@/theme/typography";
 import { JWTDeCode } from "@/auth/types";
+import { Any } from "@react-spring/three";
 
 const MainContainer = styled(Card)(({ theme }) => ({
   paddingBottom: "1.5rem",
@@ -119,9 +120,14 @@ const StyledNavLinkButton = styled(
   },
 }));
 
-type Props = {};
+export default function Navigations(props: Any) {
+  const { orderCnt, orders, addressCnt, addresses } = props;
 
-export default function Navigations({ }: Props) {
+  if (orderCnt) localStorage.setItem("orderCnt", orderCnt.toString());
+  if (orders) localStorage.setItem("orderCnt", orders.length.toString());
+  if (addressCnt) localStorage.setItem("addressCnt", addressCnt.toString());
+  if (addresses) localStorage.setItem("addressCnt", addresses.length.toString());
+
   const { pathname } = useRouter();
 
   const { data: session } = useSession();
@@ -196,7 +202,7 @@ export default function Navigations({ }: Props) {
                   <span>{link.title}</span>
                 </Stack>
 
-                {link.count && (
+                {link.countKey && (
                   <Label
                     sx={{
                       bgcolor: "#EDE9DC",
@@ -207,7 +213,7 @@ export default function Navigations({ }: Props) {
                       top: { xs: 10, md: "auto" },
                     }}
                   >
-                    {link.count}
+                    {localStorage.getItem(link.countKey)}
                   </Label>
                 )}
               </StyledNavLink>
@@ -241,11 +247,11 @@ export default function Navigations({ }: Props) {
                   <span>{link.title}</span>
                 </Stack>
 
-                {link.count && (
+                {link.countKey && (
                   <Label
                     sx={{ bgcolor: "#EDE9DC", color: "#292F3D", fontSize: 14 }}
                   >
-                    {link.count}
+                    {localStorage.getItem(link.countKey)}
                   </Label>
                 )}
               </StyledNavLinkButton>
@@ -267,13 +273,13 @@ const linkList = [
     title: "Orders",
     href: "/user/order",
     icon: () => <OrderIcon sx={{ width: 16, height: 20 }} />,
-    // count: localStorage.getItem("userCnt") ? JSON.parse(localStorage.getItem("userCnt") as any).orderCnt : null,
+    countKey: "orderCnt",
   },
   {
     title: "Address",
     href: "/user/address",
     icon: () => <AddressIcon sx={{ width: 15, height: 20 }} />,
-    // count: localStorage.getItem("userCnt") ? JSON.parse(localStorage.getItem("userCnt") as any).addressCnt : null,
+    countKey: "addressCnt",
   },
   {
     title: "Payment methods",

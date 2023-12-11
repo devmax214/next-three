@@ -28,7 +28,7 @@ export default function CustomerLayout({ Breadcrumbs, children }: Props) {
 
             <Grid container spacing={{ xs: 3, md: 2 }}>
               <Grid item xs={12} md={3}>
-                <Navigations />
+                <Navigations {...children.props} />
               </Grid>
               <Grid item xs={12} md={9}>
                 <Box component="div" pl={{ xs: 0, md: 3 }}>

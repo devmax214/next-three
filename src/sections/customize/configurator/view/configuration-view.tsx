@@ -17,6 +17,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Iconify from "@/components/iconify";
 import { RHFTextField } from "@/components/hook-form";
 import Image from "@/components/image";
+import { useRouter } from "next/router";
+import { PATH_SHOP } from "@/routers/path";
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
@@ -146,6 +148,7 @@ export default function ConfigurationView(props: Props) {
 }
 
 const SaveButton = (props: any) => {
+  const router = useRouter();
   const context = useCustomizeContext();
   const cart = useBoolean();
   const [image, setImage] = useState();
@@ -178,9 +181,12 @@ const SaveButton = (props: any) => {
         color: context.color,
       }
 
-      await axios.post(endpoints.customize.list, data);
-      setLoading(false);
-      cart.onFalse();
+      axios.post(endpoints.customize.list, data).then((result) => {
+        setLoading(false);
+        cart.onFalse();
+      }).catch((err) => {
+        router.push(PATH_SHOP.login);
+      });
     }
   }
 

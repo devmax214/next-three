@@ -28,7 +28,6 @@ export default function OrderListView({ orders }: Props) {
   const router = useRouter();
 
   const table = useTable({ defaultOrderBy: "id" });
-
   return (
     <>
       <TableContainer sx={{

@@ -72,24 +72,61 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
       setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
   }, [customize.tag.file])
 
-  useEffect(() => {
-    if (customize.embellishment.file)
-      setTexture(loader.load(URL.createObjectURL(customize.embellishment.file)));
-  }, [customize.embellishment.file]);
-
-  useEffect(() => {
+  const setTextTexture = () => {
     var textCanvas = document.createElement("canvas");
     textCanvas.width = 200;
-    textCanvas.height = 100;
+    textCanvas.height = 200;
     var ctx = textCanvas.getContext("2d");
+
     if (ctx !== null && customize.embellishment.font) {
       ctx.fillStyle = "black";
       ctx.font = `30px ${customize.embellishment.font}`;
-      ctx.fillText(customize.embellishment.textureText, 0, 100);
+      switch (customize.embellishment.position.type) {
+        case 0:
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment.textureText, 0, 100);
+          break;
+        case 1:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment.textureText, 100, 100);
+          break;
+        case 2:
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment.textureText, 200, 100);
+          break;
+        case 3:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillText(customize.embellishment.textureText, 100, 0);
+          break;
+        case 4:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment.textureText, 100, 100);
+          break;
+        case 5:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText(customize.embellishment.textureText, 100, 200);
+          break;
+      }
+
       const myTexture = new THREE.CanvasTexture(textCanvas);
       setTexture(myTexture)
     }
-  }, [customize.embellishment.textureText, customize.embellishment.font])
+  }
+
+  useEffect(() => {
+    if (customize.embellishment.type === 'image') {
+      if (customize.embellishment.file)
+        setTexture(loader.load(URL.createObjectURL(customize.embellishment.file)));
+    } else if (customize.embellishment.type === 'text') {
+      setTextTexture();
+    }
+  }, [customize.embellishment.position, customize.embellishment.type, customize.embellishment.file, customize.embellishment.textureText, customize.embellishment.font]);
 
   const { nodes, materials } = useGLTF(
     "/models/TSHIRTWR_man/TSHIRT_MAN.glb"
@@ -113,6 +150,7 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
         let keys: string[] = Object.keys(nodes);
         keys = keys.filter((key) => (nodes[key].isMesh));
         const positionY = customize.tag.size.startsWith("45x45") ? 1.609 : customize.tag.size.startsWith("55") ? 1.614 : 1.615;
+        const scaleYZ = customize.tag.size.startsWith("45x45") ? 0.02 : customize.tag.size.startsWith("55") ? 0.015 : 0.025;
 
         return (
           <group dispose={null}>
@@ -122,11 +160,10 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
                   <Decal
                     position={[0, positionY, -0.085]}
                     rotation={[0, 0, 0]}
-                    scale={0.02}
+                    scale={[0.03, scaleYZ, scaleYZ]}
                     map={tagTexture}
                     // debug={true}
                     depthTest={true}
-
                   />
                 </mesh>
               ) : (
@@ -185,11 +222,8 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
         <Decal
           position={[0, 1.31, 0.15]}
           rotation={[0, 0, 0]}
-          scale={0.25}
+          scale={[0.26, 0.28, 0.26]}
           map={texture}
-        // debug={true}
-        // depthTest={true}
-        // map-anisotropy={16}
         />
       </mesh>
       <mesh geometry={nodes['TSHIRTWR-FRE005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.012']} />

@@ -77,8 +77,7 @@ export default function EmbellishmentButton(props: Props) {
   }
 
   const checkImage = (ev: boolean, type: string) => {
-    if (ev)
-      customize.onEmbelSelectType(type);
+    if (ev) customize.onEmbelSelectType(type);
     else customize.onEmbelSelectType("");
   }
 
@@ -122,7 +121,7 @@ export default function EmbellishmentButton(props: Props) {
     <>
       <FormControlLabel
         sx={{ mb: -2 }}
-        control={<Checkbox color="default" checked={customize.embellishment.type === "image"} onClick={(ev) => checkImage(ev.target.checked, "image")} />}
+        control={<Checkbox color="default" disabled={customize.embellishment.type === "image"} checked={customize.embellishment.type === "image"} onClick={(ev) => checkImage(ev.target.checked, "image")} />}
         label={
           <Typography
             sx={{
@@ -224,11 +223,11 @@ export default function EmbellishmentButton(props: Props) {
               size="small"
               defaultValue={22}
               fullWidth
-
+              onChange={(e) => customize.onEmbelChangePosition({ ...customize.embellishment.position, width: e.target.value })}
               inputProps={{
                 step: 1,
                 min: 0,
-                max: 100,
+                max: 22,
                 type: 'number',
                 'aria-labelledby': 'input-slider',
               }} />
@@ -241,10 +240,11 @@ export default function EmbellishmentButton(props: Props) {
               size="small"
               defaultValue={22}
               fullWidth
+              onChange={(e) => customize.onEmbelChangePosition({ ...customize.embellishment.position, neck: e.target.value })}
               inputProps={{
                 step: 1,
                 min: 0,
-                max: 100,
+                max: 22,
                 type: 'number',
                 'aria-labelledby': 'input-slider',
               }} />
@@ -257,10 +257,11 @@ export default function EmbellishmentButton(props: Props) {
               size="small"
               defaultValue={22}
               fullWidth
+              onChange={(e) => customize.onEmbelChangePosition({ ...customize.embellishment.position, center: e.target.value })}
               inputProps={{
                 step: 1,
                 min: 0,
-                max: 100,
+                max: 22,
                 type: 'number',
                 'aria-labelledby': 'input-slider',
               }} />
@@ -280,7 +281,7 @@ export default function EmbellishmentButton(props: Props) {
       <Stack gap={2}>
         <FormControlLabel
           sx={{ mb: -2 }}
-          control={<Checkbox color="default" checked={customize.embellishment.type === "text"} onClick={(ev) => checkImage(ev.target.checked, "text")} />}
+          control={<Checkbox color="default" disabled={customize.embellishment.type === "text"} checked={customize.embellishment.type === "text"} onClick={(ev) => checkImage(ev.target.checked, "text")} />}
           label={
             <Typography
               sx={{
@@ -310,6 +311,10 @@ export default function EmbellishmentButton(props: Props) {
           <MenuItem value="Arial" >Arial</MenuItem>
           <MenuItem value="monospace">Monospace</MenuItem>
         </Select>
+      </Stack>
+      <Stack mt={1}>
+        <StyledHeader2>Position</StyledHeader2>
+        <PositionControl type="text" />
       </Stack>
     </>
   );

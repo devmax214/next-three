@@ -7,6 +7,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { CustomerDashboardView } from "@/sections/customer/profile/view";
 import { Address, Order, dbConnect } from "@/helpers/db";
 import { getSession } from "next-auth/react";
+import address from "@/helpers/db/models/address";
 
 UserDashboardPage.getLayout = (page: React.ReactElement) => (
   <CustomerLayout
@@ -50,7 +51,6 @@ export default function UserDashboardPage({
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   try {
     const session = await getSession(ctx);
-
     if (session) {
       const userId = session.user?.id;
 
@@ -59,7 +59,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       const addressCnt = (await Address.find({ customer: userId })).length;
       const orderCnt = (await Order.find({ customer: userId })).length;
 
-      // localStorage.setItem("userCnt", JSON.stringify({ addressCnt: addressCnt, orderCnt: orderCnt }))
       return { props: { addressCnt: addressCnt, orderCnt: orderCnt } };
     } else {
       return { props: { addressCnt: 0, orderCnt: 0 } };

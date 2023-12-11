@@ -116,15 +116,18 @@ export default function SWEATManModel(props: JSX.IntrinsicElements["group"]) {
         let keys: string[] = Object.keys(nodes);
         keys = keys.filter((key) => (nodes[key].isMesh));
 
+        const positionY = customize.tag.size.startsWith("45x45") ? 1.602 : customize.tag.size.startsWith("55") ? 1.611 : 1.615;
+        const scaleYZ = customize.tag.size.startsWith("45x45") ? 0.02 : customize.tag.size.startsWith("55") ? 0.015 : 0.025;
+
         return (
           <group dispose={null}>
             {keys.map((key: string, idx: number) => (
               idx === 0 ? (
                 <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key} position={[0, 0, tagName.startsWith("print") ? 0.002 : 0]}>
                   <Decal
-                    position={[0, 1.614, -0.085]}
+                    position={[0, positionY, -0.085]}
                     rotation={[0, 0, 0]}
-                    scale={0.02}
+                    scale={[0.03, scaleYZ, scaleYZ]}
                     map={tagTexture}
                     // debug={true}
                     depthTest={true}

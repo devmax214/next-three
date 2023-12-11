@@ -28,12 +28,14 @@ export default function GlobalStyles() {
           "&[type=number]": {
             MozAppearance: "textfield",
             "&::-webkit-outer-spin-button": {
-              margin: 0,
-              WebkitAppearance: "none",
+              margin: 4,
+              opacity: 1,
+              paddging: 5
             },
             "&::-webkit-inner-spin-button": {
               margin: 0,
-              WebkitAppearance: "none",
+              opacity: 1,
+              paddging: 5
             },
           },
         },

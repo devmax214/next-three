@@ -36,14 +36,14 @@ const initialState = {
     visibleText: false,
     file: null,
     position: {
-      width: 40,
-      neck: 0,
-      center: 0,
+      width: 22,
+      neck: 22,
+      center: 22,
       type: 0
     },
     reqText: "",
     textureText: "",
-    font: ""
+    font: "Arial"
   },
   color: "",
   cord: "",

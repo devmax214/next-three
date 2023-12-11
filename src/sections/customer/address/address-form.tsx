@@ -2,7 +2,8 @@ import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { yupResolver } from "@hookform/resolvers/yup";
-import FormProvider, { RHFTextField } from "@/components/hook-form";
+import FormProvider, { RHFTextField, RHFAutocomplete } from "@/components/hook-form";
+import { countries } from "@/@mockup/country";
 import { Box, Button, Grid, Stack, Typography } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { styled } from "@mui/material/styles";
@@ -10,7 +11,9 @@ import { secondaryFont } from "@/theme/typography";
 import { addAddress } from "@/services/customer";
 import { PATH_SHOP } from "@/routers/path";
 import { PhoneInput } from 'react-international-phone';
+import Iconify from "@/components/iconify";
 import 'react-international-phone/style.css';
+import { useState } from "react";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: "14px",
@@ -49,6 +52,8 @@ export default function AddressForm(props: any) {
     phone: props.phone,
   };
 
+  const [phone, setPhone] = useState(props.phone);
+
   const methods = useForm({
     resolver: yupResolver(AddressSchema),
     defaultValues,
@@ -62,6 +67,7 @@ export default function AddressForm(props: any) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      data.phone = phone;
       await addAddress(data);
       push(PATH_SHOP.customer.address.list);
     } catch (error) { }
@@ -112,7 +118,27 @@ export default function AddressForm(props: any) {
         <Grid item xs={12} md={6}>
           <Box>
             <StyledTypography>Country/Region</StyledTypography>
-            <RHFTextField name="country" size="small" />
+            <RHFAutocomplete
+              name="country"
+              placeholder="Country"
+              options={countries.map((country) => country.label)}
+              getOptionLabel={(option) => option}
+              renderOption={(props, option) => {
+                const { code, label, phone } = countries.filter(
+                  (country) => country.label === option
+                )[0];
+
+                if (!label) {
+                  return null;
+                }
+
+                return (
+                  <li {...props} key={label}>
+                    {label} ({code})
+                  </li>
+                );
+              }}
+            />
           </Box>
         </Grid>
         <Grid item xs={12} md={6}>
@@ -124,14 +150,14 @@ export default function AddressForm(props: any) {
         <Grid item xs={12} md={6}>
           <Box>
             <StyledTypography>Phone</StyledTypography>
-            {/* <RHFTextField name="phone" size="small" /> */}
             <PhoneInput
               defaultCountry="pr"
+              value={phone}
+              onChange={(phone) => setPhone(phone)}
               name="phone"
               style={{ width: '100%' }}
               inputStyle={{ width: '100%' }}
             />
-
           </Box>
         </Grid>
       </Grid>

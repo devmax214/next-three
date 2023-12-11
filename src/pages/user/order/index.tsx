@@ -62,7 +62,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         path: "items",
         populate: { path: "product" },
       });
-
       return {
         props: {
           orders: JSON.parse(JSON.stringify(orders)),

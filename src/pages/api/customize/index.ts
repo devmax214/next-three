@@ -13,8 +13,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect();
 
   const session = await getServerSession(req, res, authOptions);
-
-  if (!session) throw new Error("");
+  if (!session) {
+    res.status(401).json(true);
+    return res.status(401);
+  }
 
   const userId = session.user?.id as string;
 

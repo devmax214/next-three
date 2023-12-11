@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ButtonBase, Grid } from "@mui/material";
 import {
   BottomPosition,
@@ -50,6 +50,10 @@ export default function PositionControl(props: Props) {
   const customize = useContext(CustomizeContext);
   const [state, setState] = useState(0);
 
+  useEffect(() => {
+    setState(customize.embellishment.position.type)
+  }, [customize.embellishment.type]);
+
   return (
     <>
       <Grid container>
@@ -66,7 +70,10 @@ export default function PositionControl(props: Props) {
                   fill: state === index ? "#5C6166" : "#ACB1B8"
                 }
               }
-            }} onClick={() => setState(index)}>{pos.icon}</StyledButton>
+            }} onClick={() => {
+              customize.onEmbelChangePosition({ ...customize.embellishment.position, type: index })
+              setState(index)
+            }}>{pos.icon}</StyledButton>
           </Grid>
         ))}
       </Grid>
