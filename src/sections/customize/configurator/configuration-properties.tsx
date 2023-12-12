@@ -378,7 +378,7 @@ export default function ConfigurationProperties(props: Props) {
 
           <Button
             component={RouterLink}
-            href={PATH_SHOP.customer.address.edit("1111")}
+            href={"javascript:;"}
             startIcon={
               <EditIcon color="#F05A4A" sx={{ width: 13.4, height: 16 }} />
             }
@@ -389,7 +389,7 @@ export default function ConfigurationProperties(props: Props) {
 
           <Button
             component={RouterLink}
-            href={PATH_SHOP.customer.address.edit("1111")}
+            href={"javascript:;"}
             startIcon={
               <CartDeleteIcon
                 color="#F05A4A"
@@ -528,19 +528,14 @@ export default function ConfigurationProperties(props: Props) {
 
         <EmbellishmentButton />
 
-        {/* {props.type === 'pants' || props.type === 'shorts' || props.type === 'hoodies' ? renderCardType : ""}
+        {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderCardType : ""}
+        {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderCardTip : ""}
+        {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderText : ""}
+        {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderTag : ""}
 
-        {props.type === 'pants' || props.type === 'shorts' || props.type === 'hoodies' ? renderCardTip : ""}
-
-        {props.type === 'pants' || props.type === 'shorts' || props.type === 'hoodies' ? renderText : ""} */}
-
-        {renderCareLabel}
-
-        {renderSizeLabel}
-
-        {renderNotes}
-
-        {/* {props.type === 'pants' || props.type === 'shorts' || props.type === 'hoodies' ? renderTag : ""} */}
+        {props.type !== 'Pants' && props.type !== 'Shorts' && props.type !== 'Hoodies' ? renderCareLabel : ""}
+        {props.type !== 'Pants' && props.type !== 'Shorts' && props.type !== 'Hoodies' ? renderSizeLabel : ""}
+        {props.type !== 'Pants' && props.type !== 'Shorts' && props.type !== 'Hoodies' ? renderNotes : ""}
 
         {renderButtons}
 

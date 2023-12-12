@@ -22,13 +22,12 @@ export default function ConfirmQuote({ onConfirm, query, customize }: Props) {
     customProductInfo = JSON.parse(localStorage.getItem('product-info'));
   } catch (e) { }
 
-
   return (
     <Box component={"div"} sx={{ textAlign: "start" }}>
       <Grid container spacing={5}>
         <Grid item md={7}>
           <Box component={"div"} sx={{ mt: 5, mb: 7 }}>
-            <Image src={`/uploads/${customProductInfo['img']}?v=${new Date().valueOf()}`} />
+            <Image src={`${customProductInfo['img']}`} />
           </Box>
         </Grid>
 

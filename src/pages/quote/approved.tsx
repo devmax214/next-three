@@ -161,7 +161,7 @@ export default function ApprovedQuotePage(props: Props) {
             <Grid item md={5}>
               <Box component={"div"}>
                 <Box style={{ marginTop: "15px", backgroundImage: "radial-gradient(circle, white, #717171)", borderRadius: "10px" }} >
-                  <Image src={`/uploads/${customProductInfo['img']}?v=${new Date().valueOf()}`} />
+                  <Image src={`${customProductInfo['img']}`} />
                 </Box>
                 <Typography
                   sx={{

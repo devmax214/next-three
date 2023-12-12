@@ -32,7 +32,6 @@ const AddressSchema = Yup.object().shape({
   apartment: Yup.string().required("Address is required"),
   city: Yup.string().required("City is required"),
   postal: Yup.string().required("Post Code is required"),
-  phone: Yup.string().required("Phone Number is required"),
 });
 
 type Props = {};
@@ -40,17 +39,28 @@ type Props = {};
 export default function AddressForm(props: any) {
   const { push } = useRouter();
 
-  const defaultValues = {
-    firstname: props.firstname,
-    lastname: props.lastname,
-    company: props.company,
-    country: props.country,
-    address: props.address,
-    apartment: props.apartment,
-    city: props.city,
-    postal: props.postal,
-    phone: props.phone,
+  var defaultValues = {
+    firstname: "",
+    lastname: "",
+    company: "",
+    country: "",
+    address: "",
+    apartment: "",
+    city: "",
+    postal: "",
   };
+  if (props.isUpdate) {
+    defaultValues = {
+      firstname: props.firstname,
+      lastname: props.lastname,
+      company: props.company,
+      country: props.country,
+      address: props.address,
+      apartment: props.apartment,
+      city: props.city,
+      postal: props.postal,
+    };
+  }
 
   const [phone, setPhone] = useState(props.phone);
 
@@ -67,8 +77,8 @@ export default function AddressForm(props: any) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      data.phone = phone;
-      await addAddress(data);
+      await addAddress({ ...data, phone: phone, addressId: props._id });
+
       push(PATH_SHOP.customer.address.list);
     } catch (error) { }
   });

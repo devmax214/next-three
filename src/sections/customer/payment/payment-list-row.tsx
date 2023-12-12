@@ -20,7 +20,7 @@ export default function PaymentListRow({ data, index }: Props) {
         <TableCell width={50}>
           <Button
             component={RouterLink}
-            href={PATH_SHOP.customer.address.edit("1111")}
+            href={"javascript:;"}
             startIcon={<EditIcon sx={{ width: 13.4, height: 16 }} />}
           >
             Edit

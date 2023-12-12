@@ -96,7 +96,7 @@ export default function ProductCard1({ product }: Props) {
       };
 
       onAddToCart(newProduct);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const handleWishlist = async () => {
@@ -181,7 +181,7 @@ export default function ProductCard1({ product }: Props) {
           <Image
             className="product-image"
             alt={name}
-            src={`/uploads/${images[0]}`}
+            src={images[0]}
             ratio="1/1"
             sx={{
               borderRadius: 2,
@@ -253,7 +253,7 @@ export default function ProductCard1({ product }: Props) {
               size="small"
               variant="outlined"
               value={size}
-              // defaultValue={PRODUCT_SIZE_OPTIONS[2].value}
+            // defaultValue={PRODUCT_SIZE_OPTIONS[2].value}
             >
               {clothSize.map((size) => (
                 <MenuItem key={size._id} value={size._id}>

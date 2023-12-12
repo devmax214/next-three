@@ -40,6 +40,10 @@ import EditIcon from "@/components/icons/icon-edit";
 import CartDeleteIcon from "@/components/icons/icon-cart-delete";
 import { useCustomizeContext } from "@/components/customize/context/customize-context";
 import { uploadImage } from "@/services/upload";
+import { endpoints } from "../../../../global-config";
+import axios from "axios";
+import { random } from "lodash";
+import { randomInt } from "crypto";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
 
@@ -198,7 +202,7 @@ export default function ConfigurationDetails(props) {
   );
   let isActiveLace = false;
   if (props.type !== undefined) {
-    isActiveLace = props.type.toLowerCase() == "shorts" || props.type.toLowerCase() == "pants" || props.type.toLowerCase() == "hoodie";
+    isActiveLace = props.type.toLowerCase() == "shorts" || props.type.toLowerCase() == "pants" || props.type.toLowerCase() == "hoodies";
   }
 
   const laceSelect = isActiveLace ? (
@@ -282,7 +286,7 @@ export default function ConfigurationDetails(props) {
 
           <Button
             component={RouterLink}
-            href={PATH_SHOP.customer.address.edit("1111")}
+            href={"javascript:;"}
             startIcon={
               <CartDeleteIcon
                 color="#F05A4A"
@@ -374,7 +378,7 @@ export default function ConfigurationDetails(props) {
         }}
         onClick={async () => {
           let customProductInfo = {
-            'img': props.images[0],
+            'img': '',
             'color': context.color,
             'size': context.sizeLabel,
             'material': context.material,
@@ -385,16 +389,39 @@ export default function ConfigurationDetails(props) {
           var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
           if (canvas) {
             var imageData = canvas.toDataURL();
-            const res = await uploadImage(imageData, true);
-            customProductInfo.img = res.data.path;
-          }
-          localStorage.setItem('product-info', JSON.stringify(customProductInfo));
-          push({
-            pathname: "/quote",
-            query: {
-              id: props._id,
+            customProductInfo.img = imageData;
+            const images = [];
+            images.push(imageData);;
+            const data = {
+              images: images,
+              name: "custom" + new Date().getTime().toString(),
+              price: Number((40 - Math.random() * 20).toFixed(0)),
+              code: '123',
+              product: props.type,
+              color: context.color,
             }
-          }, '/quote')
+
+            if (!props._id) {
+              axios.post(endpoints.customize.list, data).then((result) => {
+                push({
+                  pathname: "/quote",
+                  query: {
+                    id: result.data[0]._id,
+                  }
+                }, '/quote')
+                localStorage.setItem('product-info', JSON.stringify(customProductInfo));
+              }).catch((err) => {
+
+              });
+            } else {
+              push({
+                pathname: "/quote",
+                query: {
+                  id: props._id,
+                }
+              }, '/quote')
+            }
+          }
         }}
       >
         <Typography sx={{ fontSize: 14, fontWeight: 500, fontFamily: secondaryFont.style.fontFamily }}>

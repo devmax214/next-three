@@ -22,7 +22,7 @@ import { navConfig } from "./config-navigation";
 
 type Props = {};
 
-export default function Header({}: Props) {
+export default function Header({ }: Props) {
   const theme = useTheme();
 
   const mdUp = useResponsive("up", "md");

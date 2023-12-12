@@ -159,19 +159,8 @@ const SaveButton = (props: any) => {
     var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
     if (canvas) {
       var imageData = canvas.toDataURL();
-      const res = await uploadImage(imageData);
       const images = [];
-      images.push(res.data.path);
-      // if (context.embellishment.file) {
-      //   console.log(JSON.stringify(context.embellishment.file))
-      //   const res = await uploadImage(JSON.stringify({ image: context.embellishment.file }));
-      //   images.push(res.data.path);
-      // }
-      // if (context.tag.file) {
-      //   const res = await uploadImage(context.tag.file);
-      //   images.push(res.data.path);
-      // }
-      // console.log(images)
+      images.push(imageData);
       const data = {
         images: images,
         name: name,

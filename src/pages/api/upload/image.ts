@@ -19,10 +19,10 @@ export default async function handler(
             .send({ success: true, data: { path: fileName } });
         });
       } catch (error) {
-        return res
-          .status(201)
-          .send({ success: true, data: { path: fileName } });
       }
+      return res
+        .status(201)
+        .send({ success: true, data: { path: fileName } });
     default:
       break;
   }

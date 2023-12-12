@@ -28,15 +28,26 @@ export default function GlobalStyles() {
           "&[type=number]": {
             MozAppearance: "textfield",
             "&::-webkit-outer-spin-button": {
-              margin: 4,
-              opacity: 1,
-              paddging: 5
+              margin: 0,
+              WebkitAppearance: "none",
             },
             "&::-webkit-inner-spin-button": {
               margin: 0,
-              opacity: 1,
-              paddging: 5
+              WebkitAppearance: "none",
             },
+          },
+        },
+        "input.showspin": {
+          MozAppearance: "textfield",
+          "&::-webkit-outer-spin-button": {
+            margin: 0,
+            opacity: 1,
+            WebkitAppearance: "auto",
+          },
+          "&::-webkit-inner-spin-button": {
+            margin: 0,
+            opacity: 1,
+            WebkitAppearance: "auto",
           },
         },
         img: {

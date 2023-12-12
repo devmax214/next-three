@@ -8,8 +8,9 @@ type Props = {
 
 export default function QuoteTableRow({ data }: Props) {
   const { quoteState } = data;
-  const seq = "1";
-  console.log(quoteState)
+
+  const seq = data._id;
+
   const renderState = (
     <>
       {quoteState === QUOTE_STATE.approved && (

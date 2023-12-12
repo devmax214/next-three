@@ -34,7 +34,7 @@ export default function QuoteForm(props: Props) {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    await axios.post(endpoints.customize.list, { customizeId: props.query.id, quoteState: QUOTE_STATE.review });
+    await axios.post(endpoints.customize.list, { customizeId: props.query.id, quoteState: QUOTE_STATE.approved });
     push('/quote/approved');
   });
   const { push } = useRouter();

@@ -229,6 +229,7 @@ export default function EmbellishmentButton(props: Props) {
                 min: 0,
                 max: 22,
                 type: 'number',
+                className: 'showspin',
                 'aria-labelledby': 'input-slider',
               }} />
           </Grid>
@@ -246,6 +247,7 @@ export default function EmbellishmentButton(props: Props) {
                 min: 0,
                 max: 22,
                 type: 'number',
+                className: 'showspin',
                 'aria-labelledby': 'input-slider',
               }} />
           </Grid>
@@ -263,6 +265,7 @@ export default function EmbellishmentButton(props: Props) {
                 min: 0,
                 max: 22,
                 type: 'number',
+                className: 'showspin',
                 'aria-labelledby': 'input-slider',
               }} />
           </Grid>

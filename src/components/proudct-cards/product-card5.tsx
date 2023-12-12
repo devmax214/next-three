@@ -59,11 +59,11 @@ export default function ProductCard5(props: any) {
   const router = useRouter();
   // const { id, name, coverUrl } = product;
   const id = product._id;
-  const coverUrl = `/uploads/${product.images[0]}`;
+  const coverUrl = product.images[0];
   const name = product.name;
 
   const linkTo = PATH_CONFIGURATOR.product.edit(id);
-  
+
   const remove = async () => {
     const result = await axios.delete(endpoints.customize.list, { data: { id: product._id } });
     if (result.data.success) router.push(PATH_CONFIGURATOR.gallery);
