@@ -1,6 +1,8 @@
 import { Checkbox, TableCell, TableRow } from "@mui/material";
 import { ICouponItem } from "@/@types/coupon";
 import Label from "@/components/label";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 type Props = {
   selected: boolean;
@@ -14,7 +16,7 @@ export default function CouponTableRow({ selected, row, onSelectRow }: Props) {
   return (
     <TableRow>
       <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
+        <Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} checked={selected} onClick={onSelectRow} />
       </TableCell>
 
       <TableCell>AXXQT-2547</TableCell>

@@ -35,7 +35,7 @@ export default function OrderCompleteView() {
 
   const renderDetail = (
     <Stack p={3}>
-      <Typography sx={{ fontSize: 19, fontWeight: 600, color: "#292F3D" }}>
+      <Typography sx={{ fontSize: 19, fontWeight: 600, color: "#292F3D", mb: "10px" }}>
         ORDER DETAILS
       </Typography>
 
@@ -66,7 +66,7 @@ export default function OrderCompleteView() {
         >
           {renderHead}
 
-          <Divider sx={{ borderStyle: "dashed", borderWidth: 2 }} />
+          <Divider sx={{ borderStyle: "dashed", borderWidth: 1, borderColor: "#b3b3b3" }} />
 
           {renderDetail}
         </Card>

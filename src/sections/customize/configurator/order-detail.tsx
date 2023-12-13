@@ -46,7 +46,6 @@ export default function OrderDetail(props: Props) {
   const [showSummary, setShowSummary] = React.useState(true);
   const router = useRouter();
   const slug: any = router.query.slug;
-  console.log(slug)
 
   const handleShowSummary = () => {
     setShowSummary(false);
@@ -70,13 +69,12 @@ export default function OrderDetail(props: Props) {
             fontFamily: secondaryFont.style.fontFamily,
           }}
         >
-          Modern T-Shirt
+          Modern {slug}
         </Typography>
       </Typography>
 
       <Stack alignItems="center" gap={2} py={3}>
-        <Image src="/images/customize/front.png" sx={{ width: 144 }} />
-        <Image src="/images/customize/back.png" sx={{ width: 144 }} />
+        <Image src={localStorage.getItem("review-img")} sx={{ width: "100%" }} />
       </Stack>
     </>
   );

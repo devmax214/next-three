@@ -41,7 +41,7 @@ export default function SelectColorButton(props: Props) {
   useEffect(() => {
     customize.onColorChange(hsvaToHex(hsva));
   }, [hsva]);
-  
+
   return (
     <>
       <ControlDropButton
@@ -115,7 +115,7 @@ export default function SelectColorButton(props: Props) {
             >
               Insert Pantone Reference
             </Typography>
-            <TextField defaultValue={"11-0601 TCX"} disabled variant="outlined" size="small" inputProps={{ style: { backgroundColor: "#f8f8f8" } }} />
+            <TextField defaultValue={"11-0601 TCX"} variant="outlined" size="small" inputProps={{ style: { backgroundColor: "#f8f8f8" } }} />
           </Grid>
         </Grid>
         {/* </Stack> */}

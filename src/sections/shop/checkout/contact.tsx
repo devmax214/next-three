@@ -3,6 +3,8 @@ import { RouterLink } from "@/routers/components";
 import { PATH_SHOP } from "@/routers/path";
 import { useSession } from "next-auth/react";
 import { RHFTextField } from "@/components/hook-form";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 export default function Contact() {
   const { data: session, status } = useSession();
@@ -38,7 +40,7 @@ export default function Contact() {
 
         {!isLogin && (
           <FormControlLabel
-            control={<Checkbox />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} />}
             label="Sign me up for Wonder Raw emails about new products, restocks and
                 events."
             labelPlacement="end"

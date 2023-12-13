@@ -66,10 +66,10 @@ export default function ConfigurationEditView({ customProduct }) {
                   href: PATH_CONFIGURATOR.root,
                 },
                 {
-                  name: "Product Page",
-                  href: PATH_CONFIGURATOR.root,
+                  name: "Customized Product Gallery",
+                  href: PATH_CONFIGURATOR.gallery,
                 },
-                { name: "T-Shirt" },
+                { name: customProduct.name },
               ]}
               sx={{
                 mb: { xs: 3, md: 5 },

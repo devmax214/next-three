@@ -17,6 +17,8 @@ import Label from "@/components/label";
 import Iconify from "@/components/iconify";
 import CustomPopover, { usePopover } from "@/components/custom-popover";
 import { secondaryFont } from "@/theme/typography";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 type Props = {
   row: IProductItem;
@@ -54,7 +56,7 @@ export default function ProductTableRow({
     <>
       <TableRow hover selected={selected}>
         <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
+          <Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} checked={selected} onClick={onSelectRow} />
         </TableCell>
 
         <TableCell sx={{ display: "flex", alignItems: "center" }}>
@@ -165,7 +167,7 @@ export default function ProductTableRow({
           Edit
         </MenuItem>
 
-        <MenuItem onClick={() => {}} sx={{ color: "error.main" }}>
+        <MenuItem onClick={() => { }} sx={{ color: "error.main" }}>
           <Iconify icon="solar:trash-bin-trash-bold" />
           Delete
         </MenuItem>

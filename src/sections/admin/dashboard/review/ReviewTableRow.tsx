@@ -11,6 +11,8 @@ import ListItemText from "@mui/material/ListItemText";
 import { format } from "date-fns";
 import Iconify from "@/components/iconify";
 import { usePopover } from "@/components/custom-popover";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 type Props = {
   row: IReviewItem;
@@ -34,7 +36,7 @@ export default function ReviewTableRow({
   return (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
+        <Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} checked={selected} onClick={onSelectRow} />
       </TableCell>
 
       <TableCell sx={{ display: "flex", alignItems: "center" }}>

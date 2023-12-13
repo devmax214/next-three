@@ -14,7 +14,7 @@ import { useCheckoutContext } from "@/components/checkout/context";
 import OrderSummary from "./order-summary";
 import Contact from "./contact";
 import ShippingAddress from "./shipping-address";
-import { PATH_ADMIN_DASHBOARD } from "@/routers/path";
+import { PATH_ADMIN_DASHBOARD, PATH_SHOP } from "@/routers/path";
 import { IAddressItem } from "@/@types/customer";
 import Icon2 from '@/components/icons/auth/icon2';
 import Icon3 from '@/components/icons/auth/icon3';
@@ -151,8 +151,9 @@ export default function CheckoutBilllingAddress({ addresses }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                right: 0,
-                bottom: 0,
+                rotate: "-90deg",
+                right: 15,
+                bottom: -5,
                 width: { xs: 93, md: "60px" },
                 height: { xs: 68.55, md: "65px" },
               }}
@@ -210,11 +211,11 @@ export default function CheckoutBilllingAddress({ addresses }: Props) {
           links={[
             {
               name: "Home",
-              href: PATH_ADMIN_DASHBOARD.root,
+              href: PATH_SHOP.home,
             },
             {
               name: "Checkout",
-              href: PATH_ADMIN_DASHBOARD.order.root,
+              href: PATH_SHOP.checkout,
             },
             { name: "Shipping" },
           ]}

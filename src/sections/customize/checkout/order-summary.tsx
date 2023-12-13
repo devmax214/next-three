@@ -47,10 +47,11 @@ export default function OrderSummary() {
                         width: 70,
                         height: 70,
                         border: "1px solid #EEE",
-                        background: "#F8F8F8",
+                        background: "lightgrey",
+                        borderRadius: "5px"
                       }}
                     >
-                      <Image src={`/uploads/${item.coverUrl}`} />
+                      <Image width="100%" height="100%" src={`${item.coverUrl}`} />
                     </Box>
                   </TableCell>
                   <TableCell sx={{ py: 1, pr: 1, verticalAlign: "top" }}>

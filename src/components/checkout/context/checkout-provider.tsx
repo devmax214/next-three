@@ -80,7 +80,7 @@ export function CheckoutProvider({ children }: Props) {
         (item: ICheckoutItem) => {
           if (item.id === newItem.id) {
             return {
-              ...item,
+              ...newItem,
               quantity: item.quantity + 1,
             };
           }

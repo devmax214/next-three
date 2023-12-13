@@ -30,50 +30,61 @@ export default function ConfirmOrderDetail(props: Props) {
         <Table>
           <TableBody>
             {checkout.items.map((item, index) => (
-              <TableRow key={index} sx={{ borderBottom: "1px solid #EEE" }}>
-                <TableCell sx={{ px: 0.5 }}>
-                  <Typography sx={{ fontSize: 14, fontWeight: 600 }}>
-                    {index + 1}
-                  </Typography>
-                </TableCell>
-                <TableCell sx={{ px: 0.5 }}>
+              <TableRow
+                key={index}
+                sx={{ borderBottom: "1px solid lightgrey", py: 1 }}
+              >
+                <TableCell width={70} sx={{ py: 1, px: 0 }}>
                   <Box
                     component="div"
                     sx={{
                       width: 70,
                       height: 70,
                       border: "1px solid #EEE",
-                      background: "#F8F8F8",
+                      background: "lightgrey",
+                      borderRadius: "5px"
                     }}
                   >
-                    <Image src={item.coverUrl} />
+                    <Image width="100%" height="100%" src={`${item.coverUrl}`} />
                   </Box>
                 </TableCell>
-                <TableCell sx={{ px: 0 }}>
+                <TableCell sx={{ py: 1, pr: 1, verticalAlign: "top" }}>
                   <Typography sx={{ fontSize: 14, fontWeight: 600 }}>
                     {item.name}
                   </Typography>
                   <Typography
-                    sx={{ fontSize: 14, fontWeight: 500, color: "#ACB1B8" }}
+                    sx={{ fontSize: 14, fontWeight: 600, color: "#5C6166" }}
                   >
                     {item.size}
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ px: 0.5 }}>
+                <TableCell
+                  width={60}
+                  sx={{ py: 1, px: 0, verticalAlign: "top" }}
+                >
                   <Typography
-                    sx={{ fontSize: 14, fontWeight: 500, color: "#5C6166" }}
+                    sx={{ fontSize: 14, fontWeight: 500, color: "#292F3D" }}
                   >
                     {item.quantity} item
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ px: 0.5 }}>
+                <TableCell
+                  width={60}
+                  sx={{
+                    py: 1,
+                    px: 0,
+                    verticalAlign: "top",
+                    textAlign: "right",
+                  }}
+                >
                   <Typography
-                    sx={{ fontSize: 16, fontWeight: 600, color: "#5C6166" }}
+                    sx={{ fontSize: 16, fontWeight: 600, color: "#292F3D" }}
                   >
                     {fCurrency(item.price * item.quantity)}
                   </Typography>
                 </TableCell>
               </TableRow>
+
             ))}
           </TableBody>
         </Table>
@@ -245,7 +256,7 @@ export default function ConfirmOrderDetail(props: Props) {
           position: 'absolute',
           top: 278,
           left: 0,
-          background: 'linear-gradient(90deg, #F9F5EE 0%, #D9D9D9 100%)',
+          background: '#F9F5EE',
           borderRadius: 38,
           transform: "translate(-50%, -50%)",
         }} />
@@ -257,7 +268,7 @@ export default function ConfirmOrderDetail(props: Props) {
           position: 'absolute',
           top: 278,
           right: 0,
-          background: 'linear-gradient(90deg, #D9D9D9 0%, #F9F5EE 100%)',
+          background: "#F9F5EE",
           borderRadius: 38,
           transform: "translate(50%, -50%)",
         }} />

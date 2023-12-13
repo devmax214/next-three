@@ -20,7 +20,7 @@ export default function ConfiguratorCard({ data }: Props) {
 
   const { name, description, image, startPrice, attributes } = data;
 
-  const linkTo = PATH_CONFIGURATOR.product.edit(name);
+  const linkTo = PATH_CONFIGURATOR.product.create(name);
 
   return (
     <Box

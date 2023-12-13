@@ -50,7 +50,7 @@ const initialState = {
   cordTip: "",
   text: "",
   careLabel: 0,
-  sizeLabel: "XL",
+  sizeLabel: 0,
   washing: {},
   material: "",
   lace: "",

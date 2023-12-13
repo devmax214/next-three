@@ -30,6 +30,9 @@ import { PATH_CONFIGURATOR, PATH_SHOP } from "@/routers/path";
 import EditIcon from "@/components/icons/icon-edit";
 import CartDeleteIcon from "@/components/icons/icon-cart-delete";
 import { CustomizeContext } from "@/components/customize/context/customize-context";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
+import { useCheckoutContext } from "@/components/checkout/context";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: "16px",
@@ -55,28 +58,28 @@ const cords = [
   {
     key: "Cord1",
     color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-      <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `gray` }} />
+      {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `gray` }} /> */}
       <Typography>cord 01</Typography>
     </Box>
   },
   {
     key: "Cord2",
     color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-      <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `red` }} />
+      {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `red` }} /> */}
       <Typography>cord 02</Typography>
     </Box>
   },
   {
     key: "Cord3",
     color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-      <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `pink` }} />
+      {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `pink` }} /> */}
       <Typography>cord 03</Typography>
     </Box>
   },
   {
     key: "Cord4",
     color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-      <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `blue` }} />
+      {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `blue` }} /> */}
       <Typography>cord 04</Typography>
     </Box>
   }
@@ -87,7 +90,7 @@ const tips = [
     key: "tip1",
     name: "tip01",
     color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-      <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `gray` }} />
+      {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `gray` }} /> */}
       <Typography>tip 01</Typography>
     </Box>
   },
@@ -95,7 +98,7 @@ const tips = [
     key: "tip2",
     name: "tip02",
     color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-      <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `red` }} />
+      {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `red` }} /> */}
       <Typography>tip 02</Typography>
     </Box>
   },
@@ -103,7 +106,7 @@ const tips = [
     key: "tip3",
     name: "tip03",
     color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-      <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `pink` }} />
+      {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `pink` }} /> */}
       <Typography>tip 03</Typography>
     </Box>
   },
@@ -111,7 +114,7 @@ const tips = [
     key: "tip4",
     name: "tip04",
     color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-      <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `blue` }} />
+      {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `blue` }} /> */}
       <Typography>tip 04</Typography>
     </Box>
   }
@@ -125,6 +128,8 @@ export default function ConfigurationProperties(props: Props) {
   const [cord, setCord] = useState("");
   const [cordTip, setCordTip] = useState("");
   const context = useContext(CustomizeContext);
+  const checkoutContext = useCheckoutContext();
+  const { onAddToCart } = checkoutContext;
   const { push } = useRouter();
 
   const methods = useForm({
@@ -157,6 +162,11 @@ export default function ConfigurationProperties(props: Props) {
   }
 
   const requestQuote = () => {
+    var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
+    if (canvas) {
+      var imageData = canvas.toDataURL();
+      localStorage.setItem("review-img", imageData);
+    }
     push(PATH_CONFIGURATOR.product.review(props.type));
   }
 
@@ -212,7 +222,7 @@ export default function ConfigurationProperties(props: Props) {
         <FormGroup >
           <FormControlLabel
             sx={{ mr: 0 }}
-            control={<Checkbox color="default" checked={context.careLabel === 0} onChange={ev => changeCareLabel(ev, 0)} sx={{ color: '#333333' }} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={context.careLabel === 0} onChange={ev => changeCareLabel(ev, 0)} sx={{ color: '#333333' }} />}
             label={
               <Typography
                 sx={{
@@ -228,7 +238,7 @@ export default function ConfigurationProperties(props: Props) {
             } />
           <FormControlLabel
             sx={{ mt: -2, mr: 0 }}
-            control={<Checkbox color="default" checked={context.careLabel === 1} onChange={ev => changeCareLabel(ev, 1)} sx={{ color: '#333333' }} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={context.careLabel === 1} onChange={ev => changeCareLabel(ev, 1)} sx={{ color: '#333333' }} />}
             label={
               <Typography
                 sx={{
@@ -239,12 +249,12 @@ export default function ConfigurationProperties(props: Props) {
                   lineHeight: '28px'
                 }}
               >
-                Brand label on the garment seam, 10cm from the button
+                Brand label on the garment seam, 10cm from the bottom
               </Typography>
             } />
           <FormControlLabel
             sx={{ mt: -2, mr: 0 }}
-            control={<Checkbox color="default" sx={{ color: '#333333' }} checked={context.careLabel === 2} onChange={ev => changeCareLabel(ev, 2)} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" sx={{ color: '#333333' }} checked={context.careLabel === 2} onChange={ev => changeCareLabel(ev, 2)} />}
             label={
               <Typography
                 sx={{
@@ -282,7 +292,7 @@ export default function ConfigurationProperties(props: Props) {
         <FormGroup>
           <FormControlLabel
             sx={{ mr: 0 }}
-            control={<Checkbox color="default" checked={context.sizeLabel === 0} onChange={ev => changeSizeLabel(ev, 0)} sx={{ color: '#333333' }} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={context.sizeLabel === 0} onChange={ev => changeSizeLabel(ev, 0)} sx={{ color: '#333333' }} />}
             label={
               <Typography
                 sx={{
@@ -299,7 +309,7 @@ export default function ConfigurationProperties(props: Props) {
             } />
           <FormControlLabel
             sx={{ mt: -2, mr: 0 }}
-            control={<Checkbox color="default" checked={context.sizeLabel === 1} onChange={ev => changeSizeLabel(ev, 1)} sx={{ color: '#333333' }} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={context.sizeLabel === 1} onChange={ev => changeSizeLabel(ev, 1)} sx={{ color: '#333333' }} />}
             label={
               <Typography
                 sx={{
@@ -310,12 +320,12 @@ export default function ConfigurationProperties(props: Props) {
                   lineHeight: '28px'
                 }}
               >
-                Brand label on the garment seam, 10cm from the button
+                Brand label on the garment seam, 10cm from the bottom
               </Typography>
             } />
           <FormControlLabel
             sx={{ mt: -2, mr: 0 }}
-            control={<Checkbox color="default" checked={context.sizeLabel === 2} onChange={ev => changeSizeLabel(ev, 2)} sx={{ color: '#333333' }} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={context.sizeLabel === 2} onChange={ev => changeSizeLabel(ev, 2)} sx={{ color: '#333333' }} />}
             label={
               <Typography
                 sx={{
@@ -402,7 +412,7 @@ export default function ConfigurationProperties(props: Props) {
           </Button>
         </Stack>
         <Stack direction="row" gap={1}>
-          <CheckBox />
+          <CheckBox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} />
           <Typography
             sx={{
               fontSize: 12,
@@ -415,7 +425,7 @@ export default function ConfigurationProperties(props: Props) {
           </Typography>
         </Stack>
         <Stack direction="row" gap={1}>
-          <CheckBox />
+          <CheckBox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} />
           <TextField
             fullWidth
             size="small"
@@ -427,7 +437,35 @@ export default function ConfigurationProperties(props: Props) {
       </Stack>
     </>
   );
+  const sizes = [
+    { label: "XS" },
+    { label: "S" },
+    { label: "M" },
+    { label: "L" },
+    { label: "XL" },
+  ];
 
+  const handleAddCart = async () => {
+    console.log("test")
+    try {
+      const selectedSize = sizes[context.embellishment.size].label;
+      var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
+      var imageData = "";
+      if (canvas) {
+        imageData = canvas.toDataURL();
+      }
+      const newProduct = {
+        id: props.type + (Math.random() < 0.5 ? "1" : "2"),
+        name: props.type,
+        coverUrl: imageData,
+        price: 6,
+        size: selectedSize,
+        quantity: 1,
+      };
+
+      onAddToCart(newProduct);
+    } catch (error) { console.log(error) }
+  }
   const renderButtons = (
     <>
       <Stack direction="row" gap={1}>
@@ -438,6 +476,7 @@ export default function ConfigurationProperties(props: Props) {
             bgcolor: "#5C6166",
             "&:hover": { bgcolor: "#550248" },
           }}
+          onClick={handleAddCart}
         >
           ORDER SAMPLE
         </Button>
@@ -530,12 +569,12 @@ export default function ConfigurationProperties(props: Props) {
 
         {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderCardType : ""}
         {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderCardTip : ""}
-        {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderText : ""}
-        {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderTag : ""}
+        {/* {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderText : ""} */}
+        {/* {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderTag : ""} */}
 
-        {props.type !== 'Pants' && props.type !== 'Shorts' && props.type !== 'Hoodies' ? renderCareLabel : ""}
-        {props.type !== 'Pants' && props.type !== 'Shorts' && props.type !== 'Hoodies' ? renderSizeLabel : ""}
-        {props.type !== 'Pants' && props.type !== 'Shorts' && props.type !== 'Hoodies' ? renderNotes : ""}
+        {renderCareLabel}
+        {renderSizeLabel}
+        {renderNotes}
 
         {renderButtons}
 

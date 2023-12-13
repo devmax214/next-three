@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Alert, Button, Stack, Typography } from "@mui/material";
-import FormProvider, { RHFTextField } from "@/components/hook-form";
+import FormProvider, { RHFTextField, RHFAutocomplete } from "@/components/hook-form";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -8,6 +8,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useAuthContext } from "@/auth/useAuthContext";
 import { secondaryFont } from "@/theme/typography";
+import { endpoints } from "../../../../global-config";
+import axios from "@/utils/axios";
+import { countries } from "@/@mockup/country";
 
 const RegisterSchema = Yup.object().shape({
   firstname: Yup.string().required("Firstname is required"),
@@ -15,12 +18,18 @@ const RegisterSchema = Yup.object().shape({
   email: Yup.string()
     .required("Email is required")
     .email("Email must be a valid email address"),
-  password: Yup.string().required("Password is required"),
   phone: Yup.string().required("Phone is required"),
   country: Yup.string().required("Country is required"),
   street: Yup.string().required("Street is required"),
   city: Yup.string().required("City is required"),
-  postal: Yup.string().required("Postal code is required"),
+  postal: Yup.string().required("Postal code is required."),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password is too short - should be 6 chars minimum."),
+  conformPassword: Yup.string().oneOf(
+    [Yup.ref("password")],
+    "Passwords must match"
+  ),
 });
 
 type Props = {};
@@ -33,15 +42,16 @@ export default function RegisterForm(props: Props) {
   const { register } = useAuthContext();
 
   const defaultValues = {
-    firstname: "Alexander",
-    lastname: "Feduleev",
-    email: "sorinwebdev1@outlook.com",
-    password: "test1234",
-    phone: "38328238328",
-    country: "Russia",
-    street: "Moscow",
-    city: "Moscow",
-    postal: "2332423",
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    conformPassword: "",
+    phone: "",
+    country: "",
+    street: "",
+    city: "",
+    postal: "",
   };
 
   const methods = useForm({
@@ -57,24 +67,17 @@ export default function RegisterForm(props: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await register(
-        data.firstname,
-        data.lastname,
-        data.email,
-        data.password,
-        data.phone,
-        data.country,
-        data.street,
-        data.city,
-        data.postal
-      );
-
+      const response = await axios.post(endpoints.auth.register, data);
       // push(returnTo || PATH_AFTER_LOGIN);
-      push("/auth/auth");
+      if (response.data.success) {
+        push("/auth/auth");
+      } else {
+        reset();
+        setErrorMsg(response.data.msg);
+      }
     } catch (error: any) {
       reset();
-
-      setErrorMsg(typeof error === "string" ? error : error.message);
+      setErrorMsg("server error");
     }
   });
 
@@ -85,12 +88,39 @@ export default function RegisterForm(props: Props) {
         <RHFTextField name="lastname" placeholder="Last name" />
         <RHFTextField name="email" placeholder="Email" />
         <RHFTextField name="phone" placeholder="Phone" />
-        <RHFTextField name="country" placeholder="Country" />
+        <RHFAutocomplete
+          name="country"
+          size="large"
+          placeholder="Country"
+          options={countries.map((country) => country.label)}
+          getOptionLabel={(option) => option}
+          renderOption={(props, option) => {
+            const { code, label, phone } = countries.filter(
+              (country) => country.label === option
+            )[0];
+
+            if (!label) {
+              return null;
+            }
+
+            return (
+              <li {...props} key={label}>
+                {label} ({code})
+              </li>
+            );
+          }}
+        />
         <RHFTextField name="street" placeholder="Street" />
         <Stack direction="row" gap={2}>
           <RHFTextField name="city" placeholder="City" />
           <RHFTextField name="postal" placeholder="Zip/Postal Code" />
         </Stack>
+        <RHFTextField name="password" type="password" placeholder="Password" />
+        <RHFTextField
+          name="conformPassword"
+          type="password"
+          placeholder="Confirm password"
+        />
       </Stack>
 
       <Stack

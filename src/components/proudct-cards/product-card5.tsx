@@ -82,6 +82,7 @@ export default function ProductCard5(props: any) {
         sx={{
           position: "relative",
           overflow: "hidden",
+          bgcolor: "#F8F8F8",
           "&:hover .add-cart-btn": { opacity: 1 },
           "&:hover .product-image": { transform: "scale(1.1)" },
         }}
@@ -171,7 +172,7 @@ export default function ProductCard5(props: any) {
             sx={{
               position: "absolute",
               right: 10,
-              bottom: 55,
+              bottom: 10,
               opacity: 0,
               zIndex: 9,
               transition: (theme) =>
@@ -195,36 +196,6 @@ export default function ProductCard5(props: any) {
             </Button>
           </Box>
         </Link>
-
-        <Box
-          className="add-cart-btn"
-          component="div"
-          sx={{
-            position: "absolute",
-            right: 10,
-            bottom: 10,
-            opacity: 0,
-            zIndex: 9,
-            transition: (theme) =>
-              theme.transitions.create("all", {
-                easing: theme.transitions.easing.easeInOut,
-                duration: theme.transitions.duration.shorter,
-              }),
-          }}
-        >
-          <Button
-            variant="contained"
-            sx={{
-              bgcolor: "#F05A4A",
-              fontSize: 13,
-              width: 120,
-              fontWeight: 500,
-              "&:hover ": { bgcolor: "#6AB67A" },
-            }}
-          >
-            Add to basket
-          </Button>
-        </Box>
       </Box>
 
       <Stack

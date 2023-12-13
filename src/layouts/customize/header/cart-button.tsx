@@ -320,7 +320,7 @@ export default function CartButton() {
       {/*</IconButton>*/}
 
       <IconButton onClick={cart.onTrue} disableRipple>
-        <SvgColor src="/icons/cart.svg" sx={{ width: 24, height: 24 }} />
+        <SvgColor src="/icons/cart.svg" sx={{ bgcolor: "#292F3D", width: 24, height: 24 }} />
 
         {checkout.items.length > 0 && (
           <Box
@@ -375,7 +375,7 @@ export default function CartButton() {
                   fontFamily: secondaryFont.style.fontFamily,
                 }}
               >
-                {checkout.items.length > 0 && `${checkout.items.length} items`}
+                {checkout.items.length > 0 && `(${checkout.items.length} items)`}
               </Typography>
             </Stack>
 

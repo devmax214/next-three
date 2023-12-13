@@ -13,7 +13,7 @@ import OrderSummary from "./common/order-summary";
 import ContactAndShipping from "./contact-and-shipping";
 import ShippingMethod from "./shipping-method";
 import PaymentMethod from "./payment-method";
-import { PATH_ADMIN_DASHBOARD } from "@/routers/path";
+import { PATH_ADMIN_DASHBOARD, PATH_SHOP } from "@/routers/path";
 import { IPaymentItem } from "@/@types/customer";
 import { createOrder } from "@/services/order";
 
@@ -127,17 +127,15 @@ export default function CheckoutPayment({ payments }: Props) {
             links={[
               {
                 name: "Home",
-                href: PATH_ADMIN_DASHBOARD.root,
+                href: PATH_SHOP.home,
               },
               {
                 name: "Checkout",
-                href: PATH_ADMIN_DASHBOARD.order.root,
+                href: PATH_SHOP.checkout,
               },
               {
-                name: "Shipping",
-                href: PATH_ADMIN_DASHBOARD.order.root,
+                name: "Shipping"
               },
-              { name: "Payment" },
             ]}
             sx={{
               mb: { xs: 3, md: 5 },

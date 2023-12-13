@@ -2,6 +2,8 @@ import { Checkbox, FormControlLabel, Stack, Typography } from "@mui/material";
 import { Controller } from "react-hook-form";
 import { secondaryFont } from "@/theme/typography";
 import { useCheckoutContext } from "@/components/checkout/context";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 export const DELIVERY_OPTIONS = [
   {
@@ -51,7 +53,7 @@ export default function ShippingMethod() {
                   <FormControlLabel
                     key={index}
                     control={
-                      <Checkbox checked={field.value === option.value} />
+                      <Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} checked={field.value === option.value} />
                     }
                     label={option.description}
                     componentsProps={{

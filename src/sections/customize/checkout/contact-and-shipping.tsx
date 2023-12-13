@@ -9,10 +9,13 @@ import {
   Typography,
 } from "@mui/material";
 import { primaryFont, secondaryFont } from "@/theme/typography";
+import { useCheckoutContext } from "@/components/checkout/context";
 
 type Props = {};
 
 export default function ContactAndShipping(props: Props) {
+
+  const checkout = useCheckoutContext();
 
   return (
     <>
@@ -49,7 +52,7 @@ export default function ContactAndShipping(props: Props) {
                 </Typography>
               </TableCell>
               <TableCell sx={{ px: 0, pb: 0.5 }}>
-                <Button><Typography
+                <Button onClick={checkout.onBackStep}><Typography
                   sx={{
                     fontSize: 12,
                     fontWeight: 500,
@@ -85,7 +88,7 @@ export default function ContactAndShipping(props: Props) {
                 </Typography>
               </TableCell>
               <TableCell sx={{ px: 0, pb: 0.5, pt: 0.5 }}>
-                <Button><Typography
+                <Button onClick={checkout.onBackStep}><Typography
                   sx={{
                     fontSize: 12,
                     fontWeight: 500,

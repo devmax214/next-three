@@ -10,6 +10,8 @@ import {
   FormLabel,
 } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 interface RHFCheckboxProps extends Omit<FormControlLabelProps, "control"> {
   name: string;
@@ -18,7 +20,7 @@ interface RHFCheckboxProps extends Omit<FormControlLabelProps, "control"> {
 
 export function RHFCheckbox({ name, helperText, ...other }: RHFCheckboxProps) {
   const { control } = useFormContext();
-  
+
   return (
     <Controller
       name={name}
@@ -26,7 +28,7 @@ export function RHFCheckbox({ name, helperText, ...other }: RHFCheckboxProps) {
       render={({ field, fieldState: { error } }) => (
         <div>
           <FormControlLabel
-            control={<Checkbox {...field} checked={field.value} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} {...field} checked={field.value} />}
             {...other}
           />
 
@@ -104,6 +106,7 @@ export function RHFMultiCheckbox({
                 key={option.value}
                 control={
                   <Checkbox
+                    icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />}
                     checked={field.value.includes(option.value)}
                     onChange={() =>
                       field.onChange(getSelected(field.value, option.value))

@@ -44,6 +44,8 @@ import { endpoints } from "../../../../global-config";
 import axios from "axios";
 import { random } from "lodash";
 import { randomInt } from "crypto";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
 
@@ -301,7 +303,7 @@ export default function ConfigurationDetails(props) {
         <FormGroup >
           <FormControlLabel
             sx={{ mr: 0 }}
-            control={<Checkbox checked={washing} onChange={handleChange} color="default" sx={{ color: '#333333' }} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} checked={washing} onChange={handleChange} color="default" sx={{ color: '#333333' }} />}
             label={
               <Typography
                 sx={{
@@ -318,7 +320,7 @@ export default function ConfigurationDetails(props) {
 
           <FormControlLabel
             sx={{ mr: 0 }}
-            control={<Checkbox disabled={washing} color="default" sx={{ color: '#333333', mt: -6 }} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} disabled={washing} color="default" sx={{ color: '#333333', mt: -6 }} />}
             label={
               <TextField
                 fullWidth
@@ -391,7 +393,7 @@ export default function ConfigurationDetails(props) {
             var imageData = canvas.toDataURL();
             customProductInfo.img = imageData;
             const images = [];
-            images.push(imageData);;
+            images.push(imageData);
             const data = {
               images: images,
               name: "custom" + new Date().getTime().toString(),

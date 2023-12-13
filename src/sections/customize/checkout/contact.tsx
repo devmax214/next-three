@@ -7,6 +7,8 @@ import { RHFTextField } from "@/components/hook-form";
 import { styled } from "@mui/material/styles";
 import { primaryFont, secondaryFont } from "@/theme/typography";
 import { useCheckoutContext } from "@/components/checkout/context";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 const items = [{ label: "Shipping Included" }, { label: "Shipping not Included" }];
 
@@ -61,7 +63,7 @@ export default function Contact() {
 
         {!isLogin && (
           <FormControlLabel
-            control={<Checkbox />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} />}
             label="Sign me up for Wonder Raw emails about new products, restocks and
                 events."
             labelPlacement="end"

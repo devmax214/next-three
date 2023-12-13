@@ -17,6 +17,8 @@ import { usePopover } from "@/components/custom-popover";
 import { useBoolean } from "@/hooks";
 import { IOrderItem } from "@/@types/order";
 import Iconify from "@/components/iconify";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 type Props = {
   row: IOrderItem;
@@ -56,7 +58,7 @@ export default function OrderTableRow({
   const renderPrimary = (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
+        <Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} checked={selected} onClick={onSelectRow} />
       </TableCell>
 
       <TableCell>

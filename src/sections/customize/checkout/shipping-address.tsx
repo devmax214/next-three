@@ -23,6 +23,8 @@ import { useEffect, useState } from "react";
 import { primaryFont, secondaryFont } from "@/theme/typography";
 import SaveIcon from '@/components/icons/checkout/icon-save';
 import { useCheckoutContext } from "@/components/checkout/context";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: 16,
@@ -192,7 +194,7 @@ export default function ShippingAddress({ addresses, setAddresses, renderModal, 
         <StyledTypography sx={{ paddingTop: '6px' }}>Select your address</StyledTypography>
 
         <FormControlLabel
-          control={<Checkbox color="default" sx={{ color: '#000000' }} />}
+          control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" sx={{ color: '#000000' }} />}
           label="Transport not included - Client Pick up"
           labelPlacement="end"
           componentsProps={{

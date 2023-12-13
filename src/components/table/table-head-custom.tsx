@@ -6,6 +6,8 @@ import TableHead from "@mui/material/TableHead";
 import TableCell from "@mui/material/TableCell";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import { secondaryFont } from "@/theme/typography";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 const visuallyHidden = {
   border: 0,
@@ -46,6 +48,7 @@ export default function TableHeadCustom({
         {onSelectAllRows && (
           <TableCell padding="checkbox">
             <Checkbox
+              icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />}
               indeterminate={!!numSelected && numSelected < rowCount}
               checked={!!rowCount && numSelected === rowCount}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>

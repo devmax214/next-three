@@ -35,6 +35,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { secondaryFont } from "@/theme/typography";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 export const StyledSwitchLabel = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -235,7 +237,7 @@ export default function ApprovedQuotePage(props: Props) {
                     </Grid>
                     <FormControlLabel
                       sx={{ mt: -1 }}
-                      control={<Checkbox color="default" checked={true} disabled={true} />}
+                      control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={true} disabled={true} />}
                       label={
                         <Typography
                           sx={{
@@ -264,7 +266,7 @@ export default function ApprovedQuotePage(props: Props) {
                     </Grid>
                     <FormControlLabel
                       sx={{ mt: -1 }}
-                      control={<Checkbox color="default" checked={true} disabled={true} />}
+                      control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={true} disabled={true} />}
                       label={
                         <Typography
                           sx={{

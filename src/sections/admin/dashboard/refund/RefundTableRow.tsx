@@ -12,6 +12,8 @@ import { fCurrency } from "@/utils/formatNumber";
 import Label from "@/components/label";
 import Iconify from "@/components/iconify";
 import { usePopover } from "@/components/custom-popover";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 type Props = {
   row: IRefundRequestItem;
@@ -36,7 +38,7 @@ export default function RefundTableRow({
     <>
       <TableRow hover selected={selected}>
         <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
+          <Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} checked={selected} onClick={onSelectRow} />
         </TableCell>
 
         <TableCell align="center">{orderNumber}</TableCell>

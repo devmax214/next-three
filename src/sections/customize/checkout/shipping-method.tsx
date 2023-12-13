@@ -1,5 +1,7 @@
 import { primaryFont, secondaryFont } from "@/theme/typography";
 import { Checkbox, FormControlLabel, Stack, Typography } from "@mui/material";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 type Props = {};
 

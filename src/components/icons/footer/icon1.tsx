@@ -1,7 +1,7 @@
 import { memo } from "react";
 import Box, { BoxProps } from "@mui/material/Box";
 
-function Icon1({ ...other }: BoxProps) {
+function FootIcon1({ ...other }: BoxProps) {
   return (
     <Box
       component="svg"
@@ -28,4 +28,4 @@ function Icon1({ ...other }: BoxProps) {
   );
 }
 
-export default memo(Icon1);
+export default memo(FootIcon1);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -8,13 +8,15 @@ import {
   Link,
   Stack,
   TextField,
+  Modal,
+  Card,
   Typography,
 } from "@mui/material";
 import NextLink from "next/link";
 import Logo from "@/components/logo";
 import { RouterLink } from "@/routers/components";
-import Icon1 from "@/components/icons/footer/icon1";
-import Icon2 from "@/components/icons/footer/icon2";
+import FootIcon1 from "@/components/icons/footer/icon1";
+import FootIcon2 from "@/components/icons/footer/icon2";
 import FacebookIcon from "@/components/icons/icon-facebook";
 import InstagramIcon from "@/components/icons/icon-instagram";
 import LinkedinIcon from "@/components/icons/icon-linkedin";
@@ -25,9 +27,125 @@ import { useResponsive } from "@/hooks";
 import { PATH_SHOP } from "@/routers/path";
 import { secondaryFont } from "@/theme/typography";
 import { LINKS } from "./config-footer";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import FormProvider, { RHFTextField } from "@/components/hook-form";
+import * as Yup from "yup";
+import { styled } from "@mui/material/styles";
+import Icon2 from '@/components/icons/auth/icon2';
+import Icon3 from '@/components/icons/auth/icon3';
+import ModalFootIcon from '@/components/icons/footer/modal';
+import Iconify from "@/components/iconify";
+
+const SubscribeSchema = Yup.object().shape({
+  email: Yup.string()
+    .required("Email is required")
+    .email("Email must be a valid email address"),
+});
+
+const defaultValues = {
+  email: "",
+};
+
+const Wrapper = styled(Box)<{}>(({ theme }) => ({
+  position: "absolute",
+  left: "50%",
+  top: 100,
+  transform: "translateX(-50%)",
+  width: "40%",
+  outline: "none",
+}));
 
 export default function Footer() {
   const upMd = useResponsive("up", "md");
+
+  const methods = useForm({
+    resolver: yupResolver(SubscribeSchema),
+    defaultValues,
+  });
+
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
+  const [subscribed, setSubscribed] = useState(false);
+  const onSubmit = handleSubmit(async (data) => {
+    setSubscribed(true);
+  });
+
+  const renderModal = (
+    <>
+      <Modal open={subscribed}>
+        <Wrapper>
+          <Card sx={{ px: 5, py: 18 }}>
+            <Box
+              component="div"
+              sx={{
+                position: "absolute",
+                left: 20,
+                top: 20,
+                width: { xs: 93, md: "20px" },
+                height: { xs: 68.55, md: "20px" },
+              }}
+            >
+              <Icon3 />
+            </Box>
+            <Box
+              component="div"
+              sx={{
+                position: "absolute",
+                left: 67,
+                top: 35,
+                width: { xs: 93, md: "12px" },
+                height: { xs: 68.55, md: "12px" },
+              }}
+            >
+              <Icon2 />
+            </Box>
+            <Box
+              component="div"
+              sx={{
+                position: "absolute",
+                rotate: "-90deg",
+                right: 15,
+                bottom: -5,
+                width: { xs: 93, md: "60px" },
+                height: { xs: 68.55, md: "65px" },
+              }}
+            >
+              <ModalFootIcon />
+            </Box>
+            <Stack alignItems="end">
+              <IconButton
+                onClick={() => {
+                  setSubscribed(false)
+                }}
+                sx={{ fontWeight: 300, position: "absolute", top: 5, right: 5 }}
+              >
+                <Iconify
+                  icon="material-symbols:close"
+                  width={{ xs: 24, md: 42 }}
+                  color="#5C6166"
+                  fontWeight={300}
+                />
+              </IconButton>
+            </Stack>
+            <Typography
+              sx={{
+                flexGrow: 1,
+                fontSize: 22,
+                fontweight: 500,
+                textAlign: "center",
+                fontFamily: secondaryFont.style.fontFamily
+              }}>
+              Thank you for subscribing.<br />Please check your email to get the Discount Code
+            </Typography>
+          </Card>
+        </Wrapper>
+      </Modal>
+    </>
+  );
 
   return (
     <Box
@@ -41,6 +159,7 @@ export default function Footer() {
         },
       }}
     >
+      {renderModal}
       <Divider />
 
       <Container
@@ -127,19 +246,18 @@ export default function Footer() {
                 Newsletter
               </Typography>
 
-              <Stack direction="row" alignItems="center" gap={3}>
-                <TextField size="small" placeholder="Email address" fullWidth />
-
-                <Box component="div" sx={{ flexShrink: 0 }}>
+              <FormProvider methods={methods} onSubmit={onSubmit}>
+                <Stack direction="row" alignItems="flex-start" gap={3}>
+                  <RHFTextField sx={{ width: 150 }} size="small" name="email" placeholder="Email address" />
                   <Button
+                    type="submit"
                     sx={{ bgcolor: "#F05A4A", width: 120 }}
                     variant="contained"
                   >
                     Subscribe
                   </Button>
-                </Box>
-              </Stack>
-
+                </Stack>
+              </FormProvider>
               <Typography
                 sx={{
                   fontSize: { xs: 10, md: 11 },
@@ -231,7 +349,7 @@ export default function Footer() {
             transform: "translateY(-50%)",
           }}
         >
-          <Icon1 />
+          <FootIcon1 />
         </Box>
 
         <Box
@@ -245,7 +363,7 @@ export default function Footer() {
             transform: "translateY(-100%)",
           }}
         >
-          <Icon2 />
+          <FootIcon2 />
         </Box>
       </Container>
     </Box>

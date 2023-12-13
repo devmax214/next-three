@@ -11,6 +11,11 @@ export default async function handler(
 
   switch (method) {
     case "POST":
+      const count = await Customer.count({ email: req.body.email });
+      if (count > 0) {
+        res.status(201).json({ success: false, msg: "email duplicated!" });
+        return;
+      }
       const customer = await Customer.create({ ...req.body });
       res.status(201).json({ success: true, data: customer });
       break;

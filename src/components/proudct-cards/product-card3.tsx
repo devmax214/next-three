@@ -36,13 +36,13 @@ export default function ProductCard3({
         sx={{
           width: 70,
           height: 70,
-          background: "#F8F8F8",
+          background: "lightgrey",
           borderRadius: "8px",
           border: "1px solid #eee",
           overflow: "hidden",
         }}
       >
-        <Image src={`/uploads/${coverUrl}`} />
+        <Image width="100%" height="100%" src={`${coverUrl}`} />
       </Box>
 
       <Stack flexGrow={1} justifyContent="space-between">

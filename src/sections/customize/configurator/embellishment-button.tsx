@@ -20,6 +20,8 @@ import { secondaryFont } from "@/theme/typography";
 import PositionControl from "./position-control";
 import SizeControl from "./size-control";
 import { CustomizeContext } from "@/components/customize/context/customize-context";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 export const StyledHeader1 = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -121,7 +123,7 @@ export default function EmbellishmentButton(props: Props) {
     <>
       <FormControlLabel
         sx={{ mb: -2 }}
-        control={<Checkbox color="default" disabled={customize.embellishment.type === "image"} checked={customize.embellishment.type === "image"} onClick={(ev) => checkImage(ev.target.checked, "image")} />}
+        control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" disabled={customize.embellishment.type === "image"} checked={customize.embellishment.type === "image"} onClick={(ev) => checkImage(ev.target.checked, "image")} />}
         label={
           <Typography
             sx={{
@@ -204,7 +206,7 @@ export default function EmbellishmentButton(props: Props) {
     <>
       <StyledHeader1>File</StyledHeader1>
 
-      <input type="file" onChange={fileSelect} />
+      <input type="file" disabled={customize.embellishment.type !== "image"} onChange={fileSelect} />
     </>
   );
 
@@ -223,6 +225,7 @@ export default function EmbellishmentButton(props: Props) {
               size="small"
               defaultValue={22}
               fullWidth
+              disabled={customize.embellishment.type !== "image"}
               onChange={(e) => customize.onEmbelChangePosition({ ...customize.embellishment.position, width: e.target.value })}
               inputProps={{
                 step: 1,
@@ -241,6 +244,7 @@ export default function EmbellishmentButton(props: Props) {
               size="small"
               defaultValue={22}
               fullWidth
+              disabled={customize.embellishment.type !== "image"}
               onChange={(e) => customize.onEmbelChangePosition({ ...customize.embellishment.position, neck: e.target.value })}
               inputProps={{
                 step: 1,
@@ -259,6 +263,7 @@ export default function EmbellishmentButton(props: Props) {
               size="small"
               defaultValue={22}
               fullWidth
+              disabled={customize.embellishment.type !== "image"}
               onChange={(e) => customize.onEmbelChangePosition({ ...customize.embellishment.position, center: e.target.value })}
               inputProps={{
                 step: 1,
@@ -284,7 +289,7 @@ export default function EmbellishmentButton(props: Props) {
       <Stack gap={2}>
         <FormControlLabel
           sx={{ mb: -2 }}
-          control={<Checkbox color="default" disabled={customize.embellishment.type === "text"} checked={customize.embellishment.type === "text"} onClick={(ev) => checkImage(ev.target.checked, "text")} />}
+          control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" disabled={customize.embellishment.type === "text"} checked={customize.embellishment.type === "text"} onClick={(ev) => checkImage(ev.target.checked, "text")} />}
           label={
             <Typography
               sx={{
@@ -350,7 +355,7 @@ export default function EmbellishmentButton(props: Props) {
           </Grid>
 
           <Grid item md={6}>
-            {renderView}
+            {/* {renderView} */}
           </Grid>
 
           <Grid item md={12}>

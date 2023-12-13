@@ -24,6 +24,7 @@ export default function LoginView(props: Props) {
         component="div"
         sx={{
           bgcolor: "#F9F5EE",
+          height: "100%"
         }}
       >
         <Container

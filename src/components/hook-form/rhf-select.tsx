@@ -16,6 +16,8 @@ import { Controller, useFormContext } from "react-hook-form";
 import FormHelperText from "@mui/material/FormHelperText";
 import Checkbox from "@mui/material/Checkbox";
 import { Theme } from "@mui/material/styles";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 type RHFSelectProps = TextFieldProps & {
   name: string;
@@ -165,7 +167,7 @@ export function RHFMultiSelect({
               return (
                 <MenuItem key={option.value} value={option.value}>
                   {checkbox && (
-                    <Checkbox size="small" disableRipple checked={selected} />
+                    <Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} size="small" disableRipple checked={selected} />
                   )}
 
                   {option.label}

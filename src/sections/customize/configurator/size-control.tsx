@@ -24,7 +24,11 @@ export default function SizeControl(props: Props) {
   return (
     <Stack direction="row" gap={2}>
       {sizes.map((size, index) => (
-        <StyledButton key={index} disabled={context.embellishment.type !== "image"}>{size.label}</StyledButton>
+        <StyledButton
+          key={index}
+          sx={context.embellishment.size === index ? { border: "1px solid #F05A4A", borderRadius: "7px", width: "45px", height: "45px" } : { width: "45px", height: "45px" }}
+          onClick={() => context.onEmbelSelectSize(index)} disabled={context.embellishment.type !== "image"}
+        >{size.label}</StyledButton>
       ))}
     </Stack>
   );

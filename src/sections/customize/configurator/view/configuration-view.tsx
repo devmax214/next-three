@@ -78,7 +78,7 @@ export default function ConfigurationView(props: Props) {
                   name: "Product Page",
                   href: PATH_CONFIGURATOR.root,
                 },
-                { name: name },
+                { name: "Customize product" },
               ]}
               sx={{
                 mb: { xs: 3, md: 5 },

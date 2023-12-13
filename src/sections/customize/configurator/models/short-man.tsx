@@ -145,6 +145,9 @@ export default function ShortManModel(props: JSX.IntrinsicElements["group"]) {
         const material: any = materials[Object.keys(materials)[0]];
         let keys: string[] = Object.keys(nodes);
         keys = keys.filter((key) => (nodes[key].isMesh));
+        const positionY = customize.tag.size.startsWith("45x45") ? 1.1 : customize.tag.size.startsWith("55") ? 1.106 : 1.615;
+        const scaleYZ = customize.tag.size.startsWith("45x45") ? 0.023 : customize.tag.size.startsWith("55") ? 0.017 : 0.025;
+        const scaleX = customize.tag.size.startsWith("45x45") ? 0.034 : customize.tag.size.startsWith("55") ? 0.04 : 0.04;
 
         return (
           <group dispose={null}>
@@ -152,13 +155,12 @@ export default function ShortManModel(props: JSX.IntrinsicElements["group"]) {
               idx === 0 ? (
                 <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key}>
                   <Decal
-                    position={[0, 1.614, -0.085]}
+                    position={[0.002, positionY, -0.1]}
                     rotation={[0, 0, 0]}
-                    scale={0.02}
+                    scale={[scaleX, scaleYZ, scaleYZ]}
                     map={tagTexture}
                     // debug={true}
                     depthTest={true}
-
                   />
                 </mesh>
               ) : (
@@ -183,7 +185,7 @@ export default function ShortManModel(props: JSX.IntrinsicElements["group"]) {
         const material: any = materials[Object.keys(materials)[0]];
 
         return (
-          <group {...props} dispose={null}>
+          <group {...props} dispose={null} position={[0, 0, -0.0035]}>
             {keys.map((key: string, idx: number) => (
               <mesh name={`cords_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
             ))}

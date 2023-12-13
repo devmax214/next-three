@@ -14,6 +14,7 @@ import UserButton from "./user-button";
 import { navConfig } from "./config-navigation";
 import { HEADER } from "../../../../global-config";
 import NavMobile from "./nav-mobile";
+import DiscountBar from "@/layouts/shop/discount";
 
 type Props = {};
 
@@ -76,6 +77,7 @@ export default function Header(props: Props) {
           </Stack>
         </Container>
       </Toolbar>
+      <DiscountBar />
     </AppBar>
   );
 }

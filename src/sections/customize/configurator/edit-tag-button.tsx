@@ -9,6 +9,8 @@ import Option2Icon from "@/components/icons/customize/stitch/option2";
 import Option3Icon from "@/components/icons/customize/stitch/option3";
 import { CustomizeContext } from "@/components/customize/context/customize-context";
 import { useRouter } from "next/router";
+import CheckedIcon from "@/components/icons/checked-icon";
+import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
 export const StyledHeader1 = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -117,7 +119,7 @@ export default function EditTagButton(props: Props) {
     }
   }
 
-  const renderLabel = (
+  const renderOwnLabel = (
     <Stack>
       <Stack sx={{ mb: 1, mt: 1 }} direction="row" alignItems="center">
         <Typography
@@ -135,7 +137,7 @@ export default function EditTagButton(props: Props) {
         <FormGroup>
           <FormControlLabel
             sx={{ mt: -1 }}
-            control={<Checkbox color="default" checked={!context.tag.edit} onClick={() => onEditCheck(false)} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={!context.tag.edit} onClick={() => onEditCheck(false)} />}
             label={
               <Typography
                 sx={{
@@ -150,7 +152,7 @@ export default function EditTagButton(props: Props) {
             } />
           <FormControlLabel
             sx={{ mt: -2 }}
-            control={<Checkbox color="default" checked={context.tag.edit} onClick={() => onEditCheck(true)} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={context.tag.edit} onClick={() => onEditCheck(true)} />}
             label={
               <Typography
                 sx={{
@@ -165,7 +167,11 @@ export default function EditTagButton(props: Props) {
             } />
         </FormGroup>
       </Stack>
+    </Stack>
+  );
 
+  const renderNotOwnLabel = (
+    <Stack>
       <Stack sx={{ mb: 1, mt: 2 }} direction="row" alignItems="center">
         <Typography
           sx={{
@@ -183,7 +189,7 @@ export default function EditTagButton(props: Props) {
           {type === 'Oversize' || type === 'T-Shirts' || type === 'Sweatshirts' ?
             <FormControlLabel
               sx={{ mt: -1 }}
-              control={<Checkbox color="default" checked={!context.tag.neck} onClick={() => onNeckCheck(false)} disabled={!context.tag.edit} />}
+              control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={!context.tag.neck} onClick={() => onNeckCheck(false)} disabled={!context.tag.edit} />}
               label={
                 <Typography
                   sx={{
@@ -198,7 +204,7 @@ export default function EditTagButton(props: Props) {
               } /> : <></>}
           <FormControlLabel
             sx={{ mt: -2 }}
-            control={<Checkbox color="default" checked={context.tag.neck} onClick={() => onNeckCheck(true)} disabled={!context.tag.edit} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={context.tag.neck} onClick={() => onNeckCheck(true)} disabled={!context.tag.edit} />}
             label={
               <Typography
                 sx={{
@@ -242,7 +248,7 @@ export default function EditTagButton(props: Props) {
         <FormGroup>
           <FormControlLabel
             sx={{ mt: -1 }}
-            control={<Checkbox color="default" checked={!context.tag.color} onClick={() => onColorCheck(false)} disabled={!context.tag.edit} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={!context.tag.color} onClick={() => onColorCheck(false)} disabled={!context.tag.edit} />}
             label={
               <Typography
                 sx={{
@@ -257,7 +263,7 @@ export default function EditTagButton(props: Props) {
             } />
           <FormControlLabel
             sx={{ mt: -2 }}
-            control={<Checkbox color="default" checked={context.tag.color} onClick={() => onColorCheck(true)} disabled={!context.tag.edit} />}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={context.tag.color} onClick={() => onColorCheck(true)} disabled={!context.tag.edit} />}
             label={
               <Typography
                 sx={{
@@ -430,9 +436,9 @@ export default function EditTagButton(props: Props) {
         sx={{ p: 2, width: 400, height: 600, overflowY: 'scroll' }}
       >
         <Stack gap={1}>
-          {renderLabel}
-
-          {renderArtwork}
+          {renderOwnLabel}
+          {context.tag.edit ? renderNotOwnLabel : ""}
+          {context.tag.edit ? renderArtwork : ""}
 
           {/* {renderAttachment} */}
 
