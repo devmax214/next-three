@@ -148,7 +148,7 @@ export default function OrderSummary() {
 
         <Divider />
 
-        <Stack direction="row" justifyContent="space-between" sx={{ mt: -1 }}>
+        <Stack direction="row" justifyContent="space-between" sx={{ mt: -1, mb: 5 }}>
           <Typography variant="subtitle2" sx={{
             fontSize: 16,
             fontWeight: 500,

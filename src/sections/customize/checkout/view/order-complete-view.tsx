@@ -3,30 +3,32 @@ import { RouterLink } from "@/routers/components";
 import ConfirmOrderDetail from "../confirm-order-detail";
 import { secondaryFont } from "@/theme/typography";
 import BackIcon from '@/components/icons/icon-back';
+import { useResponsive } from "@/hooks";
 
 export default function OrderCompleteView() {
   const linkTo = "/";
 
+  const smDown = useResponsive("down", "sm");
   const renderHead = (
     <Stack p={3}>
       <Typography sx={{ fontSize: 19, fontWeight: 600, color: "#F05A4A", fontFamily: secondaryFont.style.fontFamily }}>
         Great!
       </Typography>
 
-      <Typography sx={{ fontSize: 28, fontWeight: 700, color: "#292F3D" }}>
+      <Typography sx={{ fontSize: { md: 28, xs: 24 }, fontWeight: 700, color: "#292F3D" }}>
         Payment Confirmed!
       </Typography>
 
       <Typography
-        sx={{ fontSize: 14, fontWeight: 500, color: "#5C6166", mt: 4 }}
+        sx={{ fontSize: { xs: 12, md: 14 }, fontWeight: 500, color: "#5C6166", mt: 4 }}
       >
         Thank you for shopping with us. Your order is being processed.
-        <br /> We'll send you a confirmation email shortly.
-        <br /> Happy shopping!
+        {smDown ? '' : <br />}We'll send you a confirmation email shortly.
+        {smDown ? '' : <br />}Happy shopping!
         <br /> <br />
         Your order code is
         <br />
-        <Typography sx={{ fontSize: 14, fontWeight: 600, color: "#5C6166" }}>
+        <Typography sx={{ fontSize: { xs: 12, md: 14 }, fontWeight: 600, color: "#5C6166" }}>
           #67L09KM1
         </Typography>
       </Typography>
@@ -53,12 +55,13 @@ export default function OrderCompleteView() {
           alignItems: "center",
           justifyContent: "center",
           py: 10,
+          pb: { md: 30, xs: 25 },
           bgcolor: "#F9F5EE",
         }}
       >
         <Card
           sx={{
-            width: 560,
+            width: { xs: 340, md: 560 },
             textAlign: "center",
             filter: "drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.15))",
             bgcolor: "#ffffff",

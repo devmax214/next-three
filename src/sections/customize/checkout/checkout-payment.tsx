@@ -17,6 +17,7 @@ import { PATH_ADMIN_DASHBOARD } from "@/routers/path";
 import { IPaymentItem } from "@/@types/customer";
 import { createOrder } from "@/services/order";
 import { useRouter } from "next/router";
+import { useResponsive } from "@/hooks";
 
 const CartPaymentSchema = Yup.object().shape({
   payment: Yup.string().required("Payment is required"),
@@ -36,7 +37,7 @@ type Props = {
 export default function CheckoutPayment({ payments }: Props) {
   const checkout = useCheckoutContext();
   const router = useRouter();
-
+  const smDown = useResponsive("down", "sm");
   const defaultValues = {
     payment: "credit",
     delivery: checkout.shipping,
@@ -116,7 +117,6 @@ export default function CheckoutPayment({ payments }: Props) {
         sx={{
           bgcolor: "#F9F5EE",
           position: "relative",
-          pl: 4
         }}
       >
         <Container
@@ -148,24 +148,36 @@ export default function CheckoutPayment({ payments }: Props) {
           />
 
           <FormProvider methods={methods} onSubmit={onSubmit}>
-            <Grid container spacing={38} mt={-38}>
-              <Grid item md={6}>
-                <Stack gap={4}>
-                  <ContactAndShipping />
+            <Grid container spacing={{ xs: 0, md: 38 }} >
+              <Grid item md={6} xs={12}>
+                {smDown ? <OrderSummary /> :
+                  <Stack gap={4}>
+                    <ContactAndShipping />
 
-                  <ShippingMethod />
+                    <ShippingMethod />
 
-                  <PaymentMethod
-                    payment={values.payment}
-                    onChange={onChangeMethod}
-                    payments={payments}
-                    setCreditInfo={setCreditInfo}
-                  />
-                </Stack>
+                    <PaymentMethod
+                      payment={values.payment}
+                      onChange={onChangeMethod}
+                      payments={payments}
+                      setCreditInfo={setCreditInfo}
+                    />
+                  </Stack>}
               </Grid>
+              <Grid item md={5.5} xs={12}>
+                {!smDown ? <OrderSummary /> :
+                  <Stack gap={4}>
+                    <ContactAndShipping />
 
-              <Grid item md={5.8} sx={{ ml: -17 }}>
-                <OrderSummary />
+                    <ShippingMethod />
+
+                    <PaymentMethod
+                      payment={values.payment}
+                      onChange={onChangeMethod}
+                      payments={payments}
+                      setCreditInfo={setCreditInfo}
+                    />
+                  </Stack>}
               </Grid>
             </Grid>
           </FormProvider>

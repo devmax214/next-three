@@ -22,6 +22,7 @@ import ModalFootIcon from '@/components/icons/footer/modal';
 import { styled } from "@mui/material/styles";
 import { primaryFont, secondaryFont } from "@/theme/typography";
 import { addAddress } from "@/services/customer";
+import { useResponsive } from "@/hooks";
 
 const ShippingAddressSchema = Yup.object().shape({
   email: Yup.string()
@@ -52,7 +53,7 @@ type Props = {
 
 export default function CheckoutBilllingAddress({ addresses }: Props) {
   const router = useRouter();
-
+  const smDown = useResponsive("down", "sm");
   const checkout = useCheckoutContext();
 
   const { data: session, status } = useSession();
@@ -197,7 +198,6 @@ export default function CheckoutBilllingAddress({ addresses }: Props) {
       sx={{
         bgcolor: "#F9F5EE",
         position: "relative",
-        pl: 4
       }}
     >
       <Container
@@ -225,22 +225,32 @@ export default function CheckoutBilllingAddress({ addresses }: Props) {
         />
 
         <FormProvider methods={methods}>
-          <Grid container spacing={35} >
-            <Grid item md={6}>
-              <Stack gap={4} sx={{ pl: 2.5 }}>
-                <Contact />
-
-                <ShippingAddress
-                  addresses={addresses}
-                  renderModal={renderModal}
-                  onNewAddrSubmit={onNewAddrSubmit}
-                  onSubmit={onSubmit}
-                  setAddresses={setAddresses}
-                />
-              </Stack>
+          <Grid container spacing={{ xs: 0, md: 20 }} >
+            <Grid item md={5.5}>
+              {smDown ? <OrderSummary /> :
+                <Stack gap={4} >
+                  <Contact />
+                  <ShippingAddress
+                    addresses={addresses}
+                    renderModal={renderModal}
+                    onNewAddrSubmit={onNewAddrSubmit}
+                    onSubmit={onSubmit}
+                    setAddresses={setAddresses}
+                  />
+                </Stack>}
             </Grid>
-            <Grid item md={5.8} sx={{ ml: -17 }} >
-              <OrderSummary />
+            <Grid item md={5.5} >
+              {!smDown ? <OrderSummary /> :
+                <Stack gap={4} >
+                  <Contact />
+                  <ShippingAddress
+                    addresses={addresses}
+                    renderModal={renderModal}
+                    onNewAddrSubmit={onNewAddrSubmit}
+                    onSubmit={onSubmit}
+                    setAddresses={setAddresses}
+                  />
+                </Stack>}
             </Grid>
           </Grid>
         </FormProvider>

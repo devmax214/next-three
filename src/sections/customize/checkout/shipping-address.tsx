@@ -93,7 +93,7 @@ export default function ShippingAddress({ addresses, setAddresses, renderModal, 
 
       <Stack gap={5}>
         <Grid container spacing={2.5}>
-          <Grid item md={12}>
+          <Grid item md={12} xs={12}>
             <RHFAutocomplete
               name="country"
               placeholder="Country"
@@ -123,46 +123,48 @@ export default function ShippingAddress({ addresses, setAddresses, renderModal, 
             />
           </Grid>
 
-          <Grid item md={6} sx={{ pr: 0.5 }}>
+          <Grid item md={6} xs={6} sx={{ pr: 0.5 }}>
             <RHFTextField size="small" name="firstname" placeholder="First name" />
           </Grid>
 
-          <Grid item md={6}>
+          <Grid item md={6} xs={6}>
             <RHFTextField size="small" name="lastname" placeholder="Last name" />
           </Grid>
 
-          <Grid item md={12}>
+          <Grid item md={12} xs={12}>
             <RHFTextField size="small" name="address" placeholder="Address" />
           </Grid>
 
-          <Grid item md={12}>
+          <Grid item md={12} xs={12}>
             <RHFTextField size="small"
               name="apartment"
               placeholder="Apartment, suite, etc. (optional)"
             />
           </Grid>
 
-          <Grid item md={7} sx={{ pr: 0.5 }}>
+          <Grid item md={7} xs={6} sx={{ pr: 0.5 }}>
             <RHFTextField size="small" name="city" placeholder="City" />
           </Grid>
 
-          <Grid item md={5}>
+          <Grid item md={5} xs={6}>
             <RHFTextField size="small" name="postal" placeholder="Postcode" />
           </Grid>
 
-          <Grid item md={12}>
+          <Grid item md={12} xs={12}>
             <RHFTextField size="small" name="phone" placeholder="Phone" />
           </Grid>
         </Grid>
 
-        <Stack direction="row" justifyContent="center" gap={5} px={3}>
+        <Stack direction="row" justifyContent="center" gap={5} px={{ xs: 0, md: 3 }}>
           <Button
             fullWidth
             variant="contained"
             size="large"
             sx={{
               bgcolor: "#ACB1B8",
-              width: 225,
+              width: { xs: 130, md: 225 },
+              fontSize: { xs: 12, md: 16 },
+              height: { xs: 40, md: 45 },
               "&:hover": { bgcolor: "#6AB67A" },
             }}
           >
@@ -177,7 +179,9 @@ export default function ShippingAddress({ addresses, setAddresses, renderModal, 
             size="large"
             sx={{
               bgcolor: "#292F3D",
-              width: 225,
+              width: { xs: 170, md: 225 },
+              height: { xs: 40, md: 45 },
+              fontSize: { xs: 12, md: 16 },
               "&:hover": { bgcolor: "#550248" },
             }}
           >
@@ -213,7 +217,9 @@ export default function ShippingAddress({ addresses, setAddresses, renderModal, 
           size="large"
           sx={{
             bgcolor: "#ACB1B8",
-            width: 225,
+            width: { xs: 130, md: 225 },
+            fontSize: { xs: 12, md: 16 },
+            height: { xs: 40, md: 45 },
             "&:hover": { bgcolor: "#6AB67A" },
           }}
         >
@@ -228,7 +234,9 @@ export default function ShippingAddress({ addresses, setAddresses, renderModal, 
           size="large"
           sx={{
             bgcolor: "#292F3D",
-            width: 225,
+            width: { xs: 170, md: 225 },
+            height: { xs: 40, md: 45 },
+            fontSize: { xs: 12, md: 16 },
             "&:hover": { bgcolor: "#550248" },
           }}
         >

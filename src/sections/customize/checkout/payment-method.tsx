@@ -109,14 +109,16 @@ export default function PaymentMethod({ payment, onChange }: Props) {
           </Stack>
         </TabPanel>
 
-        <Stack direction="row" px={2} gap={8} mt={5}>
+        <Stack direction="row" px={2} gap={2} mt={5}>
           <Button
             fullWidth
             variant="contained"
             size="large"
             sx={{
               bgcolor: "#ACB1B8",
-              width: 215,
+              width: { xs: 170, md: 255 },
+              height: { xs: 40, md: 45 },
+              fontSize: { xs: 12, md: 16 },
               "&:hover": { bgcolor: "#6AB67A" },
             }}
             onClick={checkout.onBackStep}
@@ -131,7 +133,9 @@ export default function PaymentMethod({ payment, onChange }: Props) {
             size="large"
             sx={{
               bgcolor: "#292F3D",
-              width: 215,
+              width: { xs: 130, md: 215 },
+              height: { xs: 40, md: 45 },
+              fontSize: { xs: 12, md: 16 },
               "&:hover": { bgcolor: "#550248" },
             }}
           >

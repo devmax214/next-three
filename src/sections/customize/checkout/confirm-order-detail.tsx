@@ -254,7 +254,7 @@ export default function ConfirmOrderDetail(props: Props) {
         height={33}
         sx={{
           position: 'absolute',
-          top: 278,
+          top: { md: 278, xs: 255 },
           left: 0,
           background: '#F9F5EE',
           borderRadius: 38,
@@ -266,7 +266,7 @@ export default function ConfirmOrderDetail(props: Props) {
         height={33}
         sx={{
           position: 'absolute',
-          top: 278,
+          top: { md: 278, xs: 255 },
           right: 0,
           background: "#F9F5EE",
           borderRadius: 38,
