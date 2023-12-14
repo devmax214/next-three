@@ -57,9 +57,10 @@ type ContextType = Record<
   React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
 >;
 
-export default function SWEATManModel(props: JSX.IntrinsicElements["group"]) {
+export default function SWEATManModel(props: any) {
   const customize = useCustomizeContext();
   const [tagName, setTagName] = useState("");
+  const { embelIndex } = props;
 
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
@@ -72,9 +73,9 @@ export default function SWEATManModel(props: JSX.IntrinsicElements["group"]) {
   }, [customize.tag.file])
 
   useEffect(() => {
-    if (customize.embellishment.file)
-      setTexture(loader.load(URL.createObjectURL(customize.embellishment.file)));
-  }, [customize.embellishment.file]);
+    if (customize.embellishment[embelIndex].file)
+      setTexture(loader.load(URL.createObjectURL(customize.embellishment[embelIndex].file)));
+  }, [customize.embellishment[embelIndex].file]);
 
   useEffect(() => {
     var textCanvas = document.createElement("canvas");
@@ -83,16 +84,16 @@ export default function SWEATManModel(props: JSX.IntrinsicElements["group"]) {
     var ctx = textCanvas.getContext("2d");
     if (ctx !== null) {
       ctx.fillStyle = "black";
-      ctx.font = `30px ${customize.embellishment.font}`;
-      ctx.fillText(customize.embellishment.textureText, 10, 50);
+      ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
+      ctx.fillText(customize.embellishment[embelIndex].textureText, 10, 50);
       const myTexture = new THREE.CanvasTexture(textCanvas);
       setTexture(myTexture)
     }
-  }, [customize.embellishment.textureText, customize.embellishment.font])
+  }, [customize.embellishment[embelIndex].textureText, customize.embellishment[embelIndex].font])
 
   useEffect(() => {
     setTexture(new THREE.Texture())
-  }, [customize.embellishment.type]);
+  }, [customize.embellishment[embelIndex].type]);
 
   const { nodes, materials } = useGLTF(
     "/models/SWEATWR_man/SWEATSHIRT_MAN.glb"
@@ -109,7 +110,7 @@ export default function SWEATManModel(props: JSX.IntrinsicElements["group"]) {
     try {
       if (!!tagName) {
         const { nodes, materials } = useGLTF(
-          `/models/SWEATWR_man/tags/Man/${tagName}/${tagName}.glb`
+          `/models/SWEATWR_man/tags/Man/${tagName}/${tagName}.gltf`
         ) as any;
 
         const material: any = materials[Object.keys(materials)[0]];
@@ -120,7 +121,7 @@ export default function SWEATManModel(props: JSX.IntrinsicElements["group"]) {
         const scaleYZ = customize.tag.size.startsWith("45x45") ? 0.02 : customize.tag.size.startsWith("55") ? 0.015 : 0.025;
 
         return (
-          <group dispose={null}>
+          <group dispose={null} position={[0, 0, 0.001]}>
             {keys.map((key: string, idx: number) => (
               idx === 0 ? (
                 <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key} position={[0, 0, tagName.startsWith("print") ? 0.002 : 0]}>

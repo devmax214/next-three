@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useMemo, useCallback } from "react";
 import { ICustomizeQuoteItem, CustomizeContextProps } from "@/@types/customize";
+import { Any } from "@react-spring/three";
+import { number } from "yup";
 
 export const CustomizeContext = createContext({} as CustomizeContextProps);
 
@@ -27,7 +29,7 @@ const initialState = {
     size: "45x45",
     file: null
   },
-  embellishment: {
+  embellishment: [{
     visible: false,
     type: "image",
     size: 0,
@@ -44,7 +46,75 @@ const initialState = {
     reqText: "",
     textureText: "",
     font: "Arial"
-  },
+  }, {
+    visible: false,
+    type: "image",
+    size: 0,
+    artwork: 0,
+    view: 0,
+    visibleText: false,
+    file: null,
+    position: {
+      width: 22,
+      neck: 22,
+      center: 22,
+      type: 0
+    },
+    reqText: "",
+    textureText: "",
+    font: "Arial"
+  }, {
+    visible: false,
+    type: "image",
+    size: 0,
+    artwork: 0,
+    view: 0,
+    visibleText: false,
+    file: null,
+    position: {
+      width: 22,
+      neck: 22,
+      center: 22,
+      type: 0
+    },
+    reqText: "",
+    textureText: "",
+    font: "Arial"
+  }, {
+    visible: false,
+    type: "image",
+    size: 0,
+    artwork: 0,
+    view: 0,
+    visibleText: false,
+    file: null,
+    position: {
+      width: 22,
+      neck: 22,
+      center: 22,
+      type: 0
+    },
+    reqText: "",
+    textureText: "",
+    font: "Arial"
+  }, {
+    visible: false,
+    type: "image",
+    size: 0,
+    artwork: 0,
+    view: 0,
+    visibleText: false,
+    file: null,
+    position: {
+      width: 22,
+      neck: 22,
+      center: 22,
+      type: 0
+    },
+    reqText: "",
+    textureText: "",
+    font: "Arial"
+  }],
   color: "",
   cord: "",
   cordTip: "",
@@ -55,6 +125,7 @@ const initialState = {
   material: "",
   lace: "",
   laceTip: "",
+  embelIndex: 0
 }
 
 export function CustomizeProvider({ children }: CustomizeProviderProps) {
@@ -138,118 +209,23 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
         file: file
       }
     }))
-  }, [values.embellishment.file]);
+  }, [values.tag.file]);
 
   //Embellishement props
-  const onEmbelEditVisible = useCallback(() => {
-    setValues((prevStatus: any) => ({
-      ...prevStatus,
-      embellishment: {
-        ...prevStatus.embellishment,
-        visible: !prevStatus.embellishment.visible
+  const onAllEmbelChange = useCallback((index: number, data: object) => {
+    setValues((prevStatus: any) => {
+      let newEmbel = prevStatus.embellishment;
+      newEmbel[index] = {
+        ...prevStatus.embellishment[index],
+        ...data
       }
-    }))
-  }, [values.embellishment.visible]);
-
-  const onEmbelSelectType = useCallback((type: string) => {
-    setValues((prevStatus: any) => ({
-      ...prevStatus,
-      embellishment: {
-        ...prevStatus.embellishment,
-        type: type
+      return {
+        ...prevStatus,
+        embelIndex: index,
+        embellishment: newEmbel
       }
-    }))
-  }, [values.embellishment.type]);
-
-  const onEmbelSelectSize = useCallback((size: number) => {
-    setValues((prevStatus: any) => ({
-      ...prevStatus,
-      embellishment: {
-        ...prevStatus.embellishment,
-        size: size
-      }
-    }))
-  }, [values.embellishment.size]);
-
-  const onEmbelSelectArtworkType = useCallback((type: number) => {
-    setValues((prevStatus: any) => ({
-      ...prevStatus,
-      embellishment: {
-        ...prevStatus.embellishment,
-        artwork: type
-      }
-    }))
-  }, [values.embellishment.artwork]);
-
-  const onEmbelSelectViewType = useCallback((type: string) => {
-    setValues((prevStatus: any) => ({
-      ...prevStatus,
-      embellishment: {
-        ...prevStatus.embellishment,
-        view: type
-      }
-    }))
-  }, [values.embellishment.view]);
-
-  const onEmbelVisibleText = useCallback(() => {
-    setValues((prevStatus: any) => ({
-      ...prevStatus,
-      embellishment: {
-        ...prevStatus.embellishment,
-        visibleText: !prevStatus.embellishment.visibleText
-      }
-    }))
-  }, [values.embellishment.visibleText]);
-
-  const onEmbelSelectFile = useCallback((file: any) => {
-    setValues((prevStatus: any) => ({
-      ...prevStatus,
-      embellishment: {
-        ...prevStatus.embellishment,
-        file: file
-      }
-    }))
-  }, [values.embellishment.file]);
-
-  const onEmbelChangePosition = useCallback((position: any) => {
-    setValues((prevStatus: any) => ({
-      ...prevStatus,
-      embellishment: {
-        ...prevStatus.embellishment,
-        position: position
-      }
-    }))
-  }, [values.embellishment.position]);
-
-  const onEmbelChangeReqText = useCallback((text: string) => {
-    setValues((prevStatus: any) => ({
-      ...prevStatus,
-      embellishment: {
-        ...prevStatus.embellishment,
-        reqText: text
-      }
-    }))
-  }, [values.embellishment.reqText]);
-
-  const onEmbelChangeTextureText = useCallback((text: string) => {
-    setValues((prevStatus: any) => ({
-      ...prevStatus,
-      embellishment: {
-        ...prevStatus.embellishment,
-        textureText: text
-      }
-    }))
-  }, [values.embellishment.textureText]);
-
-  const onEmbelChangeFont = useCallback((value: string) => {
-    setValues((prevStatus: any) => ({
-      ...prevStatus,
-      embellishment: {
-        ...prevStatus.embellishment,
-        font: value
-      }
-    }))
-  }, [values.embellishment.font]);
+    })
+  }, [values.embellishment]);
 
   const onCordTypeChange = useCallback((value: string) => {
     setValues((prevStatus: any) => ({
@@ -310,17 +286,7 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
       onTagSizeChange,
       onTagEditVisible,
       onTagSelectFile,
-      onEmbelEditVisible,
-      onEmbelSelectType,
-      onEmbelSelectSize,
-      onEmbelSelectArtworkType,
-      onEmbelSelectViewType,
-      onEmbelVisibleText,
-      onEmbelSelectFile,
-      onEmbelChangePosition,
-      onEmbelChangeReqText,
-      onEmbelChangeTextureText,
-      onEmbelChangeFont,
+      onAllEmbelChange,
       onCordTypeChange,
       onCordTipChange,
       onCareLabelChange,

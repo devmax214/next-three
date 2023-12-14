@@ -13,7 +13,7 @@ import OrderSummary from "./order-summary";
 import ContactAndShipping from "./contact-and-shipping";
 import ShippingMethod from "./shipping-method";
 import PaymentMethod from "./payment-method";
-import { PATH_ADMIN_DASHBOARD } from "@/routers/path";
+import { PATH_SHOP } from "@/routers/path";
 import { IPaymentItem } from "@/@types/customer";
 import { createOrder } from "@/services/order";
 import { useRouter } from "next/router";
@@ -130,17 +130,15 @@ export default function CheckoutPayment({ payments }: Props) {
             links={[
               {
                 name: "Home",
-                href: PATH_ADMIN_DASHBOARD.root,
+                href: PATH_SHOP.home,
               },
               {
                 name: "Checkout",
-                href: PATH_ADMIN_DASHBOARD.order.root,
+                href: PATH_SHOP.checkout,
               },
               {
                 name: "Shipping",
-                href: PATH_ADMIN_DASHBOARD.order.root,
               },
-              { name: "Payment" },
             ]}
             sx={{
               mb: { xs: 3, md: 5 },
@@ -148,7 +146,7 @@ export default function CheckoutPayment({ payments }: Props) {
           />
 
           <FormProvider methods={methods} onSubmit={onSubmit}>
-            <Grid container spacing={{ xs: 0, md: 38 }} >
+            <Grid container columnSpacing={{ xs: 0, md: 38 }} >
               <Grid item md={6} xs={12}>
                 {smDown ? <OrderSummary /> :
                   <Stack gap={4}>

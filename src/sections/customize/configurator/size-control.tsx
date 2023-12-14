@@ -17,17 +17,19 @@ export const StyledButton = styled(ButtonBase)(({ theme }) => ({
   padding: 10,
 }));
 
-type Props = {};
+type Props = {
+  embelIndex: number
+};
 
-export default function SizeControl(props: Props) {
+export default function SizeControl({ embelIndex }: Props) {
   const context = useContext(CustomizeContext);
   return (
     <Stack direction="row" gap={2}>
       {sizes.map((size, index) => (
         <StyledButton
           key={index}
-          sx={context.embellishment.size === index ? { border: "1px solid #F05A4A", borderRadius: "7px", width: "45px", height: "45px" } : { width: "45px", height: "45px" }}
-          onClick={() => context.onEmbelSelectSize(index)} disabled={context.embellishment.type !== "image"}
+          sx={context.embellishment[embelIndex].size === index ? { border: "1px solid #F05A4A", borderRadius: "7px", width: "45px", height: "45px" } : { width: "45px", height: "45px" }}
+          onClick={() => context.onAllEmbelChange(embelIndex, { size: index })} disabled={context.embellishment[embelIndex].type !== "image"}
         >{size.label}</StyledButton>
       ))}
     </Stack>

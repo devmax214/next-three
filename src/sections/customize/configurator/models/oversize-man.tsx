@@ -67,9 +67,11 @@ type ContextType = Record<
   React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
 >;
 
-export default function OversizeManModel(props: JSX.IntrinsicElements["group"]) {
+export default function OversizeManModel(props: any) {
   const customize = useCustomizeContext();
   const [tagName, setTagName] = useState("");
+  const { embelIndex } = props;
+  console.log('embelIndex', embelIndex)
 
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
@@ -82,9 +84,9 @@ export default function OversizeManModel(props: JSX.IntrinsicElements["group"]) 
   }, [customize.tag.file])
 
   useEffect(() => {
-    if (customize.embellishment.file)
-      setTexture(loader.load(URL.createObjectURL(customize.embellishment.file)));
-  }, [customize.embellishment.file]);
+    if (customize.embellishment[embelIndex].file)
+      setTexture(loader.load(URL.createObjectURL(customize.embellishment[embelIndex].file)));
+  }, [customize.embellishment[embelIndex].file]);
 
   useEffect(() => {
     var textCanvas = document.createElement("canvas");
@@ -93,12 +95,12 @@ export default function OversizeManModel(props: JSX.IntrinsicElements["group"]) 
     var ctx = textCanvas.getContext("2d");
     if (ctx !== null) {
       ctx.fillStyle = "black";
-      ctx.font = `30px ${customize.embellishment.font}`;
-      ctx.fillText(customize.embellishment.textureText, 10, 50);
+      ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
+      ctx.fillText(customize.embellishment[embelIndex].textureText, 10, 50);
       const myTexture = new THREE.CanvasTexture(textCanvas);
       setTexture(myTexture)
     }
-  }, [customize.embellishment.textureText, customize.embellishment.font])
+  }, [customize.embellishment[embelIndex].textureText, customize.embellishment[embelIndex].font])
 
   const { nodes, materials } = useGLTF(
     "/models/Oversize/Oversized.glb"

@@ -10,7 +10,7 @@ import ContactAndShipping from "../contact-and-shipping";
 import ShippingMethod from "../shipping-method";
 import PaymentMethod from "../payment-method";
 import FormProvider from "@/components/hook-form";
-import { PATH_ADMIN_DASHBOARD } from "@/routers/path";
+import { PATH_SHOP } from "@/routers/path";
 
 const CartPaymentSchema = Yup.object().shape({
   payment: Yup.string().required(""),
@@ -45,7 +45,7 @@ export default function PaymentView(props: Props) {
     [setValue]
   );
 
-  const onSubmit = handleSubmit(async (data) => {});
+  const onSubmit = handleSubmit(async (data) => { });
 
   return (
     <>
@@ -67,17 +67,15 @@ export default function PaymentView(props: Props) {
             links={[
               {
                 name: "Home",
-                href: PATH_ADMIN_DASHBOARD.root,
+                href: PATH_SHOP.home,
               },
               {
                 name: "Checkout",
-                href: PATH_ADMIN_DASHBOARD.order.root,
+                href: PATH_SHOP.checkout,
               },
               {
                 name: "Shipping",
-                href: PATH_ADMIN_DASHBOARD.order.root,
               },
-              { name: "Payment" },
             ]}
             sx={{
               mb: { xs: 3, md: 5 },

@@ -116,11 +116,12 @@ type ContextType = Record<
   React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
 >;
 
-export default function PANTManModel(props: JSX.IntrinsicElements["group"]) {
+export default function PANTManModel(props: any) {
   const customize = useCustomizeContext();
   const [tagName, setTagName] = useState("");
   const [cords, setCords] = useState("");
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
+  const { embelIndex } = props;
 
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");

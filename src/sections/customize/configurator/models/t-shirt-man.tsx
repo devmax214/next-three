@@ -58,7 +58,7 @@ type ContextType = Record<
   React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
 >;
 
-export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
+export default function TShirtManModel(props: any) {
   const customize = useCustomizeContext();
 
   const [tagName, setTagName] = useState("");
@@ -66,6 +66,7 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
   loader.setCrossOrigin("");
   const [texture, setTexture] = useState(new THREE.Texture()) as any;
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
+  const { embelIndex } = props;
 
   useEffect(() => {
     if (customize.tag.file)
@@ -78,39 +79,39 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
     textCanvas.height = 200;
     var ctx = textCanvas.getContext("2d");
 
-    if (ctx !== null && customize.embellishment.font) {
+    if (ctx !== null && customize.embellishment[embelIndex].font) {
       ctx.fillStyle = "black";
-      ctx.font = `30px ${customize.embellishment.font}`;
-      switch (customize.embellishment.position.type) {
+      ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
+      switch (customize.embellishment[embelIndex].position.type) {
         case 0:
           ctx.textAlign = 'left';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment.textureText, 0, 100);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 0, 100);
           break;
         case 1:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment.textureText, 100, 100);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
           break;
         case 2:
           ctx.textAlign = 'right';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment.textureText, 200, 100);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 200, 100);
           break;
         case 3:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'top';
-          ctx.fillText(customize.embellishment.textureText, 100, 0);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 0);
           break;
         case 4:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment.textureText, 100, 100);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
           break;
         case 5:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'bottom';
-          ctx.fillText(customize.embellishment.textureText, 100, 200);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 200);
           break;
       }
 
@@ -120,13 +121,13 @@ export default function TShirtManModel(props: JSX.IntrinsicElements["group"]) {
   }
 
   useEffect(() => {
-    if (customize.embellishment.type === 'image') {
-      if (customize.embellishment.file)
-        setTexture(loader.load(URL.createObjectURL(customize.embellishment.file)));
-    } else if (customize.embellishment.type === 'text') {
+    if (customize.embellishment[embelIndex].type === 'image') {
+      if (customize.embellishment[embelIndex].file)
+        setTexture(loader.load(URL.createObjectURL(customize.embellishment[embelIndex].file)));
+    } else if (customize.embellishment[embelIndex].type === 'text') {
       setTextTexture();
     }
-  }, [customize.embellishment.position, customize.embellishment.type, customize.embellishment.file, customize.embellishment.textureText, customize.embellishment.font]);
+  }, [customize.embellishment[embelIndex].position, customize.embellishment[embelIndex].type, customize.embellishment[embelIndex].file, customize.embellishment[embelIndex].textureText, customize.embellishment[embelIndex].font]);
 
   const { nodes, materials } = useGLTF(
     "/models/TSHIRTWR_man/TSHIRT_MAN.glb"

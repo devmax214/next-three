@@ -39,7 +39,7 @@ export interface ICustomizeQuoteItem {
   category: ICategoryItem;
   garment: string;
   tag: ICustomizeTagItem;
-  embellishment: IEmbellishmentItem;
+  embellishment: IEmbellishmentItem[];
   cord: string;
   cordTip: string;
   text: string;
@@ -50,6 +50,7 @@ export interface ICustomizeQuoteItem {
   laceTip: string;
   lace: string;
   material: string;
+  embelIndex: number;
 }
 
 export interface ICustomizeItem {
@@ -75,17 +76,7 @@ export type CustomizeContextProps = ICustomizeQuoteItem & {
   onTagSizeChange: (size: string) => void;
   onTagEditVisible: () => void;
   onTagSelectFile: (file: any) => void;
-  onEmbelEditVisible: () => void;
-  onEmbelSelectType: (type: string) => void;
-  onEmbelSelectSize: (size: number) => void;
-  onEmbelSelectArtworkType: (type: number) => void;
-  onEmbelSelectViewType: (type: number) => void;
-  onEmbelVisibleText: () => void;
-  onEmbelSelectFile: (file: any) => void;
-  onEmbelChangePosition: (position: any) => void;
-  onEmbelChangeReqText: (value: string) => void;
-  onEmbelChangeTextureText: (value: string) => void;
-  onEmbelChangeFont: (value: string) => void;
+  onAllEmbelChange: (index: number, data: object) => void;
   onCordTypeChange: (value: string) => void;
   onCordTipChange: (value: string) => void;
   onCareLabelChange: (value: number) => void;

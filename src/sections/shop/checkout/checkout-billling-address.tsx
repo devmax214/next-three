@@ -13,7 +13,7 @@ import { useCheckoutContext } from "@/components/checkout/context";
 import OrderSummary from "./common/order-summary";
 import Contact from "./contact";
 import ShippingAddress from "./shipping-address";
-import { PATH_ADMIN_DASHBOARD } from "@/routers/path";
+import { PATH_SHOP } from "@/routers/path";
 import { IAddressItem } from "@/@types/customer";
 
 const ShippingAddressSchema = Yup.object().shape({
@@ -112,11 +112,11 @@ export default function CheckoutBillingAddress({ addresses }: Props) {
           links={[
             {
               name: "Home",
-              href: PATH_ADMIN_DASHBOARD.root,
+              href: PATH_SHOP.home,
             },
             {
               name: "Checkout",
-              href: PATH_ADMIN_DASHBOARD.order.root,
+              href: PATH_SHOP.checkout,
             },
             { name: "Shipping" },
           ]}

@@ -43,7 +43,8 @@ const positions = [
 ];
 
 type Props = {
-  type: string
+  type: string,
+  embelIndex: number
 };
 
 export default function PositionControl(props: Props) {
@@ -51,15 +52,15 @@ export default function PositionControl(props: Props) {
   const [state, setState] = useState(0);
 
   useEffect(() => {
-    setState(customize.embellishment.position.type)
-  }, [customize.embellishment.type]);
+    setState(customize.embellishment[props.embelIndex].position.type)
+  }, [customize.embellishment[props.embelIndex].type]);
 
   return (
     <>
       <Grid container>
         {positions.map((pos, index) => (
           <Grid key={index} item md={2}>
-            <StyledButton disabled={customize.embellishment.type !== props.type} sx={{
+            <StyledButton disabled={customize.embellishment[props.embelIndex].type !== props.type} sx={{
               border: state == index ? "1px solid red" : "",
               borderRadius: 1,
               "svg": {
@@ -71,7 +72,7 @@ export default function PositionControl(props: Props) {
                 }
               }
             }} onClick={() => {
-              customize.onEmbelChangePosition({ ...customize.embellishment.position, type: index })
+              customize.onAllEmbelChange(props.embelIndex, { position: { ...customize.embellishment[props.embelIndex].position, type: index } });
               setState(index)
             }}>{pos.icon}</StyledButton>
           </Grid>

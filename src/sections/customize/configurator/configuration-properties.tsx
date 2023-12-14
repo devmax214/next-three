@@ -35,6 +35,7 @@ import UnCheckedIcon from "@/components/icons/unchecked-icon";
 import { useCheckoutContext } from "@/components/checkout/context";
 import { endpoints } from "../../../../global-config";
 import axios from "axios";
+import { fromPairs } from "lodash";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: "16px",
@@ -490,7 +491,7 @@ export default function ConfigurationProperties(props: Props) {
   const handleAddCart = async () => {
     console.log("test")
     try {
-      const selectedSize = sizes[context.embellishment.size].label;
+      const selectedSize = sizes[context.embellishment[0].size].label;
       var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
       var imageData = "";
       if (canvas) {
@@ -607,12 +608,14 @@ export default function ConfigurationProperties(props: Props) {
 
         <EditTagButton {...props} />
 
-        <EmbellishmentButton />
+        <EmbellishmentButton embelIndex={0} />
+        <EmbellishmentButton embelIndex={1} />
+        <EmbellishmentButton embelIndex={2} />
+        <EmbellishmentButton embelIndex={3} />
+        {props.type === 'Pants' || props.type === 'Shorts' ? <EmbellishmentButton embelIndex={4} /> : ""}
 
         {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderCardType : ""}
         {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderCardTip : ""}
-        {/* {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderText : ""} */}
-        {/* {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderTag : ""} */}
 
         {renderCareLabel}
         {renderSizeLabel}
