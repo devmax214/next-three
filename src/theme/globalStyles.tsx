@@ -7,6 +7,9 @@ export default function GlobalStyles() {
         "*": {
           boxSizing: "border-box",
         },
+        ".mobile-menu .MuiModal-backdrop": {
+          opacity: "0 !important"
+        },
         html: {
           margin: 0,
           padding: 0,
