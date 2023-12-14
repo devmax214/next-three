@@ -30,7 +30,7 @@ export default function Section1(props: Props) {
           sx={{
             borderRadius: "15px",
             overflow: "hidden",
-            mt: "32px",
+            mt: {xs: 0, md: "12px"},
             position: "relative",
           }}
         >

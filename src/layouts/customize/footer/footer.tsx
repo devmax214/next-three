@@ -172,10 +172,10 @@ export default function Footer() {
         <Stack
           sx={{ flexDirection: { xs: "column", md: "row" } }}
           justifyContent="space-between"
-          gap={{ xs: 5, md: 0 }}
+          gap={{ xs: 4, md: 0 }}
         >
           <Stack gap={10}>
-            <Logo sx={{ mb: 3 }} />
+            <Logo sx={{ mb: {xs: 0, md: 3}}} />
 
             {upMd && (
               <Typography
@@ -191,7 +191,7 @@ export default function Footer() {
             )}
           </Stack>
 
-          <Stack gap={1}>
+          <Stack gap={1} sx={{flexWrap: "wrap",  height: {md: "auto", xs: "85px"}}}>
             <>
               {LINKS.map((link) => (
                 <Link
@@ -232,7 +232,7 @@ export default function Footer() {
             />
           </Stack>
 
-          <Stack gap={2} sx={{ maxWidth: { xs: "auto", md: "300px" } }}>
+          <Stack gap={2} sx={{ maxWidth: { xs: "auto", md: "300px" }, mt: {xs: "20px", md: 0} }}>
             <Stack gap={2}>
               <Typography
                 component="div"
@@ -248,7 +248,7 @@ export default function Footer() {
 
               <FormProvider methods={methods} onSubmit={onSubmit}>
                 <Stack direction="row" alignItems="flex-start" gap={3}>
-                  <RHFTextField sx={{ width: 150 }} size="small" name="email" placeholder="Email address" />
+                  <RHFTextField sx={{ width: "70%" }} size="small" name="email" placeholder="Email address" />
                   <Button
                     type="submit"
                     sx={{ bgcolor: "#F05A4A", width: 120 }}
@@ -281,7 +281,7 @@ export default function Footer() {
             </Stack>
           </Stack>
 
-          <Stack gap={2}>
+          <Stack gap={2} sx={{flexWrap: "wrap", height: {xs: "115px", md: "auto"}}}>
             <Typography
               sx={{
                 fontSize: { xs: 13, md: 14 },
@@ -308,7 +308,7 @@ export default function Footer() {
               info@wonder-raw.com
             </Typography>
 
-            <Stack direction="row" gap={1}>
+            <Stack direction="row" gap={1} sx={{mt: {xs: "30px", md: 0}}}>
               <IconButton>
                 <FacebookIcon
                   sx={{ width: 9, height: 18, "& path": { fill: "#ffffff" } }}
@@ -344,8 +344,8 @@ export default function Footer() {
             position: "absolute",
             right: 0,
             top: 0,
-            width: { xs: 93, md: "149.598px" },
-            height: { xs: 68.55, md: "185.287px" },
+            width: { xs: 75, md: "149.598px" },
+            height: { xs: 93, md: "185.287px" },
             transform: "translateY(-50%)",
           }}
         >
