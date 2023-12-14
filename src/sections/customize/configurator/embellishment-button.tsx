@@ -55,9 +55,11 @@ const artworks = [
 
 const views = [{ label: "Front view" }, { label: "Back view" }];
 
-type Props = {};
+type Props = {
+  embelIndex: number
+};
 
-export default function EmbellishmentButton(props: Props) {
+export default function EmbellishmentButton({ embelIndex }: Props) {
   const [font, setFont] = useState("Arial")
 
   const customize = useContext(CustomizeContext);
@@ -65,65 +67,65 @@ export default function EmbellishmentButton(props: Props) {
 
   const clickConfirm = () => {
     popover.onClose();
-    customize.onEmbelEditVisible();
+    customize.onAllEmbelChange(embelIndex, { visible: !customize.embellishment[embelIndex].visible });
   };
 
   const onOpen = (ev: MouseEvent<HTMLElement>) => {
     popover.onOpen(ev);
-    customize.onEmbelEditVisible();
+    customize.onAllEmbelChange(embelIndex, { visible: !customize.embellishment[embelIndex].visible });
   }
 
   const onClose = () => {
     popover.onClose();
-    customize.onEmbelEditVisible();
+    customize.onAllEmbelChange(embelIndex, { visible: !customize.embellishment[embelIndex].visible });
   }
 
   const checkImage = (ev: boolean, type: string) => {
-    if (ev) customize.onEmbelSelectType(type);
-    else customize.onEmbelSelectType("");
+    if (ev) customize.onAllEmbelChange(embelIndex, { type: type });
+    else customize.onAllEmbelChange(embelIndex, { type: "" });
   }
 
   const checkArtwork = (ev: boolean, type: number) => {
     if (ev)
-      customize.onEmbelSelectArtworkType(type)
+      customize.onAllEmbelChange(embelIndex, { artwork: type })
     else
-      customize.onEmbelSelectArtworkType(-1)
+      customize.onAllEmbelChange(embelIndex, { artwork: -1 })
   }
 
   const checkViewType = (ev: boolean, type: number) => {
     if (ev)
-      customize.onEmbelSelectViewType(type)
+      customize.onAllEmbelChange(embelIndex, { view: type })
   }
 
   const checkNotPrint = () => {
-    customize.onEmbelVisibleText()
+    customize.onAllEmbelChange(embelIndex, { visibleText: !customize.embellishment[embelIndex].visibleText })
   }
 
   const fileSelect = (ev: any) => {
     if (ev.target.files && ev.target.files.length > 0) {
       var userImage = ev.target.files[0];
-      customize.onEmbelSelectFile(userImage);
+      customize.onAllEmbelChange(embelIndex, { file: userImage });
     }
   }
 
   const changeTextureText = (value: string) => {
-    customize.onEmbelChangeTextureText(value);
+    customize.onAllEmbelChange(embelIndex, { textureText: value });
   }
 
   const changeReqText = (value: string) => {
-    customize.onEmbelChangeReqText(value);
+    customize.onAllEmbelChange(embelIndex, { reqText: value });
   }
 
   const handleChange = (event: SelectChangeEvent) => {
     setFont(event.target.value as string);
-    customize.onEmbelChangeFont(event.target.value)
+    customize.onAllEmbelChange(embelIndex, { font: event.target.value })
   };
 
   const renderImage = (
     <>
       <FormControlLabel
         sx={{ mb: -2 }}
-        control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" disabled={customize.embellishment.type === "image"} checked={customize.embellishment.type === "image"} onClick={(ev) => checkImage(ev.target.checked, "image")} />}
+        control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" disabled={customize.embellishment[embelIndex].type === "image"} checked={customize.embellishment[embelIndex].type === "image"} onClick={(ev) => checkImage(ev.target.checked, "image")} />}
         label={
           <Typography
             sx={{
@@ -145,7 +147,7 @@ export default function EmbellishmentButton(props: Props) {
 
       <StyledHeader2>Size</StyledHeader2>
 
-      <SizeControl />
+      <SizeControl embelIndex={embelIndex} />
     </>
   );
 
@@ -157,9 +159,9 @@ export default function EmbellishmentButton(props: Props) {
         <FormControlLabel
           sx={{ mt: -1 }}
           key={i}
-          control={<Switch color="primary" checked={customize.embellishment.artwork === i} onClick={ev => checkArtwork(ev.target.checked, i)} />}
+          control={<Switch color="primary" checked={customize.embellishment[embelIndex].artwork === i} onClick={ev => checkArtwork(ev.target.checked, i)} />}
           label={<StyledSwitchLabel>{artwork.label}</StyledSwitchLabel>}
-          disabled={customize.embellishment.type !== "image" || customize.embellishment.visibleText}
+          disabled={customize.embellishment[embelIndex].type !== "image" || customize.embellishment[embelIndex].visibleText}
         />
       ))}
     </>
@@ -173,9 +175,9 @@ export default function EmbellishmentButton(props: Props) {
         <FormControlLabel
           sx={{ mt: -1 }}
           key={i}
-          control={<Switch color="primary" checked={customize.embellishment.view === i} onClick={ev => checkViewType(ev.target.checked, i)} />}
+          control={<Switch color="primary" checked={customize.embellishment[embelIndex].view === i} onClick={ev => checkViewType(ev.target.checked, i)} />}
           label={<StyledSwitchLabel>{artwork.label}</StyledSwitchLabel>}
-          disabled={customize.embellishment.type !== "image" || customize.embellishment.visibleText}
+          disabled={customize.embellishment[embelIndex].type !== "image" || customize.embellishment[embelIndex].visibleText}
         />
       ))}
     </>
@@ -186,9 +188,9 @@ export default function EmbellishmentButton(props: Props) {
       <FormControlLabel
         sx={{ mt: -1 }}
         key={1}
-        control={<Switch color="primary" checked={customize.embellishment.visibleText} onClick={checkNotPrint} />}
+        control={<Switch color="primary" checked={customize.embellishment[embelIndex].visibleText} onClick={checkNotPrint} />}
         label={<StyledSwitchLabel>These arn't the printing options i want</StyledSwitchLabel>}
-        disabled={customize.embellishment.type !== "image"}
+        disabled={customize.embellishment[embelIndex].type !== "image"}
       />
       <TextField
         fullWidth
@@ -196,8 +198,8 @@ export default function EmbellishmentButton(props: Props) {
         multiline
         rows={3}
         placeholder="Describe the printing style you are looking for"
-        style={{ display: customize.embellishment.visibleText ? "contents" : "none" }}
-        disabled={customize.embellishment.type !== "image"}
+        style={{ display: customize.embellishment[embelIndex].visibleText ? "contents" : "none" }}
+        disabled={customize.embellishment[embelIndex].type !== "image"}
       />
     </Stack>
   )
@@ -206,7 +208,7 @@ export default function EmbellishmentButton(props: Props) {
     <>
       <StyledHeader1>File</StyledHeader1>
 
-      <input type="file" disabled={customize.embellishment.type !== "image"} onChange={fileSelect} />
+      <input type="file" disabled={customize.embellishment[embelIndex].type !== "image"} onChange={fileSelect} />
     </>
   );
 
@@ -225,8 +227,8 @@ export default function EmbellishmentButton(props: Props) {
               size="small"
               defaultValue={22}
               fullWidth
-              disabled={customize.embellishment.type !== "image"}
-              onChange={(e) => customize.onEmbelChangePosition({ ...customize.embellishment.position, width: e.target.value })}
+              disabled={customize.embellishment[embelIndex].type !== "image"}
+              onChange={(e) => customize.onAllEmbelChange(embelIndex, { position: { ...customize.embellishment[embelIndex].position, width: e.target.value } })}
               inputProps={{
                 step: 1,
                 min: 0,
@@ -244,8 +246,8 @@ export default function EmbellishmentButton(props: Props) {
               size="small"
               defaultValue={22}
               fullWidth
-              disabled={customize.embellishment.type !== "image"}
-              onChange={(e) => customize.onEmbelChangePosition({ ...customize.embellishment.position, neck: e.target.value })}
+              disabled={customize.embellishment[embelIndex].type !== "image"}
+              onChange={(e) => customize.onAllEmbelChange(embelIndex, { position: { ...customize.embellishment[embelIndex].position, neck: e.target.value } })}
               inputProps={{
                 step: 1,
                 min: 0,
@@ -263,8 +265,8 @@ export default function EmbellishmentButton(props: Props) {
               size="small"
               defaultValue={22}
               fullWidth
-              disabled={customize.embellishment.type !== "image"}
-              onChange={(e) => customize.onEmbelChangePosition({ ...customize.embellishment.position, center: e.target.value })}
+              disabled={customize.embellishment[embelIndex].type !== "image"}
+              onChange={(e) => customize.onAllEmbelChange(embelIndex, { position: { ...customize.embellishment[embelIndex].position, center: e.target.value } })}
               inputProps={{
                 step: 1,
                 min: 0,
@@ -279,7 +281,7 @@ export default function EmbellishmentButton(props: Props) {
 
       <Stack>
         <StyledHeader2>Position</StyledHeader2>
-        <PositionControl type="image" />
+        <PositionControl embelIndex={embelIndex} type="image" />
       </Stack>
     </Stack>
   );
@@ -289,7 +291,7 @@ export default function EmbellishmentButton(props: Props) {
       <Stack gap={2}>
         <FormControlLabel
           sx={{ mb: -2 }}
-          control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" disabled={customize.embellishment.type === "text"} checked={customize.embellishment.type === "text"} onClick={(ev) => checkImage(ev.target.checked, "text")} />}
+          control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" disabled={customize.embellishment[embelIndex].type === "text"} checked={customize.embellishment[embelIndex].type === "text"} onClick={(ev) => checkImage(ev.target.checked, "text")} />}
           label={
             <Typography
               sx={{
@@ -310,19 +312,19 @@ export default function EmbellishmentButton(props: Props) {
             rows={3}
             size="small"
             placeholder="Write your text"
-            disabled={customize.embellishment.type !== "text"}
+            disabled={customize.embellishment[embelIndex].type !== "text"}
             onChange={(ev) => changeTextureText(ev.target.value)}
           />
         </Stack>
 
-        <Select fullWidth size="small" value={font} onChange={handleChange} disabled={customize.embellishment.type !== "text"}>
+        <Select fullWidth size="small" value={font} onChange={handleChange} disabled={customize.embellishment[embelIndex].type !== "text"}>
           <MenuItem value="Arial" >Arial</MenuItem>
           <MenuItem value="monospace">Monospace</MenuItem>
         </Select>
       </Stack>
       <Stack mt={1}>
         <StyledHeader2>Position</StyledHeader2>
-        <PositionControl type="text" />
+        <PositionControl embelIndex={embelIndex} type="text" />
       </Stack>
     </>
   );

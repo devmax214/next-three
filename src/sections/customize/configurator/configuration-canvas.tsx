@@ -13,8 +13,11 @@ type Props = {
 export default function ConfigurationCanvas(props: Props) {
   const customize = useContext(CustomizeContext);
   const [state, setState] = useState({});
+  const [embelIndex, setEmbelIndex] = useState(0);
 
   useEffect(() => {
+    setEmbelIndex(customize.embelIndex);
+
     if (customize.tag.visible) {
       setState({
         scale: [10, 10, 10],
@@ -22,22 +25,26 @@ export default function ConfigurationCanvas(props: Props) {
         position: [-0.02, 0.4, 0.4],
         rotation: [0.1, 0, 0]
       })
-    } else if (customize.embellishment.visible) {
-      if (customize.embellishment.view) {
+    } else if (customize.embellishment[embelIndex].visible) {
+      const typeOne = ["Pants", "Shorts"];
+      if ((typeOne.includes(props.type) && [0, 1].includes(embelIndex))) {
         setState({
-          scale: [2, 2, 2],
-          rotation: [0, Math.PI, 0]
-        })
-      } else {
-        setState({
-          scale: [2, 2, 2],
+          scale: props.type == "Pants" ? [1.5, 1.5, 1.5] : [2, 2, 2],
+          position: [0, props.type == "Pants" ? -0.2 : 0, 0],
           rotation: [0, 0, 0]
+        })
+      } else if ((typeOne.includes(props.type) && [2, 3, 4].includes(embelIndex))) {
+        setState({
+          scale: props.type == "Pants" ? [1.5, 1.5, 1.5] : [2, 2, 2],
+          position: [0, props.type == "Pants" ? -0.2 : 0, 0],
+          rotation: [0, Math.PI, 0]
         })
       }
     } else {
       setState({});
     };
-  }, [customize.tag.visible, customize.embellishment.visible, customize.embellishment.view]);
+
+  }, [customize.tag.visible, customize.embelIndex, customize.embellishment[embelIndex].visible]);
 
   return (
     <Canvas
@@ -57,11 +64,11 @@ export default function ConfigurationCanvas(props: Props) {
 
       <Center {...state} >
         {props.type === 'Hoodies' ?
-          <HoodyMan /> : props.type === 'Pants' ?
-            <PantMan /> : props.type === 'Shorts' ?
-              <ShortMan /> : props.type === 'Sweatshirts' ?
-                <SWEATMAN /> : props.type === 'T-Shirts' ?
-                  <TShartMan /> : <OversizeMan />}
+          <HoodyMan embelIndex={embelIndex} /> : props.type === 'Pants' ?
+            <PantMan embelIndex={embelIndex} /> : props.type === 'Shorts' ?
+              <ShortMan embelIndex={embelIndex} /> : props.type === 'Sweatshirts' ?
+                <SWEATMAN embelIndex={embelIndex} /> : props.type === 'T-Shirts' ?
+                  <TShartMan embelIndex={embelIndex} /> : <OversizeMan embelIndex={embelIndex} />}
 
       </Center>
 
@@ -69,32 +76,3 @@ export default function ConfigurationCanvas(props: Props) {
     </Canvas>
   );
 }
-//
-// function Shirt() {
-//   const texture = useTexture("/models/decor_img.jpg");
-//
-//   const { nodes, materials } = useGLTF(
-//     "/models/TAIJ-shirt_baked_collapsed.glb"
-//   );
-//
-//   // materials.lambert1.color = "#ff0000";
-//
-//   materials.lambert1.color = new THREE.Color("#ffffff");
-//
-//   return (
-//     <mesh
-//       geometry={nodes.T_Shirt_male.geometry}
-//       material={materials.lambert1}
-//       material-roughness={1}
-//     >
-//       <Decal
-//         position={[0, 0.04, 0.15]}
-//         rotation={[0, 0, 0]}
-//         scale={0.15}
-//         map={texture}
-//         // map-anisotropy={16}
-//       />
-//       {/*<meshLambertMaterial color={0xff0000} />*/}
-//     </mesh>
-//   );
-// }

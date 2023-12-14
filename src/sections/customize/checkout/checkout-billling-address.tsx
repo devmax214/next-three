@@ -225,7 +225,7 @@ export default function CheckoutBilllingAddress({ addresses }: Props) {
         />
 
         <FormProvider methods={methods}>
-          <Grid container spacing={{ xs: 0, md: 20 }} >
+          <Grid container columnSpacing={{ xs: 0, md: 20 }} >
             <Grid item md={5.5}>
               {smDown ? <OrderSummary /> :
                 <Stack gap={4} >
