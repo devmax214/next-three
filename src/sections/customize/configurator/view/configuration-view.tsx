@@ -192,8 +192,8 @@ const SaveButton = (props: any) => {
 
   const renderModal = (
     <>
-      <Modal open={cart.value}>
-        <Wrapper>
+      <Modal open={cart.value} sx={{height: {xs: "70%", md: "100%"}}}>
+        <Wrapper sx={{top: {xs: "45%", md: "50%"}}}>
           <Stack alignItems="end">
             <IconButton
               onClick={() => {
@@ -210,7 +210,7 @@ const SaveButton = (props: any) => {
           <Card sx={{ px: 4, py: 6 }}>
             <Grid container>
               <Grid item md={8}>
-                <Box component={"div"} sx={{ height: 484, width: 620, background: "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)", borderRadius: 5 }}>
+                <Box component={"div"} sx={{ height: "100%", width: "100%", background: "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)", borderRadius: 5 }}>
                   <Image
                     src={image}
                     sx={{ width: 1 }}

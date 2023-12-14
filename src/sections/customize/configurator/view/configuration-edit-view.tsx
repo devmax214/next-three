@@ -77,8 +77,8 @@ export default function ConfigurationEditView({ customProduct }) {
             />
 
             <Grid container spacing={5}>
-              <Grid item md={8}>
-                <ConfigurationCanvas id="myCanvas" {...props} />
+              <Grid item md={8} xs={12}>
+                <ConfigurationCanvas id="myCanvas" {...props}/>
                 <Box
                   component={"div"}
                   sx={{
@@ -125,7 +125,7 @@ export default function ConfigurationEditView({ customProduct }) {
                   </Modal>
                 </Box>
               </Grid>
-              <Grid item md={4}>
+              <Grid item md={4} xs={12}>
                 <ConfigurationDetails {...props} />
               </Grid>
             </Grid>

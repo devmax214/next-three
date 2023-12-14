@@ -247,7 +247,7 @@ export default function CartButton() {
   );
 
   const renderAction = (
-    <Stack direction="row" gap={1} justifyContent="space-between" pt={3} pb={5}>
+    <Stack direction="row" gap={1} justifyContent="space-between" pt={3} pb={3}>
       <Stack>
         <Typography
           sx={{
@@ -292,13 +292,13 @@ export default function CartButton() {
           sx={{
             fontSize: { xs: 13, md: 16 },
             fontWeight: 500,
-            width: '275px',
+            width: '100%',
             textAlign: "center",
           }}
         >
           <Typography
             sx={{
-              fontSize: 16,
+              fontSize: {xs: 13, md: 16},
               fontWeight: 500,
               lineHeight: '21.6px',
               color: "#fff",

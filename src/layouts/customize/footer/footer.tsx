@@ -157,6 +157,7 @@ export default function Footer() {
         '.MuiContainer-root': {
           maxWidth: 1280
         },
+        marginTop: "65px"
       }}
     >
       {renderModal}

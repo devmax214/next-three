@@ -34,17 +34,17 @@ export default function LoginView(props: Props) {
             py: { xs: 10, md: 20 },
           }}
         >
-          <Grid container spacing={30}>
+          <Grid container spacing={10}>
             <Grid item xs={12} md={6}>
-              <StyledTypography sx={{ mb: 4 }}>
-                Login
+              <StyledTypography sx={{ mb: 4}}>
+                <h2>Login</h2>
               </StyledTypography>
 
               <LoginForm />
             </Grid>
             <Grid item xs={12} md={6}>
               <StyledTypography sx={{ mb: 4 }}>
-                Sign Up
+                <h2>Sign Up</h2> 
               </StyledTypography>
 
               <Button

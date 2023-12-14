@@ -243,16 +243,16 @@ export default function ConfigurationDetails(props) {
 
   const renderProperty = (
     <Grid container rowSpacing={2} columnSpacing={5}>
-      <Grid item md={6}>
+      <Grid item md={6} xs={6}>
         {materialSelect}
       </Grid>
-      <Grid item md={6}>
+      <Grid item md={6} xs={6}>
         <SelectColorButton name="Color" isShowIcon={false} color={props.color} />
       </Grid>
-      <Grid item md={6}>
+      <Grid item md={6} xs={6}>
         {laceSelect}
       </Grid>
-      <Grid item md={6}>
+      <Grid item md={6} xs={6}>
         {laceTipSelect}
       </Grid>
     </Grid>
@@ -317,7 +317,12 @@ export default function ConfigurationDetails(props) {
             } />
 
           <FormControlLabel
-            sx={{ mr: 0 }}
+            sx={{ 
+              mr: 0,
+              ".MuiFormControlLabel-label": {
+                width: "100%"
+              } 
+            }}
             control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} disabled={washing} color="default" sx={{ color: '#333333', mt: -6 }} />}
             label={
               <TextField
@@ -327,7 +332,7 @@ export default function ConfigurationDetails(props) {
                 disabled={washing}
                 rows={3}
                 sx={{
-                  width: 354,
+                  width: "100%",
                   ".css-1qheboz-MuiInputBase-input-MuiOutlinedInput-input": {
                     fontSize: 12,
                     fontWeight: 500,
@@ -531,7 +536,7 @@ export default function ConfigurationDetails(props) {
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Stack gap={3}>
+      <Stack gap={4}>
         {renderSize}
 
         {renderPrice}

@@ -36,7 +36,7 @@ export default function RequestQuoteView(props: Props) {
               { name: "Request for Quote" },
             ]}
             sx={{
-              mb: { xs: 3, md: 5 },
+              mb: { xs: 0, md: 5 },
             }}
           />
 

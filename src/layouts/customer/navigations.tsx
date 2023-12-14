@@ -162,14 +162,16 @@ export default function Navigations(props: Any) {
         />
       </Stack>
 
-      <Grid container mt={4} sx={{ borderTop: "1px solid #EEEEEE" }}>
+      <Grid container sx={{marginTop: {md: 4}}} >
         {linkList.map((link, index) => (
           <Grid
             xs={4}
             md={12}
             sx={{
-              borderBottom: "1px solid #EEEEEE",
+              borderBottom: {xs: index < (linkList.length - linkList.length%3) ? "1px solid #EEEEEE" : "none", md: "1px solid #EEEEEE"}, 
               position: "relative",
+              paddingBottom: {xs: 1},
+              paddingTop: {xs: 1}
             }}
           >
             {link.href ? (
@@ -195,6 +197,9 @@ export default function Navigations(props: Any) {
                       alignItems: "center",
                       justifyContent: "center",
                       borderRadius: "50%",
+                      "&:hover" : {
+                        bgcolor: "#F05A4A"
+                      }
                     }}
                   >
                     <link.icon />
@@ -240,6 +245,10 @@ export default function Navigations(props: Any) {
                       alignItems: "center",
                       justifyContent: "center",
                       borderRadius: "50%",
+                      marginTop: {xs: 1},
+                      "&:hover" : {
+                        bgcolor: "#F05A4A"
+                      }
                     }}
                   >
                     <link.icon />

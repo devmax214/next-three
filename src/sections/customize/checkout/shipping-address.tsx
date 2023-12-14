@@ -55,6 +55,11 @@ export default function ShippingAddress({ addresses, setAddresses, renderModal, 
       <Select
         size="small"
         value={selectedAddress}
+        sx={{
+          ".css-nq0j4t-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input": {
+            textWrap: "wrap !important"
+          }
+          }}
         onChange={(event) => {
           setSelectedAddress(event.target.value as string);
         }}

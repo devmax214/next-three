@@ -1,4 +1,5 @@
 import { Drawer, Grid, IconButton, Link, Box, MenuItem } from "@mui/material";
+import IconButtonAnimate from "@/components/animate/icon-button-animate";
 import SvgColor from "@/components/svg-color";
 import { useBoolean } from "@/hooks";
 import Scrollbar from "@/components/scrollbar/Scrollbar";
@@ -26,7 +27,7 @@ export default function NavMobile({ offsetTop }: Props) {
   return (
     <>
       {!nav.value ?
-        <IconButton
+        <IconButtonAnimate
           onClick={nav.onTrue}
           sx={{
             ...(offsetTop && {
@@ -35,9 +36,9 @@ export default function NavMobile({ offsetTop }: Props) {
           }}
         >
           <SvgColor src="/icons/ic_hamboger.svg" />
-        </IconButton>
+        </IconButtonAnimate>
         :
-        <IconButton
+        <IconButtonAnimate
           onClick={nav.onFalse}
           sx={{
             ...(offsetTop && {
@@ -45,8 +46,8 @@ export default function NavMobile({ offsetTop }: Props) {
             }),
           }}
         >
-          <SvgColor src="/icons/ic_hamboger.svg" />
-        </IconButton>
+          <span style={{fontSize: "30px"}}>&times;</span>
+        </IconButtonAnimate>
       }
       <Drawer
         open={nav.value}
@@ -68,9 +69,9 @@ export default function NavMobile({ offsetTop }: Props) {
                 href={m.path}
                 rel="noopener"
                 underline="none"
-                sx={{ display: "table", color: "black", padding: "8px 30px" }}
+                sx={{ display: "table", color: "black", padding: "8px 20px", fontSize: "14px", fontWeight: 600 }}
               >
-                {m.title}
+                {m.title.toUpperCase()}
               </Link>
             ))}
           </Box>
@@ -81,7 +82,7 @@ export default function NavMobile({ offsetTop }: Props) {
               {_caches.map((language, index) => (
                 <Link
                   key={index}
-                  sx={{ display: "table", color: index === 1 ? "black" : "grey", padding: "5px 30px", fontSize: 14 }}
+                  sx={{ display: "table", color: index === 1 ? "black" : "grey", fontWeight: index === 1 ? 600 : 100, padding: "5px 30px", fontSize: 14 }}
                   underline="none"
                   href="javascript:;"
                 >

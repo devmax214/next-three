@@ -14,7 +14,7 @@ UserDashboardPage.getLayout = (page: React.ReactElement) => (
     Breadcrumbs={
       <CustomBreadCrumbs
         mode="dark"
-        heading="USER DASHBOARD"
+        heading="User Dashboard"
         links={[
           {
             name: "Home",

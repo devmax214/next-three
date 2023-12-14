@@ -45,7 +45,11 @@ export default function ConfigurationCanvas(props: Props) {
       shadows
       gl={{ preserveDrawingBuffer: true }}
       camera={{ position: [0, 0, 2.5], fov: 25 }}
-      style={{ height: 600, background: "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)", borderRadius: 20 }}
+      style={{ 
+        height: window.screen.width > 760 ? 600 : "85%", 
+        background: "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)", 
+        borderRadius: 20 
+      }}
     >
       <ambientLight intensity={0.5} />
 

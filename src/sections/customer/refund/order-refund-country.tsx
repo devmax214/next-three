@@ -25,7 +25,7 @@ export default function OrderRefundFirst({ onNext }: Props) {
           }}
         >
           <CustomBreadCrumbs
-            heading="ORDER REFUND/REPLACEMENT"
+            heading="ORDER REFUND/ REPLACEMENT"
             links={[
               {
                 name: "Home",
@@ -43,7 +43,7 @@ export default function OrderRefundFirst({ onNext }: Props) {
           />
 
           <Grid container spacing={15}>
-            <Grid item md={6}>
+            <Grid item md={6} xs={12}>
               <Stack gap={5}>
                 <Typography
                   sx={{
@@ -117,7 +117,7 @@ export default function OrderRefundFirst({ onNext }: Props) {
                 </Stack>
               </Stack>
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={6} xs={12}>
               <Stack gap={4}>
                 <Stack gap={2}>
                   <Typography

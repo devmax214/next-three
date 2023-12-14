@@ -48,6 +48,7 @@ export default function CustomBreadCrumbs({
                 fontSize: { xs: 36, md: 48 },
                 fontWeight: 700,
                 color: "#292F3D",
+                textWrap: "wrap"
               }}
               gutterBottom
             >

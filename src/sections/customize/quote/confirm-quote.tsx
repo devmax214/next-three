@@ -2,6 +2,9 @@ import React from "react";
 import { Box, Button, Typography, Grid, TableCell, TableRow, TableContainer, Table, TableBody, Stack } from "@mui/material";
 import Image from "@/components/image";
 import { secondaryFont } from "@/theme/typography";
+import { Canvas } from "@react-three/fiber";
+import { Center, Environment, OrbitControls } from "@react-three/drei";
+import { TShartMan, HoodyMan, PantMan, ShortMan, SWEATMAN, OversizeMan } from "@/sections/customize/configurator/models";
 
 type Props = {
   onConfirm: VoidFunction;
@@ -24,16 +27,16 @@ export default function ConfirmQuote({ onConfirm, query, customize }: Props) {
   } catch (e) { }
 
   return (
-    <Box component={"div"} sx={{ textAlign: "start" }}>
+    <Box component={"div"} sx={{ textAlign: {xs: "center", md: "start"}}}>
       <Grid container spacing={5}>
-        <Grid item md={7}>
-          <Box component={"div"} sx={{ mt: 5, mb: 7 }}>
-            <Image src={`${customProductInfo['img']}`} />
+        <Grid item md={7} xs={12}>
+          <Box component={"div"} sx={{ mt: 2, mb: 2 }}>
+            <Image src={`${customProductInfo['img']}`} sx={{width: {xs: "70%"}, margin: "auto"}}/>
           </Box>
         </Grid>
 
-        <Grid item md={4}>
-          <Stack gap={6} sx={{ mt: 5 }}>
+        <Grid item md={4} xs={12}>
+          <Stack gap={6} sx={{ mt: 2 }}>
             <Typography
               sx={{
                 fontSize: 16,
@@ -276,7 +279,7 @@ export default function ConfirmQuote({ onConfirm, query, customize }: Props) {
             </TableContainer >
 
             <Grid container>
-              <Grid item md={6}>
+              <Grid item md={6} xs={6}>
                 <Button
                   variant="contained"
                   size="large"
@@ -298,7 +301,7 @@ export default function ConfirmQuote({ onConfirm, query, customize }: Props) {
                   </Typography>
                 </Button>
               </Grid>
-              <Grid item md={6}>
+              <Grid item md={6} xs={6}>
                 <Button
                   variant="contained"
                   size="large"
