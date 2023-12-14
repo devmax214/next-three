@@ -75,12 +75,12 @@ export default function Section4({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 34,
-                height: 34,
+                width: {md: 34, xs: 25},
+                height: {md: 34, xs: 25},
                 borderRadius: "50%",
                 bgcolor: "#F05A4A",
-                left: 200,
-                top: 100,
+                left: {md: 200, xs: 16},
+                top: {md: 100, xs: 40},
               }}
             />
 
@@ -88,12 +88,12 @@ export default function Section4({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 22,
-                height: 22,
+                width: {md: 22, xs: 12},
+                height: {md: 22, xs: 12},
                 borderRadius: "50%",
                 bgcolor: "#6AB67A",
-                right: 200,
-                top: 110,
+                right: {md: 200, xs: 30},
+                top: {md: 110, xs: 50},
               }}
             />
           </>

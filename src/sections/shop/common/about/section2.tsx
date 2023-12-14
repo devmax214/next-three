@@ -102,8 +102,8 @@ export default function Section2({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 72,
-                height: 137,
+                width: {md: 72, xs: 50},
+                height: {md: 137, xs: 80},
                 left: 0,
                 top: 0,
                 transform: "translateY(-50%)",
@@ -117,8 +117,8 @@ export default function Section2({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 75,
-                height: 152,
+                width: {md: 75, xs: 50},
+                height: {md: 152, xs: 90},
                 right: 0,
                 bottom: 0,
                 transform: "translateY(50%)",
@@ -132,12 +132,12 @@ export default function Section2({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 23,
-                height: 23,
+                width: {md: 23, xs: 15},
+                height: {md: 23, xs: 15},
                 borderRadius: "50%",
                 bgcolor: "#F05A4A",
-                left: 140,
-                top: 80,
+                left: {md: 140, xs: 40},
+                top: {md: 80, xs: 40},
               }}
             />
 
@@ -145,12 +145,12 @@ export default function Section2({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 16,
-                height: 16,
+                width: {md: 16, xs: 10},
+                height: {md: 16, xs: 10},
                 borderRadius: "50%",
                 bgcolor: "#6B6FB5",
-                left: 40,
-                bottom: 80,
+                left: {md: 40, xs: 15},
+                bottom: {md: 80, xs: 60} ,
               }}
             />
 
@@ -158,12 +158,13 @@ export default function Section2({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 32,
-                height: 32,
+                width: {md: 32, xs: 22},
+                height: {md: 32, xs: 22},
                 borderRadius: "50%",
                 bgcolor: "#F3BC1A",
                 left: 80,
-                bottom: 30,
+                zIndex: 1,
+                bottom: {md: 30, xs: -10}
               }}
             />
 
@@ -171,12 +172,12 @@ export default function Section2({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 13,
-                height: 13,
+                width: {md: 13, xs: 10},
+                height: {md: 13, xs: 10},
                 borderRadius: "50%",
                 bgcolor: "#6AB67A",
                 right: 30,
-                top: 80,
+                top: {md: 80, xs: 30},
               }}
             />
           </>

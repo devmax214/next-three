@@ -34,9 +34,9 @@ export default function CommunityItem({
         component="div"
         sx={{
           textAlign: { xs: "left", md: "unset" },
-          mt: { xs: 10, md: 20 },
-          pr: { xs: 4, md: 8 },
-          ...(direction === "right" && {
+          mt: { xs: 0, md: 20 },
+          pr: { xs: 0, md: 8 },
+          ...((direction === "right" && window.screen.width > 768) && {
             pl: { xs: 4, md: 8 },
             pr: { xs: 0, md: 0 },
           }),
@@ -49,8 +49,8 @@ export default function CommunityItem({
               color: "#292F3D",
               fontSize: { xs: 22, md: 28 },
               fontWeight: 700,
-              mb: 4,
-              ...(mode === "dark" && { color: "#ffffff" }),
+              mb: {md: 4, xs: 4},
+              ...((mode === "dark" && window.screen.width > 768) && { color: "#ffffff" }),
             }}
           >
             {title}
@@ -65,7 +65,7 @@ export default function CommunityItem({
                 fontSize: { xs: 15, md: 16 },
                 fontWeight: 500,
                 fontFamily: secondaryFont.style.fontFamily,
-                ...(mode === "dark" && { color: "#ffffff" }),
+                ...((mode === "dark" && window.screen.width > 768) && { color: "#ffffff" }),
               }}
             >
               {description1}
@@ -77,7 +77,7 @@ export default function CommunityItem({
                 fontSize: { xs: 15, md: 16 },
                 fontWeight: 500,
                 fontFamily: secondaryFont.style.fontFamily,
-                ...(mode === "dark" && { color: "#ffffff" }),
+                ...((mode === "dark" && window.screen.width > 768) && { color: "#ffffff" }),
               }}
             >
               {description2}
@@ -95,11 +95,11 @@ export default function CommunityItem({
         src={image}
         variants={varFade().in}
         sx={{
-          height: 1,
-          width: 0.5,
+          height: {xs: 1, md: 1},
+          width: {xs: 1, md: 0.5},
           objectFit: "cover",
-          position: "absolute",
-          ...(direction === "right" && { left: 0 }),
+          position: {md: "absolute"},
+          ...((direction === "right" && window.screen.width > 768) && { left: 0 }),
         }}
       />
     </>
@@ -110,19 +110,19 @@ export default function CommunityItem({
       <Box
         component="div"
         sx={{
-          minHeight: 700,
+          minHeight: {md: 700, xs: 100},
           position: "relative",
-          ...(mode === "dark" && { bgcolor: "#6B6FB5" }),
+          ...((mode === "dark" && window.screen.width > 768) && { bgcolor: "#6B6FB5" }),
         }}
       >
-        <Container component={MotionViewport}>
+        <Container component={MotionViewport} sx={{ paddingBottom: {xs: "0 !important;"}, paddingLeft: {xs: 0}, paddingRight: {xs: 0}}}>
           <Grid container>
-            {direction === "left" ? (
+            {direction === "left" || window.screen.width < 768 ? (
               <>
-                <Grid xs={12} md={6}>
+                <Grid xs={12} md={6} sx={{paddingLeft: {xs: 1}, paddingRight: {xs: 1}, paddingTop: {xs: 5}}}>
                   {renderDescription}
                 </Grid>
-                <Grid xs={12} md={6}>
+                <Grid xs={12} md={6} sx={{mt: {xs: 5}}}>
                   {renderImg}
                 </Grid>
               </>
@@ -145,8 +145,8 @@ export default function CommunityItem({
               component="div"
               sx={{
                 position: "absolute",
-                width: 72,
-                height: 137,
+                width: {md:  72, xs: 50},
+                height: {md: 137, xs: 80 },
                 left: 0,
                 top: 0,
                 transform: "translateY(-50%)",
@@ -160,8 +160,8 @@ export default function CommunityItem({
               component="div"
               sx={{
                 position: "absolute",
-                width: 75,
-                height: 152,
+                width: {md: 75, xs: 50},
+                height: {md: 152, xs: 90},
                 right: 0,
                 bottom: 0,
                 transform: "translateY(50%)",

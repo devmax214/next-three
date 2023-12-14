@@ -17,12 +17,13 @@ export default function Section1({ mode = "colored" }: Props) {
           color: "#292F3D",
         }}
       >
-        <Container component={MotionViewport}>
+        <Container component={MotionViewport} sx={{pb: {xs: "0px !important"}}}>
           <Grid container sx={{ minHeight: 600 }} spacing={10}>
             <Grid
               item
               xs={12}
               md={6}
+              sx={{mt: {xs: "100px"}}}
             // sx={{
             //   display: "flex",
             //   flexDirection: "column",
@@ -82,10 +83,11 @@ export default function Section1({ mode = "colored" }: Props) {
                 src="/images/about3.png"
                 variants={varFade().in}
                 sx={{
-                  width: "40vw",
+                  width: {md: "40vw", xs: "70vw"} ,
                   objectFit: "cover",
                   position: "absolute",
-                  top: "50%",
+                  left: {xs: "13%", md: "55%"},
+                  top: {md: "50%", xs: "15%"},
                   transform: "translateY(-50%)",
                 }}
               />

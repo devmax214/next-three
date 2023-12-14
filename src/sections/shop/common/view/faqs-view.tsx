@@ -95,7 +95,7 @@ export default function FaqsView({ mode }: Props) {
           </Stack>
         </Container>
 
-        {mode === "colored" && (
+        {/* {mode === "colored" && (
           <>
             <Box
               component="div"
@@ -127,7 +127,7 @@ export default function FaqsView({ mode }: Props) {
               <Icon4 />
             </Box>
           </>
-        )}
+        )} */}
       </Box>
     </>
   );

@@ -18,7 +18,7 @@ export default function Section3({ mode = "colored" }: Props) {
           color: "#ffffff",
         }}
       >
-        <Container component={MotionViewport}>
+        <Container component={MotionViewport} sx={{paddingLeft: {xs: 0, md: "16px"}, paddingRight: {xs: 0, md: "16px"}}} >
           <Grid container sx={{ minHeight: 600 }}>
             <Grid xs={12} md={6}>
               <Box
@@ -27,9 +27,9 @@ export default function Section3({ mode = "colored" }: Props) {
                 variants={varFade().in}
                 sx={{
                   height: 1,
-                  width: 0.5,
+                  width: {md: 0.5, xs: 1 },
                   objectFit: "cover",
-                  position: "absolute",
+                  position: {md: "absolute"},
                   left: 0,
                 }}
               />
@@ -37,13 +37,13 @@ export default function Section3({ mode = "colored" }: Props) {
             <Grid
               xs={12}
               md={6}
-              pl={5}
-              sx={{ display: "flex", alignItems: "center" }}
+              
+              sx={{ display: "flex", alignItems: {md: "center", xs: "left"}, mt: {xs: 15}, pl: {md: 5, xs: 1}}}
             >
               <m.div variants={varFade().inUp}>
                 <Typography
                   sx={{
-                    fontSize: 28,
+                    fontSize: {md: 28, xs: 22},
                     fontWeight: 700,
                     color: mode === "dark" ? "#000" : "#F3BC1A",
                     mb: 3,
@@ -74,12 +74,12 @@ export default function Section3({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 24,
-                height: 24,
+                width: {md: 24, xs: 18},
+                height: {md: 24, xs: 18},
                 borderRadius: "50%",
                 bgcolor: "#F05A4A",
-                right: 13,
-                bottom: 16,
+                right: {md: 13, xs: 20},
+                bottom: {md: 16, xs: 35},
               }}
             />
 
@@ -87,8 +87,8 @@ export default function Section3({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 16,
-                height: 16,
+                width: {md: 16, xs: 10},
+                height: {md: 16, xs: 10},
                 borderRadius: "50%",
                 bgcolor: "#6AB67A",
                 right: 76,
@@ -107,17 +107,36 @@ export default function Section3({ mode = "colored" }: Props) {
           color: mode === "dark" ? "#000" : "#ffffff",
         }}
       >
-        <Container component={MotionViewport}>
+        <Container component={MotionViewport} sx={{paddingLeft: {xs: 0, md: "16px"}, paddingRight: {xs: 0, md: "16px"}}}>
           <Grid container sx={{ minHeight: 600 }}>
+          <Grid xs={12} md={6}>
+              <Box
+                component={m.img}
+                src="/images/about2.jpg"
+                variants={varFade().in}
+                sx={{
+                  height: 1,
+                  width: {md: 0.5, xs: 1},
+                  objectFit: "cover",
+                  position: {md: "absolute"},
+                  right: {md: 0}
+                }}
+              />
+            </Grid>
             <Grid
               xs={12}
               md={6}
-              pr={5}
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
+                position: {md: "absolute"},
+                top: {md: "20%"},
+                left: {md: 0},
+                pt: {md: 3, xs: 10},
+                pr: {md: 5},
+                pl: {xs: 1}
               }}
             >
               <m.div variants={varFade().inUp}>
@@ -169,19 +188,7 @@ export default function Section3({ mode = "colored" }: Props) {
                 </Typography>
               </m.div>
             </Grid>
-            <Grid xs={12} md={6}>
-              <Box
-                component={m.img}
-                src="/images/about2.jpg"
-                variants={varFade().in}
-                sx={{
-                  height: 1,
-                  width: 0.5,
-                  objectFit: "cover",
-                  position: "absolute",
-                }}
-              />
-            </Grid>
+            
           </Grid>
         </Container>
 
@@ -191,10 +198,10 @@ export default function Section3({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 132,
-                height: 111,
+                width: {md: 132, xs: 100},
+                height: {md: 111, xs: 80},
                 right: 0,
-                bottom: 0,
+                bottom: {md: 0, xs: "66%"},
               }}
             >
               <Icon5 />
@@ -204,11 +211,11 @@ export default function Section3({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 22,
-                height: 22,
+                width: {md: 22, xs: 18},
+                height: {md: 22, xs: 18},
                 borderRadius: "50%",
                 bgcolor: "#550248",
-                right: 65,
+                right: {md: 65, xs: 40},
                 top: 32,
               }}
             />
@@ -217,11 +224,11 @@ export default function Section3({ mode = "colored" }: Props) {
               component="div"
               sx={{
                 position: "absolute",
-                width: 12,
-                height: 12,
+                width: {md: 12, xs: 8},
+                height: {md: 12, xs: 8},
                 borderRadius: "50%",
                 bgcolor: "#6AB67A",
-                right: "calc(50% - 68px)",
+                right: {md: "calc(50% - 68px)", xs: "calc(100% - 25px)"},
                 top: 68,
               }}
             />
@@ -235,7 +242,7 @@ export default function Section3({ mode = "colored" }: Props) {
                 borderRadius: "50%",
                 bgcolor: "#F3BC1A",
                 left: 22,
-                top: 70,
+                top: {md: 70, xs: "40%"},
               }}
             />
 
@@ -248,7 +255,7 @@ export default function Section3({ mode = "colored" }: Props) {
                 borderRadius: "50%",
                 bgcolor: "#F05A4A",
                 left: 61,
-                top: 32,
+                top: {md: 32, xs: "37%"},
               }}
             />
           </>
