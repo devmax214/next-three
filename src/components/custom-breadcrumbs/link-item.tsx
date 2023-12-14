@@ -23,6 +23,7 @@ export default function BreadcrumbsLink({
     color: mode === "colored" ? "#F05A4A" : "#858585",
     fontWeight: 500,
     display: "inline-flex",
+    fontSize: {xs: "12px !important"},
     fontFamily: secondaryFont.style.fontFamily,
     ...(disabled &&
       !activeLast && {

@@ -53,7 +53,7 @@ export default function CustomizeLayout({ children }: Props) {
             sx={{
               position: "absolute",
               left: {xs: 4, md: 24},
-              top: {xs: 40, md: 80},
+              top: {xs: 40, md: 70},
               width: { xs: 10, md: "12px" },
               height: { xs: 10.73, md: "12px" },
               transform: "translateY(-50%)",

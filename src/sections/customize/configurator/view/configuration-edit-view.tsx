@@ -84,13 +84,14 @@ export default function ConfigurationEditView({ customProduct }) {
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    mt: 2
+                    mt: 2,
+                    flexDirection: {xs: "column", md: "row"}
                   }}
                 >
                   <Button
                     variant="contained"
                     sx={{
-                      width: 170,
+                      width: {xs: "100%", md: 170},
                       bgcolor: "#5C6166",
                       "&:hover": { bgcolor: "#550248" },
                     }}

@@ -21,7 +21,14 @@ export default function CustomBreadCrumbs({
         <Box component="div" sx={{ flexGrow: 1 }}>
           {/* BREADCRUMBS */}
           {!!links.length && (
-            <Breadcrumbs separator={<Separator />} {...other}>
+            <Breadcrumbs 
+              sx={{
+                ".css-s5f5gt-MuiBreadcrumbs-separator": {
+                  marginRight: {xs: "8px", md: "16px"}, 
+                  marginLeft: {xs: "8px", md: "16px"}}
+              }} 
+              separator={<Separator />} 
+              {...other}>
               {links.map((link) => (
                 <LinkItem
                   key={link.name || ""}

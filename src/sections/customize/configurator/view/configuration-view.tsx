@@ -93,13 +93,15 @@ export default function ConfigurationView(props: Props) {
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    mt: 2
+                    mt: 2,
+                    flexDirection: {xs: "column", md: "row"},
+                    gap: {xs: 1, md: 0}
                   }}
                 >
                   <Button
                     variant="contained"
                     sx={{
-                      width: 170,
+                      width: {xs: "100%", md: 170},
                       bgcolor: "#5C6166",
                       "&:hover": { bgcolor: "#550248" },
                     }}
@@ -241,7 +243,7 @@ const SaveButton = (props: any) => {
       <Button
         variant="contained"
         sx={{
-          width: 210,
+          width: {xs: "100%", md: 210},
           bgcolor: "#292F3D",
           "&:hover": { bgcolor: "#550248" },
         }}
