@@ -42,8 +42,6 @@ import { useCustomizeContext } from "@/components/customize/context/customize-co
 import { uploadImage } from "@/services/upload";
 import { endpoints } from "../../../../global-config";
 import axios from "axios";
-import { random } from "lodash";
-import { randomInt } from "crypto";
 import CheckedIcon from "@/components/icons/checked-icon";
 import UnCheckedIcon from "@/components/icons/unchecked-icon";
 
@@ -416,6 +414,7 @@ export default function ConfigurationDetails(props) {
 
               });
             } else {
+              localStorage.setItem('product-info', JSON.stringify(customProductInfo));
               push({
                 pathname: "/quote",
                 query: {

@@ -33,6 +33,8 @@ import { CustomizeContext } from "@/components/customize/context/customize-conte
 import CheckedIcon from "@/components/icons/checked-icon";
 import UnCheckedIcon from "@/components/icons/unchecked-icon";
 import { useCheckoutContext } from "@/components/checkout/context";
+import { endpoints } from "../../../../global-config";
+import axios from "axios";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: "16px",
@@ -162,12 +164,52 @@ export default function ConfigurationProperties(props: Props) {
   }
 
   const requestQuote = () => {
+    let customProductInfo = {
+      'img': '',
+      'color': context.color,
+      'size': context.sizeLabel,
+      'material': context.material,
+      'lace': context.lace,
+      'lace-tip': context.laceTip,
+      'type': props.type
+    }
     var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
     if (canvas) {
       var imageData = canvas.toDataURL();
-      localStorage.setItem("review-img", imageData);
+      customProductInfo.img = imageData;
+      const images = [];
+      images.push(imageData);
+      const data = {
+        images: images,
+        name: "custom" + new Date().getTime().toString(),
+        price: Number((40 - Math.random() * 20).toFixed(0)),
+        code: '123',
+        product: props.type,
+        color: context.color,
+      }
+
+      if (!props._id) {
+        axios.post(endpoints.customize.list, data).then((result) => {
+          push({
+            pathname: "/quote",
+            query: {
+              id: result.data[0]._id,
+            }
+          }, '/quote')
+          localStorage.setItem('product-info', JSON.stringify(customProductInfo));
+        }).catch((err) => {
+
+        });
+      } else {
+        localStorage.setItem('product-info', JSON.stringify(customProductInfo));
+        push({
+          pathname: "/quote",
+          query: {
+            id: props._id,
+          }
+        }, '/quote')
+      }
     }
-    push(PATH_CONFIGURATOR.product.review(props.type));
   }
 
   const renderCardType = (

@@ -24,6 +24,7 @@ import { mutate } from "swr";
 const GENDERS = [
   { value: "man", label: "Male" },
   { value: "female", label: "Female" },
+  { value: "other", label: "Other" },
 ];
 
 const StyledTypography1 = styled(Typography)(({ theme }) => ({
@@ -95,7 +96,7 @@ export default function CustomerProfileView() {
         phone: res.phone,
         accept: res.accept,
       });
-    } catch (error) {}
+    } catch (error) { }
   });
 
   const renderProfile = (

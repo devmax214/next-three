@@ -13,14 +13,18 @@ import StarIcon from "@/components/icons/customer/icon-star";
 import { secondaryFont } from "@/theme/typography";
 import ListItemText from "@mui/material/ListItemText";
 import { format } from "date-fns";
+import { useRouter } from "next/router";
 
 type Props = { no: number, index: number; row: IOrderItem; onTrackingRow: VoidFunction };
 
 export default function OrderTableRow({ no, index, row, onTrackingRow }: Props) {
   const { _id, createdAt, status } = row;
+  const { push } = useRouter();
 
   const renderReview = (
-    <ButtonBase>
+    <ButtonBase onClick={() => {
+      push('/user/feedback')
+    }} >
       <Stack direction="row" gap={1} alignItems="center">
         <StarIcon sx={{ width: 14, height: 13.5 }} />
 
@@ -42,7 +46,7 @@ export default function OrderTableRow({ no, index, row, onTrackingRow }: Props) 
   );
 
   const renderTracking = (
-    <ButtonBase onClick={onTrackingRow}>
+    <ButtonBase href="https://www.ups.com/track?loc=en_PT&requester=ST/" target="_blank">
       <Stack direction="row" gap={1} alignItems="center">
         <TrackingIcon sx={{ width: 17, height: 15 }} />
 
@@ -189,7 +193,19 @@ export default function OrderTableRow({ no, index, row, onTrackingRow }: Props) 
       </TableCell>
 
       <TableCell>{renderReview}</TableCell>
-
+      <TableCell>
+        <Typography
+          sx={{
+            fontSize: 12,
+            fontWeight: 500,
+            textAlign: "right",
+            color: status === "completed" ? "#ACB1B8" : "#292F3D",
+            fontFamily: secondaryFont.style.fontFamily,
+          }}
+        >
+          {index + Math.round(Math.random() * 100)}
+        </Typography>
+      </TableCell>
       <TableCell>{renderTracking}</TableCell>
 
       <TableCell>{renderStatus}</TableCell>

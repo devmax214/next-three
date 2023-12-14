@@ -18,6 +18,7 @@ const TABLE_HEAD = [
   { id: "goods", label: "Goods" },
   { id: "total", label: "Total" },
   { id: "review", label: "Review" },
+  { id: "tracking-number", label: "Tracking Number" },
   { id: "tracking", label: "Tracking" },
   { id: "status", label: "Status" },
 ];

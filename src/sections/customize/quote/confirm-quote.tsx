@@ -6,7 +6,7 @@ import { secondaryFont } from "@/theme/typography";
 type Props = {
   onConfirm: VoidFunction;
 };
-
+const SIZES = ["XS", "S", "M", "L", "XL"];
 export default function ConfirmQuote({ onConfirm, query, customize }: Props) {
 
   let customProductInfo = {
@@ -20,6 +20,7 @@ export default function ConfirmQuote({ onConfirm, query, customize }: Props) {
   }
   try {
     customProductInfo = JSON.parse(localStorage.getItem('product-info'));
+    customProductInfo.size = SIZES[customProductInfo.size];
   } catch (e) { }
 
   return (
@@ -274,23 +275,52 @@ export default function ConfirmQuote({ onConfirm, query, customize }: Props) {
               </Table>
             </TableContainer >
 
-            <Button
-              variant="contained"
-              size="large"
-              sx={{ width: 340, height: 40, ml: 2 }}
-              onClick={onConfirm}
-            >
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 500,
-                  color: "#fff",
-                  fontFamily: secondaryFont.style.fontFamily,
-                }}
-              >
-                CONFIRM
-              </Typography>
-            </Button>
+            <Grid container>
+              <Grid item md={6}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    width: "75%", height: 40, ml: 2, bgcolor: "#bfbfbf",
+                    "&:hover ": { bgcolor: "#6AB67A" },
+                  }}
+                  onClick={onConfirm}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 500,
+                      color: "#fff",
+                      fontFamily: secondaryFont.style.fontFamily,
+                    }}
+                  >
+                    EDIT
+                  </Typography>
+                </Button>
+              </Grid>
+              <Grid item md={6}>
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    width: "75%", height: 40, ml: 2, bgcolor: '#292F3D',
+                    "&:hover": { bgcolor: "#6AB67A" },
+                  }}
+                  onClick={onConfirm}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      fontWeight: 500,
+                      color: "#fff",
+                      fontFamily: secondaryFont.style.fontFamily,
+                    }}
+                  >
+                    CONFIRM
+                  </Typography>
+                </Button>
+              </Grid>
+            </Grid>
           </Stack>
         </Grid>
       </Grid>

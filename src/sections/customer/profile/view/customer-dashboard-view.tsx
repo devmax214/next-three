@@ -1,4 +1,4 @@
-import { Button, Divider, Grid, Stack, Typography } from "@mui/material";
+import { Button, Divider, Grid, Stack, Typography, MenuItem, Select } from "@mui/material";
 import DashboardPanel from "../dashboard-panel";
 import SpendIcon from "@/components/icons/customer/icon-spend";
 import OrderCountIcon from "@/components/icons/customer/icon-order-count";
@@ -9,6 +9,7 @@ import { PATH_SHOP } from "@/routers/path";
 import EditIcon from "@/components/icons/icon-edit";
 import React from "react";
 import { useGetProfile } from "@/services/customer";
+import { PhoneInput } from 'react-international-phone';
 
 type Props = {
   addressCnt: number,
@@ -18,6 +19,7 @@ type Props = {
 export default function CustomerDashboardView(props: Props) {
   const { profile, profileLoading } = useGetProfile();
   const { addressCnt, orderCnt } = props;
+
 
   const renderData = (
     <Grid container spacing={{ xs: 1, md: 3 }}>
@@ -176,6 +178,12 @@ export default function CustomerDashboardView(props: Props) {
   );
 }
 
+const GENDERS = [
+  { value: "man", label: "Male" },
+  { value: "female", label: "Female" },
+  { value: "other", label: "Other" },
+];
+
 function ContentItem({
   title,
   value,
@@ -195,16 +203,33 @@ function ContentItem({
       >
         {title}
       </Typography>
-      <Typography
-        sx={{
-          fontSize: { xs: 15, md: 16 },
-          fontWeight: 500,
-          color: "#292F3D",
-          fontFamily: secondaryFont.style.fontFamily,
-        }}
-      >
-        {value}
-      </Typography>
+      {title === "Gender" ?
+        <Select value={String(value).toLowerCase()} size="small" name="gender">
+          {GENDERS.map((gender, index) => (
+            <MenuItem key={index} value={gender.value}>
+              {gender.label}
+            </MenuItem>
+          ))}
+        </Select>
+        : title === "Phone" ?
+          <PhoneInput
+            defaultCountry="pr"
+            value={value}
+            name="phone"
+            style={{ width: '100%' }}
+            inputStyle={{ width: '100%' }}
+          /> :
+          <Typography
+            sx={{
+              fontSize: { xs: 15, md: 16 },
+              fontWeight: 500,
+              color: "#292F3D",
+              fontFamily: secondaryFont.style.fontFamily,
+            }}
+          >
+            {value}
+          </Typography>
+      }
     </Stack>
   );
 }
