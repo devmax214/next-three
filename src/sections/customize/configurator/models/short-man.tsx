@@ -124,9 +124,24 @@ export default function ShortManModel(props: any) {
 
   const modelRef = useRef<any>();
   const [zoomFactor, setZoomFactor] = useState<number>(1);
+  const [embelIndexArr, setEmbelIndexArr] = useState<number[]>([]);
 
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
+
+  useEffect(() => {
+    if (embelIndexArr.length > 0) {
+      let isSameIndex = false;
+      embelIndexArr.forEach(index => {
+        if (index == embelIndex) {
+          isSameIndex = true;
+        }
+      })
+      if (!isSameIndex) setEmbelIndexArr([...embelIndexArr, embelIndex]);
+    } else {
+      setEmbelIndexArr([...embelIndexArr, embelIndex]);
+    }
+  }, [embelIndex])
 
   useEffect(() => {
     if (customize.tag.file) {
@@ -136,51 +151,51 @@ export default function ShortManModel(props: any) {
     }
   }, [customize.tag.file])
 
-  const setTextTexture = (factor = 1) => {
+  const setTextTexture = (factor = 1, dataIndex = embelIndex) => {
     var textCanvas = document.createElement("canvas");
     textCanvas.width = 50 * factor;
     textCanvas.height = 150 * factor;
     var ctx = textCanvas.getContext("2d");
 
-    if (ctx !== null && customize.embellishment[embelIndex].font) {
+    if (ctx !== null && customize.embellishment[dataIndex].font) {
       ctx.fillStyle = "black";
-      ctx.font = `10px ${customize.embellishment[embelIndex].font}`;
+      ctx.font = `10px ${customize.embellishment[dataIndex].font}`;
       ctx.scale(factor, factor);
-      switch (customize.embellishment[embelIndex].position.type) {
+      switch (customize.embellishment[dataIndex].position.type) {
         case 0:
           ctx.textAlign = 'left';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 0, 75);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 0, 75);
           break;
         case 1:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 25, 75);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 25, 75);
           break;
         case 2:
           ctx.textAlign = 'right';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 50, 75);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 50, 75);
           break;
         case 3:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'top';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 25, 0);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 25, 0);
           break;
         case 4:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 25, 75);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 25, 75);
           break;
         case 5:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'bottom';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 25, 150);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 25, 150);
           break;
       }
 
       const myTexture = new THREE.CanvasTexture(textCanvas);
-      setTexture({ ...texture, [embelIndex]: myTexture });
+      setTexture({ ...texture, [dataIndex]: myTexture });
     }
   }
 
@@ -303,7 +318,11 @@ export default function ShortManModel(props: any) {
   }, [customize.cord])
 
   useEffect(() => {
-    setTextTexture(zoomFactor);
+    if (embelIndexArr.length > 0) {
+      embelIndexArr.forEach(index => {
+        setTextTexture(zoomFactor, index);
+      })
+    }
   }, [zoomFactor])
 
   useFrame(state => {

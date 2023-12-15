@@ -106,6 +106,8 @@ export default function Model(props: any) {
   const [cords, setCords] = useState("");
   const { embelIndex } = props;
 
+  const [embelIndexArr, setEmbelIndexArr] = useState<number[]>([]);
+
   const modelRef = useRef<any>();
   const [zoomFactor, setZoomFactor] = useState<number>(1);
 
@@ -121,6 +123,20 @@ export default function Model(props: any) {
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
 
   useEffect(() => {
+    if (embelIndexArr.length > 0) {
+      let isSameIndex = false;
+      embelIndexArr.forEach(index => {
+        if (index == embelIndex) {
+          isSameIndex = true;
+        }
+      })
+      if (!isSameIndex) setEmbelIndexArr([...embelIndexArr, embelIndex]);
+    } else {
+      setEmbelIndexArr([...embelIndexArr, embelIndex]);
+    }
+  }, [embelIndex])
+
+  useEffect(() => {
     if (customize.tag.file) {
       loader.loadAsync(URL.createObjectURL(customize.tag.file)).then((result) => {
         setTagTexture(result);
@@ -129,51 +145,51 @@ export default function Model(props: any) {
   }, [customize.tag.file])
 
 
-  const setTextTexture = (factor = 1) => {
+  const setTextTexture = (factor = 1, dataIndex = embelIndex) => {
     var textCanvas = document.createElement("canvas");
     textCanvas.width = 200 * factor;
     textCanvas.height = 200 * factor;
     var ctx = textCanvas.getContext("2d");
-    var fontSize = embelIndex == 3 || embelIndex == 2 ? '15' : '30';
-    if (ctx !== null && customize.embellishment[embelIndex].font) {
+    var fontSize = dataIndex == 3 || dataIndex == 2 ? '15' : '30';
+    if (ctx !== null && customize.embellishment[dataIndex].font) {
       ctx.scale(factor, factor);
       ctx.fillStyle = "black";
-      ctx.font = `${fontSize}px ${customize.embellishment[embelIndex].font}`;
-      switch (customize.embellishment[embelIndex].position.type) {
+      ctx.font = `${fontSize}px ${customize.embellishment[dataIndex].font}`;
+      switch (customize.embellishment[dataIndex].position.type) {
         case 0:
           ctx.textAlign = 'left';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 0, 100);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 0, 100);
           break;
         case 1:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 100, 100);
           break;
         case 2:
           ctx.textAlign = 'right';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 200, 100);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 200, 100);
           break;
         case 3:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'top';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 20);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 100, 20);
           break;
         case 4:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 100, 100);
           break;
         case 5:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'bottom';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 200);
+          ctx.fillText(customize.embellishment[dataIndex].textureText, 100, 200);
           break;
       }
 
       const myTexture = new THREE.CanvasTexture(textCanvas);
-      setTexture({ ...texture, [embelIndex]: myTexture });
+      setTexture({ ...texture, [dataIndex]: myTexture });
     }
   }
 
@@ -297,7 +313,12 @@ export default function Model(props: any) {
   }, [customize.cord])
 
   useEffect(() => {
-    setTextTexture(zoomFactor);
+    if (embelIndexArr.length > 0) {
+      embelIndexArr.forEach(index => {
+        setTextTexture(zoomFactor, index);
+      })
+    }
+    
   }, [zoomFactor])
 
   useFrame(state => {
