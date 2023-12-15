@@ -85,8 +85,11 @@ export default function OversizeManModel(props: any) {
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
 
   useEffect(() => {
-    if (customize.tag.file)
-      setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
+    if (customize.tag.file) {
+      loader.loadAsync(URL.createObjectURL(customize.tag.file)).then((result) => {
+        setTagTexture(result);
+      });
+    }
   }, [customize.tag.file])
 
   const setTextTexture = () => {
@@ -166,9 +169,9 @@ export default function OversizeManModel(props: any) {
         const material: any = materials[Object.keys(materials)[0]];
         let keys: string[] = Object.keys(nodes);
         keys = keys.filter((key) => (nodes[key].isMesh));
-        const positionY = customize.tag.size.startsWith("45x45") ? 1.6 : customize.tag.size.startsWith("55") ? 1.607 : 1.615;
-        const scaleYZ = customize.tag.size.startsWith("45x45") ? 0.028 : customize.tag.size.startsWith("55") ? 0.015 : 0.025;
-        const scaleX = customize.tag.size.startsWith("45x45") ? 0.03 : customize.tag.size.startsWith("55") ? 0.04 : 0.025;
+        const positionY = customize.tag.size.startsWith("45x45") ? 1.603 : customize.tag.size.startsWith("55") ? 1.609 : 1.615;
+        const scaleYZ = customize.tag.size.startsWith("45x45") ? 0.02 : customize.tag.size.startsWith("55") ? 0.015 : 0.025;
+        const scaleX = !tagTexture.source.data ? 0 : scaleYZ * tagTexture.source.data.naturalWidth / tagTexture.source.data.naturalHeight;
 
         return (
           <group dispose={null}>
@@ -178,7 +181,7 @@ export default function OversizeManModel(props: any) {
                   <Decal
                     position={[0, positionY, -0.085]}
                     rotation={[0, 0, 0]}
-                    scale={[scaleX, scaleYZ, scaleYZ]}
+                    scale={[scaleX, scaleYZ, 0.2]}
                     map={tagTexture}
                     // debug={true}
                     depthTest={true}

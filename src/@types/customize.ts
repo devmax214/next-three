@@ -44,6 +44,7 @@ export interface ICustomizeQuoteItem {
   cordTip: string;
   text: string;
   color: string;
+  pantone: string;
   careLabel: number;
   sizeLabel: number;
   washing: IWashingInstructionTagItem;
@@ -71,6 +72,7 @@ export interface ICustomizeItem {
 
 export type CustomizeContextProps = ICustomizeQuoteItem & {
   onColorChange: (itemId: string) => void;
+  onPantoneChange: (pantone: string) => void;
   onTagEditChange: () => void;
   onTagNeckChange: () => void;
   onTagColorChange: () => void;

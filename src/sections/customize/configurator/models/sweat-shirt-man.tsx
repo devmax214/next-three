@@ -74,8 +74,11 @@ export default function SWEATManModel(props: any) {
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
 
   useEffect(() => {
-    if (customize.tag.file)
-      setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
+    if (customize.tag.file) {
+      loader.loadAsync(URL.createObjectURL(customize.tag.file)).then((result) => {
+        setTagTexture(result);
+      });
+    }
   }, [customize.tag.file])
 
   useEffect(() => {
@@ -163,6 +166,7 @@ export default function SWEATManModel(props: any) {
 
         const positionY = customize.tag.size.startsWith("45x45") ? 1.602 : customize.tag.size.startsWith("55") ? 1.611 : 1.615;
         const scaleYZ = customize.tag.size.startsWith("45x45") ? 0.02 : customize.tag.size.startsWith("55") ? 0.015 : 0.025;
+        const scaleX = !tagTexture.source.data ? 0 : scaleYZ * tagTexture.source.data.naturalWidth / tagTexture.source.data.naturalHeight;
 
         return (
           <group dispose={null} position={[0, 0, 0.001]}>
@@ -172,7 +176,7 @@ export default function SWEATManModel(props: any) {
                   <Decal
                     position={[0, positionY, -0.085]}
                     rotation={[0, 0, 0]}
-                    scale={[0.03, scaleYZ, scaleYZ]}
+                    scale={[scaleX, scaleYZ, scaleYZ]}
                     map={tagTexture}
                     // debug={true}
                     depthTest={true}
