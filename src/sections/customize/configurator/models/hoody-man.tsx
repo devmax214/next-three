@@ -5,7 +5,7 @@ Files: GU22HOODIEWR_man_cord01_color_cru_end_silicone.gltf [214.63KB] > GU22HOOD
 */
 
 import * as THREE from "three";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
@@ -106,6 +106,9 @@ export default function Model(props: any) {
   const [cords, setCords] = useState("");
   const { embelIndex } = props;
 
+  const modelRef = useRef<any>();
+  const [zoomFactor, setZoomFactor] = useState<number>(1);
+
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
   const [texture, setTexture] = useState({
@@ -123,15 +126,16 @@ export default function Model(props: any) {
   }, [customize.tag.file])
 
 
-  const setTextTexture = () => {
+  const setTextTexture = (factor = 1) => {
     var textCanvas = document.createElement("canvas");
-    textCanvas.width = 200;
-    textCanvas.height = 200;
+    textCanvas.width = 200 * factor;
+    textCanvas.height = 200 * factor;
     var ctx = textCanvas.getContext("2d");
-
+    var fontSize = embelIndex == 3 || embelIndex == 2 ? '15' : '30';
     if (ctx !== null && customize.embellishment[embelIndex].font) {
+      ctx.scale(factor, factor);
       ctx.fillStyle = "black";
-      ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
+      ctx.font = `${fontSize}px ${customize.embellishment[embelIndex].font}`;
       switch (customize.embellishment[embelIndex].position.type) {
         case 0:
           ctx.textAlign = 'left';
@@ -151,7 +155,7 @@ export default function Model(props: any) {
         case 3:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'top';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 0);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 20);
           break;
         case 4:
           ctx.textAlign = 'center';
@@ -289,9 +293,19 @@ export default function Model(props: any) {
     setCords(customize.cord);
   }, [customize.cord])
 
+  useEffect(() => {
+    setTextTexture(zoomFactor);
+  }, [zoomFactor])
+
   useFrame(state => {
     if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
+    } else {
+      const distance = state.camera.position.distanceTo(modelRef.current.position);
+      const newZoomFactor = 2.5 / distance;
+      if (newZoomFactor !== zoomFactor) {
+        setZoomFactor(newZoomFactor);
+      }
     }
   })
 
@@ -341,7 +355,7 @@ export default function Model(props: any) {
       </mesh>
       <mesh geometry={nodes['HOODIE-COSTA001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.030']} />
       <mesh geometry={nodes['HOODIE-COSTA001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.026']} />
-      <mesh geometry={nodes['HOODIE-FRENTE001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.025']}>
+      <mesh geometry={nodes['HOODIE-FRENTE001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.025']} ref={modelRef}>
         <Decal
           position={[0, 1.38, 0.2]}
           rotation={[0, 0, 0]}

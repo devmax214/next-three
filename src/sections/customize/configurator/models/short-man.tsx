@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
@@ -122,6 +122,9 @@ export default function ShortManModel(props: any) {
     4: new THREE.Texture(),
   }) as any;
 
+  const modelRef = useRef<any>();
+  const [zoomFactor, setZoomFactor] = useState<number>(1);
+
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
 
@@ -130,15 +133,16 @@ export default function ShortManModel(props: any) {
       setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
   }, [customize.tag.file])
 
-  const setTextTexture = () => {
+  const setTextTexture = (factor = 1) => {
     var textCanvas = document.createElement("canvas");
-    textCanvas.width = 50;
-    textCanvas.height = 150;
+    textCanvas.width = 50 * factor;
+    textCanvas.height = 150 * factor;
     var ctx = textCanvas.getContext("2d");
 
     if (ctx !== null && customize.embellishment[embelIndex].font) {
       ctx.fillStyle = "black";
-      ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
+      ctx.font = `10px ${customize.embellishment[embelIndex].font}`;
+      ctx.scale(factor, factor);
       switch (customize.embellishment[embelIndex].position.type) {
         case 0:
           ctx.textAlign = 'left';
@@ -295,14 +299,24 @@ export default function ShortManModel(props: any) {
     setCords(customize.cord);
   }, [customize.cord])
 
+  useEffect(() => {
+    setTextTexture(zoomFactor);
+  }, [zoomFactor])
+
   useFrame(state => {
     if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
+    } else {
+      const distance = state.camera.position.distanceTo(modelRef.current.position);
+      const newZoomFactor = 2.5 / distance;
+      if (newZoomFactor !== zoomFactor) {
+        setZoomFactor(newZoomFactor);
+      }
     }
   })
 
   return (
-    <group position={[0, 0, 0]} {...props} dispose={null}>
+    <group position={[0, 0, 0]} {...props} dispose={null} ref={modelRef}>
       <mesh geometry={nodes.StitchMatShape_21660_Node.geometry} material={materials['Material3537.002']}>
         {customize.tag.edit ? tag() : ""}
       </mesh>

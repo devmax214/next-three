@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
@@ -73,6 +73,9 @@ export default function SWEATManModel(props: any) {
   }) as any;
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
 
+  const modelRef = useRef<any>();
+  const [zoomFactor, setZoomFactor] = useState<number>(1);
+
   useEffect(() => {
     if (customize.tag.file)
       setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
@@ -83,15 +86,16 @@ export default function SWEATManModel(props: any) {
       setTexture(loader.load(URL.createObjectURL(customize.embellishment[embelIndex].file)));
   }, [customize.embellishment[embelIndex].file]);
 
-  const setTextTexture = () => {
+  const setTextTexture = (factor = 1) => {
     var textCanvas = document.createElement("canvas");
-    textCanvas.width = 200;
-    textCanvas.height = 200;
+    textCanvas.width = 200 * factor;
+    textCanvas.height = 200 * factor;
     var ctx = textCanvas.getContext("2d");
-
+    var fontSize = embelIndex == 3 || embelIndex == 2 ? '15' : '30';
     if (ctx !== null && customize.embellishment[embelIndex].font) {
       ctx.fillStyle = "black";
-      ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
+      ctx.font = `${fontSize}px ${customize.embellishment[embelIndex].font}`;
+      ctx.scale(factor, factor);
       switch (customize.embellishment[embelIndex].position.type) {
         case 0:
           ctx.textAlign = 'left';
@@ -199,14 +203,24 @@ export default function SWEATManModel(props: any) {
     }
   }, [customize.tag])
 
+  useEffect(() => {
+    setTextTexture(zoomFactor);
+  }, [zoomFactor])
+
   useFrame(state => {
     if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
+    } else {
+      const distance = state.camera.position.distanceTo(modelRef.current.position);
+      const newZoomFactor = 2.5 / distance;
+      if (newZoomFactor !== zoomFactor) {
+        setZoomFactor(newZoomFactor);
+      }
     }
   })
 
   return (
-    <group position={[0, 0, 0]} {...props} dispose={null}>
+    <group position={[0, 0, 0]} {...props} dispose={null} ref={modelRef}>
       <mesh geometry={nodes.StitchMatShape_39172_Node.geometry} material={materials['Material2816.002']} />
       <mesh geometry={nodes.StitchMatShape_39333_Node.geometry} material={materials['Material2816.002']} />
       <mesh geometry={nodes.StitchMatShape_39494_Node.geometry} material={materials['Material2816.002']} />

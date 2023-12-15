@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
@@ -71,7 +71,9 @@ export default function OversizeManModel(props: any) {
   const customize = useCustomizeContext();
   const [tagName, setTagName] = useState("");
   const { embelIndex } = props;
-  console.log('embelIndex', embelIndex)
+
+  const modelRef = useRef<any>();
+  const [zoomFactor, setZoomFactor] = useState<number>(1);
 
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
@@ -89,15 +91,16 @@ export default function OversizeManModel(props: any) {
       setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
   }, [customize.tag.file])
 
-  const setTextTexture = () => {
+  const setTextTexture = (factor = 1) => {
     var textCanvas = document.createElement("canvas");
-    textCanvas.width = 200;
-    textCanvas.height = 200;
+    textCanvas.width = 200 * factor;
+    textCanvas.height = 200 * factor;
     var ctx = textCanvas.getContext("2d");
-
+    var fontSize = embelIndex == 3 || embelIndex == 2 ? '20' : '30';
     if (ctx !== null && customize.embellishment[embelIndex].font) {
       ctx.fillStyle = "black";
-      ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
+      ctx.font = `${fontSize}px ${customize.embellishment[embelIndex].font}`;
+      ctx.scale(factor, factor);
       switch (customize.embellishment[embelIndex].position.type) {
         case 0:
           ctx.textAlign = 'left';
@@ -205,10 +208,21 @@ export default function OversizeManModel(props: any) {
     }
   }, [customize.tag])
 
+  useEffect(() => {
+    setTextTexture(zoomFactor);
+  }, [zoomFactor])
+
   useFrame(state => {
     if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
+    } else {
+      const distance = state.camera.position.distanceTo(modelRef.current.position);
+      const newZoomFactor = 2.5 / distance;
+      if (newZoomFactor !== zoomFactor) {
+        setZoomFactor(newZoomFactor);
+      }
     }
+    
   })
 
   return (
@@ -243,7 +257,7 @@ export default function OversizeManModel(props: any) {
       </mesh>
       <mesh geometry={nodes.MG100Y__MAN2_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.008']} />
       <mesh geometry={nodes.MG100Y__MAN2_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.008']} />
-      <mesh geometry={nodes.MG100Y__MAN3.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.009']} >
+      <mesh geometry={nodes.MG100Y__MAN3.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.009']} ref={modelRef} >
         <Decal
           position={[-0.245, 1.41, -0.02]}
           rotation={[0, 0, THREE.MathUtils.degToRad(-15)]}

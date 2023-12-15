@@ -73,21 +73,26 @@ export default function TShirtManModel(props: any) {
     4: new THREE.Texture(),
   }) as any;
 
+  const modelRef = useRef<any>();
+  const [zoomFactor, setZoomFactor] = useState<number>(1);
+
 
   useEffect(() => {
     if (customize.tag.file)
       setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
   }, [customize.tag.file])
 
-  const setTextTexture = () => {
+  const setTextTexture = (factor = 1) => {
     var textCanvas = document.createElement("canvas");
-    textCanvas.width = 200;
-    textCanvas.height = 200;
+    textCanvas.width = 200 * factor;
+    textCanvas.height = 200 * factor;
     var ctx = textCanvas.getContext("2d");
+    var fontSize = embelIndex == 3 || embelIndex == 2 ? '20' : '30';
 
     if (ctx !== null && customize.embellishment[embelIndex].font) {
       ctx.fillStyle = "black";
-      ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
+      ctx.font = `${fontSize}px ${customize.embellishment[embelIndex].font}`;
+      ctx.scale(factor, factor);
       switch (customize.embellishment[embelIndex].position.type) {
         case 0:
           ctx.textAlign = 'left';
@@ -194,14 +199,24 @@ export default function TShirtManModel(props: any) {
     }
   }, [customize.tag])
 
+  useEffect(() => {
+    setTextTexture(zoomFactor);
+  }, [zoomFactor])
+
   useFrame(state => {
     if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
+    } else {
+      const distance = state.camera.position.distanceTo(modelRef.current.position);
+      const newZoomFactor = 2.5 / distance;
+      if (newZoomFactor !== zoomFactor) {
+        setZoomFactor(newZoomFactor);
+      }
     }
   })
 
   return (
-    <group position={[0, 0, 0]} {...props} dispose={null}>
+    <group position={[0, 0, 0]} {...props} dispose={null} ref={modelRef}>
       <mesh geometry={nodes.StitchMatShape_23735_Node.geometry} material={materials['Material3180.002']}>
         {customize.tag.edit ? tag() : ""}
       </mesh>

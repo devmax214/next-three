@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
@@ -130,6 +130,9 @@ export default function PANTManModel(props: any) {
   }) as any;
   const { embelIndex } = props;
 
+  const modelRef = useRef<any>();
+  const [zoomFactor, setZoomFactor] = useState<number>(1);
+
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
 
@@ -138,15 +141,16 @@ export default function PANTManModel(props: any) {
       setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
   }, [customize.tag.file])
 
-  const setTextTexture = () => {
+  const setTextTexture = (factor = 1) => {
     var textCanvas = document.createElement("canvas");
-    textCanvas.width = 40;
-    textCanvas.height = 200;
+    textCanvas.width = 40 * factor;
+    textCanvas.height = 200 * factor;
     var ctx = textCanvas.getContext("2d");
 
     if (ctx !== null && customize.embellishment[embelIndex].font) {
       ctx.fillStyle = "black";
-      ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
+      ctx.font = `10px ${customize.embellishment[embelIndex].font}`;
+      ctx.scale(factor, factor);
       switch (customize.embellishment[embelIndex].position.type) {
         case 0:
           ctx.textAlign = 'left';
@@ -301,14 +305,24 @@ export default function PANTManModel(props: any) {
     setCords(customize.cord);
   }, [customize.cord])
 
+  useEffect(() => {
+    setTextTexture(zoomFactor);
+  }, [zoomFactor])
+
   useFrame(state => {
     if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
+    } else {
+      const distance = state.camera.position.distanceTo(modelRef.current.position);
+      const newZoomFactor = 2.5 / distance;
+      if (newZoomFactor !== zoomFactor) {
+        setZoomFactor(newZoomFactor);
+      }
     }
   })
 
   return (
-    <group position={[0, 0, 0]} {...props} dispose={null}>
+    <group position={[0, 0, 0]} {...props} dispose={null} ref={modelRef}>
       <mesh geometry={nodes.StitchMatShape_25119_Node.geometry} material={materials.Material3558}>
         {customize.tag.edit ? tag() : ""}
       </mesh>
@@ -380,7 +394,7 @@ export default function PANTManModel(props: any) {
       <mesh geometry={nodes.WRCALCACSDI_2001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.009']} />
       <mesh geometry={nodes.WRCALCACSDI_2001_1.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.009']} />
       <mesh geometry={nodes.WRCALCACSDI_2001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.009']} />
-      <mesh geometry={nodes.WRCALCACSDI_3001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.013']} >
+      <mesh geometry={nodes.WRCALCACSDI_3001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.013']}>
         <Decal
           position={[0.1, 0.74, -0.12]}
           rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
