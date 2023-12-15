@@ -116,6 +116,7 @@ const initialState = {
     font: "Arial"
   }],
   color: "",
+  pantone: "11-0601 TCX",
   cord: "",
   cordTip: "",
   text: "",
@@ -140,6 +141,15 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
         color: color
       }))
     }, [values.color]
+  )
+
+  const onPantoneChange = useCallback(
+    (pantone: string) => {
+      setValues((prevStatus: any) => ({
+        ...prevStatus,
+        pantone: pantone
+      }))
+    }, [values.pantone]
   )
 
   const onTagEditChange = useCallback(
@@ -203,7 +213,6 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
   )
 
   const onTagSelectFile = useCallback((file: any) => {
-    console.log(file)
     setValues((prevStatus: any) => ({
       ...prevStatus,
       tag: {
@@ -289,6 +298,7 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
     return {
       ...values,
       onColorChange,
+      onPantoneChange,
       onTagEditChange,
       onTagNeckChange,
       onTagColorChange,

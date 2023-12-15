@@ -29,6 +29,7 @@ export default function SelectColorButton(props: Props) {
 
   const hexColor = props ? props.color : "";
   const [hsva, setHsva] = useState(hexColor ? hexToHsva(props.color) : { h: 0, s: 0, v: 95, a: 1 });
+  const [pantone, setPantone] = useState(customize.pantone);
 
   const changeColor = (color: ColorResult) => {
     setHsva({
@@ -36,6 +37,11 @@ export default function SelectColorButton(props: Props) {
       ...color.hsva
     })
     customize.onColorChange(hsvaToHex(color.hsva))
+  }
+
+  const changePantone = (e: any) => {
+    setPantone(e.target.value);
+    customize.onPantoneChange(e.target.value);
   }
 
   useEffect(() => {
@@ -115,7 +121,7 @@ export default function SelectColorButton(props: Props) {
             >
               Insert Pantone Reference
             </Typography>
-            <TextField defaultValue={"11-0601 TCX"} variant="outlined" size="small" inputProps={{ style: { backgroundColor: "#f8f8f8" } }} />
+            <TextField value={pantone} onChange={changePantone} variant="outlined" size="small" inputProps={{ style: { backgroundColor: "#f8f8f8" } }} />
           </Grid>
         </Grid>
         {/* </Stack> */}

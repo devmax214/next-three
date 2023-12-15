@@ -137,8 +137,11 @@ export default function PANTManModel(props: any) {
   loader.setCrossOrigin("");
 
   useEffect(() => {
-    if (customize.tag.file)
-      setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
+    if (customize.tag.file) {
+      loader.loadAsync(URL.createObjectURL(customize.tag.file)).then((result) => {
+        setTagTexture(result);
+      });
+    }
   }, [customize.tag.file])
 
   const setTextTexture = (factor = 1) => {
@@ -222,7 +225,8 @@ export default function PANTManModel(props: any) {
         let keys: string[] = Object.keys(nodes);
         keys = keys.filter((key) => (nodes[key].isMesh));
         const positionY = customize.tag.size.startsWith("45x45") ? 1.088 : customize.tag.size.startsWith("55") ? 1.094 : 1.615;
-        const scaleYZ = customize.tag.size.startsWith("45x45") ? 0.023 : customize.tag.size.startsWith("55") ? 0.017 : 0.025;
+        const scaleYZ = customize.tag.size.startsWith("45x45") ? 0.02 : customize.tag.size.startsWith("55") ? 0.017 : 0.025;
+        const scaleX = !tagTexture.source.data ? 0 : scaleYZ * tagTexture.source.data.naturalWidth / tagTexture.source.data.naturalHeight;
 
         return (
           <group dispose={null}>
@@ -232,7 +236,7 @@ export default function PANTManModel(props: any) {
                   <Decal
                     position={[-0.0025, positionY, -0.105]}
                     rotation={[0, 0, 0]}
-                    scale={[0.034, scaleYZ, scaleYZ]}
+                    scale={[scaleX, scaleYZ, scaleYZ]}
                     map={tagTexture}
                     // debug={true}
                     depthTest={true}
