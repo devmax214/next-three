@@ -60,13 +60,19 @@ type ContextType = Record<
 
 export default function TShirtManModel(props: any) {
   const customize = useCustomizeContext();
-
+  const { embelIndex } = props;
   const [tagName, setTagName] = useState("");
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
-  const [texture, setTexture] = useState(new THREE.Texture()) as any;
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
-  const { embelIndex } = props;
+  const [texture, setTexture] = useState({
+    0: new THREE.Texture(),
+    1: new THREE.Texture(),
+    2: new THREE.Texture(),
+    3: new THREE.Texture(),
+    4: new THREE.Texture(),
+  }) as any;
+
 
   useEffect(() => {
     if (customize.tag.file)
@@ -116,14 +122,14 @@ export default function TShirtManModel(props: any) {
       }
 
       const myTexture = new THREE.CanvasTexture(textCanvas);
-      setTexture(myTexture)
+      setTexture({ ...texture, [embelIndex]: myTexture });
     }
   }
 
   useEffect(() => {
     if (customize.embellishment[embelIndex].type === 'image') {
       if (customize.embellishment[embelIndex].file)
-        setTexture(loader.load(URL.createObjectURL(customize.embellishment[embelIndex].file)));
+        setTexture({ ...texture, [embelIndex]: loader.load(URL.createObjectURL(customize.embellishment[embelIndex].file)) });
     } else if (customize.embellishment[embelIndex].type === 'text') {
       setTextTexture();
     }
@@ -163,7 +169,6 @@ export default function TShirtManModel(props: any) {
                     rotation={[0, 0, 0]}
                     scale={[0.03, scaleYZ, scaleYZ]}
                     map={tagTexture}
-                    // debug={true}
                     depthTest={true}
                   />
                 </mesh>
@@ -190,8 +195,15 @@ export default function TShirtManModel(props: any) {
   }, [customize.tag])
 
   useFrame(state => {
-    if (customize.tag.visible) {
+    if (/*customize.embellishment[embelIndex].visible || */customize.tag.visible) {
       state.camera.position.set(0, 0, 2.5);
+      // if (embelIndex === 1) {
+      //   state.camera.position.set(0, 0, -2.5);
+      // } else if (embelIndex === 2) {
+      //   state.camera.position.set(THREE.MathUtils.degToRad(-90), 0, 0);
+      // } else if (embelIndex === 3) {
+      //   state.camera.position.set(THREE.MathUtils.degToRad(90), 0, 0);
+      // }
     }
   })
 
@@ -200,8 +212,7 @@ export default function TShirtManModel(props: any) {
       <mesh geometry={nodes.StitchMatShape_23735_Node.geometry} material={materials['Material3180.002']}>
         {customize.tag.edit ? tag() : ""}
       </mesh>
-      <mesh geometry={nodes.StitchMatShape_24030_Node.geometry} material={materials['Material2818.002']}>
-      </mesh>
+      <mesh geometry={nodes.StitchMatShape_24030_Node.geometry} material={materials['Material2818.002']} />
       <mesh geometry={nodes.StitchMatShape_24325_Node.geometry} material={materials['Material2818.002']} />
       <mesh geometry={nodes.StitchMatShape_24515_Node.geometry} material={materials['Material2996.002']} />
       <mesh geometry={nodes.StitchMatShape_24809_Node.geometry} material={materials['Material3180.002']} />
@@ -216,15 +227,24 @@ export default function TShirtManModel(props: any) {
       <mesh geometry={nodes.Pattern2D_190184005.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.014']} />
       <mesh geometry={nodes.Pattern2D_190184005_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.014']} />
       <mesh geometry={nodes.Pattern2D_190184005_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.014']} />
-      <mesh geometry={nodes['TSHIRTWR-COS005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} />
-      <mesh geometry={nodes['TSHIRTWR-COS005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} />
+      <mesh geometry={nodes['TSHIRTWR-COS005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} >
+        <Decal
+          position={[0, 1.43, -0.24]}
+          rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
+          scale={[0.23, 0.31, 0.26]}
+          map={texture[1]}
+        />
+      </mesh>
+      <mesh geometry={nodes['TSHIRTWR-COS005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} >
+
+      </mesh>
       <mesh geometry={nodes['TSHIRTWR-COS005_2'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} />
       <mesh geometry={nodes['TSHIRTWR-FRE005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.012']}>
         <Decal
-          position={[0, 1.31, 0.15]}
+          position={[0, 1.38, 0.15]}
           rotation={[0, 0, 0]}
-          scale={[0.26, 0.28, 0.26]}
-          map={texture}
+          scale={[0.23, 0.31, 0.26]}
+          map={texture[0]}
         />
       </mesh>
       <mesh geometry={nodes['TSHIRTWR-FRE005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.012']} />
@@ -232,10 +252,24 @@ export default function TShirtManModel(props: any) {
       <mesh geometry={nodes['TSHIRTWR-GOLA005'].geometry} material={materials['Rib_1X1_319gsm_FRONT_2550.005']} />
       <mesh geometry={nodes['TSHIRTWR-GOLA005_1'].geometry} material={materials['Rib_1X1_319gsm_FRONT_2550.005']} />
       <mesh geometry={nodes['TSHIRTWR-GOLA005_2'].geometry} material={materials['Rib_1X1_319gsm_FRONT_2550.005']} />
-      <mesh geometry={nodes['TSHIRTWR-MANGA_1005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.011']} />
+      <mesh geometry={nodes['TSHIRTWR-MANGA_1005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.011']} >
+        <Decal
+          position={[-0.245, 1.47, -0.02]}
+          rotation={[0, 0, THREE.MathUtils.degToRad(-15)]}
+          scale={[0.05, 0.078, 0.066]}
+          map={texture[3]}
+        />
+      </mesh>
       <mesh geometry={nodes['TSHIRTWR-MANGA_1005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.011']} />
       <mesh geometry={nodes['TSHIRTWR-MANGA_1005_2'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.011']} />
-      <mesh geometry={nodes['TSHIRTWR-MANGA005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.013']} />
+      <mesh geometry={nodes['TSHIRTWR-MANGA005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.013']} >
+        <Decal
+          position={[0.25, 1.46, -0.03]}
+          rotation={[0, 0, THREE.MathUtils.degToRad(15)]}
+          scale={[0.05, 0.078, 0.066]}
+          map={texture[2]}
+        />
+      </mesh>
       <mesh geometry={nodes['TSHIRTWR-MANGA005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.013']} />
       <mesh geometry={nodes['TSHIRTWR-MANGA005_2'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.013']} />
     </group>

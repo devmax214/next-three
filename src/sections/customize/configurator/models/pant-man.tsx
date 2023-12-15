@@ -121,6 +121,13 @@ export default function PANTManModel(props: any) {
   const [tagName, setTagName] = useState("");
   const [cords, setCords] = useState("");
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
+  const [texture, setTexture] = useState({
+    0: new THREE.Texture(),
+    1: new THREE.Texture(),
+    2: new THREE.Texture(),
+    3: new THREE.Texture(),
+    4: new THREE.Texture(),
+  }) as any;
   const { embelIndex } = props;
 
   let loader = new THREE.TextureLoader();
@@ -130,6 +137,62 @@ export default function PANTManModel(props: any) {
     if (customize.tag.file)
       setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
   }, [customize.tag.file])
+
+  const setTextTexture = () => {
+    var textCanvas = document.createElement("canvas");
+    textCanvas.width = 200;
+    textCanvas.height = 200;
+    var ctx = textCanvas.getContext("2d");
+
+    if (ctx !== null && customize.embellishment[embelIndex].font) {
+      ctx.fillStyle = "black";
+      ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
+      switch (customize.embellishment[embelIndex].position.type) {
+        case 0:
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 0, 100);
+          break;
+        case 1:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
+          break;
+        case 2:
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 200, 100);
+          break;
+        case 3:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 0);
+          break;
+        case 4:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
+          break;
+        case 5:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 200);
+          break;
+      }
+
+      const myTexture = new THREE.CanvasTexture(textCanvas);
+      setTexture({ ...texture, [embelIndex]: myTexture });
+    }
+  }
+
+  useEffect(() => {
+    if (customize.embellishment[embelIndex].type === 'image') {
+      if (customize.embellishment[embelIndex].file)
+        setTexture({ ...texture, [embelIndex]: loader.load(URL.createObjectURL(customize.embellishment[embelIndex].file)) });
+    } else if (customize.embellishment[embelIndex].type === 'text') {
+      setTextTexture();
+    }
+  }, [customize.embellishment[embelIndex].position, customize.embellishment[embelIndex].type, customize.embellishment[embelIndex].file, customize.embellishment[embelIndex].textureText, customize.embellishment[embelIndex].font]);
 
   const { nodes, materials } = useGLTF(
     "/models/PANTWR_man/PANTS_MAN.glb"
@@ -289,13 +352,29 @@ export default function PANTManModel(props: any) {
       <mesh geometry={nodes.WRCALCAFRE_1001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.012']} />
       <mesh geometry={nodes.WRCALCAFRE_1001_1.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.012']} />
       <mesh geometry={nodes.WRCALCAFRE_1001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.012']} />
-      <mesh geometry={nodes.WRCALCAFRE_2001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.011']} />
+      <mesh geometry={nodes.WRCALCAFRE_2001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.011']} >
+        <Decal
+          position={[-0.1, 0.71, 0.18]}
+          rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
+          scale={[0.1, 0.55, 0.2]}
+          map={texture[0]}
+        // debug={true}
+        />
+      </mesh>
       <mesh geometry={nodes.WRCALCAFRE_2001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.011']} />
       <mesh geometry={nodes.WRCALCAFRE_2001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.011']} />
       <mesh geometry={nodes.WRCALCAFRE_3001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.006']} />
       <mesh geometry={nodes.WRCALCAFRE_3001_1.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.006']} />
       <mesh geometry={nodes.WRCALCAFRE_3001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.006']} />
-      <mesh geometry={nodes.WRCALCAFRE_4001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.016']} />
+      <mesh geometry={nodes.WRCALCAFRE_4001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.016']} >
+        <Decal
+          position={[0.1, 0.71, 0.18]}
+          rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
+          scale={[0.1, 0.55, 0.2]}
+          map={texture[1]}
+        // debug={true}
+        />
+      </mesh>
       <mesh geometry={nodes.WRCALCAFRE_4001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.016']} />
       <mesh geometry={nodes.WRCALCAFRE_4001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.016']} />
     </group>

@@ -25,21 +25,13 @@ export default function ConfigurationCanvas(props: Props) {
         position: [-0.02, 0.4, 0.4],
         rotation: [0.1, 0, 0]
       })
-    } else if (customize.embellishment[embelIndex].visible) {
+      // } else if (customize.embellishment[embelIndex].visible) {
       const typeOne = ["Pants", "Shorts"];
-      if ((typeOne.includes(props.type) && [0, 1].includes(embelIndex))) {
-        setState({
-          scale: props.type == "Pants" ? [1.5, 1.5, 1.5] : [2, 2, 2],
-          position: [0, props.type == "Pants" ? -0.2 : 0, 0],
-          rotation: [0, 0, 0]
-        })
-      } else if ((typeOne.includes(props.type) && [2, 3, 4].includes(embelIndex))) {
-        setState({
-          scale: props.type == "Pants" ? [1.5, 1.5, 1.5] : [2, 2, 2],
-          position: [0, props.type == "Pants" ? -0.2 : 0, 0],
-          rotation: [0, Math.PI, 0]
-        })
-      }
+      // setState({
+      //   scale: props.type == "Pants" ? [1.5, 1.5, 1.5] : [2, 2, 2],
+      //   position: [0, props.type == "Pants" ? 0 : 0, 0],
+      //   rotation: [0, 0, 0]
+      // })
     } else {
       setState({});
     };
@@ -52,10 +44,10 @@ export default function ConfigurationCanvas(props: Props) {
       shadows
       gl={{ preserveDrawingBuffer: true }}
       camera={{ position: [0, 0, 2.5], fov: 25 }}
-      style={{ 
-        height: window.screen.width > 760 ? 600 : "85%", 
-        background: "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)", 
-        borderRadius: 20 
+      style={{
+        height: window.screen.width > 760 ? 600 : "85%",
+        background: "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)",
+        borderRadius: 20
       }}
     >
       <ambientLight intensity={0.5} />

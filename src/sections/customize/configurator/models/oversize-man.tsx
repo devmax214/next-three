@@ -75,7 +75,13 @@ export default function OversizeManModel(props: any) {
 
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
-  const [texture, setTexture] = useState(new THREE.Texture()) as any;
+  const [texture, setTexture] = useState({
+    0: new THREE.Texture(),
+    1: new THREE.Texture(),
+    2: new THREE.Texture(),
+    3: new THREE.Texture(),
+    4: new THREE.Texture(),
+  }) as any;
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
 
   useEffect(() => {
@@ -83,24 +89,61 @@ export default function OversizeManModel(props: any) {
       setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
   }, [customize.tag.file])
 
-  useEffect(() => {
-    if (customize.embellishment[embelIndex].file)
-      setTexture(loader.load(URL.createObjectURL(customize.embellishment[embelIndex].file)));
-  }, [customize.embellishment[embelIndex].file]);
-
-  useEffect(() => {
+  const setTextTexture = () => {
     var textCanvas = document.createElement("canvas");
     textCanvas.width = 200;
-    textCanvas.height = 100;
+    textCanvas.height = 200;
     var ctx = textCanvas.getContext("2d");
-    if (ctx !== null) {
+
+    if (ctx !== null && customize.embellishment[embelIndex].font) {
       ctx.fillStyle = "black";
       ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
-      ctx.fillText(customize.embellishment[embelIndex].textureText, 10, 50);
+      switch (customize.embellishment[embelIndex].position.type) {
+        case 0:
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 0, 100);
+          break;
+        case 1:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
+          break;
+        case 2:
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 200, 100);
+          break;
+        case 3:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 0);
+          break;
+        case 4:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
+          break;
+        case 5:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 200);
+          break;
+      }
+
       const myTexture = new THREE.CanvasTexture(textCanvas);
-      setTexture(myTexture)
+      setTexture({ ...texture, [embelIndex]: myTexture });
     }
-  }, [customize.embellishment[embelIndex].textureText, customize.embellishment[embelIndex].font])
+  }
+
+  useEffect(() => {
+    if (customize.embellishment[embelIndex].type === 'image') {
+      if (customize.embellishment[embelIndex].file)
+        setTexture({ ...texture, [embelIndex]: loader.load(URL.createObjectURL(customize.embellishment[embelIndex].file)) });
+    } else if (customize.embellishment[embelIndex].type === 'text') {
+      setTextTexture();
+    }
+  }, [customize.embellishment[embelIndex].position, customize.embellishment[embelIndex].type, customize.embellishment[embelIndex].file, customize.embellishment[embelIndex].textureText, customize.embellishment[embelIndex].font]);
 
   const { nodes, materials } = useGLTF(
     "/models/Oversize/Oversized.glb"
@@ -190,13 +233,34 @@ export default function OversizeManModel(props: any) {
         {customize.tag.edit ? tag() : ""}
       </mesh>
       <mesh geometry={nodes.StitchMatShape_63412_Node.geometry} material={materials.Material3503} />
-      <mesh geometry={nodes.MG100Y__MAN2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.008']} />
+      <mesh geometry={nodes.MG100Y__MAN2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.008']} >
+        <Decal
+          position={[0.25, 1.42, -0.03]}
+          rotation={[0, 0, THREE.MathUtils.degToRad(15)]}
+          scale={[0.07, 0.08, 0.066]}
+          map={texture[2]}
+        />
+      </mesh>
       <mesh geometry={nodes.MG100Y__MAN2_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.008']} />
       <mesh geometry={nodes.MG100Y__MAN2_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.008']} />
-      <mesh geometry={nodes.MG100Y__MAN3.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.009']} />
+      <mesh geometry={nodes.MG100Y__MAN3.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.009']} >
+        <Decal
+          position={[-0.245, 1.41, -0.02]}
+          rotation={[0, 0, THREE.MathUtils.degToRad(-15)]}
+          scale={[0.07, 0.08, 0.066]}
+          map={texture[3]}
+        />
+      </mesh>
       <mesh geometry={nodes.MG100Y__MAN3_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.009']} />
       <mesh geometry={nodes.MG100Y__MAN3_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.009']} />
-      <mesh geometry={nodes.MG100Y_COS2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.006']} />
+      <mesh geometry={nodes.MG100Y_COS2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.006']} >
+        <Decal
+          position={[0, 1.43, -0.24]}
+          rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
+          scale={[0.23, 0.31, 0.26]}
+          map={texture[1]}
+        />
+      </mesh>
       <mesh geometry={nodes.MG100Y_COS2_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.006']} />
       <mesh geometry={nodes.MG100Y_COS2_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.006']} />
       <mesh geometry={nodes.MG100Y_COS4.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.006']} />
@@ -204,13 +268,10 @@ export default function OversizeManModel(props: any) {
       <mesh geometry={nodes.MG100Y_COS4_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.006']} />
       <mesh geometry={nodes.MG100Y_FRE2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.007']}>
         <Decal
-          position={[0, 1.31, 0.15]}
+          position={[0, 1.38, 0.15]}
           rotation={[0, 0, 0]}
-          scale={0.25}
-          map={texture}
-        // debug={true}
-        // depthTest={true}
-        // map-anisotropy={16}
+          scale={[0.23, 0.31, 0.26]}
+          map={texture[0]}
         />
       </mesh>
       <mesh geometry={nodes.MG100Y_FRE2_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.007']} />

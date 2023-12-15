@@ -202,6 +202,7 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
   )
 
   const onTagSelectFile = useCallback((file: any) => {
+    console.log(file)
     setValues((prevStatus: any) => ({
       ...prevStatus,
       tag: {
