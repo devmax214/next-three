@@ -19,24 +19,87 @@ export default function ConfigurationCanvas(props: Props) {
     setEmbelIndex(customize.embelIndex);
 
     if (customize.tag.visible) {
-      setState({
-        scale: [10, 10, 10],
-        bottom: true,
-        position: [-0.02, 0.4, 0.4],
-        rotation: [0.1, 0, 0]
-      })
-      // } else if (customize.embellishment[embelIndex].visible) {
-      const typeOne = ["Pants", "Shorts"];
-      // setState({
-      //   scale: props.type == "Pants" ? [1.5, 1.5, 1.5] : [2, 2, 2],
-      //   position: [0, props.type == "Pants" ? 0 : 0, 0],
-      //   rotation: [0, 0, 0]
-      // })
+      setState({ scale: [10, 10, 10], bottom: true, position: [-0.02, 0.4, 0.4], rotation: [0.1, 0, 0] })
+    } else if (customize.embellishment[embelIndex].visible) {
+      if (props.type === "Pants") {
+        switch (embelIndex) {
+          case 0:
+            setState({ scale: [1.5, 1.5, 1.5], position: [-0.15, -0.2, 0], rotation: [0, 0, 0] });
+            break;
+          case 1:
+            setState({ scale: [1.5, 1.5, 1.5], position: [0.2, -0.2, 0], rotation: [0, 0, 0] });
+            break;
+          case 2:
+            setState({ scale: [1.5, 1.5, 1.5], position: [0.2, -0.2, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
+            break;
+          case 3:
+            setState({ scale: [2, 2, 1.5], position: [-0.2, -0.04, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
+            break;
+          case 4:
+            setState({ scale: [3, 3, 3], position: [-0.3, -1, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
+            break;
+          default:
+            break;
+        }
+      } else if (props.type === "Shorts") {
+        switch (embelIndex) {
+          case 0:
+            setState({ scale: [2, 2, 2], position: [-0.15, 0.05, 0], rotation: [0, 0, 0] });
+            break;
+          case 1:
+            setState({ scale: [2, 2, 2], position: [0.2, 0.05, 0], rotation: [0, 0, 0] });
+            break;
+          case 2:
+            setState({ scale: [2, 2, 2], position: [0.2, 0.05, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
+            break;
+          case 3:
+            setState({ scale: [3, 3, 2], position: [-0.2, 0.2, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
+            break;
+          case 4:
+            setState({ scale: [3, 3, 3], position: [-0.3, -0.4, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
+            break;
+          default:
+            break;
+        }
+      } else {
+        const sideTopOffset = props.type === "Hoodies" || props.type === "Sweatshirts" ? 0.3 : -0.5;
+        switch (embelIndex) {
+          case 0:
+            setState({ scale: [2, 2, 2], position: [0, -0.15, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
+            break;
+          case 1:
+            setState({ scale: [2, 2, 2], position: [0, -0.2, 0], rotation: [0, 0, 0] });
+            break;
+          case 2:
+            setState({ scale: [2.5, 2.5, 2.5], position: [-0.1, sideTopOffset, 0], rotation: [0, THREE.MathUtils.degToRad(-90), 0] });
+            break;
+          case 3:
+            setState({ scale: [2.5, 2.5, 2.5], position: [0.1, sideTopOffset, 0], rotation: [0, THREE.MathUtils.degToRad(90), 0] });
+            break;
+          default:
+            break;
+        }
+      }
     } else {
       setState({});
     };
 
   }, [customize.tag.visible, customize.embelIndex, customize.embellishment[embelIndex].visible]);
+
+  useEffect(() => {
+    if (customize.cordVisible) {
+      if (props.type === "Shorts") {
+        setState({ scale: [2, 2, 2], position: [0, -0.2, 0], rotation: [THREE.MathUtils.degToRad(60), THREE.MathUtils.degToRad(-140), 0] });
+      } else if (props.type === "Pants") {
+        setState({ scale: [2, 2, 2], position: [0, -0.4, 0], rotation: [THREE.MathUtils.degToRad(60), THREE.MathUtils.degToRad(-140), 0] });
+      } else {
+        setState({ scale: [2, 2, 2], position: [0, -0.4, 0], rotation: [0, 0, 0] });
+      }
+    } else {
+      setState({});
+    }
+  }, [customize.cordVisible]);
+
 
   return (
     <Canvas

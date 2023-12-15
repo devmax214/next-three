@@ -22,6 +22,7 @@ import SizeControl from "./size-control";
 import { CustomizeContext } from "@/components/customize/context/customize-context";
 import CheckedIcon from "@/components/icons/checked-icon";
 import UnCheckedIcon from "@/components/icons/unchecked-icon";
+import { typeIndexToLabel } from "@/helpers/common";
 
 export const StyledHeader1 = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -56,10 +57,11 @@ const artworks = [
 const views = [{ label: "Front view" }, { label: "Back view" }];
 
 type Props = {
-  embelIndex: number
+  embelIndex: number;
+  ptype: string;
 };
 
-export default function EmbellishmentButton({ embelIndex }: Props) {
+export default function EmbellishmentButton({ embelIndex, ptype }: Props) {
   const [font, setFont] = useState("Arial")
 
   const customize = useContext(CustomizeContext);
@@ -332,7 +334,7 @@ export default function EmbellishmentButton({ embelIndex }: Props) {
   return (
     <>
       <ControlButton
-        label="Embellishment or Text"
+        label={`Embellishment or Text - ${typeIndexToLabel(ptype, embelIndex)}`}
         isOpen={Boolean(popover.open)}
         onClick={onOpen}
       />

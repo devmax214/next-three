@@ -206,7 +206,7 @@ export default function OversizeManModel(props: any) {
   }, [customize.tag])
 
   useFrame(state => {
-    if (customize.tag.visible) {
+    if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
     }
   })
@@ -258,7 +258,7 @@ export default function OversizeManModel(props: any) {
           position={[0, 1.43, -0.24]}
           rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
           scale={[0.23, 0.31, 0.26]}
-          map={texture[1]}
+          map={texture[0]}
         />
       </mesh>
       <mesh geometry={nodes.MG100Y_COS2_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.006']} />
@@ -271,7 +271,7 @@ export default function OversizeManModel(props: any) {
           position={[0, 1.38, 0.15]}
           rotation={[0, 0, 0]}
           scale={[0.23, 0.31, 0.26]}
-          map={texture[0]}
+          map={texture[1]}
         />
       </mesh>
       <mesh geometry={nodes.MG100Y_FRE2_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.007']} />

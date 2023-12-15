@@ -114,6 +114,13 @@ export default function ShortManModel(props: any) {
   const [cords, setCords] = useState("");
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
   const { embelIndex } = props;
+  const [texture, setTexture] = useState({
+    0: new THREE.Texture(),
+    1: new THREE.Texture(),
+    2: new THREE.Texture(),
+    3: new THREE.Texture(),
+    4: new THREE.Texture(),
+  }) as any;
 
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
@@ -122,6 +129,62 @@ export default function ShortManModel(props: any) {
     if (customize.tag.file)
       setTagTexture(loader.load(URL.createObjectURL(customize.tag.file)));
   }, [customize.tag.file])
+
+  const setTextTexture = () => {
+    var textCanvas = document.createElement("canvas");
+    textCanvas.width = 50;
+    textCanvas.height = 150;
+    var ctx = textCanvas.getContext("2d");
+
+    if (ctx !== null && customize.embellishment[embelIndex].font) {
+      ctx.fillStyle = "black";
+      ctx.font = `30px ${customize.embellishment[embelIndex].font}`;
+      switch (customize.embellishment[embelIndex].position.type) {
+        case 0:
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 0, 75);
+          break;
+        case 1:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 25, 75);
+          break;
+        case 2:
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 50, 75);
+          break;
+        case 3:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 25, 0);
+          break;
+        case 4:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 25, 75);
+          break;
+        case 5:
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'bottom';
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 25, 150);
+          break;
+      }
+
+      const myTexture = new THREE.CanvasTexture(textCanvas);
+      setTexture({ ...texture, [embelIndex]: myTexture });
+    }
+  }
+
+  useEffect(() => {
+    if (customize.embellishment[embelIndex].type === 'image') {
+      if (customize.embellishment[embelIndex].file)
+        setTexture({ ...texture, [embelIndex]: loader.load(URL.createObjectURL(customize.embellishment[embelIndex].file)) });
+    } else if (customize.embellishment[embelIndex].type === 'text') {
+      setTextTexture();
+    }
+  }, [customize.embellishment[embelIndex].position, customize.embellishment[embelIndex].type, customize.embellishment[embelIndex].file, customize.embellishment[embelIndex].textureText, customize.embellishment[embelIndex].font]);
 
   const { nodes, materials } = useGLTF(
     "/models/SHORTWR_man/Shorts.glb"
@@ -198,6 +261,29 @@ export default function ShortManModel(props: any) {
     }
   }, [cords]);
 
+  const cordTipItem = useCallback(() => {
+    try {
+      if (!!customize.cord && !!customize.cordTip) {
+        const { nodes, materials } = useGLTF(
+          `/models/SHORTWR_man/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.gltf`
+        ) as any;
+
+        const keys: string[] = Object.keys(nodes);
+        const material: any = materials[Object.keys(materials)[0]];
+
+        return (
+          <group {...props} dispose={null} position={[0, 0, -0.0025]}>
+            {keys.map((key: string, idx: number) => (
+              <mesh name={`cords_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
+            ))}
+          </group>
+        )
+      } else return ''
+    } catch (err) {
+      console.log(err);
+    }
+  }, [customize.cordTip]);
+
   useEffect(() => {
     if (customize.tag.neck)
       setTagName(`label-${customize.tag.size}_${customize.tag.color ? "black" : "white"}`);
@@ -210,7 +296,7 @@ export default function ShortManModel(props: any) {
   }, [customize.cord])
 
   useFrame(state => {
-    if (customize.tag.visible) {
+    if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
     }
   })
@@ -252,7 +338,14 @@ export default function ShortManModel(props: any) {
       <mesh geometry={nodes.StitchMatShape_24808_Node.geometry} material={materials['Material3537.002']} />
       <mesh geometry={nodes.StitchMatShape_24936_Node.geometry} material={materials['Material2983.006']} />
       <mesh geometry={nodes.StitchMatShape_25064_Node.geometry} material={materials['Material2983.006']} />
-      <mesh geometry={nodes.WRCALCAOBOLCOS.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.099']} />
+      <mesh geometry={nodes.WRCALCAOBOLCOS.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.099']} >
+        <Decal
+          position={[-0.11, 0.98, -0.12]}
+          rotation={[0, 0, 0]}
+          scale={[0.07, 0.1, 0.2]}
+          map={texture[4]}
+        />
+      </mesh>
       <mesh geometry={nodes.WRCALCAOBOLCOS_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2603.003']} />
       <mesh geometry={nodes.WRCALCAOBOLCOS_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.099']} />
       <mesh geometry={nodes.WRCALCAOBOLINF.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.100']} />
@@ -272,19 +365,48 @@ export default function ShortManModel(props: any) {
       <mesh geometry={nodes.WRCALCAOCNTCOS_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.097']} />
       <mesh geometry={nodes.WRCALCAOCNTFRE.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.096']}>
         {cord()}
+        {cordTipItem()}
       </mesh>
       <mesh geometry={nodes.WRCALCAOCNTFRE_1.geometry} material={materials.Knit_Fleece_Terry_BACK_2603} />
       <mesh geometry={nodes.WRCALCAOCNTFRE_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.096']} />
-      <mesh geometry={nodes.WRCALCAOCOSDRT.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.102']} />
+      <mesh geometry={nodes.WRCALCAOCOSDRT.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.102']} >
+        <Decal
+          position={[-0.10, 0.77, -0.12]}
+          rotation={[0, 0, 0]}
+          scale={[0.08, 0.12, 0.2]}
+          map={texture[3]}
+        />
+      </mesh>
       <mesh geometry={nodes.WRCALCAOCOSDRT_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2603.006']} />
       <mesh geometry={nodes.WRCALCAOCOSDRT_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.102']} />
-      <mesh geometry={nodes.WRCALCAOCOSDRTR.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.105']} />
+      <mesh geometry={nodes.WRCALCAOCOSDRTR.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.105']} >
+        <Decal
+          position={[0.07, 0.84, -0.16]}
+          rotation={[THREE.MathUtils.degToRad(-5), 0, 0]}
+          scale={[0.08, 0.48, 0.2]}
+          map={texture[2]}
+        />
+      </mesh>
       <mesh geometry={nodes.WRCALCAOCOSDRTR_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2603.009']} />
       <mesh geometry={nodes.WRCALCAOCOSDRTR_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.105']} />
-      <mesh geometry={nodes.WRCALCAOFRE.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.098']} />
+      <mesh geometry={nodes.WRCALCAOFRE.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.098']} >
+        <Decal
+          position={[-0.08, 0.82, 0.16]}
+          rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
+          scale={[0.08, 0.45, 0.2]}
+          map={texture[1]}
+        />
+      </mesh>
       <mesh geometry={nodes.WRCALCAOFRE_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2603.002']} />
       <mesh geometry={nodes.WRCALCAOFRE_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.098']} />
-      <mesh geometry={nodes.WRCALCAOFRER.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.104']} />
+      <mesh geometry={nodes.WRCALCAOFRER.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.104']} >
+        <Decal
+          position={[0.1, 0.82, 0.16]}
+          rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
+          scale={[0.08, 0.45, 0.2]}
+          map={texture[0]}
+        />
+      </mesh>
       <mesh geometry={nodes.WRCALCAOFRER_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2603.008']} />
       <mesh geometry={nodes.WRCALCAOFRER_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.104']} />
     </group>
@@ -302,3 +424,19 @@ useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord1/Cord1.glb")
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord2/Cord2.glb")
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord3/Cord3.glb")
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord4/Cord4.glb")
+
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord1/mental_end/mental_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord1/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord1/silicone_end/silicone_end.gltf")
+
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord2/mental_end/mental_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord2/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord2/silicone_end/silicone_end.gltf")
+
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord3/mental_end/mental_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord3/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord3/silicone_end/silicone_end.gltf")
+
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord4/mental_end/mental_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord4/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord4/silicone_end/silicone_end.gltf")

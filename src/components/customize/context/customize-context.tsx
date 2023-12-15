@@ -125,7 +125,8 @@ const initialState = {
   material: "",
   lace: "",
   laceTip: "",
-  embelIndex: 0
+  embelIndex: 0,
+  cordVisible: false,
 }
 
 export function CustomizeProvider({ children }: CustomizeProviderProps) {
@@ -235,6 +236,13 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
     }))
   }, [values.cord]);
 
+  const onCordEditable = useCallback((value: boolean) => {
+    setValues((prevStatus: any) => ({
+      ...prevStatus,
+      cordVisible: value,
+    }))
+  }, [values.cordVisible]);
+
   const onCordTipChange = useCallback((value: string) => {
     setValues((prevStatus: any) => ({
       ...prevStatus,
@@ -289,6 +297,7 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
       onTagSelectFile,
       onAllEmbelChange,
       onCordTypeChange,
+      onCordEditable,
       onCordTipChange,
       onCareLabelChange,
       onSizeLabelChange,

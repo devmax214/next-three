@@ -51,6 +51,7 @@ export interface ICustomizeQuoteItem {
   lace: string;
   material: string;
   embelIndex: number;
+  cordVisible: boolean;
 }
 
 export interface ICustomizeItem {
@@ -78,6 +79,7 @@ export type CustomizeContextProps = ICustomizeQuoteItem & {
   onTagSelectFile: (file: any) => void;
   onAllEmbelChange: (index: number, data: object) => void;
   onCordTypeChange: (value: string) => void;
+  onCordEditable: (value: boolean) => void;
   onCordTipChange: (value: string) => void;
   onCareLabelChange: (value: number) => void;
   onSizeLabelChange: (value: number) => void;

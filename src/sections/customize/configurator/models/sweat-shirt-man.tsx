@@ -200,7 +200,7 @@ export default function SWEATManModel(props: any) {
   }, [customize.tag])
 
   useFrame(state => {
-    if (customize.tag.visible) {
+    if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
     }
   })
@@ -222,7 +222,7 @@ export default function SWEATManModel(props: any) {
           position={[0, 1.38, -0.24]}
           rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
           scale={[0.23, 0.31, 0.26]}
-          map={texture[1]}
+          map={texture[0]}
         />
       </mesh>
       <mesh geometry={nodes['SWEATWR-COSTA001_1'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} />
@@ -232,7 +232,7 @@ export default function SWEATManModel(props: any) {
           position={[0, 1.38, 0.15]}
           rotation={[0, 0, 0]}
           scale={[0.23, 0.31, 0.26]}
-          map={texture[0]}
+          map={texture[1]}
         />
       </mesh>
       <mesh geometry={nodes['SWEATWR-FRENTE001_1'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} />

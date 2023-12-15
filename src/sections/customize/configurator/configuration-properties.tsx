@@ -90,7 +90,7 @@ const cords = [
 
 const tips = [
   {
-    key: "tip1",
+    key: "mental_end",
     name: "tip01",
     color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
       {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `gray` }} /> */}
@@ -98,7 +98,7 @@ const tips = [
     </Box>
   },
   {
-    key: "tip2",
+    key: "plastic_end",
     name: "tip02",
     color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
       {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `red` }} /> */}
@@ -106,21 +106,13 @@ const tips = [
     </Box>
   },
   {
-    key: "tip3",
+    key: "silicone_end",
     name: "tip03",
     color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
       {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `pink` }} /> */}
       <Typography>tip 03</Typography>
     </Box>
   },
-  {
-    key: "tip4",
-    name: "tip04",
-    color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-      {/* <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `blue` }} /> */}
-      <Typography>tip 04</Typography>
-    </Box>
-  }
 ]
 
 type Props = {
@@ -143,13 +135,13 @@ export default function ConfigurationProperties(props: Props) {
   const onSubmit = handleSubmit(async (data) => { });
 
   const changeCord = (ev: any) => {
-    setCord(ev.target.value);
-    context.onCordTypeChange(ev.target.value);
+    setCord(ev.target.dataset ? ev.target.dataset.value : ev.target.value);
+    context.onCordTypeChange(ev.target.dataset ? ev.target.dataset.value : ev.target.value);
   }
 
   const changeCordTip = (ev: any) => {
-    setCordTip(ev.target.value);
-    // context.onCordTypeChange(ev.target.value);
+    setCordTip(ev.target.dataset ? ev.target.dataset.value : ev.target.value);
+    context.onCordTipChange(ev.target.dataset ? ev.target.dataset.value : ev.target.value);
   }
 
   const changeCareLabel = (ev: any, value: number) => {
@@ -217,9 +209,9 @@ export default function ConfigurationProperties(props: Props) {
     <Box component="div">
       <StyledTypography>Cord type</StyledTypography>
 
-      <RhfSelect onChange={changeCord} value={cord} name="cord" placeholder="Selected Color">{
+      <RhfSelect onFocus={(e) => context.onCordEditable(e.target.ariaExpanded === "true" ? true : false)} onChange={changeCord} value={cord} name="cord" placeholder="Selected Color">{
         cords.map((cord, i) => (
-          <MenuItem value={cord.key} key={i}>{cord.color}</MenuItem>
+          <MenuItem value={cord.key} key={i} onMouseOver={changeCord}>{cord.color}</MenuItem>
         ))
       }</RhfSelect>
     </Box>
@@ -229,9 +221,9 @@ export default function ConfigurationProperties(props: Props) {
     <Box component="div">
       <StyledTypography>Cord tip</StyledTypography>
 
-      <RhfSelect name="tip" value={cordTip} onChange={changeCordTip} placeholder="Selected Color">{
+      <RhfSelect name="tip" onFocus={(e) => context.onCordEditable(e.target.ariaExpanded === "true" ? true : false)} value={cordTip} onChange={changeCordTip} placeholder="Selected Color">{
         tips.map((tip, i) => (
-          <MenuItem value={tip.key} key={i}>{tip.color}</MenuItem>
+          <MenuItem value={tip.key} key={i} onMouseOver={changeCordTip}>{tip.color}</MenuItem>
         ))
       }</RhfSelect>
     </Box>
@@ -608,11 +600,11 @@ export default function ConfigurationProperties(props: Props) {
 
         <EditTagButton {...props} />
 
-        <EmbellishmentButton embelIndex={0} />
-        <EmbellishmentButton embelIndex={1} />
-        <EmbellishmentButton embelIndex={2} />
-        <EmbellishmentButton embelIndex={3} />
-        {props.type === 'Pants' || props.type === 'Shorts' ? <EmbellishmentButton embelIndex={4} /> : ""}
+        <EmbellishmentButton embelIndex={1} ptype={props.type} />
+        <EmbellishmentButton embelIndex={0} ptype={props.type} />
+        <EmbellishmentButton embelIndex={3} ptype={props.type} />
+        <EmbellishmentButton embelIndex={2} ptype={props.type} />
+        {props.type === 'Pants' || props.type === 'Shorts' ? <EmbellishmentButton embelIndex={4} ptype={props.type} /> : ""}
 
         {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderCardType : ""}
         {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderCardTip : ""}

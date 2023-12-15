@@ -195,15 +195,8 @@ export default function TShirtManModel(props: any) {
   }, [customize.tag])
 
   useFrame(state => {
-    if (/*customize.embellishment[embelIndex].visible || */customize.tag.visible) {
+    if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
-      // if (embelIndex === 1) {
-      //   state.camera.position.set(0, 0, -2.5);
-      // } else if (embelIndex === 2) {
-      //   state.camera.position.set(THREE.MathUtils.degToRad(-90), 0, 0);
-      // } else if (embelIndex === 3) {
-      //   state.camera.position.set(THREE.MathUtils.degToRad(90), 0, 0);
-      // }
     }
   })
 
@@ -232,7 +225,7 @@ export default function TShirtManModel(props: any) {
           position={[0, 1.43, -0.24]}
           rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
           scale={[0.23, 0.31, 0.26]}
-          map={texture[1]}
+          map={texture[0]}
         />
       </mesh>
       <mesh geometry={nodes['TSHIRTWR-COS005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} >
@@ -244,7 +237,7 @@ export default function TShirtManModel(props: any) {
           position={[0, 1.38, 0.15]}
           rotation={[0, 0, 0]}
           scale={[0.23, 0.31, 0.26]}
-          map={texture[0]}
+          map={texture[1]}
         />
       </mesh>
       <mesh geometry={nodes['TSHIRTWR-FRE005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.012']} />

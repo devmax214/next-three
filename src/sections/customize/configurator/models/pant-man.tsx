@@ -140,7 +140,7 @@ export default function PANTManModel(props: any) {
 
   const setTextTexture = () => {
     var textCanvas = document.createElement("canvas");
-    textCanvas.width = 200;
+    textCanvas.width = 40;
     textCanvas.height = 200;
     var ctx = textCanvas.getContext("2d");
 
@@ -156,27 +156,27 @@ export default function PANTManModel(props: any) {
         case 1:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 20, 100);
           break;
         case 2:
           ctx.textAlign = 'right';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 200, 100);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 40, 100);
           break;
         case 3:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'top';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 0);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 20, 0);
           break;
         case 4:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 20, 100);
           break;
         case 5:
           ctx.textAlign = 'center';
           ctx.textBaseline = 'bottom';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 200);
+          ctx.fillText(customize.embellishment[embelIndex].textureText, 20, 200);
           break;
       }
 
@@ -268,6 +268,28 @@ export default function PANTManModel(props: any) {
     }
   }, [cords]);
 
+  const cordTipItem = useCallback(() => {
+    try {
+      if (!!customize.cord && !!customize.cordTip) {
+        const { nodes, materials } = useGLTF(
+          `/models/PANTWR_man/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.gltf`
+        ) as any;
+
+        const keys: string[] = Object.keys(nodes);
+        const material: any = materials[Object.keys(materials)[0]];
+        return (
+          <group {...props} dispose={null} position={[0, 0, -0.005]}>
+            {keys.map((key: string, idx: number) => (
+              <mesh name={`cords_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
+            ))}
+          </group>
+        )
+      } else return ''
+    } catch (err) {
+      console.log(err);
+    }
+  }, [customize.cordTip]);
+
   useEffect(() => {
     if (customize.tag.neck)
       setTagName(`label-${customize.tag.size}_${customize.tag.color ? "black" : "white"}`);
@@ -280,7 +302,7 @@ export default function PANTManModel(props: any) {
   }, [customize.cord])
 
   useFrame(state => {
-    if (customize.tag.visible) {
+    if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
     }
   })
@@ -314,7 +336,14 @@ export default function PANTManModel(props: any) {
       <mesh geometry={nodes.StitchMatShape_27842_Node.geometry} material={materials.Material3280} />
       <mesh geometry={nodes.StitchMatShape_27850_Node.geometry} material={materials.Material3004} />
       <mesh geometry={nodes.StitchMatShape_27858_Node.geometry} material={materials.Material3004} />
-      <mesh geometry={nodes.WRCALCA_BOLSO001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.005']} />
+      <mesh geometry={nodes.WRCALCA_BOLSO001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.005']} >
+        <Decal
+          position={[-0.12, 0.965, -0.12]}
+          rotation={[0, 0, 0]}
+          scale={[0.07, 0.1, 0.2]}
+          map={texture[4]}
+        />
+      </mesh>
       <mesh geometry={nodes.WRCALCA_BOLSO001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.005']} />
       <mesh geometry={nodes.WRCALCA_BOLSO001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.005']} />
       <mesh geometry={nodes.WRCALCABOLINF_1001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.007']} />
@@ -335,15 +364,30 @@ export default function PANTManModel(props: any) {
       <mesh geometry={nodes.WRCALCACNTFRE001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.003']} />
       <mesh geometry={nodes.WRCALCACNTFRE001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.003']}>
         {cord()}
+        {cordTipItem()}
       </mesh>
       <mesh geometry={nodes.WRCALCACNTFRE001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.003']} />
-      <mesh geometry={nodes.WRCALCACSDI_1001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.015']} />
+      <mesh geometry={nodes.WRCALCACSDI_1001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.015']} >
+        <Decal
+          position={[-0.11, 0.64, -0.12]}
+          rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
+          scale={[0.08, 0.45, 0.2]}
+          map={texture[3]}
+        />
+      </mesh>
       <mesh geometry={nodes.WRCALCACSDI_1001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.015']} />
       <mesh geometry={nodes.WRCALCACSDI_1001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.015']} />
       <mesh geometry={nodes.WRCALCACSDI_2001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.009']} />
       <mesh geometry={nodes.WRCALCACSDI_2001_1.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.009']} />
       <mesh geometry={nodes.WRCALCACSDI_2001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.009']} />
-      <mesh geometry={nodes.WRCALCACSDI_3001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.013']} />
+      <mesh geometry={nodes.WRCALCACSDI_3001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.013']} >
+        <Decal
+          position={[0.1, 0.74, -0.12]}
+          rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
+          scale={[0.1, 0.55, 0.2]}
+          map={texture[2]}
+        />
+      </mesh>
       <mesh geometry={nodes.WRCALCACSDI_3001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.013']} />
       <mesh geometry={nodes.WRCALCACSDI_3001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.013']} />
       <mesh geometry={nodes.WRCALCACSDI_4001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.015']} />
@@ -354,11 +398,10 @@ export default function PANTManModel(props: any) {
       <mesh geometry={nodes.WRCALCAFRE_1001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.012']} />
       <mesh geometry={nodes.WRCALCAFRE_2001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.011']} >
         <Decal
-          position={[-0.1, 0.71, 0.18]}
+          position={[0.1, 0.71, 0.14]}
           rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
           scale={[0.1, 0.55, 0.2]}
           map={texture[0]}
-        // debug={true}
         />
       </mesh>
       <mesh geometry={nodes.WRCALCAFRE_2001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.011']} />
@@ -368,11 +411,10 @@ export default function PANTManModel(props: any) {
       <mesh geometry={nodes.WRCALCAFRE_3001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.006']} />
       <mesh geometry={nodes.WRCALCAFRE_4001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.016']} >
         <Decal
-          position={[0.1, 0.71, 0.18]}
+          position={[-0.1, 0.71, 0.14]}
           rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
           scale={[0.1, 0.55, 0.2]}
           map={texture[1]}
-        // debug={true}
         />
       </mesh>
       <mesh geometry={nodes.WRCALCAFRE_4001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.016']} />
@@ -391,3 +433,19 @@ useGLTF.preload("/models/PANTWR_man/cords/Man/Cord1/Cord1.glb")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord2/Cord2.glb")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord3/Cord3.glb")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord4/Cord4.glb")
+
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord1/mental_end/mental_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord1/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord1/silicone_end/silicone_end.gltf")
+
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord2/mental_end/mental_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord2/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord2/silicone_end/silicone_end.gltf")
+
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord3/mental_end/mental_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord3/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord3/silicone_end/silicone_end.gltf")
+
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord4/mental_end/mental_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord4/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord4/silicone_end/silicone_end.gltf")

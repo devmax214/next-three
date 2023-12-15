@@ -236,7 +236,7 @@ export default function Model(props: any) {
     try {
       if (!!cords) {
         const { nodes, materials } = useGLTF(
-          `/models/Hoody/cords/Man/${cords}/${cords}.glb`
+          `/models/Hoody/cords/Man/${cords}/${cords}.gltf`
         ) as any;
 
         const keys: string[] = Object.keys(nodes);
@@ -255,6 +255,29 @@ export default function Model(props: any) {
     }
   }, [cords]);
 
+  const cordTipItem = useCallback(() => {
+    try {
+      if (!!customize.cord && !!customize.cordTip) {
+        const { nodes, materials } = useGLTF(
+          `/models/Hoody/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.gltf`
+        ) as any;
+
+        const keys: string[] = Object.keys(nodes);
+        const material: any = materials[Object.keys(materials)[0]];
+
+        return (
+          <group {...props} dispose={null} position={[0, 0, -0.0025]}>
+            {keys.map((key: string, idx: number) => (
+              <mesh name={`cords_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
+            ))}
+          </group>
+        )
+      } else return ''
+    } catch (err) {
+      console.log(err);
+    }
+  }, [customize.cordTip]);
+
   useEffect(() => {
     if (customize.tag.neck)
       setTagName(`label-${customize.tag.size}_${customize.tag.color ? "black" : "white"}`);
@@ -267,7 +290,7 @@ export default function Model(props: any) {
   }, [customize.cord])
 
   useFrame(state => {
-    if (customize.tag.visible) {
+    if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
       state.camera.position.set(0, 0, 2.5);
     }
   })
@@ -301,6 +324,7 @@ export default function Model(props: any) {
       <mesh geometry={nodes['HOODIE-BOLSO001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.027']} />
       <mesh geometry={nodes['HOODIE-CA_1001'].geometry} material={materials['Knit_Fleece_Terry hood_FRONT_2709.003']}>
         {cord()}
+        {cordTipItem()}
       </mesh>
       <mesh geometry={nodes['HOODIE-CA_1001_1'].geometry} material={materials['Knit_Fleece_Terry hood_FRONT_2709.003']} />
       <mesh geometry={nodes['HOODIE-CA_1001_2'].geometry} material={materials['Knit_Fleece_Terry hood_FRONT_2709.003']} />
@@ -312,7 +336,7 @@ export default function Model(props: any) {
           position={[0, 1.28, -0.24]}
           rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
           scale={[0.23, 0.31, 0.26]}
-          map={texture[1]}
+          map={texture[0]}
         />
       </mesh>
       <mesh geometry={nodes['HOODIE-COSTA001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.030']} />
@@ -322,7 +346,7 @@ export default function Model(props: any) {
           position={[0, 1.38, 0.2]}
           rotation={[0, 0, 0]}
           scale={[0.23, 0.31, 0.26]}
-          map={texture[0]}
+          map={texture[1]}
         />
       </mesh>
       <mesh geometry={nodes['HOODIE-FRENTE001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.027']} />
@@ -333,7 +357,6 @@ export default function Model(props: any) {
           rotation={[THREE.MathUtils.degToRad(-10), 0, 0]}
           scale={[0.05, 0.26, 0.066]}
           map={texture[2]}
-          debug={true}
         />
       </mesh>
       <mesh geometry={nodes['HOODIE-MANGA_4001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.039']} />
@@ -372,7 +395,23 @@ useGLTF.preload("/models/Hoody/tags/Man/label-45x45_black/label-45x45_black.glb"
 useGLTF.preload("/models/Hoody/tags/Man/label-45x45_white/label-45x45_white.glb")
 useGLTF.preload("/models/Hoody/tags/Man/label-55x30_black/label-55x30_black.glb")
 useGLTF.preload("/models/Hoody/tags/Man/label-55x30_white/label-55x30_white.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord1/Cord1.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord2/Cord2.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord3/Cord3.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord4/Cord4.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/Cord1.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/Cord2.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/Cord3.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/Cord4.gltf")
+
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/mental_end/mental_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/silicone_end/silicone_end.gltf")
+
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/mental_end/mental_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/silicone_end/silicone_end.gltf")
+
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/mental_end/mental_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/silicone_end/silicone_end.gltf")
+
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/mental_end/mental_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/silicone_end/silicone_end.gltf")
