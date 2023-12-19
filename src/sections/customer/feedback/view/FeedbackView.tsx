@@ -5,7 +5,7 @@ type Props = {};
 export default function FeedbackView(props: Props) {
   return (
     <>
-      <FeedbackForm {...props}/>
+      <FeedbackForm {...props} />
     </>
   );
 }

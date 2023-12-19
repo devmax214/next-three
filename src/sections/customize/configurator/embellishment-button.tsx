@@ -313,6 +313,7 @@ export default function EmbellishmentButton({ embelIndex, ptype }: Props) {
             multiline
             rows={3}
             size="small"
+            value={customize.embellishment[embelIndex].textureText}
             placeholder="Write your text"
             disabled={customize.embellishment[embelIndex].type !== "text"}
             onChange={(ev) => changeTextureText(ev.target.value)}

@@ -27,7 +27,7 @@ export default function CustomerDashboardView(props: Props) {
         <DashboardPanel
           icon={<SpendIcon sx={{ width: 17, height: 16 }} />}
           label="Total spent"
-          value="€2009,02"
+          value={`${JSON.parse(localStorage.getItem('currency')).value} 2009,02`}
         />
       </Grid>
       <Grid item xs={4} md={4}>
@@ -93,7 +93,7 @@ export default function CustomerDashboardView(props: Props) {
       </Grid>
     </Stack>
   );
-  
+
   const renderContact = (
     <Stack>
       <Stack

@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { MotionViewport } from "@/components/animate";
 import { PATH_SHOP } from "@/routers/path";
 import LoginForm from "../login-form";
+import { useRouter } from "next/router";
 import { primaryFont, secondaryFont } from "@/theme/typography";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
@@ -18,6 +19,8 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
 type Props = {};
 
 export default function LoginView(props: Props) {
+  const router = useRouter();
+  const state = router.query.state;
   return (
     <>
       <Box
@@ -34,9 +37,18 @@ export default function LoginView(props: Props) {
             py: { xs: 10, md: 20 },
           }}
         >
+          {state == 1 &&
+            <Grid container spacing={10}>
+              <Grid item md={12}>
+                <Typography component="span" sx={{ fontSize: 22, fontWeight: 700 }}>
+                  Account created successfully!
+                </Typography>
+              </Grid>
+            </Grid>
+          }
           <Grid container spacing={10}>
             <Grid item xs={12} md={6}>
-              <StyledTypography sx={{ mb: 4}}>
+              <StyledTypography sx={{ mb: 4 }}>
                 <h2>Login</h2>
               </StyledTypography>
 
@@ -44,7 +56,7 @@ export default function LoginView(props: Props) {
             </Grid>
             <Grid item xs={12} md={6}>
               <StyledTypography sx={{ mb: 4 }}>
-                <h2>Sign Up</h2> 
+                <h2>Sign Up</h2>
               </StyledTypography>
 
               <Button

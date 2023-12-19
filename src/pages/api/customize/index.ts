@@ -28,7 +28,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     case "POST":
       let customizeId = req.body.customizeId;
       if (customizeId) {
-        await Customize.updateOne({ _id: new mongoose.Types.ObjectId(customizeId) }, { quoteState: req.body.quoteState });
+        await Customize.updateOne({ _id: new mongoose.Types.ObjectId(customizeId) }, req.body);
       } else {
         const customize = await Customize.create({
           ...req.body,

@@ -47,7 +47,7 @@ export function FeedbackListItem({ hasReview, product }: Props) {
         >
           {product.name}
           <br />
-          {product.price} €
+          {product.price} {JSON.parse(localStorage.getItem('currency')).value}
         </Typography>
       </Stack>
 
@@ -135,16 +135,16 @@ export function FeedbackListItem({ hasReview, product }: Props) {
         onClick={onRemove}
       >
         <Typography
-            sx={{
-              fontSize: 14,
-              fontWeight: 500,
-              fontFamily: secondaryFont.style.fontFamily,
-              color: "#fff",
-              padding: "1px 0px 1px 0px"
-            }}
-          >
-            Delete review
-          </Typography>
+          sx={{
+            fontSize: 14,
+            fontWeight: 500,
+            fontFamily: secondaryFont.style.fontFamily,
+            color: "#fff",
+            padding: "1px 0px 1px 0px"
+          }}
+        >
+          Delete review
+        </Typography>
       </Button>
     </Stack>
   );

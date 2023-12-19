@@ -80,6 +80,7 @@ export type CustomizeContextProps = ICustomizeQuoteItem & {
   onTagEditVisible: () => void;
   onTagSelectFile: (file: any) => void;
   onAllEmbelChange: (index: number, data: object) => void;
+  onAllContextChange: (data: object) => void;
   onCordTypeChange: (value: string) => void;
   onCordEditable: (value: boolean) => void;
   onCordTipChange: (value: string) => void;
@@ -87,5 +88,6 @@ export type CustomizeContextProps = ICustomizeQuoteItem & {
   onSizeLabelChange: (value: number) => void;
   onMaterialChange: (value: number) => void;
   onLaceChange: (value: number) => void;
+  onTextChange: (value: string) => void;
   onLaceTipChange: (value: number) => void;
 };

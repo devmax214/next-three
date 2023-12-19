@@ -77,15 +77,15 @@ export default function OrderSummary(props: Props) {
 
       <Button
         fullWidth
-        sx={{ fontSize: 16, color: "#F05A4A", fontWeight: 500 }}
-        startIcon={
-          <PendingIcon
-            color="#F05A4A"
-            sx={{ width: 16, height: 16 }}
-          />
-        }
+        sx={{ fontSize: 22, color: "#03bf03", fontWeight: 500 }}
+      // startIcon={
+      //   <PendingIcon
+      //     color="#F05A4A"
+      //     sx={{ width: 16, height: 16 }}
+      //   />
+      // }
       >
-        PENDING APPROVAL
+        APPROVED
       </Button>
     </>
   );

@@ -9,6 +9,8 @@ import VideoIcon from "@/components/icons/icon-video";
 import ReactPlayer from "react-player";
 import { styled } from "@mui/material/styles";
 import { useBoolean } from "@/hooks";
+import { useRouter } from "next/router";
+import SvgColor from "@/components/svg-color";
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
@@ -42,9 +44,10 @@ export default function ConfigurationEditView({ customProduct }) {
     ...customProduct,
     type: customProduct.product,
   }
+  const router = useRouter();
   return (
     <>
-      <CustomizeProvider>
+      <CustomizeProvider passInitState={customProduct.context}>
         <Box
           component="div"
           sx={{
@@ -77,27 +80,46 @@ export default function ConfigurationEditView({ customProduct }) {
             />
 
             <Grid container spacing={5}>
-              <Grid item md={8} xs={12}>
-                <ConfigurationCanvas id="myCanvas" {...props}/>
+              <Grid item md={7.5} xs={12}>
+                <ConfigurationCanvas page="customize-edit-view" ctx={typeof customProduct.context === 'object' ? customProduct.context : {}} arrowLeftCount={0} arrowRightCount={0} id="myCanvas" {...props} />
                 <Box
                   component={"div"}
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
                     mt: 2,
-                    flexDirection: {xs: "column", md: "row"}
+                    flexDirection: { xs: "column", md: "row" }
                   }}
                 >
                   <Button
                     variant="contained"
                     sx={{
-                      width: {xs: "100%", md: 170},
+                      width: { xs: "100%", md: 170 },
                       bgcolor: "#5C6166",
                       "&:hover": { bgcolor: "#550248" },
                     }}
                     onClick={open.onTrue}
                   >
                     <VideoIcon width={16} height={11} sx={{ marginRight: '9px' }} /> Watch tutorials
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    sx={{
+                      mt: { md: 0, xs: 2 },
+                      width: { xs: "100%", md: 190 },
+                      bgcolor: "#5C6166",
+                      "&:hover": { bgcolor: "#550248" },
+                    }}
+                    onClick={() => router.push({
+                      pathname: PATH_CONFIGURATOR.product.create(props.type),
+                      query: {
+                        isEdit: true,
+                        customProduct: JSON.stringify(props)
+                      }
+                    }, PATH_CONFIGURATOR.product.create(props.type))}
+                  >
+                    <SvgColor src="/icons/favorite-off.svg" sx={{ mr: "5px" }} />Edit Customization
                   </Button>
 
                   <Modal open={open.value}>
@@ -125,8 +147,8 @@ export default function ConfigurationEditView({ customProduct }) {
                   </Modal>
                 </Box>
               </Grid>
-              <Grid item md={4} xs={12}>
-                <ConfigurationDetails {...props} />
+              <Grid item md={4.5} xs={12}>
+                <ConfigurationDetails {...props} color={customProduct.context ? customProduct.context.color : ''} />
               </Grid>
             </Grid>
           </Container>

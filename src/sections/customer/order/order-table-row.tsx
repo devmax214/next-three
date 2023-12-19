@@ -188,7 +188,7 @@ export default function OrderTableRow({ no, index, row, onTrackingRow }: Props) 
             fontFamily: secondaryFont.style.fontFamily,
           }}
         >
-          87,80€
+          87,80 {JSON.parse(localStorage.getItem('currency')).value}
         </Typography>
       </TableCell>
 

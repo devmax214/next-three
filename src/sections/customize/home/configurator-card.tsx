@@ -103,7 +103,7 @@ export default function ConfiguratorCard({ data }: Props) {
                         color: "#292F3D",
                       }}
                     >
-                      {startPrice} €
+                      {startPrice} {JSON.parse(localStorage.getItem('currency')).value}
                     </Typography>
                   </Typography>
 

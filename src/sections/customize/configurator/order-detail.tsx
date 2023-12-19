@@ -45,7 +45,7 @@ type Props = {};
 export default function OrderDetail(props: Props) {
   const [showSummary, setShowSummary] = React.useState(true);
   const router = useRouter();
-  const slug: any = router.query.slug;
+  const slug: any = router.query.type;
 
   const handleShowSummary = () => {
     setShowSummary(false);
@@ -69,7 +69,7 @@ export default function OrderDetail(props: Props) {
             fontFamily: secondaryFont.style.fontFamily,
           }}
         >
-          Modern {slug}
+          Modern T-Shirts
         </Typography>
       </Typography>
 
@@ -136,7 +136,7 @@ export default function OrderDetail(props: Props) {
                 {size.label}
               </Typography>
 
-              <TextField size="small" type="number" defaultValue={size.items} sx={{ lineHeight: '1rem' }} />
+              <TextField size="small" type="number" defaultValue={size.items} sx={{ lineHeight: '1rem', padding: { md: "8.5 14px", xs: 0.2 } }} />
             </Stack>
           ))}
         </Stack>
@@ -221,7 +221,7 @@ export default function OrderDetail(props: Props) {
   );
 
   return (
-    <Card sx={{ ...styles.card, width: 730 }}>
+    <Card sx={{ ...styles.card, width: { md: 730, xs: 'auto' } }}>
       <Grid container spacing={2}>
         <Grid item md={5}>
           {renderLeft}
@@ -237,7 +237,7 @@ export default function OrderDetail(props: Props) {
                   sx={{ width: 13.4, height: 16 }}
                 />
               }
-              onClick={() => router.push(PATH_CONFIGURATOR.product.create(slug))}
+            // onClick={() => router.push(PATH_CONFIGURATOR.product.create(slug))}
             >
               Delete
             </Button>
@@ -245,7 +245,7 @@ export default function OrderDetail(props: Props) {
             <Button
               sx={{ fontSize: 12, fontWeight: 500 }}
               startIcon={<EditIcon sx={{ width: 13.4, height: 16 }} />}
-              onClick={() => router.push(PATH_CONFIGURATOR.product.create(slug))}
+            // onClick={() => router.push(PATH_CONFIGURATOR.product.create(slug))}
             >
               Edit
             </Button>

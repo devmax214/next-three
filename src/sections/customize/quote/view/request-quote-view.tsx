@@ -1,15 +1,17 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { Box, Container } from "@mui/material";
 import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
 import { PATH_CONFIGURATOR } from "@/routers/path";
 import { useBoolean } from "@/hooks";
 import ConfirmQuote from "../confirm-quote";
 import QuoteForm from "../quote-form";
+import { useRouter } from "next/router"; "@next/router";
 
 type Props = {}
 
 export default function RequestQuoteView(props: Props) {
   const quote = useBoolean();
+  const router = useRouter();
 
   return (
     <>
@@ -45,6 +47,7 @@ export default function RequestQuoteView(props: Props) {
               onConfirm={() => {
                 quote.onTrue();
               }}
+              customProduct={JSON.parse(router.query.customProduct)}
               {...props}
             />
           )}

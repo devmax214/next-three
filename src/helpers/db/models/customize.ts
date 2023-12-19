@@ -1,32 +1,16 @@
 import mongoose, { Schema, Model, Document } from "mongoose";
 
 interface ICustomizeItem extends Document {
-  name: string;
-  code: string;
-  price: number;
   customer: Schema.Types.ObjectId;
-  category?: Schema.Types.ObjectId;
   product: string;
+  name: string;
+  context: object;
   publish: string;
-  images: string[];
-  color: string;
   quoteState: number;
 }
 
 const CustomizeSchema: Schema<ICustomizeItem> = new Schema<ICustomizeItem>(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-    code: {
-      type: String,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
     customer: {
       type: Schema.Types.ObjectId,
       ref: "Customer",
@@ -36,19 +20,17 @@ const CustomizeSchema: Schema<ICustomizeItem> = new Schema<ICustomizeItem>(
       type: String,
       required: true
     },
-    images: {
-      type: [String],
+    name: {
+      type: String,
       required: true,
-      default: [],
-
+    },
+    context: {
+      type: Object,
+      required: true
     },
     publish: {
       type: String,
       default: "published",
-    },
-    color: {
-      type: String,
-      default: "",
     },
     quoteState: {
       type: Number,

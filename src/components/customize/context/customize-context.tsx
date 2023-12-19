@@ -16,6 +16,7 @@ export const useCustomizeContext = () => {
 
 type CustomizeProviderProps = {
   children: React.ReactNode;
+  passInitState: object;
 };
 
 const initialState = {
@@ -130,8 +131,14 @@ const initialState = {
   cordVisible: false,
 }
 
-export function CustomizeProvider({ children }: CustomizeProviderProps) {
-  const [values, setValues] = useState(initialState);
+export function CustomizeProvider({ children, passInitState = {} }: CustomizeProviderProps) {
+
+  let restInit = passInitState;
+  if (passInitState.embellishment) {
+    const { embellishment, ...rest } = passInitState;
+    restInit = rest;
+  }
+  const [values, setValues] = useState({ ...initialState, ...restInit });
 
   //tags props
   const onColorChange = useCallback(
@@ -238,6 +245,16 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
     })
   }, [values.embellishment]);
 
+  const onAllContextChange = useCallback((data: object) => {
+    setValues((prevStatus: any) => {
+      const { embellishment, ...rest } = data;
+      return {
+        ...prevStatus,
+        ...rest,
+      }
+    })
+  }, [values]);
+
   const onCordTypeChange = useCallback((value: string) => {
     setValues((prevStatus: any) => ({
       ...prevStatus,
@@ -294,6 +311,13 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
     }))
   }, [values.laceTip]);
 
+  const onTextChange = useCallback((value: string) => {
+    setValues((prevStatus: any) => ({
+      ...prevStatus,
+      text: value
+    }))
+  }, [values.text]);
+
   const memoizedValue = useMemo(() => {
     return {
       ...values,
@@ -306,6 +330,7 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
       onTagEditVisible,
       onTagSelectFile,
       onAllEmbelChange,
+      onAllContextChange,
       onCordTypeChange,
       onCordEditable,
       onCordTipChange,
@@ -314,6 +339,7 @@ export function CustomizeProvider({ children }: CustomizeProviderProps) {
       onMaterialChange,
       onLaceChange,
       onLaceTipChange,
+      onTextChange,
     };
   }, [values]) as any;
 

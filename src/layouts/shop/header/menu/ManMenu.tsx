@@ -95,7 +95,7 @@ export default function ManMenu(props: Props) {
                       fontFamily: secondaryFont.style.fontFamily,
                     }}
                   >
-                    76 €
+                    76 {JSON.parse(localStorage.getItem('currency')).value}
                   </Typography>
                   <Typography
                     sx={{
@@ -105,7 +105,7 @@ export default function ManMenu(props: Props) {
                       fontFamily: secondaryFont.style.fontFamily,
                     }}
                   >
-                    50 €
+                    50 {JSON.parse(localStorage.getItem('currency')).value}
                   </Typography>
                 </Stack>
               </Stack>

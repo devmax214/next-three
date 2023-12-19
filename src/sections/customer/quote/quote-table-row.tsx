@@ -1,15 +1,18 @@
 import { Avatar, Stack, TableCell, TableRow, Typography } from "@mui/material";
 import { QUOTE_STATE } from "../../../../global-config";
 import { ICustomizeItem } from "@/@types/customize";
-import { getRandomValues, randomFill, randomInt } from "crypto";
+import { useResponsive } from "@/hooks";
+import { useRouter } from "next/router";
 type Props = {
   data: ICustomizeItem;
 };
 
-export default function QuoteTableRow({ data }: Props) {
-  const { quoteState } = data;
-
-  const seq = data._id;
+export default function QuoteTableRow({ index, data }: Props) {
+  // const { quoteState } = data;
+  let quoteState = index % 2 + 1;
+  const seq = data._id.slice(0, 8).toUpperCase();
+  const isDesktop = useResponsive("up", "lg");
+  const { push } = useRouter();
 
   const renderState = (
     <>
@@ -35,9 +38,11 @@ export default function QuoteTableRow({ data }: Props) {
             </defs>
           </svg>
 
-          <Typography sx={{ color: "#6AB67A", fontSize: 16 }} noWrap>
-            Approved
-          </Typography>
+          {isDesktop ?
+            <Typography sx={{ color: "#6AB67A", fontSize: 16 }} noWrap>
+              Approved
+            </Typography>
+            : null}
         </Stack>
       )}
 
@@ -62,9 +67,11 @@ export default function QuoteTableRow({ data }: Props) {
               </clipPath>
             </defs>
           </svg>
-          <Typography sx={{ color: "#F3BC1A", fontSize: 16 }} noWrap>
-            In Review
-          </Typography>
+          {isDesktop ?
+            <Typography sx={{ color: "#F3BC1A", fontSize: 16 }} noWrap>
+              In Review
+            </Typography>
+            : null}
         </Stack>
       )}
 
@@ -93,10 +100,11 @@ export default function QuoteTableRow({ data }: Props) {
               </clipPath>
             </defs>
           </svg>
-
-          <Typography sx={{ color: "#F05A4A", fontSize: 16 }} noWrap>
-            Contact Necessary
-          </Typography>
+          {isDesktop ?
+            <Typography sx={{ color: "#F05A4A", fontSize: 16 }} noWrap>
+              Contact Necessary
+            </Typography>
+            : null}
         </Stack>
       )}
     </>
@@ -105,18 +113,20 @@ export default function QuoteTableRow({ data }: Props) {
   return (
     <>
       <TableRow sx={{ borderBottom: "1px solid #ACB1B8" }}>
-        <TableCell>Quote Requests # {seq}</TableCell>
+        <TableCell onClick={() => quoteState === QUOTE_STATE.approved ? push(`/quote/approved`) : push(`/customize/${data._id}/review`)} sx={{ cursor: "pointer" }}>Quote Requests # {seq}</TableCell>
 
-        <TableCell>
-          <Stack direction="row">
-            <Avatar
-              // src={item.coverUrl}
-              variant="rounded"
-              sx={{ width: 48, height: 48, mr: 2 }}
-            />
-            Women's Light Organic Tee T-Shirt
-          </Stack>
-        </TableCell>
+        {isDesktop ?
+          <TableCell>
+            <Stack direction="row">
+              <Avatar
+                // src={item.coverUrl}
+                variant="rounded"
+                sx={{ width: 48, height: 48, mr: 2 }}
+              />
+              Women's Light Organic Tee T-Shirt
+            </Stack>
+          </TableCell>
+          : null}
 
         <TableCell>17.09.2023</TableCell>
 

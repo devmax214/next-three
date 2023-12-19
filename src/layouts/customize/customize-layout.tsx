@@ -29,7 +29,7 @@ export default function CustomizeLayout({ children }: Props) {
             top: { xs: 63, md: 80 },
             '.MuiContainer-root': {
               maxWidth: 1350,
-              pb: {md: 20, xs: 12}
+              pb: { md: 20, xs: 12 }
             },
             // bgcolor: "#F9F5EE",
           }}
@@ -39,8 +39,8 @@ export default function CustomizeLayout({ children }: Props) {
             component="div"
             sx={{
               position: "absolute",
-              left: {xs: 38, md: 67},
-              top: {xs: 1.44, md: 5},
+              left: { xs: 38, md: 67 },
+              top: { xs: "35px", md: "35px" },
               width: { xs: 17, md: "22px" },
               height: { xs: 18.23, md: "22px" },
               transform: "translateY(-50%)",
@@ -52,8 +52,8 @@ export default function CustomizeLayout({ children }: Props) {
             component="div"
             sx={{
               position: "absolute",
-              left: {xs: 4, md: 24},
-              top: {xs: 40, md: 70},
+              left: { xs: 4, md: 24 },
+              top: { xs: 40, md: 70 },
               width: { xs: 10, md: "12px" },
               height: { xs: 10.73, md: "12px" },
               transform: "translateY(-50%)",
@@ -65,8 +65,8 @@ export default function CustomizeLayout({ children }: Props) {
             component="div"
             sx={{
               position: "absolute",
-              right: { xs: 20, md: 26},
-              top: { xs:1.44, md: 5},
+              right: { xs: 30, md: 40 },
+              top: { xs: "35px", md: "35px" },
               width: { xs: 18, md: "24px" },
               height: { xs: 19.31, md: "24px" },
               transform: "translateY(-50%)",
@@ -78,8 +78,8 @@ export default function CustomizeLayout({ children }: Props) {
             component="div"
             sx={{
               position: "absolute",
-              right: { xs: 7, md: 10},
-              top: { xs: 60, md: 80},
+              right: { xs: 7, md: 10 },
+              top: { xs: 60, md: 80 },
               width: { xs: 10, md: "14px" },
               height: { xs: 10.73, md: "14px" },
               transform: "translateY(-50%)",

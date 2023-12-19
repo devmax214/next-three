@@ -15,10 +15,10 @@ export default function CommunityView({ mode }: Props) {
           bgcolor: mode === "dark" ? "#fff" : "#F9F5EE",
           position: "relative",
           pt: { xs: 10, md: 10 },
-          pb: {xs: 20}
+          pb: { xs: 20 }
         }}
       >
-        <Container sx={{paddingBottom: {xs: "0 !important;"}}}>
+        <Container sx={{ paddingBottom: { xs: "0 !important;" } }}>
           <CustomBreadCrumbs
             mode={mode}
             heading="COMMUNITY"

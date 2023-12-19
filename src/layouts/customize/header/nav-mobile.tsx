@@ -24,6 +24,16 @@ export default function NavMobile({ offsetTop }: Props) {
     },
     [locales]
   );
+
+  const handleChangeCurrency = (newCurrency: any) => {
+    localStorage.setItem('currency', JSON.stringify(newCurrency));
+    location.reload()
+  };
+
+  if (!localStorage.getItem('currency')) {
+    handleChangeCurrency(_caches[1]);
+  }
+
   return (
     <>
       {!nav.value ?
@@ -46,7 +56,7 @@ export default function NavMobile({ offsetTop }: Props) {
             }),
           }}
         >
-          <span style={{fontSize: "30px"}}>&times;</span>
+          <span style={{ fontSize: "30px" }}>&times;</span>
         </IconButtonAnimate>
       }
       <Drawer
@@ -71,7 +81,7 @@ export default function NavMobile({ offsetTop }: Props) {
                 underline="none"
                 sx={{ display: "table", color: "black", padding: "8px 20px", fontSize: "14px", fontWeight: 600 }}
               >
-                {m.title.toUpperCase()}
+                {locales.t(m.title).toUpperCase()}
               </Link>
             ))}
           </Box>
@@ -82,8 +92,9 @@ export default function NavMobile({ offsetTop }: Props) {
               {_caches.map((language, index) => (
                 <Link
                   key={index}
-                  sx={{ display: "table", color: index === 1 ? "black" : "grey", fontWeight: index === 1 ? 600 : 100, padding: "5px 30px", fontSize: 14 }}
+                  sx={{ display: "table", color: language.value === JSON.parse(localStorage.getItem('currency')).value ? "black" : "grey", fontWeight: index === 1 ? 600 : 100, padding: "5px 30px", fontSize: 14 }}
                   underline="none"
+                  onClick={() => handleChangeCurrency(language)}
                   href="javascript:;"
                 >
                   {language.label}

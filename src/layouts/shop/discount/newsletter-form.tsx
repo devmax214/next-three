@@ -68,7 +68,7 @@ export default function NewsletterForm({ onSuccess }: Props) {
 
   const renderForm = (
     <Stack spacing={3} alignItems="center">
-      <RHFTextField name="name" label="Frist name" />
+      <RHFTextField name="name" label="First name" />
 
       <RHFTextField name="email" label="Email address" />
 

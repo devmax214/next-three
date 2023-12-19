@@ -43,7 +43,7 @@ export type CheckoutContextProps = ICheckoutValue & {
   onCreateBilling: (email: string, address: IAddressItem) => void;
   setCheckoutResult: (order: IOrderItem) => void;
 
-  onChangeSippingStatus: () => void;
+  onChangeSippingStatus: (state: boolean) => void;
 };
 
 // export type IAddressItem = {

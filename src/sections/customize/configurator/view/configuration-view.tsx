@@ -1,6 +1,6 @@
 import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
 import { PATH_CONFIGURATOR } from "@/routers/path";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Container, Grid, Button, Modal, Stack, Card, IconButton, TextField } from "@mui/material";
 import VideoIcon from "@/components/icons/icon-video";
 import ConfigurationCanvas from "../configuration-canvas";
@@ -19,6 +19,7 @@ import { RHFTextField } from "@/components/hook-form";
 import Image from "@/components/image";
 import { useRouter } from "next/router";
 import { PATH_SHOP } from "@/routers/path";
+import { forIn, reject } from "lodash";
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
@@ -42,18 +43,17 @@ const Wrapper = styled(Box)<{}>(({ theme }) => ({
   }
 }));
 
-type Props = {
-  type: string
-};
-
-export default function ConfigurationView(props: Props) {
+export default function ConfigurationView(props: any) {
   const open = useBoolean();
   // const name = props.type === "T-Shirt" ? "T-Shirt" : props.type === 'Hoodies' ? "Hoodie" : props.type === "Pants" ? "Pant" : props.type === 'Shorts' ? "Short" : props.type === 'Oversize' ? "Oversized" : "Sweat-Shirt";
   const name = props.type;
+  const router = useRouter();
+  const isEdit = router.query.isEdit;
+  const customProduct = router.query.customProduct ? JSON.parse(router.query.customProduct) : {};
 
   return (
     <>
-      <CustomizeProvider>
+      <CustomizeProvider passInitState={customProduct.context ? customProduct.context : {}}>
         <Box
           component="div"
           sx={{
@@ -87,21 +87,21 @@ export default function ConfigurationView(props: Props) {
 
             <Grid container sx={{ pl: 2 }} spacing={6}>
               <Grid item md={8} xs={12}>
-                <ConfigurationCanvas {...props} id="myCanvas" />
+                <ConfigurationCanvas page="customize-view" ctx={typeof customProduct.context === "object" ? customProduct.context : {}} arrowLeftCount={0} arrowRightCount={0}  {...props} id="myCanvas" />
                 <Box
                   component={"div"}
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
                     mt: 2,
-                    flexDirection: {xs: "column", md: "row"},
-                    gap: {xs: 1, md: 0}
+                    flexDirection: { xs: "column", md: "row" },
+                    gap: { xs: 1, md: 0 }
                   }}
                 >
                   <Button
                     variant="contained"
                     sx={{
-                      width: {xs: "100%", md: 170},
+                      width: { xs: "100%", md: 170 },
                       bgcolor: "#5C6166",
                       "&:hover": { bgcolor: "#550248" },
                     }}
@@ -110,7 +110,7 @@ export default function ConfigurationView(props: Props) {
                     <VideoIcon width={16} height={11} sx={{ marginRight: '9px' }} /> Watch tutorials
                   </Button>
 
-                  <SaveButton {...props} />
+                  <SaveButton {...props} isEdit name={customProduct.name} customId={customProduct._id} />
 
                   <Modal open={open.value}>
                     <Wrapper>
@@ -139,7 +139,7 @@ export default function ConfigurationView(props: Props) {
               </Grid>
 
               <Grid item md={4} xs={12}>
-                <ConfigurationProperties {...props} />
+                <ConfigurationProperties {...props} {...customProduct} color={customProduct.context ? customProduct.context.color : ''} />
               </Grid>
             </Grid>
           </Container>
@@ -154,31 +154,68 @@ const SaveButton = (props: any) => {
   const context = useCustomizeContext();
   const cart = useBoolean();
   const [image, setImage] = useState();
-  const [name, setName] = useState('');
+
+  const [name, setName] = useState(props.name);
   const [loading, setLoading] = useState(false);
 
   const save = async () => {
-    var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
-    if (canvas) {
-      var imageData = canvas.toDataURL();
-      const images = [];
-      images.push(imageData);
-      const data = {
-        images: images,
-        name: name,
-        price: Number((40 - Math.random() * 20).toFixed(0)),
-        code: '123',
-        product: props.type,
-        color: context.color,
+    let tmpContext = context;
+    let promises = [];
+    if (tmpContext.tag.file && typeof tmpContext.tag.file !== "string") {
+      promises.push(
+        new Promise((resolve, reject) => {
+          const reader = new FileReader()
+          reader.readAsDataURL(tmpContext.tag.file)
+          reader.onload = () => {
+            resolve({ key: 'tag', value: reader.result })
+          }
+          reader.onerror = reject
+        })
+      )
+    }
+    for (let i = 0; i < tmpContext.embellishment.length; i++) {
+      if (tmpContext.embellishment[i].file && typeof tmpContext.embellishment[i].file !== "string") {
+        promises.push(
+          new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.readAsDataURL(tmpContext.embellishment[i].file)
+            reader.onload = () => {
+              resolve({ key: [i], value: reader.result })
+            }
+            reader.onerror = reject
+          })
+        )
       }
+    }
+
+    Promise.all(promises).then((result) => {
+      for (let i = 0; i < result.length; i++) {
+        const row = result[i];
+        if (row.key === 'tag') {
+          tmpContext.tag.file = row.value;
+        } else {
+          tmpContext.embellishment[row.key].file = row.value;
+        }
+      }
+      const data = {
+        customizeId: props.customId,
+        name: name,
+        product: props.type,
+        context: tmpContext
+      }
+
+      console.log(data);
 
       axios.post(endpoints.customize.list, data).then((result) => {
         setLoading(false);
         cart.onFalse();
       }).catch((err) => {
-        router.push(PATH_SHOP.login);
+        // router.push(PATH_SHOP.login);
+        console.log(err)
+        setLoading(false);
+        cart.onFalse();
       });
-    }
+    });
   }
 
   const openModal = () => {
@@ -192,8 +229,8 @@ const SaveButton = (props: any) => {
 
   const renderModal = (
     <>
-      <Modal open={cart.value} sx={{height: {xs: "70%", md: "100%"}}}>
-        <Wrapper sx={{top: {xs: "45%", md: "50%"}}}>
+      <Modal open={cart.value} sx={{ height: { xs: "70%", md: "100%" } }}>
+        <Wrapper sx={{ top: { xs: "60%", md: "50%" } }}>
           <Stack alignItems="end">
             <IconButton
               onClick={() => {
@@ -209,17 +246,16 @@ const SaveButton = (props: any) => {
           </Stack>
           <Card sx={{ px: 4, py: 6 }}>
             <Grid container>
-              <Grid item md={8}>
+              <Grid item md={8} xs={12}>
                 <Box component={"div"} sx={{ height: "100%", width: "100%", background: "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)", borderRadius: 5 }}>
                   <Image
                     src={image}
-                    sx={{ width: 1 }}
+                    sx={{ width: 1, height: { md: 0.9, xs: "350px" } }}
                   />
                 </Box>
               </Grid>
-              <Grid item md={4} mt={3}>
-                <Stack gap={3}>
-                  {/* <RHFTextField name="name" placeholder="Product name" /> */}
+              <Grid item md={4} mt={3} xs={12}>
+                <Stack gap={3} ml={{ md: 3, xs: 0 }}>
                   <TextField value={name} onChange={e => setName(e.target.value)} name="name" placeholder="Product name" size="small" />
 
                   <LoadingButton loading={loading} fullWidth variant="contained" onClick={() => {
@@ -243,7 +279,7 @@ const SaveButton = (props: any) => {
       <Button
         variant="contained"
         sx={{
-          width: {xs: "100%", md: 210},
+          width: { xs: "100%", md: 210 },
           bgcolor: "#292F3D",
           "&:hover": { bgcolor: "#550248" },
         }}

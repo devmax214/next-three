@@ -62,9 +62,9 @@ export default function ProductCard2({ product }: Props) {
               variant="subtitle2"
               sx={{ textDecoration: "line-through", color: "text.disabled" }}
             >
-              76 €
+              76 {JSON.parse(localStorage.getItem('currency')).value}
             </Typography>
-            <Typography variant="subtitle2">50 €</Typography>
+            <Typography variant="subtitle2">50 {JSON.parse(localStorage.getItem('currency')).value}</Typography>
           </Stack>
 
           <Stack direction="row" alignItems="center">

@@ -49,7 +49,7 @@ export default function CommunityItem({
               color: "#292F3D",
               fontSize: { xs: 22, md: 28 },
               fontWeight: 700,
-              mb: {md: 4, xs: 4},
+              mb: { md: 4, xs: 4 },
               ...((mode === "dark" && window.screen.width > 768) && { color: "#ffffff" }),
             }}
           >
@@ -95,10 +95,10 @@ export default function CommunityItem({
         src={image}
         variants={varFade().in}
         sx={{
-          height: {xs: 1, md: 1},
-          width: {xs: 1, md: 0.5},
+          height: { xs: 1, md: 1 },
+          width: { xs: 1, md: 0.5 },
           objectFit: "cover",
-          position: {md: "absolute"},
+          position: { md: "absolute" },
           ...((direction === "right" && window.screen.width > 768) && { left: 0 }),
         }}
       />
@@ -110,19 +110,19 @@ export default function CommunityItem({
       <Box
         component="div"
         sx={{
-          minHeight: {md: 700, xs: 100},
+          minHeight: { md: 700, xs: 100 },
           position: "relative",
           ...((mode === "dark" && window.screen.width > 768) && { bgcolor: "#6B6FB5" }),
         }}
       >
-        <Container component={MotionViewport} sx={{ paddingBottom: {xs: "0 !important;"}, paddingLeft: {xs: 0}, paddingRight: {xs: 0}}}>
+        <Container component={MotionViewport} sx={{ paddingBottom: { xs: "0 !important;" }, paddingLeft: { xs: 0 }, paddingRight: { xs: 0 } }}>
           <Grid container>
             {direction === "left" || window.screen.width < 768 ? (
               <>
-                <Grid xs={12} md={6} sx={{paddingLeft: {xs: 1}, paddingRight: {xs: 1}, paddingTop: {xs: 5}}}>
+                <Grid xs={12} md={6} sx={{ paddingLeft: { xs: 1 }, paddingRight: { xs: 1 }, paddingTop: { xs: 5 } }}>
                   {renderDescription}
                 </Grid>
-                <Grid xs={12} md={6} sx={{mt: {xs: 5}}}>
+                <Grid xs={12} md={6} sx={{ mt: { xs: 5 } }}>
                   {renderImg}
                 </Grid>
               </>
@@ -145,8 +145,8 @@ export default function CommunityItem({
               component="div"
               sx={{
                 position: "absolute",
-                width: {md:  72, xs: 50},
-                height: {md: 137, xs: 80 },
+                width: { md: 72, xs: 50 },
+                height: { md: 137, xs: 80 },
                 left: 0,
                 top: 0,
                 transform: "translateY(-50%)",
@@ -160,8 +160,8 @@ export default function CommunityItem({
               component="div"
               sx={{
                 position: "absolute",
-                width: {md: 75, xs: 50},
-                height: {md: 152, xs: 90},
+                width: { md: 75, xs: 50 },
+                height: { md: 152, xs: 90 },
                 right: 0,
                 bottom: 0,
                 transform: "translateY(50%)",

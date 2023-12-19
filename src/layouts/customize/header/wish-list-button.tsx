@@ -55,7 +55,7 @@ export default function WishListButton() {
 
   const onClick = useCallback(() => {
     if (status === "authenticated") {
-      push(PATH_CONFIGURATOR.gallery);
+      location.href = PATH_CONFIGURATOR.gallery;
     } else {
       // push(PATH_CONFIGURATOR.);
     }

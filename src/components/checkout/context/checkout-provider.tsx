@@ -193,8 +193,8 @@ export function CheckoutProvider({ children }: Props) {
   );
 
   const onChangeSippingStatus = useCallback(
-    () => {
-      setValue("shippingInclude", !values.shippingInclude)
+    (state: boolean) => {
+      setValue("shippingInclude", state)
     },
     [setValue]
   )

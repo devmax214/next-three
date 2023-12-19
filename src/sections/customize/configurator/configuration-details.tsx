@@ -16,7 +16,9 @@ import {
   MenuItem,
   TextField,
   Checkbox,
+  Switch,
   FormGroup,
+  ButtonBase,
   FormControlLabel,
 } from "@mui/material";
 import Image from "@/components/image";
@@ -44,8 +46,31 @@ import { endpoints } from "../../../../global-config";
 import axios from "axios";
 import CheckedIcon from "@/components/icons/checked-icon";
 import UnCheckedIcon from "@/components/icons/unchecked-icon";
+import {
+  LeftPosition,
+  RightPosition,
+  TopCenterPosition,
+  TopPosition,
+  CenterPosition,
+  BottomPosition
+} from "@/components/icons/customize/position/position";
+import { NoInfer } from "@react-spring/three";
+import { typeIndexToLabel } from "@/helpers/common";
+import product from "@/helpers/db/models/product";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
+
+export const StyledSwitchLabel = styled(Typography)(({ theme }) => ({
+  fontSize: 12,
+  fontWeight: 500,
+  color: "#292F3D",
+  fontFamily: secondaryFont.style.fontFamily,
+  textWrap: "nowrap",
+}));
+
+export const StyledButton = styled(ButtonBase)(({ theme }) => ({
+  padding: 4,
+}));
 
 const defaultValues = { size: sizes[0] };
 
@@ -65,58 +90,76 @@ const prices = [
   { items: 300, price: 19.5 },
 ];
 
+const cordLabels = {
+  "Cord1": "Cord 01",
+  "Cord2": "Cord 02",
+  "Cord3": "Cord 03",
+  "Cord4": "Cord 04",
+}
+
+const tipLabels = {
+  "mental_end": "Tip 01",
+  "plastic_end": "Tip 01",
+  "silicone_end": "Tip 01",
+}
+
+const artworks = [
+  "Digital Print",
+  "Screen Print",
+  "Embroidery",
+];
+
+
+const positions = [
+  {
+    value: "left",
+    icon: <LeftPosition />,
+  },
+  {
+    value: "horizontal-center",
+    icon: <CenterPosition />,
+  },
+  {
+    value: "right",
+    icon: <RightPosition />,
+  },
+  {
+    value: "top",
+    icon: <TopPosition />,
+  },
+  {
+    value: "vertical-center",
+    icon: <TopCenterPosition />,
+  },
+  {
+    value: "bottom",
+    icon: <BottomPosition />,
+  },
+];
+
+const sizeLabels = [
+  "Size label sewn on the side the brand label",
+  "Brand label on the garment seam, 10cm from the bottom",
+  "Decide later, in a back office conversation",
+];
+
+const GENDERS = [
+  { value: "man", label: "Male" },
+  { value: "female", label: "Female" },
+  { value: "other", label: "Other" },
+];
+
 type Props = {
   type: string,
   // price: string
 };
-// let selectedData = [];
-const setSelectedData = (itemName: string) => {
-  let resultData = [];
-  resultData = [
-    {
-      key: itemName + "01",
-      color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-        <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `orange` }} />
-        <Typography>{itemName} 01</Typography>
-      </Box>
-    },
-    {
-      key: itemName + "02",
-      color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-        <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `red` }} />
-        <Typography>{itemName} 02</Typography>
-      </Box>
-    },
 
-    {
-      key: itemName + "03",
-      color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-        <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `green` }} />
-        <Typography>{itemName} 03</Typography>
-      </Box>
-    },
-
-    {
-      key: itemName + "04",
-      color: <Box component={"div"} sx={{ display: "flex", justifyContent: "start", pt: 1, mt: -1, mb: -1 }}>
-        <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `purple` }} />
-        <Typography>material 04</Typography>
-      </Box>
-    },
-  ];
-  return resultData;
-}
-
-
-export default function ConfigurationDetails(props) {
+export default function ConfigurationDetails(props: any) {
   const context = useCustomizeContext();
 
-  const cart = useBoolean();
-  const [washing, setWashing] = useState(true);
+  const dbCtx = props.context;
 
-  const handleChange = (ev: any) => {
-    setWashing(ev.target.checked);
-  };
+  const cart = useBoolean();
 
   const price = 50;
 
@@ -146,22 +189,37 @@ export default function ConfigurationDetails(props) {
           SIZE:
         </Typography>
 
-        <Controller
-          name="size"
-          render={({ field }) => {
-            return (
-              <SizePicker
-                sizes={sizes}
-                selected={field}
-                onSelectSize={(size) => {
-                  context.onSizeLabelChange(size)
-                  field.onChange(size as string)
-                }}
-              />
-            )
-          }
-          }
-        />
+        <Grid container>
+          <Grid item md={7}>
+            <Controller
+              name="size"
+              render={({ field }) => {
+                return (
+                  <SizePicker
+                    sizes={sizes}
+                    selected={field}
+                    onSelectSize={(size) => {
+                      context.onSizeLabelChange(size)
+                      field.onChange(size as string)
+                    }}
+                  />
+                )
+              }
+              }
+            />
+          </Grid>
+          <Grid item md={5}>
+            <RhfSelect name="gender" value={"man"}>
+              {GENDERS.map((gender, index) => (
+                <MenuItem key={index} selected={gender.value === "man"} value={gender.value}>
+                  {gender.label}
+                </MenuItem>
+              ))}
+            </RhfSelect>
+          </Grid>
+        </Grid>
+
+
       </Stack>
     </>
   );
@@ -188,186 +246,43 @@ export default function ConfigurationDetails(props) {
     </>
   );
 
-  const materials = setSelectedData("material");
-  const laces = setSelectedData("lace");
-  const laceTips = setSelectedData("lace tip");
-  const materialSelect = (
-    <Box component="div">
-      <RhfSelect name="material" label="Material" sx={{ fontFamily: secondaryFont.style.fontFamily, fontSize: 14, fontWeight: 500 }} onFocus={(e) => { context.onMaterialChange(e.target.outerText) }}>{
-        materials.map(item => (
-          <MenuItem value={item.key}>{item.color}</MenuItem>
-        ))
-      }</RhfSelect>
-    </Box>
-  );
   let isActiveLace = false;
   if (props.type !== undefined) {
     isActiveLace = props.type.toLowerCase() == "shorts" || props.type.toLowerCase() == "pants" || props.type.toLowerCase() == "hoodies";
   }
 
-  const laceSelect = isActiveLace ? (
-    <Box component="div">
-      <RhfSelect name="lace" label="Lace" onFocus={(e) => { context.onLaceChange(e.target.outerText) }}>{
-        laces.map(item => (
-          <MenuItem value={item.key}>{item.color}</MenuItem>
-        ))
-      }</RhfSelect>
-    </Box>
-  ) : (
-    <Box component="div">
-      <RhfSelect name="lace" label="Lace" disabled onFocus={(e) => { context.onLaceChange(e.target.outerText) }}>{
-        laces.map(item => (
-          <MenuItem value={item.key}>{item.color}</MenuItem>
-        ))
-      }</RhfSelect>
-    </Box>
-  );
-
-  const laceTipSelect = isActiveLace ? (
-    <Box component="div">
-      <RhfSelect name="laceTip" label="Lace Tip" onFocus={(e) => { context.onLaceTipChange(e.target.outerText) }}>{
-        laceTips.map(item => (
-          <MenuItem value={item.key}>{item.color}</MenuItem>
-        ))
-      }</RhfSelect>
-    </Box>
-  ) : (
-    <Box component="div">
-      <RhfSelect name="laceTip" label="Lace Tip" disabled onFocus={(e) => { context.onLaceTipChange(e.target.outerText) }}>{
-        laceTips.map(item => (
-          <MenuItem value={item.key}>{item.color}</MenuItem>
-        ))
-      }</RhfSelect>
-    </Box>
-  );
-
-  const renderProperty = (
-    <Grid container rowSpacing={2} columnSpacing={5}>
-      <Grid item md={6} xs={6}>
-        {materialSelect}
-      </Grid>
-      <Grid item md={6} xs={6}>
-        <SelectColorButton name="Color" isShowIcon={false} color={props.color} />
-      </Grid>
-      <Grid item md={6} xs={6}>
-        {laceSelect}
-      </Grid>
-      <Grid item md={6} xs={6}>
-        {laceTipSelect}
-      </Grid>
-    </Grid>
-  );
-
-  const renderTag = (
+  const renderLace = (
     <>
-      <Stack>
-        <Stack sx={{ mt: -1 }} direction="row" alignItems="center">
-          <Typography
-            sx={{
-              width: 1,
-              fontSize: 16,
-              color: "#292F3D",
-              fontFamily: secondaryFont.style.fontFamily,
-            }}
-          >
-            Washing Instruction Tag
-          </Typography>
-
-          <Button
-            component={RouterLink}
-            href={PATH_CONFIGURATOR.product.create(productType)}
-            startIcon={
-              <EditIcon color="#F05A4A" sx={{ width: 10, height: 12 }} />
-            }
-            sx={{ fontSize: 12, color: "#F05A4A", mr: 0.5 }}
-          >
-            Edit
-          </Button>
-
-          <Button
-            component={RouterLink}
-            href={"javascript:;"}
-            startIcon={
-              <CartDeleteIcon
-                color="#F05A4A"
-                sx={{ width: 11, height: 12 }}
-              />
-            }
-            sx={{ fontSize: 12, color: "#F05A4A", mt: '-2px', mr: 0.5 }}
-          >
-            Delete
-          </Button>
-        </Stack>
-        <FormGroup >
-          <FormControlLabel
-            sx={{ mr: 0 }}
-            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} checked={washing} onChange={handleChange} color="default" sx={{ color: '#333333' }} />}
-            label={
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  fontWeight: 500,
-                  color: "#5C6166",
-                  fontFamily: secondaryFont.style.fontFamily,
-                  lineHeight: '28px'
-                }}
-              >
-                Use Standard Wonder Row Washing tag
-              </Typography>
-            } />
-
-          <FormControlLabel
-            sx={{ 
-              mr: 0,
-              ".MuiFormControlLabel-label": {
-                width: "100%"
-              } 
-            }}
-            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} disabled={washing} color="default" sx={{ color: '#333333', mt: -6 }} />}
-            label={
-              <TextField
-                fullWidth
-                size="small"
-                multiline
-                disabled={washing}
-                rows={3}
-                sx={{
-                  width: "100%",
-                  ".css-1qheboz-MuiInputBase-input-MuiOutlinedInput-input": {
-                    fontSize: 12,
-                    fontWeight: 500,
-                    fontFamily: secondaryFont.style.fontFamily
-                  }
-                }
-                }
-                placeholder="Describe the custom washing tag instructions tag you want"
-              />
-            } />
-        </FormGroup>
+      <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
+        <Typography
+          sx={{
+            flexGrow: 1,
+            mt: 0,
+            py: 2,
+            color: "#292F3D",
+            fontSize: 16,
+            fontWeight: 700,
+          }}>
+          Cord: <span style={{ color: "#292F3D", fontWeight: 500 }}>{cordLabels[dbCtx.cord ? dbCtx.cord : "Cord1"]}</span>
+        </Typography>
+      </Stack>
+      <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
+        <Typography
+          sx={{
+            flexGrow: 1,
+            mt: 0,
+            py: 2,
+            color: "#292F3D",
+            fontSize: 16,
+            fontWeight: 700,
+          }}>
+          Cord Tip: <span style={{ color: "#292F3D", fontWeight: 500 }}>{tipLabels[dbCtx.cordTip ? dbCtx.cordTip : "mental_end"]}</span>
+        </Typography>
       </Stack>
     </>
   );
 
-  const renderItems = (
-    <>
-      <TableContainer sx={{ mt: -2 }}>
-        <Table>
-          <TableBody>
-            <ConfigurationPropertyRow
-              title="Text"
-              content={
-                <Typography sx={{ fontSize: 16, fontWeight: 500, fontFamily: secondaryFont.style.fontFamily }}>
-                  I'm the coolest man in the world
-                </Typography>}
-              productType={productType} />
-            <ConfigurationPropertyRow title="Tag" content={"Image"} productType={productType} />
-            <ConfigurationPropertyRow title="Image" content={"Image"} productType={productType} />
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
-  );
-
+  const isPrintLabel = productType === 'Oversize' || productType === 'T-Shirts' || productType === 'Sweatshirts';
   const { push } = useRouter();
   const renderActions = (
     <Stack direction="row" spacing={2}>
@@ -382,104 +297,19 @@ export default function ConfigurationDetails(props) {
           "&:hover": { bgcolor: "#550248" }
         }}
         onClick={async () => {
-          let customProductInfo = {
-            'img': '',
-            'color': context.color,
-            'size': context.sizeLabel,
-            'material': context.material,
-            'lace': context.lace,
-            'lace-tip': context.laceTip,
-            'type': productType
-          }
-          var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
-          if (canvas) {
-            var imageData = canvas.toDataURL();
-            customProductInfo.img = imageData;
-            const images = [];
-            images.push(imageData);
-            const data = {
-              images: images,
-              name: "custom" + new Date().getTime().toString(),
-              price: Number((40 - Math.random() * 20).toFixed(0)),
-              code: '123',
-              product: props.type,
-              color: context.color,
+          push({
+            pathname: "/quote",
+            query: {
+              customProduct: JSON.stringify(props)
             }
-
-            if (!props._id) {
-              axios.post(endpoints.customize.list, data).then((result) => {
-                push({
-                  pathname: "/quote",
-                  query: {
-                    id: result.data[0]._id,
-                  }
-                }, '/quote')
-                localStorage.setItem('product-info', JSON.stringify(customProductInfo));
-              }).catch((err) => {
-
-              });
-            } else {
-              localStorage.setItem('product-info', JSON.stringify(customProductInfo));
-              push({
-                pathname: "/quote",
-                query: {
-                  id: props._id,
-                }
-              }, '/quote')
-            }
-          }
+          }, '/quote')
         }}
       >
         <Typography sx={{ fontSize: 14, fontWeight: 500, fontFamily: secondaryFont.style.fontFamily }}>
           REQUEST FOR QUOTE
         </Typography>
       </Button>
-
-      <Button variant="outlined" sx={{ p: 1, minWidth: "auto" }}>
-        <SvgColor src="/icons/favorite-off.svg" />
-      </Button>
-    </Stack>
-  );
-
-  const renderModal = (
-    <>
-      <Modal open={cart.value}>
-        <Wrapper>
-          <Stack alignItems="end">
-            <IconButton
-              onClick={() => {
-                cart.onFalse();
-              }}
-            >
-              <Iconify
-                icon="material-symbols:close"
-                width={{ xs: 20, md: 36 }}
-                color="#ffffff"
-              />
-            </IconButton>
-          </Stack>
-          <Card sx={{ px: 4, py: 6 }}>
-            <Grid container spacing={2}>
-              <Grid item md={8}>
-                <Image
-                  src="/images/customize/screenshot.jpg"
-                  sx={{ width: 1 }}
-                />
-              </Grid>
-              <Grid item md={4}>
-                <Stack gap={3}>
-                  <RHFTextField name="name" placeholder="Product name" />
-
-                  <LoadingButton fullWidth variant="contained">
-                    SAVE
-                  </LoadingButton>
-                </Stack>
-              </Grid>
-            </Grid>
-          </Card>
-        </Wrapper>
-      </Modal>
-    </>
+    </Stack >
   );
 
   const renderPrices = (
@@ -508,7 +338,7 @@ export default function ConfigurationDetails(props) {
             {prices.map((price, index) => (
               <TableRow key={index} sx={{ borderBottom: "1px solid #EDE9DC" }}>
                 <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '32px' }}>{price.items} items</TableCell>
-                <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '32px' }}>{price.price} €</TableCell>
+                <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '32px' }}>{price.price} {JSON.parse(localStorage.getItem('currency')).value}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -534,6 +364,334 @@ export default function ConfigurationDetails(props) {
 
   );
 
+  const indexes = productType === 'Shorts' || productType === 'Pants' ? [1, 0, 3, 2, 4] : [1, 0, 3, 2];
+  const renderEmbels = (indexes.map((embelIndex: number) => (
+    <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
+      <Typography
+        sx={{
+          flexGrow: 1,
+          mt: 0,
+          py: 2,
+          color: "#292F3D",
+          fontSize: 16,
+          fontWeight: 700,
+        }}>
+        {`Embelleshment or Text - ${typeIndexToLabel(productType, embelIndex)}`}: &nbsp;&nbsp;&nbsp;&nbsp;
+        {dbCtx.embellishment[embelIndex].type === "image" ?
+          dbCtx.embellishment[embelIndex].file && <Image
+            src={dbCtx.embellishment[embelIndex].file}
+            sx={{
+              borderRadius: "2px",
+              width: "20px",
+              verticalAlign: "top",
+              height: "20px"
+            }} />
+          : (
+            <Box
+              sx={{
+                flexGrow: 1,
+                mt: 0,
+                px: 2,
+                py: 0,
+                mr: 2,
+                color: "#292F3D",
+                fontSize: 14,
+                lineHeight: 2,
+                fontWeight: 700,
+              }}>
+              Text
+              <span
+                style={{
+                  color: "#292F3D", fontWeight: 500, fontFamily: dbCtx.embellishment[embelIndex].font,
+                  fontSize: 14,
+                  fontWeight: 500,
+                }}>
+                &nbsp;&nbsp;&nbsp;&nbsp;{dbCtx.embellishment[embelIndex].textureText}
+              </span>
+            </Box>
+          )}
+      </Typography>
+      {
+        dbCtx.embellishment[embelIndex].type === "image" &&
+        <Typography
+          sx={{
+            flexGrow: 1,
+            px: 2,
+            mt: 0,
+            py: 1,
+            color: "#292F3D",
+            fontSize: 14,
+            fontWeight: 700,
+          }}>
+          artwork&nbsp;&nbsp;
+          <FormControlLabel
+            sx={{ mt: 0 }}
+            key={0}
+            control={<Switch color="default" checked={true} />}
+            label={<StyledSwitchLabel>{artworks[dbCtx.embellishment[embelIndex].artwork]}</StyledSwitchLabel>}
+            disabled={true}
+          />&nbsp;
+        </Typography>
+      }
+      < Typography
+        sx={{
+          flexGrow: 1,
+          mt: 0,
+          px: 2,
+          py: 0,
+          mr: 2,
+          color: "#292F3D",
+          fontSize: 14,
+          lineHeight: 2,
+          fontWeight: 700,
+        }}>
+        Size and position
+      </Typography >
+      {
+        dbCtx.embellishment[embelIndex].type === "image" &&
+        <Typography
+          sx={{
+            flexGrow: 1,
+            mt: 0,
+            py: 0,
+            px: 2,
+            mr: 2,
+            color: "#5C6166",
+            fontSize: 12,
+            lineHeight: 2,
+            fontWeight: 600,
+          }}>
+          artwork with: {dbCtx.embellishment[embelIndex].position.width}cm &nbsp;
+          From neck seam: {dbCtx.embellishment[embelIndex].position.neck}cm &nbsp;
+          From center: {dbCtx.embellishment[embelIndex].position.center}cm
+        </Typography>
+      }
+      < Typography
+        sx={{
+          flexGrow: 1,
+          mt: 0,
+          py: 2,
+          px: 2,
+          mr: 2,
+          color: "#292F3D",
+          fontSize: 14,
+          fontWeight: 600,
+        }}>
+        Position &nbsp;&nbsp;&nbsp;&nbsp;
+        <StyledButton sx={{
+          border: "2px solid #f38565",
+          borderRadius: 1,
+          "svg": {
+            "path": {
+              stroke: "#5C6166",
+            },
+            "rect": {
+              fill: "#ACB1B8"
+            }
+          }
+        }}>{positions[dbCtx.embellishment[embelIndex].position.type].icon}</StyledButton>
+      </Typography >
+    </Stack >
+  )))
+
+  const renderMain = (
+    <Box component={"div"}>
+      <Typography
+        sx={{
+          flexGrow: 1,
+          color: "#292F3D",
+          fontSize: 26,
+          fontWeight: 700,
+        }}>
+        Product Info:
+      </Typography>
+      <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
+        <Typography
+          sx={{
+            flexGrow: 1,
+            mt: 0,
+            py: 2,
+            color: "#292F3D",
+            fontSize: 16,
+            fontWeight: 700,
+          }}>
+          SIZE: <span style={{ color: "#292F3D", fontWeight: 500 }}>{sizes[dbCtx.embellishment[0].size]}</span>
+        </Typography>
+      </Stack>
+      <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignContent: "center",
+            mt: 0,
+            py: 2,
+            color: "#292F3D",
+            fontSize: 16,
+            fontWeight: 700,
+          }}>
+          Garment Dye: &nbsp;&nbsp;&nbsp;&nbsp;
+          <Box
+            sx={{
+              backgroundColor: (!dbCtx.color ? "lightgrey" : dbCtx.color),
+              borderRadius: "3px",
+              width: "20px",
+              maxHeight: "20px",
+            }} />
+        </Box>
+      </Stack>
+      <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
+        <Typography
+          sx={{
+            flexGrow: 1,
+            mt: 0,
+            py: 2,
+            color: "#292F3D",
+            fontSize: 16,
+            fontWeight: 700,
+          }}>
+          Tag: &nbsp;&nbsp;&nbsp;&nbsp;
+          {dbCtx.tag.file && <Image
+            src={dbCtx.tag.file}
+            sx={{
+              borderRadius: "2px",
+              width: "20px",
+              verticalAlign: "top",
+              height: "20px"
+            }} />}
+        </Typography>
+        <Box
+          sx={{
+            px: 2,
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            color: "#292F3D",
+            fontSize: 14,
+            fontWeight: 700,
+          }}>
+          <Grid md={3}>
+            Neck label: &nbsp;
+          </Grid>
+          <FormControlLabel
+            sx={{ mt: 0 }}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={isPrintLabel || dbCtx.tag.neck} disabled={true} />}
+            label={
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  color: "#5C6166",
+                  fontFamily: secondaryFont.style.fontFamily,
+                }}
+              >
+                {isPrintLabel ? "Printed Neck label" : "Waven Neck label"};
+              </Typography>
+            } />
+        </Box>
+        <Box
+          sx={{
+            flexGrow: 1,
+            px: 2,
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            color: "#292F3D",
+            fontSize: 14,
+            fontWeight: 700,
+          }}>
+          <Grid md={3}>
+            Label color: &nbsp;
+          </Grid>
+          <FormControlLabel
+            sx={{ mt: 0 }}
+            control={<Checkbox icon={<UnCheckedIcon />} checkedIcon={<CheckedIcon />} color="default" checked={true} disabled={true} />}
+            label={
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  color: "#5C6166",
+                  fontFamily: secondaryFont.style.fontFamily,
+                }}
+              >
+                {dbCtx.tag.color ? "Balck" : "White"}
+              </Typography>
+            } />
+        </Box>
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: "flex",
+            justifyContent: "flex-start",
+            px: 2,
+            color: "#292F3D",
+            fontSize: 14,
+            fontWeight: 700,
+            mb: 1
+          }}>
+          <Grid md={3}>
+            Size: &nbsp;&nbsp;&nbsp;&nbsp;
+          </Grid>
+          <Box
+            component="div"
+            sx={{
+              width: 20,
+              height: 20,
+              border: "1px dashed #292F3D",
+              fontSize: 12, fontFamily: secondaryFont.style.fontFamily,
+              fontWeight: 500
+            }}
+          />
+          <Box sx={{
+            fontSize: 14, fontFamily: secondaryFont.style.fontFamily,
+            fontWeight: 500
+          }}>&nbsp;&nbsp;&nbsp;&nbsp;{dbCtx.tag.size} mm</Box>
+        </Box>
+      </Stack>
+      {renderEmbels}
+      {isActiveLace && renderLace}
+      <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
+        <Typography
+          sx={{
+            flexGrow: 1,
+            mt: 0,
+            py: 2,
+            color: "#292F3D",
+            fontSize: 16,
+            fontWeight: 700,
+          }}>
+          Size Label: <span style={{ color: "#292F3D", fontWeight: 500 }}>{sizeLabels[dbCtx.sizeLabel]}</span>
+        </Typography>
+      </Stack>
+      <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
+        <Typography
+          sx={{
+            flexGrow: 1,
+            mt: 0,
+            py: 2,
+            color: "#292F3D",
+            fontSize: 16,
+            fontWeight: 700,
+          }}>
+          Care Tag: <span style={{ color: "#292F3D", fontWeight: 500 }}>{sizeLabels[dbCtx.careLabel]}</span>
+        </Typography>
+      </Stack>
+      <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
+        <Typography
+          sx={{
+            flexGrow: 1,
+            mt: 0,
+            py: 2,
+            color: "#292F3D",
+            fontSize: 16,
+            fontWeight: 700,
+          }}>
+          Notes: <span style={{ color: "#292F3D", fontWeight: 500 }}>{dbCtx.text}</span>
+        </Typography>
+      </Stack>
+    </Box>
+  )
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack gap={4}>
@@ -541,15 +699,9 @@ export default function ConfigurationDetails(props) {
 
         {renderPrice}
 
-        {renderProperty}
-
-        {renderItems}
-
-        {renderTag}
+        {renderMain}
 
         {renderActions}
-
-        {renderModal}
 
         {renderPrices}
 

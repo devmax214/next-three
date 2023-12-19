@@ -70,7 +70,12 @@ export default function RegisterForm(props: Props) {
       const response = await axios.post(endpoints.auth.register, data);
       // push(returnTo || PATH_AFTER_LOGIN);
       if (response.data.success) {
-        push("/auth/auth");
+        push({
+          pathname: "/auth/auth",
+          query: {
+            state: 1
+          }
+        }, "/auth/auth");
       } else {
         reset();
         setErrorMsg(response.data.msg);

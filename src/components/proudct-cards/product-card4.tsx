@@ -86,7 +86,7 @@ export default function ProductCard4({ product }: Props) {
                 fontFamily: secondaryFont.style.fontFamily,
               }}
             >
-              76 €
+              76 {JSON.parse(localStorage.getItem('currency')).value}
             </Typography>
 
             <StyledSelect

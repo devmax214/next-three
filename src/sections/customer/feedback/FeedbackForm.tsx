@@ -39,7 +39,7 @@ export default function FeedbackForm(props: Props) {
   const [rate, setRate] = useState(0);
   const router = useRouter();
   const onSubmit = handleSubmit(async (data) => {
-    await addRate({...data, productId});
+    await addRate({ ...data, productId });
     router.push('/user/feedback');
   });
 
@@ -61,7 +61,7 @@ export default function FeedbackForm(props: Props) {
             "linear-gradient(180deg, rgb(211 211 223) 0%, rgba(247,254,255,1) 100%)",
         }}
       >
-        <Image src="/images/newsletter.jpg" ratio="1/1" sx={{borderRadius: "10px"}}/>
+        <Image src="/images/newsletter.jpg" ratio="1/1" sx={{ borderRadius: "10px" }} />
       </Box>
     </Box>
   );
@@ -75,7 +75,7 @@ export default function FeedbackForm(props: Props) {
             fontWeight: 500,
             color: "#292F3D",
             fontFamily: secondaryFont.style.fontFamily,
-            paddingBottom: "8px"
+            paddingBottom: "8px",
           }}
         >
           Please left your rating
@@ -116,7 +116,7 @@ export default function FeedbackForm(props: Props) {
         >
           Please left your feedback
         </Typography>
-        <RHFTextField name="feedback" multiline rows={7} sx={{width: '79%'}}/>
+        <RHFTextField name="feedback" multiline rows={7} sx={{ width: { md: '79%', xs: 1 } }} />
       </Box>
     </>
   );
@@ -155,7 +155,7 @@ export default function FeedbackForm(props: Props) {
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Stack gap={5} style={{paddingLeft: "18px"}}>
+      <Stack gap={5} style={{ paddingLeft: "18px" }}>
         {renderHead}
 
         {renderForm}

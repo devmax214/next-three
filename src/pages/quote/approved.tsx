@@ -99,7 +99,7 @@ export default function ApprovedQuotePage(props: Props) {
             {prices.map((price, index) => (
               <TableRow key={index} >
                 <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '20px' }}>{price.items} items</TableCell>
-                <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '20px' }}>{price.price} €</TableCell>
+                <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '20px' }}>{price.price} {JSON.parse(localStorage.getItem('currency')).value}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   Box,
@@ -119,13 +119,18 @@ type Props = {
   type: string;
 };
 
-export default function ConfigurationProperties(props: Props) {
-  const [cord, setCord] = useState("");
-  const [cordTip, setCordTip] = useState("");
+export default function ConfigurationProperties(props: any) {
+  const [cord, setCord] = useState("Cord1");
+  const [cordTip, setCordTip] = useState("mental_end");
   const context = useContext(CustomizeContext);
   const checkoutContext = useCheckoutContext();
   const { onAddToCart } = checkoutContext;
   const { push } = useRouter();
+
+  useEffect(() => {
+    setCord("Cord1");
+    setCordTip("mental_end")
+  }, [])
 
   const methods = useForm({
     defaultValues,
@@ -153,55 +158,6 @@ export default function ConfigurationProperties(props: Props) {
   const changeSizeLabel = (ev: any, value: number) => {
     if (ev.target.checked) {
       context.onSizeLabelChange(value);
-    }
-  }
-
-  const requestQuote = () => {
-    let customProductInfo = {
-      'img': '',
-      'color': context.color,
-      'size': context.sizeLabel,
-      'material': context.material,
-      'lace': context.lace,
-      'lace-tip': context.laceTip,
-      'type': props.type
-    }
-    var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
-    if (canvas) {
-      var imageData = canvas.toDataURL();
-      customProductInfo.img = imageData;
-      const images = [];
-      images.push(imageData);
-      const data = {
-        images: images,
-        name: "custom" + new Date().getTime().toString(),
-        price: Number((40 - Math.random() * 20).toFixed(0)),
-        code: '123',
-        product: props.type,
-        color: context.color,
-      }
-
-      if (!props._id) {
-        axios.post(endpoints.customize.list, data).then((result) => {
-          push({
-            pathname: "/quote",
-            query: {
-              id: result.data[0]._id,
-            }
-          }, '/quote')
-          localStorage.setItem('product-info', JSON.stringify(customProductInfo));
-        }).catch((err) => {
-
-        });
-      } else {
-        localStorage.setItem('product-info', JSON.stringify(customProductInfo));
-        push({
-          pathname: "/quote",
-          query: {
-            id: props._id,
-          }
-        }, '/quote')
-      }
     }
   }
 
@@ -400,6 +356,8 @@ export default function ConfigurationProperties(props: Props) {
           size="small"
           multiline
           rows={2}
+          value={context.text}
+          onChange={(e) => context.onTextChange(e.target.value)}
           placeholder="Add special requests here"
         />
       </Stack>
@@ -523,7 +481,14 @@ export default function ConfigurationProperties(props: Props) {
             bgcolor: "#292F3D",
             "&:hover": { bgcolor: "#550248" },
           }}
-          onClick={requestQuote}
+          onClick={() => {
+            push({
+              pathname: "/quote",
+              query: {
+                customProduct: JSON.stringify({ ...props, context: context })
+              }
+            }, '/quote')
+          }}
         >
           REQUEST FOR QUOTE
         </Button>
@@ -568,7 +533,7 @@ export default function ConfigurationProperties(props: Props) {
             {prices.map((price, index) => (
               <TableRow key={index} sx={{ borderBottom: "1px solid #EDE9DC" }}>
                 <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '32px' }}>{price.items} items</TableCell>
-                <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '32px' }}>{price.price} €</TableCell>
+                <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '32px' }}>{price.price} {JSON.parse(localStorage.getItem('currency')).value}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -596,7 +561,7 @@ export default function ConfigurationProperties(props: Props) {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack gap={3}>
-        <SelectColorButton />
+        <SelectColorButton {...props} />
 
         <EditTagButton {...props} />
 

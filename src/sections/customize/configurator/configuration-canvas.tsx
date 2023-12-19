@@ -3,11 +3,16 @@ import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { Center, Environment, OrbitControls } from "@react-three/drei";
 import { TShartMan, HoodyMan, PantMan, ShortMan, SWEATMAN, OversizeMan } from "@/sections/customize/configurator/models";
-import { CustomizeContext } from '@/components/customize/context/customize-context';
+import { CustomizeContext, useCustomizeContext } from '@/components/customize/context/customize-context';
+import { useResponsive } from "@/hooks";
 
 type Props = {
   type: string;
   id: string;
+  page: string;
+  arrowLeftCount: number;
+  arrowRightCount: number;
+  ctx: object;
 };
 
 export default function ConfigurationCanvas(props: Props) {
@@ -100,7 +105,15 @@ export default function ConfigurationCanvas(props: Props) {
     }
   }, [customize.cordVisible]);
 
+  useEffect(() => {
+    setState({ rotation: [0, THREE.MathUtils.degToRad(props.arrowLeftCount * -90), 0] });
+  }, [props.arrowLeftCount]);
 
+  useEffect(() => {
+    setState({ rotation: [0, THREE.MathUtils.degToRad(props.arrowRightCount * 90), 0] });
+  }, [props.arrowRightCount]);
+
+  const smDown = useResponsive("down", "sm");
   return (
     <Canvas
       id={props.id}
@@ -108,9 +121,9 @@ export default function ConfigurationCanvas(props: Props) {
       gl={{ preserveDrawingBuffer: true }}
       camera={{ position: [0, 0, 2.5], fov: 25 }}
       style={{
-        height: window.screen.width > 760 ? 600 : "85%",
-        background: "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)",
-        borderRadius: 20
+        height: props.page === 'gallery' ? (smDown ? 'auto' : 350) : window.screen.width > 760 ? 600 : 350,
+        background: props.page === 'gallery' ? "" : "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)",
+        borderRadius: 10
       }}
     >
       <ambientLight intensity={0.5} />
@@ -119,11 +132,11 @@ export default function ConfigurationCanvas(props: Props) {
 
       <Center {...state} >
         {props.type === 'Hoodies' ?
-          <HoodyMan embelIndex={embelIndex} /> : props.type === 'Pants' ?
-            <PantMan embelIndex={embelIndex} /> : props.type === 'Shorts' ?
-              <ShortMan embelIndex={embelIndex} /> : props.type === 'Sweatshirts' ?
-                <SWEATMAN embelIndex={embelIndex} /> : props.type === 'T-Shirts' ?
-                  <TShartMan embelIndex={embelIndex} /> : <OversizeMan embelIndex={embelIndex} />}
+          <HoodyMan ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Pants' ?
+            <PantMan ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Shorts' ?
+              <ShortMan ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Sweatshirts' ?
+                <SWEATMAN ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'T-Shirts' ?
+                  <TShartMan ctx={props.ctx} embelIndex={embelIndex} /> : <OversizeMan ctx={props.ctx} embelIndex={embelIndex} />}
 
       </Center>
 

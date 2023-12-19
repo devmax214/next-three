@@ -1,13 +1,38 @@
-import { Box, Container } from "@mui/material";
+import { Box, Container, ButtonBase, Modal, Typography, Button } from "@mui/material";
+import { useBoolean } from "@/hooks";
+import SvgColor from "@/components/svg-color";
+import ReactPlayer from "react-player";
+import { styled } from "@mui/material/styles";
+import { primaryFont } from "@/theme/typography";
 import { MotionViewport } from "@/components/animate";
 import Image from "@/components/image";
 import { useResponsive } from "@/hooks";
-import TutorialButton from "./TutorialButton";
+
+const Wrapper = styled(Box)<{}>(({ theme }) => ({
+  position: "absolute",
+  left: "50%",
+  top: "100%",
+  maxWidth: 907,
+  width: "100%",
+  height: 510,
+  transform: "translateX(-50%)",
+  zIndex: 99999,
+  outline: "none",
+  borderRadius: "15px",
+  [theme.breakpoints.down("md")]: {
+    height: 430
+  },
+  "iframe": {
+    borderRadius: '15px'
+  }
+}));
+
 
 type Props = {};
 
 export default function Section1(props: Props) {
   const upMd = useResponsive("up", "md");
+  const open = useBoolean();
 
   return (
     <Box
@@ -15,7 +40,6 @@ export default function Section1(props: Props) {
       sx={{
         bgcolor: "#F9F5EE",
         position: "relative",
-        overflow: "hidden",
       }}
     >
       <Container
@@ -29,8 +53,7 @@ export default function Section1(props: Props) {
           component="div"
           sx={{
             borderRadius: "15px",
-            overflow: "hidden",
-            mt: {xs: 0, md: "12px"},
+            mt: { xs: 0, md: "12px" },
             position: "relative",
           }}
         >
@@ -40,8 +63,8 @@ export default function Section1(props: Props) {
                 ? "/images/customize/dashboard.jpeg"
                 : "/images/customize/mobile.png"
             }
+            width="100%"
           />
-
           <Box
             component="div"
             sx={{
@@ -51,67 +74,41 @@ export default function Section1(props: Props) {
               transform: "translateX(-50%)",
             }}
           >
-            <TutorialButton />
+            <ButtonBase onMouseOver={open.onTrue}>
+              <Typography sx={{ ml: 4, fontSize: 23, fontWeight: 500, color: "#F05A4A", fontFamily: primaryFont.style.fontFamily, fontStyle: 'normal' }}>
+                WATCH
+              </Typography>
+
+              <SvgColor
+                src={open.value ? "/icons/arrow-down.svg" : "/icons/arrow-icon.svg"}
+                color="#F05A4A"
+                sx={{ width: 25, height: 22, ml: 0.5, marginTop: open.value ? 2 : 0 }}
+              />
+            </ButtonBase>
           </Box>
+          <Wrapper style={{ display: open.value ? "block" : "none" }}>
+            <ReactPlayer
+              url="https://www.youtube.com/watch?v=oUFJJNQGwhk"
+              width="100%"
+              height="100%"
+            />
+            <Button sx={{
+              position: "absolute",
+              top: 5,
+              right: 4,
+              width: 30,
+              height: 30,
+              color: '#fff',
+              fontSize: 25,
+              fontWeight: 100,
+              minWidth: 30,
+              '&:hover': {
+                bgcolor: 'transparent'
+              },
+            }} onClick={open.onFalse}>X</Button>
+          </Wrapper>
         </Box>
       </Container>
-
-      {/* <Box
-        component="div"
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: { md: 100, xs: 60 },
-          width: 22,
-          height: 22,
-          bgcolor: "#6B6FB5",
-          borderRadius: 50,
-          transform: "translate(-50%, -50%)",
-        }}
-      />
-
-      <Box
-        component="div"
-        sx={{
-          position: "absolute",
-          top: 30,
-          left: { md: 60, xs: 30 },
-          width: 12,
-          height: 12,
-          bgcolor: "#6AB67A",
-          borderRadius: 50,
-          transform: "translate(-50%, -50%)",
-        }}
-      />
-
-      <Box
-        component="div"
-        sx={{
-          position: "absolute",
-          top: 0,
-          right: { md: 100, xs: 30 },
-          width: 22,
-          height: 22,
-          bgcolor: "#F3BC1A",
-          borderRadius: 50,
-          transform: "translate(-50%, -50%)",
-        }}
-      />
-
-      <Box
-        component="div"
-        sx={{
-          position: "absolute",
-          top: 40,
-          right: { md: 60, xs: 10 },
-          width: 12,
-          height: 12,
-          bgcolor: "#F05A4A",
-          borderRadius: 50,
-          transform: "translate(-50%, -50%)",
-        }}
-      /> */}
-
     </Box>
   );
 }

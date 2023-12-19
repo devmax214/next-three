@@ -7,10 +7,10 @@ export default function FeedbackListView({ productList, rateHash }: Props) {
     if (rateHash[item._id]) {
       rateHash[item._id].rateId = rateHash[item._id]._id;
     }
-    
-    return rateHash[item._id] 
-        ? <FeedbackListItem hasReview product={{...item, ...rateHash[item._id]}}/>
-        : <FeedbackListItem product={item}/>
+
+    return rateHash[item._id]
+      ? <FeedbackListItem hasReview product={{ ...item, ...rateHash[item._id] }} />
+      : <FeedbackListItem product={item} />
   }
   return (
     <>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { MenuItem, Typography } from "@mui/material";
 import TouchRipple from "@mui/material/ButtonBase";
 import SvgColor from "@/components/svg-color";
@@ -11,6 +11,16 @@ type Props = {};
 export default function CashTypeButton(props: Props) {
   const popover = usePopover();
 
+  const handleChangeCurrency = (newCurrency: any) => {
+    localStorage.setItem('currency', JSON.stringify(newCurrency));
+    popover.onClose();
+    location.reload()
+  };
+
+  if (!localStorage.getItem('currency')) {
+    handleChangeCurrency(_caches[1]);
+  }
+
   return (
     <>
       <TouchRipple onClick={popover.onOpen}>
@@ -22,7 +32,7 @@ export default function CashTypeButton(props: Props) {
             fontFamily: secondaryFont.style.fontFamily,
           }}
         >
-          EUR
+          {JSON.parse(localStorage.getItem('currency')).label}
         </Typography>
 
         <SvgColor src="/icons/arrow-bottom.svg" sx={{ width: 10, ml: 1 }} />
@@ -44,11 +54,13 @@ export default function CashTypeButton(props: Props) {
               justifyContent: "center",
               fontFamily: secondaryFont.style.fontFamily,
             }}
+            selected={language.value === JSON.parse(localStorage.getItem('currency')).value}
+            onClick={() => handleChangeCurrency(language)}
           >
             {language.label}
           </MenuItem>
         ))}
-      </CustomPopover>
+      </CustomPopover >
     </>
   );
 }

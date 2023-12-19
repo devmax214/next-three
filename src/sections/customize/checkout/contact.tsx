@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Checkbox, FormControlLabel, Stack, Typography, Switch } from "@mui/material";
 import { RouterLink } from "@/routers/components";
 import { PATH_SHOP } from "@/routers/path";
@@ -27,10 +27,14 @@ export default function Contact() {
 
   const handleChange = (ev: any, value: number) => {
     if (ev.target.checked) {
-      checkout.onChangeSippingStatus();
+      checkout.onChangeSippingStatus(value === 0);
       setState(value);
     }
   }
+
+  useEffect(() => {
+    checkout.onChangeSippingStatus(state === 0);
+  }, [])
 
   const isLogin = status === "authenticated";
 

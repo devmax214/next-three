@@ -48,11 +48,11 @@ const SizePicker = forwardRef<HTMLDivElement, SizePickerProps>(
                 sx={{
                   width: 35,
                   height: 35,
-                  borderRadius: "7px",
+                  borderRadius: 1,
                   // border: (theme) => `1px solid red`,
                   ...(hasSelected && {
                     // outline: `solid 2px ${alpha("#F05A4A", 0.8)}`,
-                    outline: `solid 2px ${alpha("#858585", 0.8)}`,
+                    outline: `solid 2px ${alpha("#f38565", 0.8)}`,
                     transition: (theme) =>
                       theme.transitions.create("all", {
                         duration: theme.transitions.duration.shortest,

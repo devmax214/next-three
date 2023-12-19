@@ -11,7 +11,7 @@ export default function QuoteListView({ quotes }: Props) {
         <Table>
           <TableBody>
             {quotes.map((quote, index) => (
-              <QuoteTableRow key={index} data={quote} />
+              <QuoteTableRow key={index} index={index} data={quote} />
             ))}
           </TableBody>
         </Table>

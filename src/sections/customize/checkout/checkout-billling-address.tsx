@@ -24,20 +24,6 @@ import { primaryFont, secondaryFont } from "@/theme/typography";
 import { addAddress } from "@/services/customer";
 import { useResponsive } from "@/hooks";
 
-const ShippingAddressSchema = Yup.object().shape({
-  email: Yup.string()
-    .required("Email is required")
-    .email("Email must be a valid email address"),
-  sid: Yup.string(),
-  firstname: Yup.string().required("First Name is required"),
-  lastname: Yup.string().required("Last Name is required"),
-  address: Yup.string().required("Address is required"),
-  city: Yup.string().required("City is required"),
-  postal: Yup.string().required("Post Code is required"),
-  phone: Yup.string().required("Phone Number is required"),
-  coupon: Yup.string(),
-});
-
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
   left: "50%",
@@ -57,6 +43,33 @@ export default function CheckoutBilllingAddress({ addresses }: Props) {
   const checkout = useCheckoutContext();
 
   const { data: session, status } = useSession();
+
+  const [ShippingAddressSchema, setSchema] = useState();
+
+  useEffect(() => {
+    if (checkout.shippingInclude) {
+      setSchema(Yup.object().shape({
+        email: Yup.string()
+          .required("Email is required")
+          .email("Email must be a valid email address"),
+        sid: Yup.string(),
+        firstname: Yup.string().required("First Name is required"),
+        lastname: Yup.string().required("Last Name is required"),
+        address: Yup.string().required("Address is required"),
+        city: Yup.string().required("City is required"),
+        postal: Yup.string().required("Post Code is required"),
+        phone: Yup.string().required("Phone Number is required"),
+        coupon: Yup.string(),
+      }))
+    } else {
+      setSchema(Yup.object().shape({
+        email: Yup.string()
+          .required("Email is required")
+          .email("Email must be a valid email address"),
+        sid: Yup.string(),
+      }))
+    }
+  }, [checkout.shippingInclude])
 
   const defaultValues = {
     email: session?.user.email || "",

@@ -39,9 +39,9 @@ export const _languages = [
 
 export const _caches = [
   { value: "chf", label: "CHF(CHF)" },
-  { value: "eur", label: "EUR(€)" },
-  { value: "gbp", label: "GBP(£)" },
-  { value: "usd", label: "USD($)" },
+  { value: "€", label: "EUR(€)" },
+  { value: "£", label: "GBP(£)" },
+  { value: "$", label: "USD($)" },
 ];
 
 export const _ads = [

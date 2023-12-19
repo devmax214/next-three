@@ -5,9 +5,7 @@ import { PATH_CONFIGURATOR } from "@/routers/path";
 import OrderDetail from "../order-detail";
 import OrderSummary from "../order-summary";
 
-type Props = {};
-
-export default function ConfigurationReviewView(props: Props) {
+export default function ConfigurationReviewView({ type, quoteNumber, id }) {
   return (
     <Box
       component="div"
@@ -23,17 +21,17 @@ export default function ConfigurationReviewView(props: Props) {
         }}
       >
         <CustomBreadCrumbs
-          heading="Review order"
+          heading={`Quote Request - ${quoteNumber}`}
           links={[
             {
               name: "Home",
               href: PATH_CONFIGURATOR.root,
             },
             {
-              name: "Product Page",
-              href: PATH_CONFIGURATOR.root,
+              name: "Quote Request",
+              href: '/user/quote',
             },
-            { name: "Review order" },
+            { name: quoteNumber },
           ]}
           sx={{
             mb: { xs: 3, md: 5 },
@@ -41,10 +39,10 @@ export default function ConfigurationReviewView(props: Props) {
         />
 
         <Grid container spacing={5}>
-          <Grid item md={8}>
+          <Grid item md={8} xs={12}>
             <OrderDetail />
           </Grid>
-          <Grid item md={4}>
+          <Grid item md={4} xs={12}>
             <OrderSummary />
           </Grid>
         </Grid>

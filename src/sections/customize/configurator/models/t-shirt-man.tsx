@@ -5,6 +5,7 @@ import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
 import { isEmpty } from "lodash";
 import { useFrame } from "@react-three/fiber";
+import { Texture } from "@mui/icons-material";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -76,72 +77,204 @@ export default function TShirtManModel(props: any) {
   const modelRef = useRef<any>();
   const [zoomFactor, setZoomFactor] = useState<number>(1);
 
-
   useEffect(() => {
     if (customize.tag.file) {
-      loader.loadAsync(URL.createObjectURL(customize.tag.file)).then((result) => {
+      loader.loadAsync(typeof customize.tag.file === "string" ? customize.tag.file : URL.createObjectURL(customize.tag.file)).then((result) => {
         setTagTexture(result);
       });
+
     }
   }, [customize.tag.file])
-
+  const reverseIndex = [2, 3], embelSize = 4, smallIndex = [2, 3];
   const setTextTexture = (factor = 1) => {
-    var textCanvas = document.createElement("canvas");
-    textCanvas.width = 200 * factor;
-    textCanvas.height = 200 * factor;
-    var ctx = textCanvas.getContext("2d");
-    var fontSize = embelIndex == 3 || embelIndex == 2 ? '20' : '30';
+    let tmpTexture = texture;
+    for (let i = 0; i < embelSize; i++) {
+      if (customize.embellishment[i].type === "image") continue;
+      const textCanvas = document.createElement("canvas");
+      textCanvas.style.cssText = "border: 1px solid grey"
+      const baseWidth = smallIndex.includes(i) ? 200 : 250;
+      const baseHeight = smallIndex.includes(i) ? 300 : 350;
+      const fontSize = smallIndex.includes(i) ? 30 : 35;
+      const lineHeight = smallIndex.includes(i) ? 32 : 37;
+      textCanvas.width = baseWidth * factor;
+      textCanvas.height = baseHeight * factor;
+      var ctx = textCanvas.getContext("2d");
+      var fillTextX = 0, fillTextY = 0;
+      const lines = customize.embellishment[i].textureText.split('\n');
 
-    if (ctx !== null && customize.embellishment[embelIndex].font) {
-      ctx.fillStyle = "black";
-      ctx.font = `${fontSize}px ${customize.embellishment[embelIndex].font}`;
-      ctx.scale(factor, factor);
-      switch (customize.embellishment[embelIndex].position.type) {
-        case 0:
-          ctx.textAlign = 'left';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 0, 100);
-          break;
-        case 1:
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
-          break;
-        case 2:
-          ctx.textAlign = 'right';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 200, 100);
-          break;
-        case 3:
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'top';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 0);
-          break;
-        case 4:
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 100);
-          break;
-        case 5:
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'bottom';
-          ctx.fillText(customize.embellishment[embelIndex].textureText, 100, 200);
-          break;
+      if (ctx !== null && customize.embellishment[i].font) {
+        ctx.font = `${fontSize}pt ${customize.embellishment[i].font}`;
+        ctx.scale(factor, factor);
+        switch (customize.embellishment[i].position.type) {
+          case 0:
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            fillTextX = 0;
+            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+            break;
+          case 1:
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            fillTextX = baseWidth / 2;
+            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+            break;
+          case 2:
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            fillTextX = baseWidth;
+            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+            break;
+          case 3:
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+            fillTextX = baseWidth / 2;
+            fillTextY = 0;
+            break;
+          case 4:
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            fillTextX = baseWidth / 2;
+            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+            break;
+          case 5:
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            fillTextX = baseWidth / 2;
+            fillTextY = (baseHeight - lineHeight * lines.length) + fontSize;
+            break;
+        }
+        for (let k = 0; k < lines.length; k++) {
+          ctx.fillText(lines[k], fillTextX, fillTextY + (k * lineHeight));
+        }
+
+        const myTexture = new THREE.CanvasTexture(textCanvas);
+        if (reverseIndex.includes(i)) {
+          myTexture.wrapS = THREE.RepeatWrapping;
+          myTexture.repeat.x = -1;
+        }
+        tmpTexture[i] = myTexture;
       }
-
-      const myTexture = new THREE.CanvasTexture(textCanvas);
-      setTexture({ ...texture, [embelIndex]: myTexture });
+      setTexture({ ...texture, ...tmpTexture });
     }
   }
 
   useEffect(() => {
     if (customize.embellishment[embelIndex].type === 'image') {
       if (customize.embellishment[embelIndex].file)
-        setTexture({ ...texture, [embelIndex]: loader.load(URL.createObjectURL(customize.embellishment[embelIndex].file)) });
+        loader.loadAsync(typeof customize.embellishment[embelIndex].file === "string" ? customize.embellishment[embelIndex].file : URL.createObjectURL(customize.embellishment[embelIndex].file)).then((result) => {
+          if (reverseIndex.includes(embelIndex)) {
+            result.wrapS = THREE.RepeatWrapping;
+            result.repeat.x = -1;
+          }
+          setTexture({ ...texture, [embelIndex]: result });
+        })
     } else if (customize.embellishment[embelIndex].type === 'text') {
       setTextTexture();
     }
   }, [customize.embellishment[embelIndex].position, customize.embellishment[embelIndex].type, customize.embellishment[embelIndex].file, customize.embellishment[embelIndex].textureText, customize.embellishment[embelIndex].font]);
+
+  useEffect(() => {
+
+    let factor = 1;
+    let tmpTexture = {
+      0: new THREE.Texture(),
+      1: new THREE.Texture(),
+      2: new THREE.Texture(),
+      3: new THREE.Texture(),
+      4: new THREE.Texture(),
+    };
+    let tmpCtx = customize;
+    if (props.ctx.embellishment) {
+      tmpCtx = props.ctx;
+    }
+    let promises = [];
+    let indexes = [];
+    for (let i = 0; i < embelSize; i++) {
+      if (tmpCtx.embellishment[i].type === 'image') {
+        if (tmpCtx.embellishment[i].file) {
+          indexes.push(i);
+          promises.push(loader.loadAsync(typeof tmpCtx.embellishment[i].file === "string" ? tmpCtx.embellishment[i].file : URL.createObjectURL(tmpCtx.embellishment[i].file)))
+        } else {
+          tmpTexture[i] = new THREE.Texture();
+        }
+      } else if (tmpCtx.embellishment[i].type === 'text') {
+        const textCanvas = document.createElement("canvas");
+        textCanvas.style.cssText = "border: 1px solid grey"
+        const baseWidth = smallIndex.includes(i) ? 200 : 250;
+        const baseHeight = smallIndex.includes(i) ? 300 : 350;
+        const fontSize = smallIndex.includes(i) ? 30 : 35;
+        const lineHeight = smallIndex.includes(i) ? 32 : 37;
+        textCanvas.width = baseWidth * factor;
+        textCanvas.height = baseHeight * factor;
+        var ctx = textCanvas.getContext("2d");
+        var fillTextX = 0, fillTextY = 0;
+        const lines = tmpCtx.embellishment[i].textureText.split('\n');
+
+        if (ctx !== null && tmpCtx.embellishment[i].font) {
+          ctx.font = `${fontSize}pt ${tmpCtx.embellishment[i].font}`;
+          ctx.scale(factor, factor);
+          switch (tmpCtx.embellishment[i].position.type) {
+            case 0:
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'middle';
+              fillTextX = 0;
+              fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+              break;
+            case 1:
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              fillTextX = baseWidth / 2;
+              fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+              break;
+            case 2:
+              ctx.textAlign = 'right';
+              ctx.textBaseline = 'middle';
+              fillTextX = baseWidth;
+              fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+              break;
+            case 3:
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'top';
+              fillTextX = baseWidth / 2;
+              fillTextY = 0;
+              break;
+            case 4:
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              fillTextX = baseWidth / 2;
+              fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+              break;
+            case 5:
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              fillTextX = baseWidth / 2;
+              fillTextY = (baseHeight - lineHeight * lines.length) + fontSize;
+              break;
+          }
+          for (let k = 0; k < lines.length; k++) {
+            ctx.fillText(lines[k], fillTextX, fillTextY + (k * lineHeight));
+          }
+
+          const myTexture = new THREE.CanvasTexture(textCanvas);
+          if (reverseIndex.includes(i)) {
+            myTexture.wrapS = THREE.RepeatWrapping;
+            myTexture.repeat.x = -1;
+          }
+          tmpTexture[i] = myTexture;
+        }
+      }
+    }
+    Promise.all(promises).then((result) => {
+      for (let i = 0; i < result.length; i++) {
+        if (reverseIndex.includes(indexes[i])) {
+          result[i].wrapS = THREE.RepeatWrapping;
+          result[i].repeat.x = -1;
+        }
+        tmpTexture[indexes[i]] = result[i];
+      }
+      setTexture({ ...texture, ...tmpTexture });
+    });
+  }, []);
 
   const { nodes, materials } = useGLTF(
     "/models/TSHIRTWR_man/TSHIRT_MAN.glb"

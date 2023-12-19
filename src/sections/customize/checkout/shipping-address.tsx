@@ -59,7 +59,7 @@ export default function ShippingAddress({ addresses, setAddresses, renderModal, 
           ".css-nq0j4t-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input": {
             textWrap: "wrap !important"
           }
-          }}
+        }}
         onChange={(event) => {
           setSelectedAddress(event.target.value as string);
         }}
@@ -199,7 +199,7 @@ export default function ShippingAddress({ addresses, setAddresses, renderModal, 
 
   const renderNewAddress2 = (
     <Stack gap={5}>
-      <Stack gap={2}>
+      {/* <Stack gap={2}>
         <StyledTypography sx={{ paddingTop: '6px' }}>Select your address</StyledTypography>
 
         <FormControlLabel
@@ -213,7 +213,7 @@ export default function ShippingAddress({ addresses, setAddresses, renderModal, 
           }}
         />
 
-      </Stack>
+      </Stack> */}
 
       <Stack direction="row" justifyContent={"space-between"}>
         <Button
@@ -264,9 +264,10 @@ export default function ShippingAddress({ addresses, setAddresses, renderModal, 
   return (
     <>
       <Stack gap={4}>
-        <Typography sx={{ fontSize: 28, fontWeight: 700, fontFamily: primaryFont.style.fontFamily }}>Shipping address</Typography>
-
-        {isLogin && renderSelectAddress}
+        {checkout.shippingInclude &&
+          <Typography sx={{ fontSize: 28, fontWeight: 700, fontFamily: primaryFont.style.fontFamily }}>Shipping address</Typography>
+        }
+        {checkout.shippingInclude && isLogin && renderSelectAddress}
 
         {checkout.shippingInclude ? renderNewAddress : renderNewAddress2}
         {renderModal}

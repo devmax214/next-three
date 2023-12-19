@@ -30,8 +30,8 @@ export default function NewsletterModal({ open, onClose }: Props) {
   const form = useBoolean();
 
   const renderForm = (
-    <Grid container sx={{ height: 410 }}>
-      <Grid lg={5} md={5}>
+    <Grid container sx={{ height: { md: 410, xs: 'auto' }, padding: { xs: 3, md: 0 } }}>
+      <Grid lg={5} md={5} xs={12}>
         <Box
           component="div"
           sx={{ backgroundImage: "/images/home/newsletter.jpg" }}
@@ -39,7 +39,7 @@ export default function NewsletterModal({ open, onClose }: Props) {
           <Box component="img" src="/images/home/newsletter.jpg" />
         </Box>
       </Grid>
-      <Grid lg={7} md={7}>
+      <Grid lg={7} md={7} xs={12}>
         <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
           <NewsletterForm onSuccess={form.onTrue} />
         </Stack>
