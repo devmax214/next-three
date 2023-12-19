@@ -204,8 +204,6 @@ const SaveButton = (props: any) => {
         context: tmpContext
       }
 
-      console.log(data);
-
       axios.post(endpoints.customize.list, data).then((result) => {
         setLoading(false);
         cart.onFalse();

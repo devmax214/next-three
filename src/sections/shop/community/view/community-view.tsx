@@ -15,7 +15,7 @@ export default function CommunityView({ mode }: Props) {
           bgcolor: mode === "dark" ? "#fff" : "#F9F5EE",
           position: "relative",
           pt: { xs: 10, md: 10 },
-          pb: { xs: 20 }
+          pb: { xs: 20, md: "15px" }
         }}
       >
         <Container sx={{ paddingBottom: { xs: "0 !important;" } }}>
@@ -50,7 +50,7 @@ export default function CommunityView({ mode }: Props) {
           description2="With this need, we've created a regenerative concept of long-lasting products made ethically and vertically integrated at an in-house manufacturing center. Our mission has always been to identify ways we can produce garments while remaining responsible for the planet and the people involved. With that, our brand was born."
           image="/images/community/2.jpg"
           direction="right"
-          mode={mode === "colored" ? "dark" : "white"}
+          // mode={mode === "colored" ? "dark" : "white"}
           isIcon={mode === "colored"}
         />
 

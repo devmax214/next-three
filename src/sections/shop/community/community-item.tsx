@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Container, Grid, Stack, Typography } from "@mui/material";
+import Image from "@/components/image";
 import { m } from "framer-motion";
 import { MotionViewport, varFade } from "@/components/animate";
 import Icon1 from "@/components/icons/home/icon1";
@@ -37,9 +38,10 @@ export default function CommunityItem({
           mt: { xs: 0, md: 20 },
           pr: { xs: 0, md: 8 },
           ...((direction === "right" && window.screen.width > 768) && {
-            pl: { xs: 4, md: 8 },
+            pl: { xs: 0, md: 8 },
             pr: { xs: 0, md: 0 },
           }),
+          width: { md: direction === "right" ? "90%" : 1 }
         }}
       >
         <m.div variants={varFade().inUp}>
@@ -87,19 +89,12 @@ export default function CommunityItem({
       </Box>
     </>
   );
-
   const renderImg = (
     <>
-      <Box
-        component={m.img}
+      <Image
         src={image}
-        variants={varFade().in}
         sx={{
-          height: { xs: 1, md: 1 },
-          width: { xs: 1, md: 0.5 },
-          objectFit: "cover",
-          position: { md: "absolute" },
-          ...((direction === "right" && window.screen.width > 768) && { left: 0 }),
+          width: { xs: 1, md: direction === "left" ? "50vw" : 1 },
         }}
       />
     </>
@@ -110,23 +105,26 @@ export default function CommunityItem({
       <Box
         component="div"
         sx={{
-          minHeight: { md: 700, xs: 100 },
           position: "relative",
           ...((mode === "dark" && window.screen.width > 768) && { bgcolor: "#6B6FB5" }),
         }}
       >
-        <Container component={MotionViewport} sx={{ paddingBottom: { xs: "0 !important;" }, paddingLeft: { xs: 0 }, paddingRight: { xs: 0 } }}>
-          <Grid container>
-            {direction === "left" || window.screen.width < 768 ? (
+
+        {direction === "left" && mdUp ?
+          <Container sx={{ pb: "0 !important" }}>
+            <Grid container>
               <>
                 <Grid xs={12} md={6} sx={{ paddingLeft: { xs: 1 }, paddingRight: { xs: 1 }, paddingTop: { xs: 5 } }}>
                   {renderDescription}
                 </Grid>
-                <Grid xs={12} md={6} sx={{ mt: { xs: 5 } }}>
+                <Grid xs={12} md={6} sx={{ mt: { xs: 5, md: 0 } }}>
                   {renderImg}
                 </Grid>
               </>
-            ) : (
+            </Grid>
+          </Container> :
+          direction === "right" && mdUp ?
+            <Grid container>
               <>
                 <Grid xs={12} md={6}>
                   {renderImg}
@@ -135,10 +133,23 @@ export default function CommunityItem({
                   {renderDescription}
                 </Grid>
               </>
-            )}
-          </Grid>
-        </Container>
+            </Grid> :
+            <>
+              <Container sx={{ pb: "0 !important" }}>
+                <Grid container>
+                  <Grid xs={12} md={6} sx={{ padding: "30px 0px !important" }}>
 
+                    {renderDescription}
+                  </Grid>
+                </Grid>
+              </Container>
+              <Grid container>
+                <Grid xs={12} md={6} sx={{ padding: "30px 0px !important" }}>
+                  {renderImg}
+                </Grid>
+              </Grid>
+            </>
+        }
         {isIcon && (
           <>
             <Box

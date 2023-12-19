@@ -7,9 +7,9 @@ import { countries } from "@/@mockup/country";
 import Iconify from "@/components/iconify";
 import { RHFAutocomplete } from "@/components/hook-form";
 
-type Props = { onNext: VoidFunction };
+type Props = {};
 
-export default function OrderRefundFirst({ onNext }: Props) {
+export default function OrderRefundFirst({ }: Props) {
   return (
     <>
       <Box
@@ -182,7 +182,7 @@ export default function OrderRefundFirst({ onNext }: Props) {
                   </Typography>
 
                   <Link
-                    href="https://www.google.com"
+                    href="/user/order"
                     underline="none"
                     sx={{
                       fontSize: 14,
@@ -208,7 +208,7 @@ export default function OrderRefundFirst({ onNext }: Props) {
                   bgcolor: "#550248",
                 },
               }}
-              onClick={onNext}
+              type="submit"
             >
               <Typography
                 sx={{

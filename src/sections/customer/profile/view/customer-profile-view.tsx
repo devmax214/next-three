@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Divider,
@@ -20,6 +20,9 @@ import FormProvider, {
 } from "@/components/hook-form";
 import { saveProfile, useGetProfile } from "@/services/customer";
 import { mutate } from "swr";
+import { PhoneInput } from 'react-international-phone';
+import 'react-international-phone/style.css';
+import { useRouter } from "next/router";
 
 const GENDERS = [
   { value: "man", label: "Male" },
@@ -46,7 +49,7 @@ const ProfileSchema = Yup.object().shape({
 
 export default function CustomerProfileView() {
   const { profile, profileLoading } = useGetProfile();
-
+  const router = useRouter();
   const defaultValues = {
     firstname: "",
     lastname: "",
@@ -69,6 +72,8 @@ export default function CustomerProfileView() {
     formState: { isSubmitting },
   } = methods;
 
+  const [phone, setPhone] = useState("");
+
   useEffect(() => {
     reset({
       firstname: profile.firstname,
@@ -79,11 +84,11 @@ export default function CustomerProfileView() {
       phone: profile.phone,
       accept: profile.accept,
     });
+    setPhone(profile.phone);
   }, [profileLoading]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-
+    data.phone = phone;
     try {
       const res = await saveProfile(data);
 
@@ -93,9 +98,10 @@ export default function CustomerProfileView() {
         birthday: new Date(res.birthday),
         gender: res.gender,
         email: res.email,
-        phone: res.phone,
+        phone: phone,
         accept: res.accept,
       });
+      router.push('/user');
     } catch (error) { }
   });
 
@@ -119,11 +125,11 @@ export default function CustomerProfileView() {
       <Grid container spacing={3} p={2}>
         <Grid item xs={6} md={6}>
           <StyledTypography1>First name</StyledTypography1>
-          <RHFTextField name="firstname" />
+          <RHFTextField size="small" name="firstname" />
         </Grid>
         <Grid item xs={6} md={6}>
           <StyledTypography1>Last name</StyledTypography1>
-          <RHFTextField name="lastname" />
+          <RHFTextField size="small" name="lastname" />
         </Grid>
         <Grid item xs={6} md={6}>
           <StyledTypography1>Date of birth</StyledTypography1>
@@ -181,11 +187,18 @@ export default function CustomerProfileView() {
       <Grid container spacing={3} p={2}>
         <Grid item xs={12} md={6}>
           <StyledTypography1>Email</StyledTypography1>
-          <RHFTextField name="email" disabled />
+          <RHFTextField name="email" size="small" disabled />
         </Grid>
         <Grid item xs={12} md={6}>
           <StyledTypography1>Phone</StyledTypography1>
-          <RHFTextField name="phone" />
+          <PhoneInput
+            defaultCountry="pr"
+            value={phone}
+            onChange={(phone) => setPhone(phone)}
+            name="phone"
+            style={{ width: '100%' }}
+            inputStyle={{ width: '100%', }}
+          />
         </Grid>
       </Grid>
     </Stack>

@@ -36,30 +36,12 @@ export default function ReturnRequestForm(props: Props) {
 
   const renderForm = (
     <Stack gap={2.5}>
-      <RHFTextField size="small" name="order number" placeholder="Your order number" />
+      <RHFTextField size="small" name="ordernumber" placeholder="Your order number" />
 
       <RHFTextField size="small" name="email" placeholder="Your email" />
 
       <RHFTextField size="small" name="postcode" placeholder="Your Postcode/Zip code" />
 
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: 500,
-          color: "#5C6166",
-          fontFamily: secondaryFont.style.fontFamily,
-        }}
-      >
-        If you have a voucher code from the seller
-        <Link
-          component={RouterLink}
-          href={PATH_CONFIGURATOR.root}
-          underline="always"
-          sx={{ color: "#F05A4A", textDecoration: "none", pl: 1 }}
-        >
-          click here
-        </Link>
-      </Typography>
     </Stack>
   );
 

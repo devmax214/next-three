@@ -55,7 +55,16 @@ export function FeedbackListItem({ hasReview, product }: Props) {
         <Button
           component={RouterLink}
           variant="contained"
-          href={PATH_SHOP.customer.feedback.rating(product._id)}
+          href={"javascript:;"}
+          onClick={() => {
+            router.push({
+              pathname: PATH_SHOP.customer.feedback.rating(product._id),
+              query: {
+                id: product._id,
+                img: `/images/customize/${product.images[0]}`
+              }
+            })
+          }}
           sx={{
             width: 168,
             bgcolor: "#292F3D",

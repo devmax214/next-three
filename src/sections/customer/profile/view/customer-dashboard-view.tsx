@@ -20,7 +20,6 @@ export default function CustomerDashboardView(props: Props) {
   const { profile, profileLoading } = useGetProfile();
   const { addressCnt, orderCnt } = props;
 
-
   const renderData = (
     <Grid container spacing={{ xs: 1, md: 3 }}>
       <Grid item xs={4} md={4}>
@@ -85,10 +84,10 @@ export default function CustomerDashboardView(props: Props) {
           <ContentItem title="Last name" value={profile.lastname} />
         </Grid>
         <Grid item xs={6} md={6}>
-          <ContentItem title="Date of birth" value="01.01.1999" />
+          <ContentItem title="Date of birth" value={`${new Date(profile.birthday).getMonth() + 1}.${new Date(profile.birthday).getDate()}.${new Date(profile.birthday).getFullYear()}`} />
         </Grid>
         <Grid item xs={6} md={6}>
-          <ContentItem title="Gender" value={profile.gender ? profile.gender[0].toUpperCase() + profile.gender.substring(1) : ''} />
+          <ContentItem title="Gender" value={GENDERS[profile.gender]} />
         </Grid>
       </Grid>
     </Stack>
@@ -156,7 +155,7 @@ export default function CustomerDashboardView(props: Props) {
         <Grid item md={6}>
           <ContentItem
             title="Accepts Marketing from WonderRaw"
-            value={`"Yes"`}
+            value={profile.accept ? `"Yes"` : `"No"`}
           />
         </Grid>
       </Grid>
@@ -178,11 +177,11 @@ export default function CustomerDashboardView(props: Props) {
   );
 }
 
-const GENDERS = [
-  { value: "man", label: "Male" },
-  { value: "female", label: "Female" },
-  { value: "other", label: "Other" },
-];
+const GENDERS = {
+  "man": "Male",
+  "female": "Female",
+  "other": "Other",
+};
 
 function ContentItem({
   title,
@@ -203,33 +202,16 @@ function ContentItem({
       >
         {title}
       </Typography>
-      {title === "Gender" ?
-        <Select value={String(value).toLowerCase()} size="small" name="gender">
-          {GENDERS.map((gender, index) => (
-            <MenuItem key={index} value={gender.value}>
-              {gender.label}
-            </MenuItem>
-          ))}
-        </Select>
-        : title === "Phone" ?
-          <PhoneInput
-            defaultCountry="pr"
-            value={value}
-            name="phone"
-            style={{ width: '100%' }}
-            inputStyle={{ width: '100%' }}
-          /> :
-          <Typography
-            sx={{
-              fontSize: { xs: 15, md: 16 },
-              fontWeight: 500,
-              color: "#292F3D",
-              fontFamily: secondaryFont.style.fontFamily,
-            }}
-          >
-            {value}
-          </Typography>
-      }
+      <Typography
+        sx={{
+          fontSize: { xs: 15, md: 16 },
+          fontWeight: 500,
+          color: "#292F3D",
+          fontFamily: secondaryFont.style.fontFamily,
+        }}
+      >
+        {value}
+      </Typography>
     </Stack>
   );
 }

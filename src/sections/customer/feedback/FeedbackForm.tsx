@@ -22,7 +22,7 @@ const defaultValues = {
 
 type Props = {};
 
-export default function FeedbackForm(props: Props) {
+export default function FeedbackForm(props: any) {
   const methods = useForm({
     resolver: yupResolver(FeedbackSchema),
     defaultValues,
@@ -61,7 +61,7 @@ export default function FeedbackForm(props: Props) {
             "linear-gradient(180deg, rgb(211 211 223) 0%, rgba(247,254,255,1) 100%)",
         }}
       >
-        <Image src="/images/newsletter.jpg" ratio="1/1" sx={{ borderRadius: "10px" }} />
+        <Image src={props.imgPath ? props.imgPath : '/images/newsletter.jpg'} ratio="1/1" sx={{ borderRadius: "10px" }} />
       </Box>
     </Box>
   );

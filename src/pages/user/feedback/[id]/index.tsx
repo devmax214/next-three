@@ -43,7 +43,7 @@ export default function GiveFeedbackPage(props: Props) {
         <title> Feedback | WonderRaw</title>
       </Head>
 
-      <FeedbackView productId={router.query.id} />
+      <FeedbackView productId={router.query.id} imgPath={router.query.img} />
     </>
   );
 }
