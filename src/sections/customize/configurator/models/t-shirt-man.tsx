@@ -85,6 +85,7 @@ export default function TShirtManModel(props: any) {
 
     }
   }, [customize.tag.file])
+
   const reverseIndex = [2, 3], embelSize = 4, smallIndex = [2, 3];
   const setTextTexture = (factor = 1) => {
     let tmpTexture = texture;
@@ -337,7 +338,7 @@ export default function TShirtManModel(props: any) {
   }, [customize.tag])
 
   useEffect(() => {
-    setTextTexture(zoomFactor);
+    setTextTexture(zoomFactor)
   }, [zoomFactor])
 
   useFrame(state => {

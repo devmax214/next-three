@@ -427,7 +427,7 @@ export default function Model(props: any) {
   }, [customize.cord])
 
   useEffect(() => {
-    setTextTexture(zoomFactor);
+    setTextTexture(zoomFactor)
   }, [zoomFactor])
 
   useFrame(state => {

@@ -344,7 +344,7 @@ export default function OversizeManModel(props: any) {
   }, [customize.tag])
 
   useEffect(() => {
-    setTextTexture(zoomFactor);
+    setTextTexture(zoomFactor)
   }, [zoomFactor])
 
   useFrame(state => {

@@ -336,7 +336,7 @@ export default function SWEATManModel(props: any) {
   }, [customize.tag])
 
   useEffect(() => {
-    setTextTexture(zoomFactor);
+    setTextTexture(zoomFactor)
   }, [zoomFactor])
 
   useFrame(state => {

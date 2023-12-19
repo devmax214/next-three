@@ -434,7 +434,7 @@ export default function ShortManModel(props: any) {
   }, [customize.cord])
 
   useEffect(() => {
-    setTextTexture(zoomFactor);
+    setTextTexture(zoomFactor)
   }, [zoomFactor])
 
   useFrame(state => {

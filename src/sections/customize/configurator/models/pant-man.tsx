@@ -442,7 +442,7 @@ export default function PANTManModel(props: any) {
   }, [customize.cord])
 
   useEffect(() => {
-    setTextTexture(zoomFactor);
+    setTextTexture(zoomFactor)
   }, [zoomFactor])
 
   useFrame(state => {
