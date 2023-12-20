@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT_SECRET_KEY } from "../../../../global-config";
 import { Customer, dbConnect } from "@/helpers/db";
 import { ICustomerItem } from "@/@types/customer";
+import { sendEmail } from "@/helpers/mailer";
 
 declare module "next-auth" {
   interface IUser extends DefaultUser {
@@ -10,7 +11,7 @@ declare module "next-auth" {
     lastname: string;
   }
 
-  interface User extends IUser {}
+  interface User extends IUser { }
 
   interface Session {
     accessToken: string;
@@ -51,20 +52,29 @@ export const authOptions: NextAuthOptions = {
             email: email,
           }).select("+password");
 
-          if (!user) throw "Username or password is incorrect";
+          if (!user) return { error: true, msg: "Username or password is incorrect" };
+          if (!user.isVerified) {
+            await sendEmail({ email: email, emailType: "VERIFY", userId: user._id.toString() });
+            return { error: true, msg: "Please verify email. Verify link sent to your email" };
+          }
 
           const pwValid = await user.comparePassword(password);
-
-          if (!pwValid) throw "Username or password is incorrect";
+          if (!pwValid) return { error: true, msg: "Password is incorrect" };
 
           return user;
         } else {
-          throw new Error("Credentionals not found");
+          return { error: true, msg: "Credentionals not found" };
         }
       },
     }),
   ],
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      if (user?.error) {
+        throw new Error(user.msg)
+      }
+      return user;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.user = user;

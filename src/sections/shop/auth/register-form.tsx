@@ -68,12 +68,13 @@ export default function RegisterForm(props: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const response = await axios.post(endpoints.auth.register, data);
-      // push(returnTo || PATH_AFTER_LOGIN);
+
       if (response.data.success) {
         push({
           pathname: "/auth/auth",
           query: {
-            state: 1
+            state: 1,
+            msg: "Account created successfully. Please verify email"
           }
         }, "/auth/auth");
       } else {

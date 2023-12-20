@@ -1,9 +1,9 @@
 import { Box, Container, Typography } from "@mui/material";
 import { MotionViewport } from "@/components/animate";
-import RegisterForm from "../register-form";
+import ResetForm from "../reset-form";
 import { primaryFont, secondaryFont } from "@/theme/typography";
 
-export default function RegisterView() {
+export default function ResetPasswordView() {
   return (
     <>
       <Box
@@ -29,11 +29,11 @@ export default function RegisterView() {
             lineHeight: "normal",
             mb: 4
           }}>
-            Sign Up
+            Reset password
           </Typography>
 
           <Box component="div" sx={{ maxWidth: 500, mx: "auto" }}>
-            <RegisterForm />
+            <ResetForm />
           </Box>
         </Container>
       </Box>

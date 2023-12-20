@@ -1,4 +1,18 @@
-function typeIndexToLabel(ptype: string, index: number) {
+import { NextRequest, NextResponse } from "next/server";
+import Jwt from "jsonwebtoken";
+
+// To verify the validity of the token and get the user id from it
+export async function getDataFromToken(req: NextRequest) {
+  try {
+    const token = req.cookies.get("token")?.value || "";
+    const data: any = Jwt.verify(token, process.env.JWT_SECERITY!);
+    return data.id;
+  } catch (error: any) {
+    NextResponse.json({ error });
+  }
+}
+
+export function typeIndexToLabel(ptype: string, index: number) {
   if (ptype !== "Pants" && ptype !== "Shorts") {
     switch (index) {
       case 0:
@@ -40,5 +54,3 @@ function typeIndexToLabel(ptype: string, index: number) {
 
   return "";
 }
-
-export { typeIndexToLabel };

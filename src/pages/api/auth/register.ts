@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Customer, dbConnect } from "@/helpers/db";
+import { sendEmail } from "@/helpers/mailer";
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,6 +18,9 @@ export default async function handler(
         return;
       }
       const customer = await Customer.create({ ...req.body });
+
+      await sendEmail({ email: req.body.email, emailType: "VERIFY", userId: customer._id.toString() });
+
       res.status(201).json({ success: true, data: customer });
       break;
     default:

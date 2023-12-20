@@ -10,6 +10,8 @@ import { RouterLink } from "@/routers/components";
 import { PATH_SHOP } from "@/routers/path";
 import { secondaryFont } from "@/theme/typography";
 import { useAuthContext } from "@/auth/useAuthContext";
+import axios from "@/utils/axios";
+import { useRouter } from "next/router";
 
 const ForgotSchema = Yup.object().shape({
   email: Yup.string()
@@ -19,6 +21,7 @@ const ForgotSchema = Yup.object().shape({
 
 export default function ForgotForm() {
 
+  const { push } = useRouter();
   const [errorMsg, setErrorMsg] = useState("");
 
   const methods = useForm({
@@ -33,12 +36,19 @@ export default function ForgotForm() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        email: data.email,
-        password: "123"
-      });
-
+      const response = await axios.post('/api/auth/forgot', { ...data });
+      console.log(response)
+      if (response.data.success) {
+        push({
+          pathname: "/auth/auth",
+          query: {
+            state: 1,
+            msg: "Password reset link sent to your email."
+          }
+        }, "/auth/auth");
+      } else {
+        setErrorMsg(response.data.msg);
+      }
     } catch (error: any) {
       setErrorMsg(typeof error === "string" ? error : error.message);
     }

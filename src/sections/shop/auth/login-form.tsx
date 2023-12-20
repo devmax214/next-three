@@ -40,14 +40,15 @@ export default function LoginForm() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      // await login(data.email, data.password);
       const result = await signIn("credentials", {
         redirect: false,
         email: data.email,
         password: data.password,
       });
 
-      console.log(result);
+      if (result?.error) {
+        setErrorMsg(result?.error)
+      }
     } catch (error: any) {
       setErrorMsg(typeof error === "string" ? error : error.message);
     }

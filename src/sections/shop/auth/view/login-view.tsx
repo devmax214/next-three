@@ -21,6 +21,8 @@ type Props = {};
 export default function LoginView(props: Props) {
   const router = useRouter();
   const state = router.query.state;
+  const msg = router.query.msg;
+
   return (
     <>
       <Box
@@ -41,7 +43,7 @@ export default function LoginView(props: Props) {
             <Grid container spacing={10}>
               <Grid item md={12}>
                 <Typography component="span" sx={{ fontSize: 22, fontWeight: 700 }}>
-                  Account created successfully!
+                  {msg}
                 </Typography>
               </Grid>
             </Grid>
