@@ -23,6 +23,10 @@ export default function GlobalStyles() {
           width: "100%",
           height: "100%",
         },
+        ".bg-black .MuiSwitch-track": {
+          backgroundColor: "black !important",
+          opacity: 0.6,
+        },
         "#__next": {
           width: "100%",
           height: "100%",

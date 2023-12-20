@@ -54,3 +54,25 @@ export function typeIndexToLabel(ptype: string, index: number) {
 
   return "";
 }
+
+export function isEmpty(data: any) {
+
+  try {
+    if (data.name) return false;
+  } catch (err) { }
+
+  try {
+    if (
+      data !== null &&
+      data !== undefined &&
+      data !== 0 &&
+      data !== "" &&
+      data.length !== 0 &&
+      Object.keys(data).length !== 0
+    ) {
+      return false;
+    }
+  } catch (error) { }
+
+  return true;
+}

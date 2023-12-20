@@ -19,7 +19,7 @@ import { RHFTextField } from "@/components/hook-form";
 import Image from "@/components/image";
 import { useRouter } from "next/router";
 import { PATH_SHOP } from "@/routers/path";
-import { forIn, reject } from "lodash";
+import { forIn, isEmpty, reject } from "lodash";
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
@@ -161,7 +161,7 @@ const SaveButton = (props: any) => {
   const save = async () => {
     let tmpContext = context;
     let promises = [];
-    if (tmpContext.tag.file && typeof tmpContext.tag.file !== "string") {
+    if (!isEmpty(tmpContext.tag.file) && typeof tmpContext.tag.file !== "string") {
       promises.push(
         new Promise((resolve, reject) => {
           const reader = new FileReader()
@@ -174,7 +174,7 @@ const SaveButton = (props: any) => {
       )
     }
     for (let i = 0; i < tmpContext.embellishment.length; i++) {
-      if (tmpContext.embellishment[i].file && typeof tmpContext.embellishment[i].file !== "string") {
+      if (!isEmpty(tmpContext.embellishment[i].file) && typeof tmpContext.embellishment[i].file !== "string") {
         promises.push(
           new Promise((resolve, reject) => {
             const reader = new FileReader()

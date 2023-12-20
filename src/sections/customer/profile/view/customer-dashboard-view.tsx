@@ -46,6 +46,9 @@ export default function CustomerDashboardView(props: Props) {
     </Grid>
   );
 
+  const d = new Date(profile.birthday);
+  const birthday = profile.birthday ? `${d.getMonth() + 1}.${d.getDate()}.${d.getFullYear()}` : '1.28.1985';
+
   const renderProfile = (
     <Stack>
       <Stack
@@ -84,7 +87,7 @@ export default function CustomerDashboardView(props: Props) {
           <ContentItem title="Last name" value={profile.lastname} />
         </Grid>
         <Grid item xs={6} md={6}>
-          <ContentItem title="Date of birth" value={`${new Date(profile.birthday).getMonth() + 1}.${new Date(profile.birthday).getDate()}.${new Date(profile.birthday).getFullYear()}`} />
+          <ContentItem title="Date of birth" value={birthday} />
         </Grid>
         <Grid item xs={6} md={6}>
           <ContentItem title="Gender" value={GENDERS[profile.gender]} />

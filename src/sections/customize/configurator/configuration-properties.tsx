@@ -485,7 +485,7 @@ export default function ConfigurationProperties(props: any) {
             push({
               pathname: "/quote",
               query: {
-                customProduct: JSON.stringify({ ...props, context: context })
+                customProduct: JSON.stringify({ ...props, context: context, product: props.type })
               }
             }, '/quote')
           }}

@@ -7,9 +7,9 @@ export function CenterPosition() {
       viewBox="0 0 20 23"
       fill="none"
     >
-      <path d="M10 0V23" stroke="#ACB1B8" />
-      <rect x="3" y="3" width="14" height="6" fill="#ACB1B8" />
-      <rect y="13" width="20" height="6" fill="#ACB1B8" />
+      <path d="M10 0V23" stroke="#5C6166" />
+      <rect x="3" y="3" width="14" height="6" fill="#5C6166" />
+      <rect y="13" width="20" height="6" fill="#5C6166" />
     </svg>
   );
 }
@@ -23,9 +23,9 @@ export function RightPosition() {
       viewBox="0 0 24 23"
       fill="none"
     >
-      <path d="M23 0V23" stroke="#ACB1B8" />
-      <rect x="6" y="3" width="14" height="6" fill="#ACB1B8" />
-      <rect y="13" width="20" height="6" fill="#ACB1B8" />
+      <path d="M23 0V23" stroke="#5C6166" />
+      <rect x="6" y="3" width="14" height="6" fill="#5C6166" />
+      <rect y="13" width="20" height="6" fill="#5C6166" />
     </svg>
   );
 }
@@ -55,14 +55,14 @@ export function TopPosition() {
       viewBox="0 0 23 24"
       fill="none"
     >
-      <path d="M0 1L23 1" stroke="#ACB1B8" />
+      <path d="M0 1L23 1" stroke="#5C6166" />
       <rect
         x="12"
         y="18"
         width="14"
         height="6"
         transform="rotate(-90 12 18)"
-        fill="#ACB1B8"
+        fill="#5C6166"
       />
       <rect
         x="2"
@@ -70,7 +70,7 @@ export function TopPosition() {
         width="20"
         height="6"
         transform="rotate(-90 2 24)"
-        fill="#ACB1B8"
+        fill="#5C6166"
       />
     </svg>
   );
@@ -85,14 +85,14 @@ export function TopCenterPosition() {
       viewBox="0 0 23 20"
       fill="none"
     >
-      <path d="M0 10L23 10" stroke="#ACB1B8" />
+      <path d="M0 10L23 10" stroke="#5C6166" />
       <rect
         x="13"
         y="17"
         width="14"
         height="6"
         transform="rotate(-90 13 17)"
-        fill="#ACB1B8"
+        fill="#5C6166"
       />
       <rect
         x="3"
@@ -100,7 +100,7 @@ export function TopCenterPosition() {
         width="20"
         height="6"
         transform="rotate(-90 3 20)"
-        fill="#ACB1B8"
+        fill="#5C6166"
       />
     </svg>
   );
@@ -115,21 +115,21 @@ export function BottomPosition() {
       viewBox="0 0 23 24"
       fill="none"
     >
-      <path d="M23 23L9.53674e-07 23" stroke="#ACB1B8" />
+      <path d="M23 23L9.53674e-07 23" stroke="#5C6166" />
       <rect
         x="19"
         y="6"
         width="14"
         height="6"
         transform="rotate(90 19 6)"
-        fill="#ACB1B8"
+        fill="#5C6166"
       />
       <rect
         x="9"
         width="20"
         height="6"
         transform="rotate(90 9 0)"
-        fill="#ACB1B8"
+        fill="#5C6166"
       />
     </svg>
   );

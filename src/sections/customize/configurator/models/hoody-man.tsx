@@ -10,6 +10,7 @@ import { Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
 import { useFrame } from "@react-three/fiber";
+import { isEmpty } from "@/helpers/common";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -121,7 +122,7 @@ export default function Model(props: any) {
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
 
   useEffect(() => {
-    if (customize.tag.file) {
+    if (!isEmpty(customize.tag.file)) {
       loader.loadAsync(typeof customize.tag.file === "string" ? customize.tag.file : URL.createObjectURL(customize.tag.file)).then((result) => {
         setTagTexture(result);
       });
@@ -203,7 +204,7 @@ export default function Model(props: any) {
 
   useEffect(() => {
     if (customize.embellishment[embelIndex].type === 'image') {
-      if (customize.embellishment[embelIndex].file)
+      if (!isEmpty(customize.embellishment[embelIndex].file))
         loader.loadAsync(typeof customize.embellishment[embelIndex].file === "string" ? customize.embellishment[embelIndex].file : typeof customize.embellishment[embelIndex].file === "string" ? customize.embellishment[embelIndex].file : URL.createObjectURL(customize.embellishment[embelIndex].file)).then((result) => {
           if (reverseIndex.includes(embelIndex)) {
             result.wrapS = THREE.RepeatWrapping;
@@ -233,7 +234,7 @@ export default function Model(props: any) {
     let indexes = [];
     for (let i = 0; i < embelSize; i++) {
       if (tmpCtx.embellishment[i].type === 'image') {
-        if (tmpCtx.embellishment[i].file) {
+        if (!isEmpty(tmpCtx.embellishment[i].file)) {
           indexes.push(i);
           promises.push(loader.loadAsync(typeof tmpCtx.embellishment[i].file === "string" ? tmpCtx.embellishment[i].file : URL.createObjectURL(tmpCtx.embellishment[i].file)))
         }

@@ -61,7 +61,7 @@ import product from "@/helpers/db/models/product";
 const sizes = ["XS", "S", "M", "L", "XL"];
 
 export const StyledSwitchLabel = styled(Typography)(({ theme }) => ({
-  fontSize: 12,
+  fontSize: 14,
   fontWeight: 500,
   color: "#292F3D",
   fontFamily: secondaryFont.style.fontFamily,
@@ -423,11 +423,11 @@ export default function ConfigurationDetails(props: any) {
             fontSize: 14,
             fontWeight: 700,
           }}>
-          artwork&nbsp;&nbsp;
+          Artwork&nbsp;&nbsp;
           <FormControlLabel
             sx={{ mt: 0 }}
             key={0}
-            control={<Switch color="default" checked={true} />}
+            control={<Switch color="default" className="bg-black" checked={true} />}
             label={<StyledSwitchLabel>{artworks[dbCtx.embellishment[embelIndex].artwork]}</StyledSwitchLabel>}
             disabled={true}
           />&nbsp;
@@ -486,8 +486,8 @@ export default function ConfigurationDetails(props: any) {
               stroke: "#5C6166",
             },
             "rect": {
-              fill: "#ACB1B8"
-            }
+              fill: "#5C6166"
+            },
           }
         }}>{positions[dbCtx.embellishment[embelIndex].position.type].icon}</StyledButton>
       </Typography >
@@ -636,15 +636,15 @@ export default function ConfigurationDetails(props: any) {
           <Box
             component="div"
             sx={{
-              width: 20,
-              height: 20,
+              width: 17,
+              height: 17,
               border: "1px dashed #292F3D",
               fontSize: 12, fontFamily: secondaryFont.style.fontFamily,
               fontWeight: 500
             }}
           />
           <Box sx={{
-            fontSize: 14, fontFamily: secondaryFont.style.fontFamily,
+            fontSize: 12, fontFamily: secondaryFont.style.fontFamily,
             fontWeight: 500
           }}>&nbsp;&nbsp;&nbsp;&nbsp;{dbCtx.tag.size} mm</Box>
         </Box>

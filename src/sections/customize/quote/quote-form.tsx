@@ -28,13 +28,15 @@ export default function QuoteForm(props: Props) {
     defaultValues,
   });
 
+  const customProduct = JSON.parse(props.query.customProduct);
+
   const {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    await axios.post(endpoints.customize.list, { customizeId: props.query.id, quoteState: QUOTE_STATE.approved });
+    const result = await axios.post(endpoints.customize.list, { ...customProduct, name: "customize" + Date.now(), quoteState: QUOTE_STATE.approved });
     push('/quote/approved');
   });
   const { push } = useRouter();
