@@ -227,36 +227,35 @@ const SaveButton = (props: any) => {
 
   const renderModal = (
     <>
-      <Modal open={cart.value} sx={{ height: { xs: "70%", md: "100%" } }}>
-        <Wrapper sx={{ top: { xs: "60%", md: "50%" } }}>
+      <Modal className={"save-custom"} open={cart.value} sx={{ height: { xs: "70%", md: "100%" } }}>
+        <Wrapper sx={{ top: { xs: "70%", md: "50%" } }}>
           <Stack alignItems="end">
             <IconButton
               onClick={() => {
                 cart.onFalse();
               }}
             >
-              <Iconify
-                icon="material-symbols:close"
-                width={{ xs: 20, md: 36 }}
-                color="#ffffff"
-              />
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M1 22.7812L22.7813 0.999986" stroke="white" stroke-width="2" stroke-linecap="round" />
+                <path d="M1 1.21875L22.7813 23" stroke="white" stroke-width="2" stroke-linecap="round" />
+              </svg>
             </IconButton>
           </Stack>
-          <Card sx={{ px: 4, py: 6 }}>
+          <Card sx={{ bgcolor: "white", px: { md: 4, xs: "10px" }, py: { md: 6, xs: "39px" } }}>
             <Grid container>
               <Grid item md={8} xs={12}>
-                <Box component={"div"} sx={{ height: "100%", width: "100%", background: "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)", borderRadius: 5 }}>
+                <Box component={"div"} sx={{ width: 1, height: { md: 0.9, xs: "275px" }, background: "radial-gradient(rgba(255,255,255), rgb(211 210 210), rgb(171 167 167), rgba(149,149,149))", borderRadius: 5 }}>
                   <Image
                     src={image}
-                    sx={{ width: 1, height: { md: 0.9, xs: "350px" } }}
+                    sx={{ width: 1, height: 1 }}
                   />
                 </Box>
               </Grid>
-              <Grid item md={4} mt={3} xs={12}>
+              <Grid item md={4} mt={"39px"} xs={12}>
                 <Stack gap={3} ml={{ md: 3, xs: 0 }}>
                   <TextField value={name} onChange={e => setName(e.target.value)} name="name" placeholder="Product name" size="small" />
 
-                  <LoadingButton loading={loading} fullWidth variant="contained" onClick={() => {
+                  <LoadingButton loading={loading} fullWidth sx={{ mb: "20px" }} variant="contained" onClick={() => {
                     setLoading(true);
                     save();
                   }

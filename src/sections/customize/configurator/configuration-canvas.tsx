@@ -121,7 +121,7 @@ export default function ConfigurationCanvas(props: Props) {
       gl={{ preserveDrawingBuffer: true }}
       camera={{ position: [0, 0, 2.5], fov: 25 }}
       style={{
-        height: props.page === 'gallery' ? (smDown ? 'auto' : 350) : window.screen.width > 760 ? 600 : 350,
+        height: props.page === 'gallery' ? (smDown ? 'auto' : 280) : window.screen.width > 760 ? 600 : 280,
         background: props.page === 'gallery' ? "" : "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)",
         borderRadius: 10
       }}

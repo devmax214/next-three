@@ -10,6 +10,9 @@ export default function GlobalStyles() {
         ".mobile-menu .MuiModal-backdrop": {
           opacity: "0 !important"
         },
+        ".save-custom .MuiModal-backdrop": {
+          backgroundColor: "rgba(0,0,0,0.75) !important"
+        },
         html: {
           margin: 0,
           padding: 0,
