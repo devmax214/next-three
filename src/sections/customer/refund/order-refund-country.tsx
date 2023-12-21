@@ -74,13 +74,7 @@ export default function OrderRefundFirst({ }: Props) {
 
                     return (
                       <li {...props} key={label}>
-                        <Iconify
-                          key={label}
-                          icon={`circle-flags:${code.toLowerCase()}`}
-                          width={28}
-                          sx={{ mr: 1 }}
-                        />
-                        {label} ({code}) +{phone}
+                        {label}
                       </li>
                     );
                   }}

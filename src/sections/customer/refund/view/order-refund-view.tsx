@@ -50,8 +50,11 @@ export default function OrderRefundView(props: Props) {
     formState: { isSubmitting },
   } = methods;
 
+  const [submited, setSubmited] = useState(false);
+
   const onSubmit = handleSubmit(async (data) => {
-    step === 0 ? setStep(1) : router.push('/')
+    if (step === 0) setStep(1);
+    if (step === 1) setSubmited(true);
   });
 
   return (
@@ -59,7 +62,7 @@ export default function OrderRefundView(props: Props) {
       <FormProvider methods={methods} onSubmit={onSubmit}>
         {step === 0 && <OrderRefundFirst />}
 
-        {step === 1 && <OrderRefundRegister />}
+        {step === 1 && <OrderRefundRegister submited={submited} />}
       </FormProvider>
     </>
   );

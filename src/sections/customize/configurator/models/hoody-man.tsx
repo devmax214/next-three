@@ -374,7 +374,7 @@ export default function Model(props: any) {
     try {
       if (!!cords) {
         const { nodes, materials } = useGLTF(
-          `/models/Hoody/cords/Man/${cords}/${cords}.gltf`
+          `/models/Hoody/cords/Man/${cords}/${cords}.glb`
         ) as any;
 
         const keys: string[] = Object.keys(nodes);
@@ -396,6 +396,48 @@ export default function Model(props: any) {
   const cordTipItem = useCallback(() => {
     try {
       if (!!customize.cord && !!customize.cordTip) {
+        if (customize.cordTip === 'mental_end') {
+          const { nodes, materials } = useGLTF(
+            `/models/Hoody/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.glb`
+          ) as any;
+          switch (customize.cord) {
+            case "Cord1":
+              return (
+                <group {...props} dispose={null}>
+                  <mesh geometry={nodes.MatShape_49527_Node.geometry} material={materials.Material4631} position={[-0.149, 0.171, 0.549]} rotation={[2.946, 0.879, -3.115]} scale={[1.294, 0.941, 1.294]} />
+                  <mesh geometry={nodes.MatShape_101039_Node.geometry} material={materials.Material4631} position={[-0.092, 0.171, 0.566]} rotation={[2.98, 0.51, -3.134]} scale={[1.294, 0.941, 1.294]} />
+                </group>
+              )
+              break;
+            case "Cord2":
+              return (
+                <group {...props} dispose={null}>
+                  <mesh geometry={nodes.MatShape_54439_Node.geometry} material={materials['Material4631.002']} position={[-0.014, 0.088, 0.102]} rotation={[-0.156, -0.165, -0.007]} scale={[0.975, 0.94, 0.975]} />
+                  <mesh geometry={nodes.MatShape_83371_Node.geometry} material={materials['Material4631.002']} position={[-0.17, 0.101, 0.173]} rotation={[-0.173, 0.362, -0.017]} scale={[0.975, 0.94, 0.975]} />
+                </group>
+              )
+              break;
+            case "Cord3":
+              return (
+                <group {...props} dispose={null}>
+                  <mesh geometry={nodes.MatShape_69312_Node.geometry} material={materials['Material4631.003']} position={[0.224, 0.062, 0.045]} rotation={[-0.138, -0.949, 0.01]} scale={[1.529, 0.958, 1.529]} />
+                  <mesh geometry={nodes.MatShape_103875_Node.geometry} material={materials['Material4631.003']} position={[0.068, 0.056, 0.021]} rotation={[-0.163, -0.5, 0.021]} scale={[1.529, 0.958, 1.529]} />
+                </group>
+              )
+              break;
+            case "Cord4":
+              return (
+                <group {...props} dispose={null}>
+                  <mesh geometry={nodes.MatShape_69312_Node.geometry} material={materials['Material4631.004']} position={[0.223, 0.06, 0.045]} rotation={[-0.138, -0.948, 0.01]} scale={[1.529, 0.958, 1.529]} />
+                  <mesh geometry={nodes.MatShape_103875_Node.geometry} material={materials['Material4631.004']} position={[0.071, 0.051, 0.022]} rotation={[-0.163, -0.509, 0.02]} scale={[1.529, 0.958, 1.529]} />
+                </group>
+              )
+              break;
+            default:
+              break;
+          }
+          return null;
+        }
         const { nodes, materials } = useGLTF(
           `/models/Hoody/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.gltf`
         ) as any;
@@ -410,9 +452,9 @@ export default function Model(props: any) {
             ))}
           </group>
         )
-      } else return ''
+      } else return null;
     } catch (err) {
-      console.log(err);
+      return null;
     }
   }, [customize.cordTip]);
 
@@ -543,23 +585,23 @@ useGLTF.preload("/models/Hoody/tags/Man/label-45x45_black/label-45x45_black.glb"
 useGLTF.preload("/models/Hoody/tags/Man/label-45x45_white/label-45x45_white.glb")
 useGLTF.preload("/models/Hoody/tags/Man/label-55x30_black/label-55x30_black.glb")
 useGLTF.preload("/models/Hoody/tags/Man/label-55x30_white/label-55x30_white.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord1/Cord1.gltf")
-useGLTF.preload("/models/Hoody/cords/Man/Cord2/Cord2.gltf")
-useGLTF.preload("/models/Hoody/cords/Man/Cord3/Cord3.gltf")
-useGLTF.preload("/models/Hoody/cords/Man/Cord4/Cord4.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/Cord1.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/Cord2.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/Cord3.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/Cord4.glb")
 
-useGLTF.preload("/models/Hoody/cords/Man/Cord1/mental_end/mental_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/mental_end/mental_end.glb")
 useGLTF.preload("/models/Hoody/cords/Man/Cord1/plastic_end/plastic_end.gltf")
 useGLTF.preload("/models/Hoody/cords/Man/Cord1/silicone_end/silicone_end.gltf")
 
-useGLTF.preload("/models/Hoody/cords/Man/Cord2/mental_end/mental_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/mental_end/mental_end.glb")
 useGLTF.preload("/models/Hoody/cords/Man/Cord2/plastic_end/plastic_end.gltf")
 useGLTF.preload("/models/Hoody/cords/Man/Cord2/silicone_end/silicone_end.gltf")
 
-useGLTF.preload("/models/Hoody/cords/Man/Cord3/mental_end/mental_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/mental_end/mental_end.glb")
 useGLTF.preload("/models/Hoody/cords/Man/Cord3/plastic_end/plastic_end.gltf")
 useGLTF.preload("/models/Hoody/cords/Man/Cord3/silicone_end/silicone_end.gltf")
 
-useGLTF.preload("/models/Hoody/cords/Man/Cord4/mental_end/mental_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/mental_end/mental_end.glb")
 useGLTF.preload("/models/Hoody/cords/Man/Cord4/plastic_end/plastic_end.gltf")
 useGLTF.preload("/models/Hoody/cords/Man/Cord4/silicone_end/silicone_end.gltf")

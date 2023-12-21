@@ -28,7 +28,7 @@ export default function ConfigurationReviewView({ type, quoteNumber, id }) {
               href: PATH_CONFIGURATOR.root,
             },
             {
-              name: "Quote Request",
+              name: "Quote Requests",
               href: '/user/quote',
             },
             { name: quoteNumber },

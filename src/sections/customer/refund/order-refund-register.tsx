@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
 import { PATH_CONFIGURATOR } from "@/routers/path";
@@ -7,7 +7,7 @@ import { secondaryFont } from "@/theme/typography";
 
 type Props = {};
 
-export default function OrderRefundRegister(props: Props) {
+export default function OrderRefundRegister(props: any) {
   return (
     <>
       <Box
@@ -63,16 +63,18 @@ export default function OrderRefundRegister(props: Props) {
 
             <ReturnRequestForm />
 
-            <Typography
-              sx={{
-                fontSize: 14,
-                fontWeight: 500,
-                color: "#292F3D",
-                fontFamily: secondaryFont.style.fontFamily,
-              }}
-            >
-              Our support team will contact you in 48 hours
-            </Typography>
+            {props.submited &&
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  color: "#292F3D",
+                  fontFamily: secondaryFont.style.fontFamily,
+                }}
+              >
+                Request submited. Our support team will contact you in 48 hours.
+              </Typography>
+            }
           </Stack>
         </Container>
       </Box>

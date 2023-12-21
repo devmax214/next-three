@@ -130,6 +130,8 @@ export default function ConfigurationProperties(props: any) {
   useEffect(() => {
     setCord("Cord1");
     setCordTip("mental_end")
+    context.onCordTypeChange("Cord1");
+    context.onCordTipChange("mental_end");
   }, [])
 
   const methods = useForm({
@@ -167,7 +169,10 @@ export default function ConfigurationProperties(props: any) {
 
       <RhfSelect onFocus={(e) => context.onCordEditable(e.target.ariaExpanded === "true" ? true : false)} onChange={changeCord} value={cord} name="cord" placeholder="Selected Color">{
         cords.map((cord, i) => (
-          <MenuItem value={cord.key} key={i} onMouseOver={changeCord}>{cord.color}</MenuItem>
+          <MenuItem value={cord.key} key={i} onClick={(e) => {
+            changeCord(e);
+            context.onCordEditable(false)
+          }} onMouseEnter={changeCord}>{cord.color}</MenuItem>
         ))
       }</RhfSelect>
     </Box>
@@ -179,7 +184,10 @@ export default function ConfigurationProperties(props: any) {
 
       <RhfSelect name="tip" onFocus={(e) => context.onCordEditable(e.target.ariaExpanded === "true" ? true : false)} value={cordTip} onChange={changeCordTip} placeholder="Selected Color">{
         tips.map((tip, i) => (
-          <MenuItem value={tip.key} key={i} onMouseOver={changeCordTip}>{tip.color}</MenuItem>
+          <MenuItem value={tip.key} key={i} onClick={(e) => {
+            changeCordTip(e);
+            context.onCordEditable(false)
+          }} onMouseEnter={changeCordTip}>{tip.color}</MenuItem>
         ))
       }</RhfSelect>
     </Box>

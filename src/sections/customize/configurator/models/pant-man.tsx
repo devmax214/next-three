@@ -412,6 +412,48 @@ export default function PANTManModel(props: any) {
   const cordTipItem = useCallback(() => {
     try {
       if (!!customize.cord && !!customize.cordTip) {
+        if (customize.cordTip === 'mental_end') {
+          const { nodes, materials } = useGLTF(
+            `/models/PANTWR_man/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.glb`
+          ) as any;
+          switch (customize.cord) {
+            case "Cord1":
+              return (
+                <group {...props} dispose={null}>
+                  <mesh geometry={nodes.MatShape_87974_Node.geometry} material={materials['Material4631.002']} position={[0.278, -0.351, -0.351]} rotation={[0.081, 0.243, 0.289]} scale={[1.458, 0.959, 1.458]} />
+                  <mesh geometry={nodes.MatShape_89430_Node.geometry} material={materials['Material4631.002']} position={[-0.279, -0.431, 0.114]} rotation={[-2.902, -0.142, -2.874]} scale={[1.458, 0.959, 1.458]} />
+                </group>
+              )
+              break;
+            case "Cord2":
+              return (
+                <group {...props} dispose={null}>
+                  <mesh geometry={nodes.MatShape_78808_Node.geometry} material={materials['Material4631.006']} position={[-0.283, -0.333, -0.38]} rotation={[-2.979, 1.532, -2.851]} scale={[1.458, 0.959, 1.458]} />
+                  <mesh geometry={nodes.MatShape_98967_Node.geometry} material={materials['Material98960.002']} position={[-0.013, 0.908, 0.115]} rotation={[0.34, -0.046, 0.225]} />
+                </group>
+              )
+              break;
+            case "Cord3":
+              return (
+                <group {...props} dispose={null}>
+                  <mesh geometry={nodes.MatShape_87974_Node.geometry} material={materials['Material4631.008']} position={[0.278, -0.351, -0.351]} rotation={[0.081, 0.243, 0.289]} scale={[1.458, 0.959, 1.458]} />
+                  <mesh geometry={nodes.MatShape_89430_Node.geometry} material={materials['Material4631.008']} position={[-0.279, -0.431, 0.114]} rotation={[-2.902, -0.142, -2.874]} scale={[1.458, 0.959, 1.458]} />
+                </group>
+              )
+              break;
+            case "Cord4":
+              return (
+                <group {...props} dispose={null}>
+                  <mesh geometry={nodes.MatShape_87974_Node.geometry} material={materials['Material4631.010']} position={[0.278, -0.351, -0.351]} rotation={[0.081, 0.243, 0.289]} scale={[1.458, 0.959, 1.458]} />
+                  <mesh geometry={nodes.MatShape_89430_Node.geometry} material={materials['Material4631.010']} position={[-0.279, -0.431, 0.114]} rotation={[-2.902, -0.142, -2.874]} scale={[1.458, 0.959, 1.458]} />
+                </group>
+              )
+              break;
+            default:
+              break;
+          }
+          return null;
+        }
         const { nodes, materials } = useGLTF(
           `/models/PANTWR_man/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.gltf`
         ) as any;
@@ -425,9 +467,9 @@ export default function PANTManModel(props: any) {
             ))}
           </group>
         )
-      } else return ''
+      } else return null
     } catch (err) {
-      console.log(err);
+      return null;
     }
   }, [customize.cordTip]);
 
@@ -585,18 +627,18 @@ useGLTF.preload("/models/PANTWR_man/cords/Man/Cord2/Cord2.glb")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord3/Cord3.glb")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord4/Cord4.glb")
 
-useGLTF.preload("/models/PANTWR_man/cords/Man/Cord1/mental_end/mental_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord1/mental_end/mental_end.glb")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord1/plastic_end/plastic_end.gltf")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord1/silicone_end/silicone_end.gltf")
 
-useGLTF.preload("/models/PANTWR_man/cords/Man/Cord2/mental_end/mental_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord2/mental_end/mental_end.glb")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord2/plastic_end/plastic_end.gltf")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord2/silicone_end/silicone_end.gltf")
 
-useGLTF.preload("/models/PANTWR_man/cords/Man/Cord3/mental_end/mental_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord3/mental_end/mental_end.glb")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord3/plastic_end/plastic_end.gltf")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord3/silicone_end/silicone_end.gltf")
 
-useGLTF.preload("/models/PANTWR_man/cords/Man/Cord4/mental_end/mental_end.gltf")
+useGLTF.preload("/models/PANTWR_man/cords/Man/Cord4/mental_end/mental_end.glb")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord4/plastic_end/plastic_end.gltf")
 useGLTF.preload("/models/PANTWR_man/cords/Man/Cord4/silicone_end/silicone_end.gltf")
