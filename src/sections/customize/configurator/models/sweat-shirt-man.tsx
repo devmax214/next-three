@@ -310,7 +310,7 @@ export default function SWEATManModel(props: any) {
                     position={[0, positionY, -0.085]}
                     rotation={[0, 0, 0]}
                     scale={[scaleX, scaleYZ, scaleYZ]}
-                    map={tagTexture}
+                    map={!tagName.startsWith("print-label") && tagTexture}
                     // debug={true}
                     depthTest={true}
 
@@ -352,8 +352,18 @@ export default function SWEATManModel(props: any) {
     }
   })
 
+  let scaleY = 0.018, scaleX = 0.038;
+  try {
+    scaleX = !tagTexture.source.data ? 0 : scaleY * tagTexture.source.data.naturalWidth / tagTexture.source.data.naturalHeight;
+  } catch (error) { }
+  var geometry = new THREE.BoxGeometry(scaleX, scaleY, 0); // give the cube it's dimensions (width, height, depth)
+  var material = new THREE.MeshLambertMaterial({ transparent: true }); // creates material and gives it a color
+  material.wireframe = false;
+  material.map = tagTexture;
+
   return (
     <group position={[0, 0, 0]} {...props} dispose={null} ref={modelRef}>
+      {customize.tag.edit && tagName.startsWith("print-label") && <mesh geometry={geometry} material={material} position={[0, 1.607, -0.08]} />}
       <mesh geometry={nodes.StitchMatShape_39172_Node.geometry} material={materials['Material2816.002']} />
       <mesh geometry={nodes.StitchMatShape_39333_Node.geometry} material={materials['Material2816.002']} />
       <mesh geometry={nodes.StitchMatShape_39494_Node.geometry} material={materials['Material2816.002']} />

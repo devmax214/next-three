@@ -373,89 +373,177 @@ export default function Model(props: any) {
   const cord = useCallback(() => {
     try {
       if (!!customize.cord) {
-        const { nodes, materials } = useGLTF(
-          `/models/Hoody/cords/Man/${customize.cord}/${customize.cord}.glb`
-        ) as any;
-
-        const keys: string[] = Object.keys(nodes);
-        const material: any = materials[Object.keys(materials)[0]];
-
-        return (
-          <group {...props} dispose={null}>
-            {keys.map((key: string, idx: number) => (
-              <mesh name={`cords_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
-            ))}
-          </group>
-        )
-      } else return ''
-    } catch (err) {
-      console.log(err);
-    }
+        const { nodes, materials } = useGLTF(`/models/Hoody/cords/Man/${customize.cord}/${customize.cord}.gltf`) as any;
+        if (customize.cord === "Cord1") {
+          return (
+            <group >
+              <mesh geometry={nodes.Pattern2D_244420.geometry} material={materials.Polyester_Taffeta_FRONT_2663} />
+              <mesh geometry={nodes.Pattern2D_244420_1.geometry} material={materials.Polyester_Taffeta_FRONT_2663} />
+              <mesh geometry={nodes.Pattern2D_244420_2.geometry} material={materials.Polyester_Taffeta_FRONT_2663} />
+              <mesh geometry={nodes.Pattern2D_244422.geometry} material={materials['Polyester_Taffeta_FRONT_2663.002']} />
+              <mesh geometry={nodes.Pattern2D_244422_1.geometry} material={materials['Polyester_Taffeta_FRONT_2663.002']} />
+              <mesh geometry={nodes.Pattern2D_244422_2.geometry} material={materials['Polyester_Taffeta_FRONT_2663.002']} />
+            </group>
+          )
+        } else if (customize.cord === "Cord2") {
+          return (
+            <group >
+              <mesh geometry={nodes.Pattern2D_244420_Node.geometry} material={materials.Polyester_Taffeta_FRONT_2480} />
+              <mesh geometry={nodes.Pattern2D_244422_Node.geometry} material={materials['Polyester_Taffeta_FRONT_2480.001']} />
+            </group>
+          )
+        } else if (customize.cord === "Cord3") {
+          return (
+            <group >
+              <mesh geometry={nodes.Pattern2D_244424_Node.geometry} material={materials['Polyester_Taffeta_FRONT_2487.004']} />
+              <mesh geometry={nodes.Pattern2D_244422_Node.geometry} material={materials['Polyester_Taffeta_FRONT_2487.005']} />
+            </group>
+          )
+        } else if (customize.cord === "Cord4") {
+          return (
+            <group >
+              <mesh geometry={nodes.Pattern2D_244420009.geometry} material={materials['Polyester_Taffeta_FRONT_2663.020']} />
+              <mesh geometry={nodes.Pattern2D_244420009_1.geometry} material={materials['Polyester_Taffeta_FRONT_2663.020']} />
+              <mesh geometry={nodes.Pattern2D_244420009_2.geometry} material={materials['Polyester_Taffeta_FRONT_2663.020']} />
+              <mesh geometry={nodes.Pattern2D_244422012.geometry} material={materials['Polyester_Taffeta_FRONT_2663.022']} />
+              <mesh geometry={nodes.Pattern2D_244422012_1.geometry} material={materials['Polyester_Taffeta_FRONT_2663.022']} />
+              <mesh geometry={nodes.Pattern2D_244422012_2.geometry} material={materials['Polyester_Taffeta_FRONT_2663.022']} />
+            </group>
+          )
+        }
+      }
+    } catch (err) { }
+    return null;
   }, [customize.cord]);
 
   const cordTipItem = useCallback(() => {
     try {
       if (!!customize.cord && !!customize.cordTip) {
-        if (customize.cordTip === 'mental_end') {
-          const { nodes, materials } = useGLTF(
-            `/models/Hoody/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.glb`
-          ) as any;
-          switch (customize.cord) {
-            case "Cord1":
-              return (
-                <group {...props} dispose={null}>
-                  <mesh geometry={nodes.MatShape_49527_Node.geometry} material={materials.Material4631} position={[-0.149, 0.171, 0.549]} rotation={[2.946, 0.879, -3.115]} scale={[1.294, 0.941, 1.294]} />
-                  <mesh geometry={nodes.MatShape_101039_Node.geometry} material={materials.Material4631} position={[-0.092, 0.171, 0.566]} rotation={[2.98, 0.51, -3.134]} scale={[1.294, 0.941, 1.294]} />
+        const { nodes, materials } = useGLTF(`/models/Hoody/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.glb`) as any;
+        if (customize.cord === "Cord1") {
+          if (customize.cordTip === "mental_end") {
+            return (
+              <group >
+                <mesh geometry={nodes.MatShape_49527_Node.geometry} material={materials.Material4631} position={[-0.1488, 0.171, 0.55]} rotation={[2.946, 0.879, -3.115]} scale={[1.294, 0.941, 1.294]} />
+                <mesh geometry={nodes.MatShape_101039_Node.geometry} material={materials.Material4631} position={[-0.090, 0.171, 0.5665]} rotation={[2.98, 0.51, -3.134]} scale={[1.294, 0.941, 1.294]} />
+              </group>
+            )
+          } else if (customize.cordTip === "plastic_end") {
+            return (
+              <group {...props} dispose={null}>
+                <group {...props} dispose={null} position={[0.001, -0.002, 0.001]}>
+                  <mesh geometry={nodes.Pattern2D_244421.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687']} />
+                  <mesh geometry={nodes.Pattern2D_244421_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687']} />
+                  <mesh geometry={nodes.Pattern2D_244421_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687']} />
                 </group>
-              )
-              break;
-            case "Cord2":
-              return (
-                <group {...props} dispose={null}>
-                  <mesh geometry={nodes.MatShape_54439_Node.geometry} material={materials['Material4631.002']} position={[-0.014, 0.088, 0.102]} rotation={[-0.156, -0.165, -0.007]} scale={[0.975, 0.94, 0.975]} />
-                  <mesh geometry={nodes.MatShape_83371_Node.geometry} material={materials['Material4631.002']} position={[-0.17, 0.101, 0.173]} rotation={[-0.173, 0.362, -0.017]} scale={[0.975, 0.94, 0.975]} />
+                <group {...props} dispose={null} position={[-0.004, -0.002, 0.0015]}>
+                  <mesh geometry={nodes.Pattern2D_244423.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687.002']} />
+                  <mesh geometry={nodes.Pattern2D_244423_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687.002']} />
+                  <mesh geometry={nodes.Pattern2D_244423_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687.002']} />
                 </group>
-              )
-              break;
-            case "Cord3":
-              return (
-                <group {...props} dispose={null}>
-                  <mesh geometry={nodes.MatShape_69312_Node.geometry} material={materials['Material4631.003']} position={[0.224, 0.062, 0.045]} rotation={[-0.138, -0.949, 0.01]} scale={[1.529, 0.958, 1.529]} />
-                  <mesh geometry={nodes.MatShape_103875_Node.geometry} material={materials['Material4631.003']} position={[0.068, 0.056, 0.021]} rotation={[-0.163, -0.5, 0.021]} scale={[1.529, 0.958, 1.529]} />
-                </group>
-              )
-              break;
-            case "Cord4":
-              return (
-                <group {...props} dispose={null}>
-                  <mesh geometry={nodes.MatShape_69312_Node.geometry} material={materials['Material4631.004']} position={[0.223, 0.06, 0.045]} rotation={[-0.138, -0.948, 0.01]} scale={[1.529, 0.958, 1.529]} />
-                  <mesh geometry={nodes.MatShape_103875_Node.geometry} material={materials['Material4631.004']} position={[0.071, 0.051, 0.022]} rotation={[-0.163, -0.509, 0.02]} scale={[1.529, 0.958, 1.529]} />
-                </group>
-              )
-              break;
-            default:
-              break;
+              </group>
+            )
+          } else if (customize.cordTip === "silicone_end") {
+            return (
+              <group {...props} dispose={null}>
+                <mesh geometry={nodes.Pattern_55162001.geometry} material={materials['silicone_FRONT_2710.003']} />
+                <mesh geometry={nodes.Pattern_55162001_1.geometry} material={materials['silicone_FRONT_2710.003']} />
+                <mesh geometry={nodes.Pattern_55162001_2.geometry} material={materials['silicone_FRONT_2710.003']} />
+                <mesh geometry={nodes.Pattern_55163001.geometry} material={materials['silicone_FRONT_2710.005']} />
+                <mesh geometry={nodes.Pattern_55163001_1.geometry} material={materials['silicone_FRONT_2710.005']} />
+                <mesh geometry={nodes.Pattern_55163001_2.geometry} material={materials['silicone_FRONT_2710.005']} />
+              </group>
+            )
           }
-          return null;
+        } else if (customize.cord === "Cord2") {
+          if (customize.cordTip === "mental_end") {
+            return (
+              <group {...props} dispose={null}>
+                <mesh geometry={nodes.MatShape_54439_Node.geometry} material={materials['Material4631.002']} position={[-0.0145, 0.09, 0.103]} rotation={[-0.156, -0.165, -0.007]} scale={[0.975, 0.94, 0.975]} />
+                <mesh geometry={nodes.MatShape_83371_Node.geometry} material={materials['Material4631.002']} position={[-0.1695, 0.102, 0.174]} rotation={[-0.173, 0.362, -0.017]} scale={[0.975, 0.94, 0.975]} />
+              </group>
+            )
+          } else if (customize.cordTip === "plastic_end") {
+            return (
+              <group >
+                <mesh geometry={nodes.Pattern2D_244421_Node.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2497']} position={[0.001, 0, 0]} />
+                <mesh geometry={nodes.Pattern2D_244423_Node.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2497.001']} position={[-0.0015, 0, 0]} />
+              </group>
+            )
+          } else if (customize.cordTip === "silicone_end") {
+            return (
+              <group {...props} dispose={null}>
+                <mesh geometry={nodes.Pattern_55162_Node.geometry} material={materials['silicone_FRONT_2499.002']} />
+                <mesh geometry={nodes.Pattern_55163_Node.geometry} material={materials['silicone_FRONT_2499.003']} />
+              </group>
+            )
+          }
+        } else if (customize.cord === "Cord3") {
+          if (customize.cordTip === "mental_end") {
+            return (
+              <group {...props} dispose={null}>
+                <mesh geometry={nodes.MatShape_69312_Node.geometry} material={materials['Material4631.003']} position={[0.224, 0.062, 0.045]} rotation={[-0.138, -0.949, 0.01]} scale={[1.529, 0.958, 1.529]} />
+                <mesh geometry={nodes.MatShape_103875_Node.geometry} material={materials['Material4631.003']} position={[0.068, 0.056, 0.023]} rotation={[-0.163, -0.5, 0.021]} scale={[1.529, 0.958, 1.529]} />
+              </group>
+            )
+          } else if (customize.cordTip === "plastic_end") {
+            return (
+              <group {...props} dispose={null}>
+                <group {...props} dispose={null} position={[0, 0.001, 0]}>
+                  <mesh geometry={nodes.Pattern2D_244421002.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688']} />
+                  <mesh geometry={nodes.Pattern2D_244421002_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688']} />
+                  <mesh geometry={nodes.Pattern2D_244421002_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688']} />
+                </group>
+                <group {...props} dispose={null} position={[-0.007, 0.001, 0]}>
+                  <mesh geometry={nodes.Pattern2D_244423002.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688.002']} />
+                  <mesh geometry={nodes.Pattern2D_244423002_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688.002']} />
+                  <mesh geometry={nodes.Pattern2D_244423002_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688.002']} />
+                </group>
+              </group>
+            )
+          } else if (customize.cordTip === "silicone_end") {
+            return (
+              <group {...props} dispose={null}>
+                <mesh geometry={nodes.Pattern_55162_Node.geometry} material={materials['silicone_FRONT_2506.002']} />
+                <mesh geometry={nodes.Pattern_55163_Node.geometry} material={materials['silicone_FRONT_2506.003']} />
+              </group>
+            )
+          }
+        } else if (customize.cord === "Cord4") {
+          if (customize.cordTip === "mental_end") {
+            return (
+              <group {...props} dispose={null}>
+                <mesh geometry={nodes.MatShape_69312_Node.geometry} material={materials['Material4631.004']} position={[0.2303, 0.056, 0.048]} rotation={[-0.138, -0.948, 0.01]} scale={[1.529, 0.958, 1.529]} />
+                <mesh geometry={nodes.MatShape_103875_Node.geometry} material={materials['Material4631.004']} position={[0.070, 0.05, 0.025]} rotation={[-0.163, -0.509, 0.02]} scale={[1.529, 0.958, 1.529]} />
+              </group>
+            )
+          } else if (customize.cordTip === "plastic_end") {
+            return (
+              <group {...props} dispose={null}>
+                <mesh geometry={nodes.Pattern2D_244421003.geometry} material={materials['Polyester_Taffeta_FRONT_2685.002']} />
+                <mesh geometry={nodes.Pattern2D_244421003_1.geometry} material={materials['Polyester_Taffeta_FRONT_2685.002']} />
+                <mesh geometry={nodes.Pattern2D_244421003_2.geometry} material={materials['Polyester_Taffeta_FRONT_2685.002']} />
+                <mesh geometry={nodes.Pattern2D_244423003.geometry} material={materials['Polyester_Taffeta_FRONT_2685.005']} />
+                <mesh geometry={nodes.Pattern2D_244423003_1.geometry} material={materials['Polyester_Taffeta_FRONT_2685.005']} />
+                <mesh geometry={nodes.Pattern2D_244423003_2.geometry} material={materials['Polyester_Taffeta_FRONT_2685.005']} />
+              </group>
+            )
+          } else if (customize.cordTip === "silicone_end") {
+            return (
+              <group {...props} dispose={null}>
+                <mesh geometry={nodes.Pattern_55162007.geometry} material={materials['silicone_FRONT_2711.002']} />
+                <mesh geometry={nodes.Pattern_55162007_1.geometry} material={materials['silicone_FRONT_2711.002']} />
+                <mesh geometry={nodes.Pattern_55162007_2.geometry} material={materials['silicone_FRONT_2711.002']} />
+                <mesh geometry={nodes.Pattern_55163007.geometry} material={materials['silicone_FRONT_2711.002']} />
+                <mesh geometry={nodes.Pattern_55163007_1.geometry} material={materials['silicone_FRONT_2711.002']} />
+                <mesh geometry={nodes.Pattern_55163007_2.geometry} material={materials['silicone_FRONT_2711.002']} />
+              </group>
+            )
+          }
         }
-        const { nodes, materials } = useGLTF(
-          `/models/Hoody/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.gltf`
-        ) as any;
-
-        const keys: string[] = Object.keys(nodes);
-        const material: any = materials[Object.keys(materials)[0]];
-
-        return (
-          <group {...props} dispose={null} position={[0, 0, -0.0025]}>
-            {keys.map((key: string, idx: number) => (
-              <mesh name={`cords_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
-            ))}
-          </group>
-        )
-      } else return null;
-    } catch (err) {
-      return null;
-    }
+      }
+    } catch (err) { }
+    return null;
   }, [customize.cordTip, customize.cord]);
 
   useEffect(() => {
@@ -569,7 +657,7 @@ export default function Model(props: any) {
       <mesh geometry={nodes.Pattern_51588001.geometry} material={materials['seam cover_FRONT_2731.002']} />
       <mesh geometry={nodes.Pattern_51588001_1.geometry} material={materials['seam cover_BACK_2731.002']} />
       <mesh geometry={nodes.Pattern_51588001_2.geometry} material={materials['seam cover_FRONT_2731.002']} />
-    </group>
+    </group >
   );
 }
 
@@ -581,23 +669,23 @@ useGLTF.preload("/models/Hoody/tags/Man/label-45x45_black/label-45x45_black.glb"
 useGLTF.preload("/models/Hoody/tags/Man/label-45x45_white/label-45x45_white.glb")
 useGLTF.preload("/models/Hoody/tags/Man/label-55x30_black/label-55x30_black.glb")
 useGLTF.preload("/models/Hoody/tags/Man/label-55x30_white/label-55x30_white.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord1/Cord1.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord2/Cord2.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord3/Cord3.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord4/Cord4.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/Cord1.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/Cord2.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/Cord3.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/Cord4.gltf")
 
 useGLTF.preload("/models/Hoody/cords/Man/Cord1/mental_end/mental_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord1/plastic_end/plastic_end.gltf")
-useGLTF.preload("/models/Hoody/cords/Man/Cord1/silicone_end/silicone_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/plastic_end/plastic_end.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/silicone_end/silicone_end.glb")
 
 useGLTF.preload("/models/Hoody/cords/Man/Cord2/mental_end/mental_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord2/plastic_end/plastic_end.gltf")
-useGLTF.preload("/models/Hoody/cords/Man/Cord2/silicone_end/silicone_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/plastic_end/plastic_end.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/silicone_end/silicone_end.glb")
 
 useGLTF.preload("/models/Hoody/cords/Man/Cord3/mental_end/mental_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord3/plastic_end/plastic_end.gltf")
-useGLTF.preload("/models/Hoody/cords/Man/Cord3/silicone_end/silicone_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/plastic_end/plastic_end.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/silicone_end/silicone_end.glb")
 
 useGLTF.preload("/models/Hoody/cords/Man/Cord4/mental_end/mental_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord4/plastic_end/plastic_end.gltf")
-useGLTF.preload("/models/Hoody/cords/Man/Cord4/silicone_end/silicone_end.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/plastic_end/plastic_end.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/silicone_end/silicone_end.glb")

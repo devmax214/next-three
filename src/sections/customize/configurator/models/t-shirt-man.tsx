@@ -306,12 +306,12 @@ export default function TShirtManModel(props: any) {
           <group dispose={null}>
             {keys.map((key: string, idx: number) => (
               idx === 0 ? (
-                <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key}>
+                <mesh name={`pattern_tag_${idx}`} position={[0, 0, 0.01]} geometry={nodes[key].geometry} material={material} key={key}>
                   <Decal
                     position={[0, positionY, -0.085]}
                     rotation={[0, 0, 0]}
                     scale={[scaleX, scaleYZ, scaleYZ]}
-                    map={tagTexture}
+                    map={!tagName.startsWith("print-label") && tagTexture}
                     depthTest={true}
                   />
                 </mesh>
@@ -353,8 +353,18 @@ export default function TShirtManModel(props: any) {
     }
   })
 
+  let scaleY = 0.021, scaleX = 0.043;
+  try {
+    scaleX = !tagTexture.source.data ? 0 : scaleY * tagTexture.source.data.naturalWidth / tagTexture.source.data.naturalHeight;
+  } catch (error) { }
+  var geometry = new THREE.BoxGeometry(scaleX, scaleY, 0); // give the cube it's dimensions (width, height, depth)
+  var material = new THREE.MeshLambertMaterial({ transparent: true }); // creates material and gives it a color
+  material.wireframe = false;
+  material.map = tagTexture;
+
   return (
     <group position={[0, 0, 0]} {...props} dispose={null} ref={modelRef}>
+      {customize.tag.edit && tagName.startsWith("print-label") && <mesh geometry={geometry} material={material} position={[0, 1.616, -0.08]} />}
       <mesh geometry={nodes.StitchMatShape_23735_Node.geometry} material={materials['Material3180.002']}>
         {customize.tag.edit ? tag() : ""}
       </mesh>

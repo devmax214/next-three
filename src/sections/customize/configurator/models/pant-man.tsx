@@ -418,7 +418,7 @@ export default function PANTManModel(props: any) {
           switch (customize.cord) {
             case "Cord1":
               return (
-                <group {...props} dispose={null}>
+                <group {...props} dispose={null} position={[0, 0, -0.004]}>
                   <mesh geometry={nodes.MatShape_87974_Node.geometry} material={materials['Material4631.002']} position={[0.278, -0.351, -0.351]} rotation={[0.081, 0.243, 0.289]} scale={[1.458, 0.959, 1.458]} />
                   <mesh geometry={nodes.MatShape_89430_Node.geometry} material={materials['Material4631.002']} position={[-0.279, -0.431, 0.114]} rotation={[-2.902, -0.142, -2.874]} scale={[1.458, 0.959, 1.458]} />
                 </group>
@@ -426,7 +426,7 @@ export default function PANTManModel(props: any) {
               break;
             case "Cord2":
               return (
-                <group {...props} dispose={null}>
+                <group {...props} dispose={null} position={[0, 0, -0.004]}>
                   <mesh geometry={nodes.MatShape_78808_Node.geometry} material={materials['Material4631.006']} position={[-0.283, -0.333, -0.38]} rotation={[-2.979, 1.532, -2.851]} scale={[1.458, 0.959, 1.458]} />
                   <mesh geometry={nodes.MatShape_98967_Node.geometry} material={materials['Material98960.002']} position={[-0.013, 0.908, 0.115]} rotation={[0.34, -0.046, 0.225]} />
                 </group>
@@ -434,7 +434,7 @@ export default function PANTManModel(props: any) {
               break;
             case "Cord3":
               return (
-                <group {...props} dispose={null}>
+                <group {...props} dispose={null} position={[0, 0, -0.004]}>
                   <mesh geometry={nodes.MatShape_87974_Node.geometry} material={materials['Material4631.008']} position={[0.278, -0.351, -0.351]} rotation={[0.081, 0.243, 0.289]} scale={[1.458, 0.959, 1.458]} />
                   <mesh geometry={nodes.MatShape_89430_Node.geometry} material={materials['Material4631.008']} position={[-0.279, -0.431, 0.114]} rotation={[-2.902, -0.142, -2.874]} scale={[1.458, 0.959, 1.458]} />
                 </group>
@@ -442,7 +442,7 @@ export default function PANTManModel(props: any) {
               break;
             case "Cord4":
               return (
-                <group {...props} dispose={null}>
+                <group {...props} dispose={null} position={[0, 0, -0.004]}>
                   <mesh geometry={nodes.MatShape_87974_Node.geometry} material={materials['Material4631.010']} position={[0.278, -0.351, -0.351]} rotation={[0.081, 0.243, 0.289]} scale={[1.458, 0.959, 1.458]} />
                   <mesh geometry={nodes.MatShape_89430_Node.geometry} material={materials['Material4631.010']} position={[-0.279, -0.431, 0.114]} rotation={[-2.902, -0.142, -2.874]} scale={[1.458, 0.959, 1.458]} />
                 </group>
@@ -460,7 +460,7 @@ export default function PANTManModel(props: any) {
         const keys: string[] = Object.keys(nodes);
         const material: any = materials[Object.keys(materials)[0]];
         return (
-          <group {...props} dispose={null} position={[0, 0, -0.005]}>
+          <group {...props} dispose={null} position={[0, 0, customize.cordTip === "silicone_end" ? -0.007 : -0.005]}>
             {keys.map((key: string, idx: number) => (
               <mesh name={`cords_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
             ))}

@@ -470,7 +470,6 @@ export default function ConfigurationProperties(props: any) {
   ];
 
   const handleAddCart = async () => {
-    console.log("test")
     try {
       const selectedSize = sizes[context.embellishment[0].size].label;
       var canvas = document.getElementById('myCanvas')?.getElementsByTagName('canvas')[0] as any;
@@ -488,6 +487,8 @@ export default function ConfigurationProperties(props: any) {
       };
 
       onAddToCart(newProduct);
+      push('/quote/ordersample')
+
     } catch (error) { console.log(error) }
   }
   const renderButtons = (

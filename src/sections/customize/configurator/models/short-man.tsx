@@ -411,32 +411,105 @@ export default function ShortManModel(props: any) {
             case "Cord1":
               return (
                 <group {...props} dispose={null}>
-                  <mesh geometry={nodes.MatShape_47733_Node.geometry} material={materials.Material4631} position={[0.223, -0.038, -0.264]} rotation={[0.173, -0.378, 0.17]} scale={[1.31, 0.74, 1.31]} />
-                  <mesh geometry={nodes.MatShape_51848_Node.geometry} material={materials.Material4631} position={[-0.287, -0.057, -0.188]} rotation={[-0.032, -0.257, -0.236]} scale={[1.31, 0.74, 1.31]} />
+                  <mesh geometry={nodes.MatShape_47733_Node.geometry} material={materials.Material4631} position={[0.223, -0.038, -0.271]} rotation={[0.173, -0.378, 0.17]} scale={[1.31, 0.74, 1.31]} />
+                  <mesh geometry={nodes.MatShape_51848_Node.geometry} material={materials.Material4631} position={[-0.28, -0.057, -0.193]} rotation={[-0.032, -0.257, -0.236]} scale={[1.31, 0.74, 1.31]} />
                 </group>
               )
               break;
             case "Cord2":
               return (
                 <group {...props} dispose={null}>
-                  <mesh geometry={nodes.MatShape_35688_Node.geometry} material={materials['Material4631.001']} position={[0.245, -0.293, -0.252]} rotation={[-2.512, 0.488, 2.887]} scale={[1.332, 0.916, 1.332]} />
-                  <mesh geometry={nodes.MatShape_64172_Node.geometry} material={materials['Material4631.001']} position={[0.256, -0.126, -0.585]} rotation={[0.539, -1.074, 0.12]} scale={[1.332, 0.916, 1.332]} />
+                  <mesh geometry={nodes.MatShape_35688_Node.geometry} material={materials['Material4631.001']} position={[0.245, -0.293, -0.255]} rotation={[-2.512, 0.488, 2.887]} scale={[1.332, 0.916, 1.332]} />
+                  <mesh geometry={nodes.MatShape_64172_Node.geometry} material={materials['Material4631.001']} position={[0.225, -0.126, -0.59]} rotation={[0.539, -1.074, 0.12]} scale={[1.332, 0.916, 1.332]} />
                 </group>
               )
               break;
             case "Cord3":
               return (
                 <group {...props} dispose={null}>
-                  <mesh geometry={nodes.MatShape_47733_Node.geometry} material={materials['Material4631.003']} position={[0.223, -0.038, -0.264]} rotation={[0.173, -0.378, 0.17]} scale={[1.31, 0.74, 1.31]} />
-                  <mesh geometry={nodes.MatShape_51848_Node.geometry} material={materials['Material4631.003']} position={[-0.287, -0.057, -0.188]} rotation={[-0.032, -0.257, -0.236]} scale={[1.31, 0.74, 1.31]} />
+                  <mesh geometry={nodes.MatShape_47733_Node.geometry} material={materials['Material4631.003']} position={[0.223, -0.038, -0.272]} rotation={[0.173, -0.378, 0.17]} scale={[1.31, 0.74, 1.31]} />
+                  <mesh geometry={nodes.MatShape_51848_Node.geometry} material={materials['Material4631.003']} position={[-0.2794, -0.057, -0.195]} rotation={[-0.032, -0.257, -0.236]} scale={[1.31, 0.74, 1.31]} />
                 </group>
               )
               break;
             case "Cord4":
               return (
                 <group {...props} dispose={null}>
-                  <mesh geometry={nodes.MatShape_47733_Node.geometry} material={materials['Material4631.004']} position={[0.224, -0.046, -0.265]} rotation={[0.173, -0.378, 0.17]} scale={[1.31, 0.74, 1.31]} />
-                  <mesh geometry={nodes.MatShape_51848_Node.geometry} material={materials['Material4631.004']} position={[-0.287, -0.061, -0.189]} rotation={[-0.032, -0.257, -0.236]} scale={[1.31, 0.74, 1.31]} />
+                  <mesh geometry={nodes.MatShape_47733_Node.geometry} material={materials['Material4631.004']} position={[0.224, -0.046, -0.273]} rotation={[0.173, -0.378, 0.17]} scale={[1.31, 0.74, 1.31]} />
+                  <mesh geometry={nodes.MatShape_51848_Node.geometry} material={materials['Material4631.004']} position={[-0.282, -0.069, -0.197]} rotation={[-0.032, -0.257, -0.236]} scale={[1.31, 0.74, 1.31]} />
+                </group>
+              )
+              break;
+            default:
+              break;
+          }
+          return null;
+        } else if (customize.cordTip === 'plastic_end') {
+          const { nodes, materials } = useGLTF(
+            `/models/SHORTWR_man/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.glb`
+          ) as any;
+          switch (customize.cord) {
+            case "Cord1":
+              return (
+                <group {...props} dispose={null}>
+                  <group {...props} dispose={null} position={[0, -0.022, -0.007]} >
+                    <mesh geometry={nodes.Pattern2D_244421002.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2628']} />
+                    <mesh geometry={nodes.Pattern2D_244421002_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2628']} />
+                    <mesh geometry={nodes.Pattern2D_244421002_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2628']} />
+                  </group>
+                  <group {...props} dispose={null} position={[0.005, -0.0165, -0.008]} >
+                    <mesh geometry={nodes.Pattern2D_244423.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2628.002']} />
+                    <mesh geometry={nodes.Pattern2D_244423_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2628.002']} />
+                    <mesh geometry={nodes.Pattern2D_244423_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2628.002']} />
+                  </group>
+                </group>
+              )
+              break;
+            case "Cord2":
+              return (
+                <group {...props} dispose={null}>
+                  <group {...props} dispose={null} position={[-0.03, 0.01, -0.008]}>
+                    <mesh geometry={nodes.Pattern2D_244424.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670']} />
+                    <mesh geometry={nodes.Pattern2D_244424_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670']} />
+                    <mesh geometry={nodes.Pattern2D_244424_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670']} />
+                  </group>
+                  <group {...props} dispose={null} position={[0.00, 0, -0.002]}>
+                    <mesh geometry={nodes.Pattern2D_244425.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670.002']} />
+                    <mesh geometry={nodes.Pattern2D_244425_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670.002']} />
+                    <mesh geometry={nodes.Pattern2D_244425_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670.002']} />
+                  </group>
+                </group>
+              )
+              break;
+            case "Cord3":
+              return (
+                <group {...props} dispose={null}>
+                  <group {...props} dispose={null} position={[0, -0.027, -0.003]}>
+                    <mesh geometry={nodes.Pattern2D_244421009.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670.004']} />
+                    <mesh geometry={nodes.Pattern2D_244421009_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670.004']} />
+                    <mesh geometry={nodes.Pattern2D_244421009_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670.004']} />
+                  </group>
+                  <group {...props} dispose={null} position={[0.0, -0.023, -0.0036]}>
+                    <mesh geometry={nodes.Pattern2D_244423001.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670.006']} />
+                    <mesh geometry={nodes.Pattern2D_244423001_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670.006']} />
+                    <mesh geometry={nodes.Pattern2D_244423001_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2670.006']} />
+                  </group>
+                </group>
+              )
+              break;
+            case "Cord4":
+              return (
+                <group {...props} dispose={null}>
+                  <group {...props} dispose={null} position={[0, -0.027, -0.003]}>
+                    <mesh geometry={nodes.Pattern2D_244421012.geometry} material={materials['Polyester_Taffeta Copy 2_FRONT_2670']} />
+                    <mesh geometry={nodes.Pattern2D_244421012_1.geometry} material={materials['Polyester_Taffeta Copy 2_FRONT_2670']} />
+                    <mesh geometry={nodes.Pattern2D_244421012_2.geometry} material={materials['Polyester_Taffeta Copy 2_FRONT_2670']} />
+                  </group>
+                  <group {...props} dispose={null} position={[0.0, -0.023, -0.0036]}>
+                    <mesh geometry={nodes.Pattern2D_244423002.geometry} material={materials['Polyester_Taffeta Copy 2_FRONT_2670.002']} />
+                    <mesh geometry={nodes.Pattern2D_244423002_1.geometry} material={materials['Polyester_Taffeta Copy 2_FRONT_2670.002']} />
+                    <mesh geometry={nodes.Pattern2D_244423002_2.geometry} material={materials['Polyester_Taffeta Copy 2_FRONT_2670.002']} />
+                  </group>
                 </group>
               )
               break;
@@ -613,17 +686,17 @@ useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord3/Cord3.glb")
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord4/Cord4.glb")
 
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord1/mental_end/mental_end.glb")
-useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord1/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord1/plastic_end/plastic_end.glb")
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord1/silicone_end/silicone_end.gltf")
 
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord2/mental_end/mental_end.glb")
-useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord2/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord2/plastic_end/plastic_end.glb")
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord2/silicone_end/silicone_end.gltf")
 
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord3/mental_end/mental_end.glb")
-useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord3/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord3/plastic_end/plastic_end.glb")
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord3/silicone_end/silicone_end.gltf")
 
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord4/mental_end/mental_end.glb")
-useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord4/plastic_end/plastic_end.gltf")
+useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord4/plastic_end/plastic_end.glb")
 useGLTF.preload("/models/SHORTWR_man/cords/Man/Cord4/silicone_end/silicone_end.gltf")
