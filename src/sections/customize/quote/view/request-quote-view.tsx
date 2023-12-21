@@ -47,7 +47,6 @@ export default function RequestQuoteView(props: Props) {
               onConfirm={() => {
                 quote.onTrue();
               }}
-              customProduct={JSON.parse(router.query.customProduct)}
               {...props}
             />
           )}

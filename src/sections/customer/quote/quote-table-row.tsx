@@ -113,7 +113,7 @@ export default function QuoteTableRow({ index, data }: Props) {
   return (
     <>
       <TableRow sx={{ borderBottom: "1px solid #ACB1B8" }}>
-        <TableCell onClick={() => quoteState === QUOTE_STATE.approved ? push({ pathname: `/quote/approved`, query: { id: data._id } }, `/quote/approved`) : push(`/customize/${data._id}/review`)} sx={{ cursor: "pointer" }}>Quote Requests # {seq}</TableCell>
+        <TableCell onClick={() => quoteState === QUOTE_STATE.approved ? push(`/quote/${data._id}/approved`) : push(`/customize/${data._id}/review`)} sx={{ cursor: "pointer" }}>Quote Requests # {seq}</TableCell>
 
         {isDesktop ?
           <TableCell>

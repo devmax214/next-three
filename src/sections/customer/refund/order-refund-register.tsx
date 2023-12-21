@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
 import { PATH_CONFIGURATOR } from "@/routers/path";
@@ -8,6 +8,14 @@ import { secondaryFont } from "@/theme/typography";
 type Props = {};
 
 export default function OrderRefundRegister(props: any) {
+  useEffect(() => {
+    window.scrollTo({
+      top: 300,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }, [])
+
   return (
     <>
       <Box
@@ -36,14 +44,14 @@ export default function OrderRefundRegister(props: any) {
             }}
           />
 
-          <Stack sx={{ width: "60%" }} gap={5}>
+          <Stack sx={{ width: { md: "60%", xs: "100%" } }} gap={5}>
             <Typography
               sx={{
                 fontSize: 14,
                 fontWeight: 500,
                 color: "#5C6166",
                 fontFamily: secondaryFont.style.fontFamily,
-                width: 595
+                width: { md: 595, xs: "100%" }
               }}
             >
               To help us find your order please enter your order number below

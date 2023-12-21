@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
+import { useOffsetTop } from "@/hooks";
 
 type Props = {};
 
@@ -47,8 +48,23 @@ export default function OrderRefundView(props: Props) {
 
   const {
     handleSubmit,
-    formState: { isSubmitting },
+    setFocus,
+    formState: { isSubmitting, errors },
   } = methods;
+
+  React.useEffect(() => {
+    const firstError = Object.keys(errors).reduce((field, a) => {
+      return !!errors[field] ? field : a;
+    }, null);
+
+    if (firstError) {
+      window.scrollTo({
+        top: 300,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }
+  }, [errors]);
 
   const [submited, setSubmited] = useState(false);
 

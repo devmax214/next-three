@@ -1,17 +1,46 @@
-import React, { useContext } from "react";
-import { Box, FormControlLabel, ButtonBase, Button, Switch, Checkbox, Typography, Grid, TableCell, TableRow, TableContainer, Table, TableBody, Stack } from "@mui/material";
+import React from "react";
+import Head from "next/head";
+import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
+import CustomizeLayout from "@/layouts/customize";
+import { PATH_SHOP } from "@/routers/path";
 import Image from "@/components/image";
-import { secondaryFont } from "@/theme/typography";
-import { Canvas } from "@react-three/fiber";
-import { PATH_CONFIGURATOR } from "@/routers/path";
-import { useRouter } from "next/router"; "@next/router";
-import { Center, Environment, OrbitControls } from "@react-three/drei";
-import { TShartMan, HoodyMan, PantMan, ShortMan, SWEATMAN, OversizeMan } from "@/sections/customize/configurator/models";
-import { CustomizeProvider } from "@/components/customize/context";
-import ConfigurationCanvas from "../configurator/configuration-canvas";
+import { RouterLink } from "@/routers/components";
+import ConfigurationCanvas from "@/sections/customize/configurator/configuration-canvas";
 import { typeIndexToLabel } from "@/helpers/common";
+import { CustomizeProvider } from "@/components/customize/context";
+import {
+  Box,
+  Button,
+  Card,
+  Grid,
+  Switch,
+  IconButton,
+  Modal,
+  Stack,
+  Table,
+  TableBody,
+  TableContainer,
+  TableCell,
+  TableRow,
+  TableHead,
+  Typography,
+  Container,
+  MenuItem,
+  TextField,
+  Checkbox,
+  FormGroup,
+  ButtonBase,
+  FormControlLabel,
+  Link
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { secondaryFont } from "@/theme/typography";
 import CheckedIcon from "@/components/icons/checked-icon";
 import UnCheckedIcon from "@/components/icons/unchecked-icon";
+
+import { Customize, dbConnect } from "@/helpers/db";
+import mongoose from "mongoose"
+
 import {
   LeftPosition,
   RightPosition,
@@ -20,8 +49,8 @@ import {
   CenterPosition,
   BottomPosition
 } from "@/components/icons/customize/position/position";
-import { styled } from "@mui/material/styles";
-import { CustomizeContext } from "@/components/customize/context/customize-context";
+
+
 
 export const StyledSwitchLabel = styled(Typography)(({ theme }) => ({
   fontSize: 14,
@@ -95,11 +124,54 @@ const GENDERS = [
 ];
 const sizes = ["XS", "S", "M", "L", "XL"];
 
-export default function ConfirmQuote(props: any) {
-  const router = useRouter();
-  const context = JSON.parse(localStorage.getItem('context'));
+ApprovedQuotePage.getLayout = (page: React.ReactElement) => (
+  <CustomizeLayout>{page}</CustomizeLayout>
+);
+type Props = {};
+const prices = [
+  { items: 50, price: 12.5 },
+  { items: 100, price: 14.5 },
+  { items: 150, price: 16.5 },
+  { items: 300, price: 19.5 },
+];
+export default function ApprovedQuotePage({ customProduct }: any) {
+  const context = customProduct.context;
   const dbCtx = context;
-  const productType = localStorage.getItem('productType');
+  const productType = customProduct.product;
+
+  const renderPrices = (
+    <>
+      <TableContainer sx={{ width: 1 }}>
+        <Table>
+          <TableHead sx={{ px: 2, py: 1, }}>
+            <TableCell
+              sx={{
+                py: 3,
+                fontSize: 16,
+                fontFamily: 500,
+              }}
+            >From </TableCell>
+            <TableCell
+              sx={{
+                py: 3,
+                fontSize: 16,
+                fontFamily: 500,
+                color: '#5C6166'
+              }}
+            >Price per item </TableCell>
+          </TableHead>
+          <TableBody>
+            {prices.map((price, index) => (
+              <TableRow key={index} >
+                <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '20px' }}>{price.items} items</TableCell>
+                <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '20px' }}>{price.price} {JSON.parse(localStorage.getItem('currency')).value}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
 
   let isActiveLace = false;
   if (productType !== undefined) {
@@ -458,106 +530,108 @@ export default function ConfirmQuote(props: any) {
       </Stack>
     </Box>
   )
+
   return (
-    <CustomizeProvider passInitState={context}>
-      <Box component={"div"} sx={{ textAlign: { xs: "center", md: "start" } }}>
-        <Grid container spacing={5}>
-          <Grid item md={7} xs={12}>
-            <Box component={"div"} sx={{ mt: 2, mb: 2 }}>
-              <ConfigurationCanvas page="customize-edit-view" ctx={context} arrowLeftCount={0} arrowRightCount={0} id="myCanvas" {...props} type={productType} />
-            </Box>
-
-          </Grid>
-
-          <Grid item md={5} xs={12}>
-            <Stack gap={6} sx={{ ml: { md: 8, xs: 0 }, mt: 2 }}>
-              <Typography
-                sx={{
-                  fontSize: 16,
-                  fontWeight: 500,
-                  color: "#292F3D",
-                  fontFamily: secondaryFont.style.fontFamily,
-                  textAlign: "start"
-                }}
-              >
-                Please confirm your choice
-              </Typography>
-
-              <Typography
-                sx={{
-                  fontSize: 28,
-                  fontWeight: 600,
-                  color: "#292F3D",
-                  fontFamily: secondaryFont.style.fontFamily,
-                  textAlign: "start",
-                  lineHeight: '26px',
-                  mt: -3
-                }}
-              >
-                {productType}
-              </Typography>
-
-              <Grid container>
-                <Grid item md={12} xs={12}>
-                  {renderMain}
-                </Grid>
+    <>
+      <CustomizeProvider passInitState={context}>
+        <Box
+          component="div"
+          sx={{
+            bgcolor: "#F9F5EE",
+            position: "relative",
+            pt: { xs: 10, md: 10 },
+          }}
+        >
+          <Container
+            sx={{
+              pb: { xs: 10, md: 10 },
+            }}
+          >
+            <CustomBreadCrumbs
+              heading="Approved"
+              links={[
+                {
+                  name: "Home",
+                  href: PATH_SHOP.home,
+                },
+                {
+                  name: "Request for Quote",
+                  href: "/quote",
+                },
+                { name: "Approved" },
+              ]}
+              sx={{
+                mb: { xs: 3, md: 5 },
+              }}
+            />
+            <Typography
+              sx={{
+                flexGrow: 1,
+                color: "#5C6166",
+                fontSize: 16,
+                fontweight: 500,
+                fontFamily: secondaryFont.style.fontFamily
+              }}>
+              Your Request:
+            </Typography>
+            <Typography
+              sx={{
+                flexGrow: 1,
+                color: "#292F3D",
+                fontSize: 16,
+                fontweight: 700,
+                fontFamily: secondaryFont.style.fontFamily
+              }}>
+              customize product
+            </Typography>
+            <Grid container spacing={6}>
+              <Grid item md={6} xs={12}>
+                <ConfigurationCanvas page="customize-edit-view" ctx={context} arrowLeftCount={0} arrowRightCount={0} id="myCanvas" type={productType} />
+                <Typography
+                  sx={{
+                    flexGrow: 1,
+                    color: "#292F3D",
+                    fontSize: 26,
+                    fontWeight: 700,
+                    mt: 5
+                  }}>
+                  Product Info:
+                </Typography>
+                {renderMain}
               </Grid>
-              <Grid container>
-                <Grid item md={6} xs={6}>
+              <Grid item md={1}></Grid>
+              <Grid item md={5}>
+                <Stack gap={6} sx={{ mt: 0 }}>
+                  {renderPrices}
                   <Button
-                    variant="contained"
                     size="large"
+                    fullWidth
+                    variant="contained"
                     sx={{
-                      width: "75%", height: 40, ml: 2, bgcolor: "#bfbfbf",
-                      "&:hover ": { bgcolor: "#6AB67A" },
+                      bgcolor: "#292F3D",
+                      width: 337,
+                      height: 40,
+                      "&:hover": { bgcolor: "#550248" }
                     }}
-                    onClick={() => router.push({
-                      pathname: PATH_CONFIGURATOR.product.create(productType),
-                      query: {
-                        isEdit: true,
-                        customProduct: JSON.stringify({ context: context })
-                      }
-                    }, PATH_CONFIGURATOR.product.create(productType))}
+                    href="/checkout"
                   >
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        fontWeight: 500,
-                        color: "#fff",
-                        fontFamily: secondaryFont.style.fontFamily,
-                      }}
-                    >
-                      EDIT
+                    <Typography sx={{ fontSize: 14, fontWeight: 500, fontFamily: secondaryFont.style.fontFamily }}>
+                      ORDER PRODUCTS
                     </Typography>
                   </Button>
-                </Grid>
-                <Grid item md={6} xs={6}>
-                  <Button
-                    variant="contained"
-                    size="large"
-                    sx={{
-                      width: "75%", height: 40, ml: 2, bgcolor: '#292F3D',
-                      "&:hover": { bgcolor: "#6AB67A" },
-                    }}
-                    onClick={props.onConfirm}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        fontWeight: 500,
-                        color: "#fff",
-                        fontFamily: secondaryFont.style.fontFamily,
-                      }}
-                    >
-                      CONFIRM
-                    </Typography>
-                  </Button>
-                </Grid>
+                </Stack>
               </Grid>
-            </Stack>
-          </Grid>
-        </Grid>
-      </Box>
-    </CustomizeProvider>
+            </Grid>
+          </Container>
+        </Box>
+      </CustomizeProvider>
+    </>
   );
+}
+
+
+export async function getServerSideProps({ params }) {
+  await dbConnect();
+  const res = await Customize.findById(params.id);
+  return { props: { customProduct: JSON.parse(JSON.stringify(res)) } };
 }

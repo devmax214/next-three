@@ -372,9 +372,9 @@ export default function Model(props: any) {
 
   const cord = useCallback(() => {
     try {
-      if (!!cords) {
+      if (!!customize.cord) {
         const { nodes, materials } = useGLTF(
-          `/models/Hoody/cords/Man/${cords}/${cords}.glb`
+          `/models/Hoody/cords/Man/${customize.cord}/${customize.cord}.glb`
         ) as any;
 
         const keys: string[] = Object.keys(nodes);
@@ -391,7 +391,7 @@ export default function Model(props: any) {
     } catch (err) {
       console.log(err);
     }
-  }, [cords]);
+  }, [customize.cord]);
 
   const cordTipItem = useCallback(() => {
     try {
@@ -456,7 +456,7 @@ export default function Model(props: any) {
     } catch (err) {
       return null;
     }
-  }, [customize.cordTip]);
+  }, [customize.cordTip, customize.cord]);
 
   useEffect(() => {
     if (customize.tag.neck)
@@ -464,10 +464,6 @@ export default function Model(props: any) {
     else
       setTagName(`print-label_${customize.tag.color ? "black" : "white"}`);
   }, [customize.tag])
-
-  useEffect(() => {
-    setCords(customize.cord);
-  }, [customize.cord])
 
   useEffect(() => {
     setTextTexture(zoomFactor)

@@ -57,6 +57,7 @@ import {
 import { NoInfer } from "@react-spring/three";
 import { typeIndexToLabel } from "@/helpers/common";
 import product from "@/helpers/db/models/product";
+import { isEmpty } from "@/helpers/common";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
 
@@ -297,12 +298,48 @@ export default function ConfigurationDetails(props: any) {
           "&:hover": { bgcolor: "#550248" }
         }}
         onClick={async () => {
-          push({
-            pathname: "/quote",
-            query: {
-              customProduct: JSON.stringify(props)
+          let tmpContext = context;
+          let promises = [];
+          if (!isEmpty(tmpContext.tag.file) && typeof tmpContext.tag.file !== "string") {
+            promises.push(
+              new Promise((resolve, reject) => {
+                const reader = new FileReader()
+                reader.readAsDataURL(tmpContext.tag.file)
+                reader.onload = () => {
+                  resolve({ key: 'tag', value: reader.result })
+                }
+                reader.onerror = reject
+              })
+            )
+          }
+          for (let i = 0; i < tmpContext.embellishment.length; i++) {
+            if (!isEmpty(tmpContext.embellishment[i].file) && typeof tmpContext.embellishment[i].file !== "string") {
+              promises.push(
+                new Promise((resolve, reject) => {
+                  const reader = new FileReader()
+                  reader.readAsDataURL(tmpContext.embellishment[i].file)
+                  reader.onload = () => {
+                    resolve({ key: [i], value: reader.result })
+                  }
+                  reader.onerror = reject
+                })
+              )
             }
-          }, '/quote')
+          }
+
+          Promise.all(promises).then((result) => {
+            for (let i = 0; i < result.length; i++) {
+              const row = result[i];
+              if (row.key === 'tag') {
+                tmpContext.tag.file = row.value;
+              } else {
+                tmpContext.embellishment[row.key].file = row.value;
+              }
+            }
+            localStorage.setItem('productType', props.type);
+            localStorage.setItem('context', JSON.stringify(tmpContext));
+            push('/quote')
+          });
         }}
       >
         <Typography sx={{ fontSize: 14, fontWeight: 500, fontFamily: secondaryFont.style.fontFamily }}>

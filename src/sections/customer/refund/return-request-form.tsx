@@ -77,7 +77,7 @@ export default function ReturnRequestForm(props: Props) {
   );
 
   return (
-    <Stack gap={4} sx={{ width: 400 }}>
+    <Stack gap={4} sx={{ width: { md: 400, xs: "100%" } }}>
       {renderHead}
 
       {renderForm}

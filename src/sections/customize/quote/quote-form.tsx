@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormProvider, { RHFTextField } from "@/components/hook-form";
@@ -7,6 +8,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { endpoints, QUOTE_STATE } from "../../../../global-config";
+import { CustomizeContext } from "@/components/customize/context/customize-context";
 
 const QuoteSchema = Yup.object().shape({
   email: Yup.string()
@@ -27,8 +29,8 @@ export default function QuoteForm(props: Props) {
     resolver: yupResolver(QuoteSchema),
     defaultValues,
   });
-
-  const customProduct = JSON.parse(props.query.customProduct);
+  const context = JSON.parse(localStorage.getItem('context'));
+  const productType = localStorage.getItem('productType');
 
   const {
     handleSubmit,
@@ -36,8 +38,8 @@ export default function QuoteForm(props: Props) {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    const result = await axios.post(endpoints.customize.list, { ...customProduct, name: "customize" + Date.now(), quoteState: QUOTE_STATE.approved });
-    push('/quote/approved');
+    const result = await axios.post(endpoints.customize.list, { context: context, product: productType, name: "customize" + Date.now(), quoteState: QUOTE_STATE.approved });
+    push(`/quote/${result.data[0]._id}/approved`);
   });
   const { push } = useRouter();
 

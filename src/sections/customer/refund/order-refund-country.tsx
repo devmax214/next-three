@@ -60,7 +60,7 @@ export default function OrderRefundFirst({ }: Props) {
                 <RHFAutocomplete
                   name="country"
                   placeholder="Select Country"
-                  sx={{ width: '50%' }}
+                  sx={{ width: { md: '50%', xs: '80%' } }}
                   options={countries.map((country) => country.label)}
                   getOptionLabel={(option) => option}
                   renderOption={(props, option) => {

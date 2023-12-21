@@ -19,7 +19,7 @@ import { RHFTextField } from "@/components/hook-form";
 import Image from "@/components/image";
 import { useRouter } from "next/router";
 import { PATH_SHOP } from "@/routers/path";
-import { forIn, isEmpty, reject } from "lodash";
+import { isEmpty } from "@/helpers/common";
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",

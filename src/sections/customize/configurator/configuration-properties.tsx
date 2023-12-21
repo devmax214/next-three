@@ -14,8 +14,11 @@ import {
   Checkbox,
   FormGroup,
   FormControlLabel,
+  FormControl,
   MenuItem,
+  OutlinedInput
 } from "@mui/material";
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { styled } from "@mui/material/styles";
 import FormProvider, { RhfSelect } from "@/components/hook-form";
 import { useForm } from "react-hook-form";
@@ -35,7 +38,7 @@ import UnCheckedIcon from "@/components/icons/unchecked-icon";
 import { useCheckoutContext } from "@/components/checkout/context";
 import { endpoints } from "../../../../global-config";
 import axios from "axios";
-import { fromPairs } from "lodash";
+import { isEmpty } from "@/helpers/common";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: "16px",
@@ -120,19 +123,10 @@ type Props = {
 };
 
 export default function ConfigurationProperties(props: any) {
-  const [cord, setCord] = useState("Cord1");
-  const [cordTip, setCordTip] = useState("mental_end");
   const context = useContext(CustomizeContext);
   const checkoutContext = useCheckoutContext();
   const { onAddToCart } = checkoutContext;
   const { push } = useRouter();
-
-  useEffect(() => {
-    setCord("Cord1");
-    setCordTip("mental_end")
-    context.onCordTypeChange("Cord1");
-    context.onCordTipChange("mental_end");
-  }, [])
 
   const methods = useForm({
     defaultValues,
@@ -140,16 +134,6 @@ export default function ConfigurationProperties(props: any) {
   const { reset, watch, control, setValue, handleSubmit } = methods;
 
   const onSubmit = handleSubmit(async (data) => { });
-
-  const changeCord = (ev: any) => {
-    setCord(ev.target.dataset ? ev.target.dataset.value : ev.target.value);
-    context.onCordTypeChange(ev.target.dataset ? ev.target.dataset.value : ev.target.value);
-  }
-
-  const changeCordTip = (ev: any) => {
-    setCordTip(ev.target.dataset ? ev.target.dataset.value : ev.target.value);
-    context.onCordTipChange(ev.target.dataset ? ev.target.dataset.value : ev.target.value);
-  }
 
   const changeCareLabel = (ev: any, value: number) => {
     if (ev.target.checked) {
@@ -163,33 +147,72 @@ export default function ConfigurationProperties(props: any) {
     }
   }
 
+  const [cord, setCord] = useState([]);
+  const [cordTip, setCordTip] = useState([]);
+
+  useEffect(() => {
+    setCord(["Cord1"]);
+    setCordTip(['mental_end'])
+    context.onCordTypeChange("Cord1");
+    context.onCordTipChange("mental_end");
+  }, [])
+
+  const changeCord = (event: SelectChangeEvent<typeof cord>) => {
+    const { target: { value } } = event;
+    const tmpList = typeof value === 'string' ? value.split(',') : value;
+
+    setCord([tmpList[tmpList.length - 1]]);
+    context.onCordTypeChange(tmpList[tmpList.length - 1]);
+  }
+
+  const changeCordTip = (event: SelectChangeEvent<typeof cordTip>) => {
+    const { target: { value } } = event;
+    const tmpList = typeof value === 'string' ? value.split(',') : value;
+    setCordTip([tmpList[tmpList.length - 1]]);
+    context.onCordTipChange(tmpList[tmpList.length - 1]);
+  }
+
   const renderCardType = (
     <Box component="div">
       <StyledTypography>Cord type</StyledTypography>
-
-      <RhfSelect onFocus={(e) => context.onCordEditable(e.target.ariaExpanded === "true" ? true : false)} onChange={changeCord} value={cord} name="cord" placeholder="Selected Color">{
-        cords.map((cord, i) => (
-          <MenuItem value={cord.key} key={i} onClick={(e) => {
-            changeCord(e);
-            context.onCordEditable(false)
-          }} onMouseEnter={changeCord}>{cord.color}</MenuItem>
-        ))
-      }</RhfSelect>
+      <FormControl sx={{ width: 1 }}>
+        <Select
+          labelId="cord-m"
+          id="cord"
+          multiple
+          size="small"
+          value={cord}
+          onChange={changeCord}
+          onOpen={() => context.onCordEditable(true)}
+          onClose={() => context.onCordEditable(false)}
+        >
+          {cords.map((cord, i) => (
+            <MenuItem value={cord.key} key={i}>{cord.color}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </Box>
   );
 
   const renderCardTip = (
     <Box component="div">
       <StyledTypography>Cord tip</StyledTypography>
-
-      <RhfSelect name="tip" onFocus={(e) => context.onCordEditable(e.target.ariaExpanded === "true" ? true : false)} value={cordTip} onChange={changeCordTip} placeholder="Selected Color">{
-        tips.map((tip, i) => (
-          <MenuItem value={tip.key} key={i} onClick={(e) => {
-            changeCordTip(e);
-            context.onCordEditable(false)
-          }} onMouseEnter={changeCordTip}>{tip.color}</MenuItem>
-        ))
-      }</RhfSelect>
+      <FormControl sx={{ width: 1 }}>
+        <Select
+          labelId="cordtips-m"
+          id="cordtips"
+          multiple
+          size="small"
+          value={cordTip}
+          onChange={changeCordTip}
+          onOpen={() => context.onCordEditable(true)}
+          onClose={() => context.onCordEditable(false)}
+        >
+          {tips.map((tip, i) => (
+            <MenuItem value={tip.key} key={i}>{tip.color}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </Box>
   );
 
@@ -490,12 +513,48 @@ export default function ConfigurationProperties(props: any) {
             "&:hover": { bgcolor: "#550248" },
           }}
           onClick={() => {
-            push({
-              pathname: "/quote",
-              query: {
-                customProduct: JSON.stringify({ ...props, context: context, product: props.type })
+            let tmpContext = context;
+            let promises = [];
+            if (!isEmpty(tmpContext.tag.file) && typeof tmpContext.tag.file !== "string") {
+              promises.push(
+                new Promise((resolve, reject) => {
+                  const reader = new FileReader()
+                  reader.readAsDataURL(tmpContext.tag.file)
+                  reader.onload = () => {
+                    resolve({ key: 'tag', value: reader.result })
+                  }
+                  reader.onerror = reject
+                })
+              )
+            }
+            for (let i = 0; i < tmpContext.embellishment.length; i++) {
+              if (!isEmpty(tmpContext.embellishment[i].file) && typeof tmpContext.embellishment[i].file !== "string") {
+                promises.push(
+                  new Promise((resolve, reject) => {
+                    const reader = new FileReader()
+                    reader.readAsDataURL(tmpContext.embellishment[i].file)
+                    reader.onload = () => {
+                      resolve({ key: [i], value: reader.result })
+                    }
+                    reader.onerror = reject
+                  })
+                )
               }
-            }, '/quote')
+            }
+
+            Promise.all(promises).then((result) => {
+              for (let i = 0; i < result.length; i++) {
+                const row = result[i];
+                if (row.key === 'tag') {
+                  tmpContext.tag.file = row.value;
+                } else {
+                  tmpContext.embellishment[row.key].file = row.value;
+                }
+              }
+              localStorage.setItem('productType', props.type);
+              localStorage.setItem('context', JSON.stringify(tmpContext));
+              push('/quote')
+            });
           }}
         >
           REQUEST FOR QUOTE

@@ -120,7 +120,6 @@ type ContextType = Record<
 export default function PANTManModel(props: any) {
   const customize = useCustomizeContext();
   const [tagName, setTagName] = useState("");
-  const [cords, setCords] = useState("");
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
   const [texture, setTexture] = useState({
     0: new THREE.Texture(),
@@ -388,9 +387,9 @@ export default function PANTManModel(props: any) {
 
   const cord = useCallback(() => {
     try {
-      if (!!cords) {
+      if (!!customize.cord) {
         const { nodes, materials } = useGLTF(
-          `/models/PANTWR_man/cords/Man/${cords}/${cords}.glb`
+          `/models/PANTWR_man/cords/Man/${customize.cord}/${customize.cord}.glb`
         ) as any;
 
         const keys: string[] = Object.keys(nodes);
@@ -407,7 +406,7 @@ export default function PANTManModel(props: any) {
     } catch (err) {
       console.log(err);
     }
-  }, [cords]);
+  }, [customize.cord]);
 
   const cordTipItem = useCallback(() => {
     try {
@@ -471,7 +470,7 @@ export default function PANTManModel(props: any) {
     } catch (err) {
       return null;
     }
-  }, [customize.cordTip]);
+  }, [customize.cordTip, customize.cord]);
 
   useEffect(() => {
     if (customize.tag.neck)
@@ -479,10 +478,6 @@ export default function PANTManModel(props: any) {
     else
       setTagName(`print-label_${customize.tag.color ? "black" : "white"}`);
   }, [customize.tag])
-
-  useEffect(() => {
-    setCords(customize.cord);
-  }, [customize.cord])
 
   useEffect(() => {
     setTextTexture(zoomFactor)
