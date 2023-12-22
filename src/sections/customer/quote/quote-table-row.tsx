@@ -113,7 +113,7 @@ export default function QuoteTableRow({ index, data }: Props) {
   return (
     <>
       <TableRow sx={{ borderBottom: "1px solid #ACB1B8" }}>
-        <TableCell onClick={() => quoteState === QUOTE_STATE.approved ? push(`/quote/${data._id}/approved`) : push(`/customize/${data._id}/review`)} sx={{ cursor: "pointer" }}>Quote Requests # {seq}</TableCell>
+        <TableCell onClick={() => quoteState === QUOTE_STATE.approved ? push(`/quote/${data._id}/approved`) : push(`/customize/${data._id}/quoterequest`)} sx={{ cursor: "pointer" }}>Quote Requests # {seq}</TableCell>
 
         {isDesktop ?
           <TableCell>
@@ -131,7 +131,7 @@ export default function QuoteTableRow({ index, data }: Props) {
         <TableCell>17.09.2023</TableCell>
 
         <TableCell>{renderState}</TableCell>
-      </TableRow>
+      </TableRow >
     </>
   );
 }

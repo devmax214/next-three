@@ -42,7 +42,7 @@ const prices = [
 
 type Props = {};
 
-export default function OrderDetail(props: Props) {
+export default function OrderDetail(props: any) {
   const [showSummary, setShowSummary] = React.useState(true);
   const router = useRouter();
   const slug: any = router.query.type;
@@ -74,7 +74,10 @@ export default function OrderDetail(props: Props) {
       </Typography>
 
       <Stack alignItems="center" gap={2} py={3}>
-        <Image src={localStorage.getItem("review-img")} sx={{ width: "100%" }} />
+        <Image src={'/images/customize/front.png'} sx={{ width: "45%" }} />
+      </Stack>
+      <Stack alignItems="center" gap={2} py={3}>
+        <Image src={'/images/customize/back.png'} sx={{ width: "45%" }} />
       </Stack>
     </>
   );

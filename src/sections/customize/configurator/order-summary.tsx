@@ -35,7 +35,7 @@ const StyledTypography4 = styled(Typography)(({ theme }) => ({
 
 type Props = {};
 
-export default function OrderSummary(props: Props) {
+export default function OrderSummary(props: any) {
   return (
     <>
       <Card sx={{ ...styles.card, mb: 5 }}>
@@ -77,15 +77,17 @@ export default function OrderSummary(props: Props) {
 
       <Button
         fullWidth
-        sx={{ fontSize: 22, color: "#03bf03", fontWeight: 500 }}
-      // startIcon={
-      //   <PendingIcon
-      //     color="#F05A4A"
-      //     sx={{ width: 16, height: 16 }}
-      //   />
-      // }
+        sx={{ fontSize: 22, color: "#F05A4A", fontWeight: 500 }}
+        startIcon={
+          <PendingIcon
+            color="#F05A4A"
+            sx={{ width: 16, height: 16 }}
+          />
+        }
+        href={props.type == '2' && '/checkout'}
       >
-        APPROVED
+        {/* APPROVED */}
+        {props.type == '2' ? 'Proceed to order' : 'Pending approval'}
       </Button>
     </>
   );

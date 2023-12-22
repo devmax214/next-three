@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { endpoints, QUOTE_STATE } from "../../../../global-config";
 import { CustomizeContext } from "@/components/customize/context/customize-context";
+import { redirect } from "next/dist/server/api-utils";
 
 const QuoteSchema = Yup.object().shape({
   email: Yup.string()
@@ -37,11 +38,12 @@ export default function QuoteForm(props: Props) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    const result = await axios.post(endpoints.customize.list, { context: context, product: productType, name: "customize" + Date.now(), quoteState: QUOTE_STATE.approved });
-    push(`/quote/${result.data[0]._id}/approved`);
-  });
   const { push } = useRouter();
+
+  const onSubmit = handleSubmit(async (data) => {
+    const result = await axios.post(endpoints.customize.list, { context: context, product: productType, name: "customize" + Date.now(), quoteState: QUOTE_STATE.review });
+    push('/user/quote');
+  });
 
   const renderForm = (
     <Stack gap={6} sx={{ width: 500, alignItems: "center", margin: "auto" }}>

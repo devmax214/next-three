@@ -5,18 +5,18 @@ import CustomizeLayout from "@/layouts/customize";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { ParsedUrlQuery } from "querystring";
 
-OrderReviewPage.getLayout = (page: React.ReactElement) => (
+QuoteRequestPage.getLayout = (page: React.ReactElement) => (
   <CustomizeLayout>{page}</CustomizeLayout>
 );
 
-export default function OrderReviewPage(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function QuoteRequestPage(props: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
       <Head>
-        <title> Review Order | WonderRaw</title>
+        <title> Quote Request | WonderRaw</title>
       </Head>
 
-      <ConfigurationReviewView {...props} type="2" />
+      <ConfigurationReviewView {...props} type="1" />
     </>
   );
 }

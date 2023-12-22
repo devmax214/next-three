@@ -8,6 +8,7 @@ import { RouterLink } from "@/routers/components";
 import ConfigurationCanvas from "@/sections/customize/configurator/configuration-canvas";
 import { typeIndexToLabel } from "@/helpers/common";
 import { CustomizeProvider } from "@/components/customize/context";
+import { useRouter } from "next/router";
 import {
   Box,
   Button,
@@ -138,6 +139,8 @@ export default function ApprovedQuotePage({ customProduct }: any) {
   const context = customProduct.context;
   const dbCtx = context;
   const productType = customProduct.product;
+
+  const { push } = useRouter();
 
   const renderPrices = (
     <>
@@ -613,7 +616,7 @@ export default function ApprovedQuotePage({ customProduct }: any) {
                       height: 40,
                       "&:hover": { bgcolor: "#550248" }
                     }}
-                    href="/checkout"
+                    onClick={() => push(`/customize/${customProduct._id}/review`)}
                   >
                     <Typography sx={{ fontSize: 14, fontWeight: 500, fontFamily: secondaryFont.style.fontFamily }}>
                       ORDER PRODUCTS

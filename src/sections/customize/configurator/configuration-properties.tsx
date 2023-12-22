@@ -487,7 +487,7 @@ export default function ConfigurationProperties(props: any) {
       };
 
       onAddToCart(newProduct);
-      push('/quote/ordersample')
+      push(`/quote/${props.type}/ordersample`)
 
     } catch (error) { console.log(error) }
   }

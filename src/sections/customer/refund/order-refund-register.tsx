@@ -4,16 +4,19 @@ import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
 import { PATH_CONFIGURATOR } from "@/routers/path";
 import ReturnRequestForm from "./return-request-form";
 import { secondaryFont } from "@/theme/typography";
+import { useResponsive } from "@/hooks";
 
 type Props = {};
 
 export default function OrderRefundRegister(props: any) {
+  const smDown = useResponsive("down", "sm");
   useEffect(() => {
-    window.scrollTo({
-      top: 300,
-      left: 0,
-      behavior: 'smooth'
-    });
+    smDown &&
+      window.scrollTo({
+        top: 300,
+        left: 0,
+        behavior: 'smooth'
+      });
   }, [])
 
   return (

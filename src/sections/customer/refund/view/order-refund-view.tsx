@@ -6,13 +6,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
-import { useOffsetTop } from "@/hooks";
+import { useResponsive } from "@/hooks";
 
 type Props = {};
 
 export default function OrderRefundView(props: Props) {
   const [step, setStep] = useState(0);
   const router = useRouter();
+  const smDown = useResponsive("down", "sm");
 
   const [RefundSchema, setRefundSchema] = useState(Yup.object().shape({
     country: Yup.string()
@@ -52,12 +53,12 @@ export default function OrderRefundView(props: Props) {
     formState: { isSubmitting, errors },
   } = methods;
 
-  React.useEffect(() => {
+  useEffect(() => {
     const firstError = Object.keys(errors).reduce((field, a) => {
       return !!errors[field] ? field : a;
     }, null);
 
-    if (firstError) {
+    if (firstError && smDown) {
       window.scrollTo({
         top: 300,
         left: 0,
