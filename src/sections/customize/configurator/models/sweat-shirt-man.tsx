@@ -199,20 +199,20 @@ export default function SWEATManModel(props: any) {
       } else if (tmpCtx.embellishment[i].type === 'text') {
         const textCanvas = document.createElement("canvas");
         textCanvas.style.cssText = "border: 1px solid grey"
-        const baseWidth = smallIndex.includes(i) ? 150 : 300;
-        const baseHeight = smallIndex.includes(i) ? 300 : 400;
-        const fontSize = smallIndex.includes(i) ? 16 : 30;
-        const lineHeight = smallIndex.includes(i) ? 18 : 32;
+        const baseWidth = smallIndex.includes(i) ? 200 : 250;
+        const baseHeight = smallIndex.includes(i) ? 300 : 350;
+        const fontSize = smallIndex.includes(i) ? 30 : 35;
+        const lineHeight = smallIndex.includes(i) ? 32 : 37;
         textCanvas.width = baseWidth * factor;
         textCanvas.height = baseHeight * factor;
         var ctx = textCanvas.getContext("2d");
         var fillTextX = 0, fillTextY = 0;
         const lines = tmpCtx.embellishment[i].textureText.split('\n');
 
-        if (ctx !== null && tmpCtx.embellishment[i].font) {
-          ctx.font = `${fontSize}pt ${tmpCtx.embellishment[i].font}`;
+        if (ctx !== null && customize.embellishment[i].font) {
+          ctx.font = `${fontSize}pt ${customize.embellishment[i].font}`;
           ctx.scale(factor, factor);
-          switch (tmpCtx.embellishment[i].position.type) {
+          switch (customize.embellishment[i].position.type) {
             case 0:
               ctx.textAlign = 'left';
               ctx.textBaseline = 'middle';
@@ -235,7 +235,7 @@ export default function SWEATManModel(props: any) {
               ctx.textAlign = 'center';
               ctx.textBaseline = 'top';
               fillTextX = baseWidth / 2;
-              fillTextY = fontSize;
+              fillTextY = 0;
               break;
             case 4:
               ctx.textAlign = 'center';
@@ -376,21 +376,35 @@ export default function SWEATManModel(props: any) {
       <mesh geometry={nodes['SWEATWR-CINTO001_2'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2548.001']} />
       <mesh geometry={nodes['SWEATWR-COSTA001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} >
         <Decal
-          position={[0, 1.38, -0.24]}
-          rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
-          scale={[0.23, 0.31, 0.26]}
-          map={texture[0]}
-        />
+          position={customize.embellishment[0].type === 'text' ? [0, 1.28, -0.24] : [0, 1.38, -0.24]}
+          rotation={customize.embellishment[0].type === 'text' ? [THREE.MathUtils.degToRad(-10), THREE.MathUtils.degToRad(180), 0] : [THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
+          scale={customize.embellishment[0].type === 'text' ? [0.34, 0.7, 1] : [0.23, 0.31, 0.26]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-1}
+            map={texture[0]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['SWEATWR-COSTA001_1'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} />
       <mesh geometry={nodes['SWEATWR-COSTA001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} />
       <mesh geometry={nodes['SWEATWR-FRENTE001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']}>
         <Decal
-          position={[0, 1.38, 0.15]}
+          position={customize.embellishment[1].type === 'text' ? [0, 1.29, 0.01] : [0, 1.38, 0.15]}
           rotation={[0, 0, 0]}
-          scale={[0.23, 0.31, 0.26]}
-          map={texture[1]}
-        />
+          scale={customize.embellishment[1].type === 'text' ? [0.31, 0.58, 0.31] : [0.23, 0.31, 0.26]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[1]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['SWEATWR-FRENTE001_1'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} />
       <mesh geometry={nodes['SWEATWR-FRENTE001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} />
@@ -401,21 +415,35 @@ export default function SWEATManModel(props: any) {
       <mesh geometry={nodes['SWEATWR-GOLA_2001_2'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2548.001']} />
       <mesh geometry={nodes['SWEATWR-MANGA_1001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} >
         <Decal
-          position={[-0.3, 1.15, -0.005]}
-          rotation={[THREE.MathUtils.degToRad(-10), 0, 0]}
-          scale={[0.05, 0.26, 0.066]}
-          map={texture[3]}
-        />
+          position={customize.embellishment[3].type === 'text' ? [-0.35, 1.265, -0.005] : [-0.3, 1.15, -0.005]}
+          rotation={customize.embellishment[3].type === 'text' ? [THREE.MathUtils.degToRad(-5), THREE.MathUtils.degToRad(90), 0] : [THREE.MathUtils.degToRad(-10), THREE.MathUtils.degToRad(90), 0]}
+          scale={customize.embellishment[3].type === 'text' ? [0.07, 0.52, 0.3] : [0.05, 0.26, 0.1]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[3]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['SWEATWR-MANGA_1001_1'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} />
       <mesh geometry={nodes['SWEATWR-MANGA_1001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} />
       <mesh geometry={nodes['SWEATWR-MANGA001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} >
         <Decal
-          position={[0.3, 1.15, -0.005]}
-          rotation={[THREE.MathUtils.degToRad(-10), 0, 0]}
-          scale={[0.05, 0.26, 0.066]}
-          map={texture[2]}
-        />
+          position={customize.embellishment[2].type === 'text' ? [0.35, 1.265, -0.02] : [0.3, 1.15, -0.005]}
+          rotation={customize.embellishment[2].type === 'text' ? [THREE.MathUtils.degToRad(10), THREE.MathUtils.degToRad(90), THREE.MathUtils.degToRad(-14)] : [THREE.MathUtils.degToRad(-10), THREE.MathUtils.degToRad(90), 0]}
+          scale={customize.embellishment[2].type === 'text' ? [0.07, 0.52, 0.25] : [0.05, 0.26, 0.1]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[2]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['SWEATWR-MANGA001_1'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} />
       <mesh geometry={nodes['SWEATWR-MANGA001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2530.002']} />

@@ -306,7 +306,7 @@ export default function TShirtManModel(props: any) {
           <group dispose={null}>
             {keys.map((key: string, idx: number) => (
               idx === 0 ? (
-                <mesh name={`pattern_tag_${idx}`} position={[0, 0, 0.01]} geometry={nodes[key].geometry} material={material} key={key}>
+                <mesh name={`pattern_tag_${idx}`} position={[0, 0, 0]} geometry={nodes[key].geometry} material={material} key={key}>
                   <Decal
                     position={[0, positionY, -0.085]}
                     rotation={[0, 0, 0]}
@@ -385,11 +385,18 @@ export default function TShirtManModel(props: any) {
       <mesh geometry={nodes.Pattern2D_190184005_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.014']} />
       <mesh geometry={nodes['TSHIRTWR-COS005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} >
         <Decal
-          position={[0, 1.43, -0.24]}
+          position={customize.embellishment[0].type === 'text' ? [0, 1.27, 0.01] : [0.002, 1.43, -0.03]}
           rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
-          scale={[0.23, 0.31, 0.26]}
-          map={texture[0]}
-        />
+          scale={customize.embellishment[0].type === 'text' ? [0.29, 0.64, 0.4] : [0.205, 0.28, 0.26]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-1}
+            map={texture[0]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['TSHIRTWR-COS005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} >
 
@@ -397,11 +404,18 @@ export default function TShirtManModel(props: any) {
       <mesh geometry={nodes['TSHIRTWR-COS005_2'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} />
       <mesh geometry={nodes['TSHIRTWR-FRE005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.012']}>
         <Decal
-          position={[0, 1.38, 0.15]}
+          position={customize.embellishment[1].type === 'text' ? [0, 1.26, 0.01] : [0, 1.38, 0.02]}
           rotation={[0, 0, 0]}
-          scale={[0.23, 0.31, 0.26]}
-          map={texture[1]}
-        />
+          scale={customize.embellishment[1].type === 'text' ? [0.29, 0.57, 0.33] : [0.21, 0.28, 0.23]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-1}
+            map={texture[1]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['TSHIRTWR-FRE005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.012']} />
       <mesh geometry={nodes['TSHIRTWR-FRE005_2'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.012']} />
@@ -410,21 +424,35 @@ export default function TShirtManModel(props: any) {
       <mesh geometry={nodes['TSHIRTWR-GOLA005_2'].geometry} material={materials['Rib_1X1_319gsm_FRONT_2550.005']} />
       <mesh geometry={nodes['TSHIRTWR-MANGA_1005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.011']} >
         <Decal
-          position={[-0.245, 1.47, -0.02]}
-          rotation={[0, 0, THREE.MathUtils.degToRad(-15)]}
-          scale={[0.05, 0.078, 0.066]}
-          map={texture[3]}
-        />
+          position={customize.embellishment[3].type === 'text' ? [-0.245, 1.45, -0.02] : [-0.245, 1.47, -0.02]}
+          rotation={[0, THREE.MathUtils.degToRad(90), 0]}
+          scale={customize.embellishment[3].type === 'text' ? [0.08, 0.175, 0.066] : [0.05, 0.078, 0.066]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-1}
+            map={texture[3]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['TSHIRTWR-MANGA_1005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.011']} />
       <mesh geometry={nodes['TSHIRTWR-MANGA_1005_2'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.011']} />
       <mesh geometry={nodes['TSHIRTWR-MANGA005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.013']} >
         <Decal
-          position={[0.25, 1.46, -0.03]}
-          rotation={[0, 0, THREE.MathUtils.degToRad(15)]}
-          scale={[0.05, 0.078, 0.066]}
-          map={texture[2]}
-        />
+          position={customize.embellishment[2].type === 'text' ? [0.25, 1.45, -0.03] : [0.25, 1.46, -0.03]}
+          rotation={[0, THREE.MathUtils.degToRad(-90), 0]}
+          scale={customize.embellishment[2].type === 'text' ? [0.08, 0.175, 0.066] : [0.05, 0.078, 0.066]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-1}
+            map={texture[2]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['TSHIRTWR-MANGA005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.013']} />
       <mesh geometry={nodes['TSHIRTWR-MANGA005_2'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.013']} />

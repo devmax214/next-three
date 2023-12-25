@@ -527,10 +527,17 @@ export default function PANTManModel(props: any) {
       <mesh geometry={nodes.WRCALCA_BOLSO001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.005']} >
         <Decal
           position={[-0.12, 0.965, -0.12]}
-          rotation={[0, 0, 0]}
+          rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
           scale={[0.07, 0.1, 0.2]}
-          map={texture[4]}
-        />
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[4]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.WRCALCA_BOLSO001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.005']} />
       <mesh geometry={nodes.WRCALCA_BOLSO001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.005']} />
@@ -557,11 +564,18 @@ export default function PANTManModel(props: any) {
       <mesh geometry={nodes.WRCALCACNTFRE001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.003']} />
       <mesh geometry={nodes.WRCALCACSDI_1001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.015']} >
         <Decal
-          position={[-0.11, 0.64, -0.12]}
+          position={customize.embellishment[3].type === 'text' ? [-0.1, 0.53, -0.12] : [-0.11, 0.64, -0.12]}
           rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
-          scale={[0.08, 0.45, 0.2]}
-          map={texture[3]}
-        />
+          scale={customize.embellishment[3].type === 'text' ? [0.11, 0.73, 0.2] : [0.08, 0.45, 0.2]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[3]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.WRCALCACSDI_1001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.015']} />
       <mesh geometry={nodes.WRCALCACSDI_1001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.015']} />
@@ -570,11 +584,18 @@ export default function PANTManModel(props: any) {
       <mesh geometry={nodes.WRCALCACSDI_2001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.009']} />
       <mesh geometry={nodes.WRCALCACSDI_3001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.013']}>
         <Decal
-          position={[0.1, 0.74, -0.12]}
+          position={customize.embellishment[2].type === 'text' ? [0.11, 0.62, -0.12] : [0.1, 0.74, -0.12]}
           rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
-          scale={[0.1, 0.55, 0.2]}
-          map={texture[2]}
-        />
+          scale={customize.embellishment[2].type === 'text' ? [0.11, 0.9, 0.2] : [0.1, 0.55, 0.2]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[2]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.WRCALCACSDI_3001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.013']} />
       <mesh geometry={nodes.WRCALCACSDI_3001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.013']} />
@@ -586,11 +607,18 @@ export default function PANTManModel(props: any) {
       <mesh geometry={nodes.WRCALCAFRE_1001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.012']} />
       <mesh geometry={nodes.WRCALCAFRE_2001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.011']} >
         <Decal
-          position={[0.1, 0.71, 0.14]}
+          position={customize.embellishment[0].type === 'text' ? [0.11, 0.6, 0] : [0.1, 0.71, 0]}
           rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
-          scale={[0.1, 0.55, 0.2]}
-          map={texture[0]}
-        />
+          scale={customize.embellishment[0].type === 'text' ? [0.11, 0.9, 0.2] : [0.1, 0.55, 0.2]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[0]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.WRCALCAFRE_2001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.011']} />
       <mesh geometry={nodes.WRCALCAFRE_2001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.011']} />
@@ -599,11 +627,18 @@ export default function PANTManModel(props: any) {
       <mesh geometry={nodes.WRCALCAFRE_3001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.006']} />
       <mesh geometry={nodes.WRCALCAFRE_4001.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.016']} >
         <Decal
-          position={[-0.1, 0.71, 0.14]}
+          position={customize.embellishment[1].type === 'text' ? [-0.1, 0.6, 0] : [-0.1, 0.71, 0]}
           rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
-          scale={[0.1, 0.55, 0.2]}
-          map={texture[1]}
-        />
+          scale={customize.embellishment[1].type === 'text' ? [0.11, 0.9, 0.2] : [0.1, 0.55, 0.2]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[1]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.WRCALCAFRE_4001_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2649.016']} />
       <mesh geometry={nodes.WRCALCAFRE_4001_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2649.016']} />

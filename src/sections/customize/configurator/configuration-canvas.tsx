@@ -29,16 +29,16 @@ export default function ConfigurationCanvas(props: Props) {
       if (props.type === "Pants") {
         switch (embelIndex) {
           case 0:
-            setState({ scale: [1.5, 1.5, 1.5], position: [-0.15, -0.2, 0], rotation: [0, 0, 0] });
+            setState({ scale: [1.2, 1.2, 1.2], position: [-0.15, 0, 0], rotation: [0, 0, 0] });
             break;
           case 1:
-            setState({ scale: [1.5, 1.5, 1.5], position: [0.2, -0.2, 0], rotation: [0, 0, 0] });
+            setState({ scale: [1.2, 1.2, 1.2], position: [0.2, 0, 0], rotation: [0, 0, 0] });
             break;
           case 2:
-            setState({ scale: [1.5, 1.5, 1.5], position: [0.2, -0.2, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
+            setState({ scale: [1.2, 1.2, 1.2], position: [0.2, 0, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
             break;
           case 3:
-            setState({ scale: [2, 2, 1.5], position: [-0.2, -0.04, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
+            setState({ scale: [1.5, 1.5, 1.5], position: [-0.2, 0.12, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
             break;
           case 4:
             setState({ scale: [3, 3, 3], position: [-0.3, -1, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
@@ -58,7 +58,7 @@ export default function ConfigurationCanvas(props: Props) {
             setState({ scale: [2, 2, 2], position: [0.2, 0.05, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
             break;
           case 3:
-            setState({ scale: [3, 3, 2], position: [-0.2, 0.2, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
+            setState({ scale: [2.5, 2.5, 2], position: [-0.2, 0.2, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
             break;
           case 4:
             setState({ scale: [3, 3, 3], position: [-0.3, -0.4, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
@@ -67,19 +67,18 @@ export default function ConfigurationCanvas(props: Props) {
             break;
         }
       } else {
-        const sideTopOffset = props.type === "Hoodies" || props.type === "Sweatshirts" ? 0.3 : -0.5;
         switch (embelIndex) {
           case 0:
-            setState({ scale: [2, 2, 2], position: [0, -0.15, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
+            setState({ scale: [1.5, 1.5, 1.5], position: [0, 0, 0], rotation: [0, THREE.MathUtils.degToRad(180), 0] });
             break;
           case 1:
-            setState({ scale: [2, 2, 2], position: [0, -0.2, 0], rotation: [0, 0, 0] });
+            setState({ scale: [1.5, 1.5, 1.5], position: [0, 0, 0], rotation: [0, 0, 0] });
             break;
           case 2:
-            setState({ scale: [2.5, 2.5, 2.5], position: [-0.1, sideTopOffset, 0], rotation: [0, THREE.MathUtils.degToRad(-90), 0] });
+            setState({ scale: [1.5, 1.5, 1.5], position: [0, 0, 0], rotation: [0, THREE.MathUtils.degToRad(-90), 0] });
             break;
           case 3:
-            setState({ scale: [2.5, 2.5, 2.5], position: [0.1, sideTopOffset, 0], rotation: [0, THREE.MathUtils.degToRad(90), 0] });
+            setState({ scale: [1.5, 1.5, 1.5], position: [0, 0, 0], rotation: [0, THREE.MathUtils.degToRad(90), 0] });
             break;
           default:
             break;

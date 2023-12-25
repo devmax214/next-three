@@ -6,7 +6,7 @@ Files: GU22HOODIEWR_man_cord01_color_cru_end_silicone.gltf [214.63KB] > GU22HOOD
 
 import * as THREE from "three";
 import React, { useCallback, useEffect, useState, useRef } from "react";
-import { Decal, useGLTF, useTexture } from "@react-three/drei";
+import { RenderTexture, OrbitControls, PerspectiveCamera, Text, ContactShadows, Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
 import { useFrame } from "@react-three/fiber";
@@ -277,7 +277,7 @@ export default function Model(props: any) {
               ctx.textAlign = 'center';
               ctx.textBaseline = 'top';
               fillTextX = baseWidth / 2;
-              fillTextY = fontSize;
+              fillTextY = 0;
               break;
             case 4:
               ctx.textAlign = 'center';
@@ -607,41 +607,69 @@ export default function Model(props: any) {
       <mesh geometry={nodes['HOODIE-CINTO001_2'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2635.007']} />
       <mesh geometry={nodes['HOODIE-COSTA001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.026']} >
         <Decal
-          position={[0, 1.28, -0.24]}
+          position={[0, 1.28, -0.04]}
           rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
-          scale={[0.23, 0.31, 0.26]}
-          map={texture[0]}
-        />
+          scale={customize.embellishment[1].type === 'text' ? [0.31, 0.6, 0.26] : [0.23, 0.31, 0.26]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-1}
+            map={texture[0]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['HOODIE-COSTA001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.030']} />
       <mesh geometry={nodes['HOODIE-COSTA001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.026']} />
       <mesh geometry={nodes['HOODIE-FRENTE001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.025']} ref={modelRef}>
         <Decal
-          position={[0, 1.38, 0.2]}
+          position={[0, 1.38, 0]}
           rotation={[0, 0, 0]}
-          scale={[0.23, 0.31, 0.26]}
-          map={texture[1]}
-        />
+          scale={customize.embellishment[1].type === 'text' ? [0.3, 0.35, 0.26] : [0.23, 0.31, 0.26]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[1]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['HOODIE-FRENTE001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.027']} />
       <mesh geometry={nodes['HOODIE-FRENTE001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.025']} />
       <mesh geometry={nodes['HOODIE-MANGA_4001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.029']} >
         <Decal
-          position={[0.3, 1.15, -0.005]}
-          rotation={[THREE.MathUtils.degToRad(-10), 0, 0]}
-          scale={[0.05, 0.26, 0.066]}
-          map={texture[2]}
-        />
+          position={customize.embellishment[2].type === 'text' ? [0.35, 1.265, -0.02] : [0.3, 1.15, 0]}
+          rotation={customize.embellishment[2].type === 'text' ? [THREE.MathUtils.degToRad(10), THREE.MathUtils.degToRad(90), THREE.MathUtils.degToRad(-14)] : [THREE.MathUtils.degToRad(-10), THREE.MathUtils.degToRad(90), 0]}
+          scale={customize.embellishment[2].type === 'text' ? [0.07, 0.52, 0.25] : [0.05, 0.26, 0.1]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[2]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['HOODIE-MANGA_4001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.039']} />
       <mesh geometry={nodes['HOODIE-MANGA_4001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.029']} />
       <mesh geometry={nodes['HOODIE-MANGA_5001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.030']} >
         <Decal
-          position={[-0.3, 1.15, -0.005]}
-          rotation={[THREE.MathUtils.degToRad(-10), 0, 0]}
-          scale={[0.05, 0.26, 0.066]}
-          map={texture[3]}
-        />
+          position={customize.embellishment[3].type === 'text' ? [-0.35, 1.265, -0.01] : [-0.3, 1.15, 0]}
+          rotation={[THREE.MathUtils.degToRad(-5), THREE.MathUtils.degToRad(90), 0]}
+          scale={customize.embellishment[3].type === 'text' ? [0.07, 0.52, 0.24] : [0.05, 0.26, 0.066]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[3]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes['HOODIE-MANGA_5001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.042']} />
       <mesh geometry={nodes['HOODIE-MANGA_5001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.030']} />

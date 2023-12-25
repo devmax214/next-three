@@ -395,31 +395,52 @@ export default function OversizeManModel(props: any) {
       <mesh geometry={nodes.StitchMatShape_63412_Node.geometry} material={materials.Material3503} />
       <mesh geometry={nodes.MG100Y__MAN2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.008']} >
         <Decal
-          position={[0.25, 1.42, -0.03]}
-          rotation={[0, 0, THREE.MathUtils.degToRad(15)]}
-          scale={[0.07, 0.08, 0.066]}
-          map={texture[2]}
-        />
+          position={customize.embellishment[2].type === 'text' ? [0.245, 1.38, -0.02] : [0.26, 1.42, -0.02]}
+          rotation={[0, THREE.MathUtils.degToRad(-90), 0]}
+          scale={customize.embellishment[2].type === 'text' ? [0.08, 0.18, 0.15] : [0.07, 0.08, 0.066]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[2]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.MG100Y__MAN2_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.008']} />
       <mesh geometry={nodes.MG100Y__MAN2_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.008']} />
       <mesh geometry={nodes.MG100Y__MAN3.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.009']} ref={modelRef} >
         <Decal
-          position={[-0.245, 1.41, -0.02]}
-          rotation={[0, 0, THREE.MathUtils.degToRad(-15)]}
-          scale={[0.07, 0.08, 0.066]}
-          map={texture[3]}
-        />
+          position={customize.embellishment[3].type === 'text' ? [-0.245, 1.38, -0.02] : [-0.26, 1.41, -0.02]}
+          rotation={[0, THREE.MathUtils.degToRad(90), THREE.MathUtils.degToRad(-5)]}
+          scale={customize.embellishment[3].type === 'text' ? [0.08, 0.18, 0.15] : [0.07, 0.08, 0.066]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[3]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.MG100Y__MAN3_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.009']} />
       <mesh geometry={nodes.MG100Y__MAN3_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.009']} />
       <mesh geometry={nodes.MG100Y_COS2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.006']} >
         <Decal
-          position={[0, 1.43, -0.24]}
+          position={customize.embellishment[0].type === 'text' ? [0, 1.27, 0.01] : [0, 1.43, -0.1]}
           rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
-          scale={[0.23, 0.31, 0.26]}
-          map={texture[0]}
-        />
+          scale={customize.embellishment[0].type === 'text' ? [0.33, 0.64, 0.4] : [0.23, 0.31, 0.26]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[0]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.MG100Y_COS2_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.006']} />
       <mesh geometry={nodes.MG100Y_COS2_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.006']} />
@@ -428,11 +449,18 @@ export default function OversizeManModel(props: any) {
       <mesh geometry={nodes.MG100Y_COS4_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.006']} />
       <mesh geometry={nodes.MG100Y_FRE2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.007']}>
         <Decal
-          position={[0, 1.38, 0.15]}
+          position={customize.embellishment[1].type === 'text' ? [0, 1.27, 0.01] : [0, 1.38, 0.1]}
           rotation={[0, 0, 0]}
-          scale={[0.23, 0.31, 0.26]}
-          map={texture[1]}
-        />
+          scale={customize.embellishment[1].type === 'text' ? [0.32, 0.57, 0.4] : [0.23, 0.31, 0.26]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[1]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.MG100Y_FRE2_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.007']} />
       <mesh geometry={nodes.MG100Y_FRE2_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.007']} />

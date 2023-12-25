@@ -601,10 +601,17 @@ export default function ShortManModel(props: any) {
       <mesh geometry={nodes.WRCALCAOBOLCOS.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.099']} >
         <Decal
           position={[-0.11, 0.98, -0.12]}
-          rotation={[0, 0, 0]}
+          rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
           scale={[0.07, 0.1, 0.2]}
-          map={texture[4]}
-        />
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[4]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.WRCALCAOBOLCOS_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2603.003']} />
       <mesh geometry={nodes.WRCALCAOBOLCOS_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.099']} />
@@ -631,41 +638,69 @@ export default function ShortManModel(props: any) {
       <mesh geometry={nodes.WRCALCAOCNTFRE_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.096']} />
       <mesh geometry={nodes.WRCALCAOCOSDRT.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.102']} >
         <Decal
-          position={[-0.10, 0.77, -0.12]}
+          position={customize.embellishment[3].type === 'text' ? [-0.10, 0.75, -0.12] : [-0.10, 0.77, -0.12]}
           rotation={[0, 0, 0]}
-          scale={[0.08, 0.12, 0.2]}
-          map={texture[3]}
-        />
+          scale={customize.embellishment[3].type === 'text' ? [0.155, 0.3, 0.2] : [0.08, 0.12, 0.2]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[3]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.WRCALCAOCOSDRT_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2603.006']} />
       <mesh geometry={nodes.WRCALCAOCOSDRT_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.102']} />
       <mesh geometry={nodes.WRCALCAOCOSDRTR.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.105']} >
         <Decal
-          position={[0.07, 0.84, -0.16]}
+          position={customize.embellishment[2].type === 'text' ? [0.1, 0.845, -0.1] : [0.07, 0.84, -0.16]}
           rotation={[THREE.MathUtils.degToRad(-5), 0, 0]}
-          scale={[0.08, 0.48, 0.2]}
-          map={texture[2]}
-        />
+          scale={customize.embellishment[2].type === 'text' ? [0.14, 0.5, 0.2] : [0.08, 0.48, 0.2]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[2]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.WRCALCAOCOSDRTR_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2603.009']} />
       <mesh geometry={nodes.WRCALCAOCOSDRTR_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.105']} />
       <mesh geometry={nodes.WRCALCAOFRE.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.098']} >
         <Decal
-          position={[-0.08, 0.82, 0.16]}
+          position={customize.embellishment[1].type === 'text' ? [-0.1, 0.827, 0.1] : [-0.08, 0.82, 0.1]}
           rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
-          scale={[0.08, 0.45, 0.2]}
-          map={texture[1]}
-        />
+          scale={customize.embellishment[1].type === 'text' ? [0.14, 0.47, 0.2] : [0.08, 0.45, 0.2]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[1]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.WRCALCAOFRE_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2603.002']} />
       <mesh geometry={nodes.WRCALCAOFRE_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.098']} />
       <mesh geometry={nodes.WRCALCAOFRER.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.104']} >
         <Decal
-          position={[0.1, 0.82, 0.16]}
+          position={customize.embellishment[0].type === 'text' ? [0.1, 0.827, 0.1] : [0.1, 0.82, 0.1]}
           rotation={[THREE.MathUtils.degToRad(5), 0, 0]}
-          scale={[0.08, 0.45, 0.2]}
-          map={texture[0]}
-        />
+          scale={customize.embellishment[0].type === 'text' ? [0.14, 0.47, 0.2] : [0.08, 0.45, 0.2]}
+        >
+          <meshPhysicalMaterial
+            transparent
+            polygonOffset
+            polygonOffsetFactor={-2}
+            map={texture[0]}
+            map-anisotropy={16}
+          />
+        </Decal>
       </mesh>
       <mesh geometry={nodes.WRCALCAOFRER_1.geometry} material={materials['Knit_Fleece_Terry_BACK_2603.008']} />
       <mesh geometry={nodes.WRCALCAOFRER_2.geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.104']} />
