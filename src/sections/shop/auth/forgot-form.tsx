@@ -56,7 +56,7 @@ export default function ForgotForm() {
 
   const renderForm = (
     <Stack gap={4}>
-      {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
+      {!!errorMsg && <Alert sx={{ width: { md: 0.6, xs: 1 }, margin: "0 auto" }} severity="error">{errorMsg}</Alert>}
 
       <Stack gap={2}>
         <RHFTextField sx={{ width: { md: 0.6, xs: 1 }, margin: "0 auto" }} name="email" placeholder="Enter your email" />
