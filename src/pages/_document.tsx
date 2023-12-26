@@ -7,6 +7,7 @@ import Document, {
 } from "next/document";
 import createEmotionCache from "@/utils/createEmotionCache";
 import createEmotionServer from "@emotion/server/create-instance";
+import { fontList } from '@/helpers/common';
 
 export default function MyDocument({
   emotionStyleTags,
@@ -18,6 +19,10 @@ export default function MyDocument({
       <Head>
         <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.png" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        {fontList.map((font, i) => (
+          <link key={font.family} href={`https://fonts.googleapis.com/css2?family=${font.family}&display=swap`} rel="stylesheet" />
+        ))}
         {emotionStyleTags}
       </Head>
       <body>

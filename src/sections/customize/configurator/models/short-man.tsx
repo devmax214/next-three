@@ -155,8 +155,11 @@ export default function ShortManModel(props: any) {
       const lines = customize.embellishment[i].textureText.split('\n');
 
       if (ctx !== null && customize.embellishment[i].font) {
-        ctx.font = `${fontSize}pt ${customize.embellishment[i].font}`;
+        ctx.font = `${fontSize}pt '${customize.embellishment[i].font}'`;
         ctx.scale(factor, factor);
+        const ele = document.getElementsByTagName('header')
+        ele.item(0)?.style.setProperty("fontFamily", customize.embellishment[i].font);
+        ele.item(0)?.style.setProperty("backgroundColor", 'red');
         switch (customize.embellishment[i].position.type) {
           case 0:
             ctx.textAlign = 'left';

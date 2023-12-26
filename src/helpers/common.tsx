@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import Jwt from "jsonwebtoken";
+import webFontData from "@/theme/fonts/fonts.json";
+
+export const fontList = webFontData.items;
 
 // To verify the validity of the token and get the user id from it
 export async function getDataFromToken(req: NextRequest) {

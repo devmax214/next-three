@@ -609,7 +609,7 @@ export default function Model(props: any) {
         <Decal
           position={[0, 1.28, -0.04]}
           rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
-          scale={customize.embellishment[1].type === 'text' ? [0.31, 0.6, 0.26] : [0.23, 0.31, 0.26]}
+          scale={customize.embellishment[0].type === 'text' ? [0.31, 0.6, 0.26] : [0.23, 0.31, 0.26]}
         >
           <meshPhysicalMaterial
             transparent
@@ -643,7 +643,7 @@ export default function Model(props: any) {
         <Decal
           position={customize.embellishment[2].type === 'text' ? [0.35, 1.265, -0.02] : [0.3, 1.15, 0]}
           rotation={customize.embellishment[2].type === 'text' ? [THREE.MathUtils.degToRad(10), THREE.MathUtils.degToRad(90), THREE.MathUtils.degToRad(-14)] : [THREE.MathUtils.degToRad(-10), THREE.MathUtils.degToRad(90), 0]}
-          scale={customize.embellishment[2].type === 'text' ? [0.07, 0.52, 0.25] : [0.05, 0.26, 0.1]}
+          scale={customize.embellishment[2].type === 'text' ? [0.07, 0.52, 0.25] : [0.05, 0.26, 0.09]}
         >
           <meshPhysicalMaterial
             transparent
@@ -660,7 +660,7 @@ export default function Model(props: any) {
         <Decal
           position={customize.embellishment[3].type === 'text' ? [-0.35, 1.265, -0.01] : [-0.3, 1.15, 0]}
           rotation={[THREE.MathUtils.degToRad(-5), THREE.MathUtils.degToRad(90), 0]}
-          scale={customize.embellishment[3].type === 'text' ? [0.07, 0.52, 0.24] : [0.05, 0.26, 0.066]}
+          scale={customize.embellishment[3].type === 'text' ? [0.07, 0.52, 0.24] : [0.05, 0.26, 0.09]}
         >
           <meshPhysicalMaterial
             transparent

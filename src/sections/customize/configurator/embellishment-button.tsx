@@ -23,6 +23,7 @@ import { CustomizeContext } from "@/components/customize/context/customize-conte
 import CheckedIcon from "@/components/icons/checked-icon";
 import UnCheckedIcon from "@/components/icons/unchecked-icon";
 import { typeIndexToLabel } from "@/helpers/common";
+import { fontList } from '@/helpers/common';
 
 export const StyledHeader1 = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -62,7 +63,7 @@ type Props = {
 };
 
 export default function EmbellishmentButton({ embelIndex, ptype }: Props) {
-  const [font, setFont] = useState("Arial")
+  const [font, setFont] = useState("ABeeZee")
 
   const customize = useContext(CustomizeContext);
   const popover = usePopover();
@@ -321,8 +322,9 @@ export default function EmbellishmentButton({ embelIndex, ptype }: Props) {
         </Stack>
 
         <Select fullWidth size="small" value={font} onChange={handleChange} disabled={customize.embellishment[embelIndex].type !== "text"}>
-          <MenuItem value="Arial" >Arial</MenuItem>
-          <MenuItem value="monospace">Monospace</MenuItem>
+          {fontList.map((font) => (
+            <MenuItem value={font.family} >{font.family}</MenuItem>
+          ))}
         </Select>
       </Stack>
       <Stack mt={1}>
