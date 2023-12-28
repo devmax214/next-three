@@ -337,6 +337,7 @@ export default function ShortManModel(props: any) {
     // const color = new THREE.Color(rgb.r, rgb.g, rgb.b);
     const color = customize.color;
     for (let key in materials) {
+      delete materials[key]['_listeners'];
       materials[key] = new THREE.MeshStandardMaterial({ ...materials[key], color: color })
     }
   }

@@ -13,7 +13,6 @@ export default function useResponsive(
   end?: Value
 ): ReturnType {
   const theme = useTheme();
-  console.log('version', '23.12.22.1')
 
   const mediaUp = useMediaQuery(theme.breakpoints.up(start as Value));
 

@@ -1,6 +1,6 @@
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, Suspense, useState, useEffect, useRef } from "react";
 import * as THREE from "three";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { Center, Environment, OrbitControls } from "@react-three/drei";
 import { TShartMan, HoodyMan, PantMan, ShortMan, SWEATMAN, OversizeMan } from "@/sections/customize/configurator/models";
 import { CustomizeContext, useCustomizeContext } from '@/components/customize/context/customize-context';
@@ -113,6 +113,7 @@ export default function ConfigurationCanvas(props: Props) {
   }, [props.arrowRightCount]);
 
   const smDown = useResponsive("down", "sm");
+  const [objData, setObjData] = useState({ scale: null, position: null, rotation: null });
   return (
     <Canvas
       id={props.id}
@@ -129,16 +130,17 @@ export default function ConfigurationCanvas(props: Props) {
 
       <Environment files="/models/potsdamer_platz_1k.hdr" />
 
-      <Center {...state} >
-        {props.type === 'Hoodies' ?
-          <HoodyMan ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Pants' ?
-            <PantMan ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Shorts' ?
-              <ShortMan ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Sweatshirts' ?
-                <SWEATMAN ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'T-Shirts' ?
-                  <TShartMan ctx={props.ctx} embelIndex={embelIndex} /> : <OversizeMan ctx={props.ctx} embelIndex={embelIndex} />}
+      <Suspense fallback={null}>
+        <Center {...state} >
+          {props.type === 'Hoodies' ?
+            <HoodyMan ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Pants' ?
+              <PantMan ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Shorts' ?
+                <ShortMan ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Sweatshirts' ?
+                  <SWEATMAN ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'T-Shirts' ?
+                    <TShartMan ctx={props.ctx} embelIndex={embelIndex} /> : <OversizeMan ctx={props.ctx} embelIndex={embelIndex} />}
 
-      </Center>
-
+        </Center>
+      </Suspense>
       <OrbitControls />
     </Canvas>
   );

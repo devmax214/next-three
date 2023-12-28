@@ -87,7 +87,12 @@ export default function ConfigurationView(props: any) {
 
             <Grid container sx={{ pl: 2 }} spacing={6}>
               <Grid item md={8} xs={12}>
-                <ConfigurationCanvas page="customize-view" ctx={typeof customProduct.context === "object" ? customProduct.context : {}} arrowLeftCount={0} arrowRightCount={0}  {...props} id="myCanvas" />
+                <div style={{ position: 'relative' }}>
+                  <ConfigurationCanvas page="customize-view" ctx={typeof customProduct.context === "object" ? customProduct.context : {}} arrowLeftCount={0} arrowRightCount={0}  {...props} id="myCanvas" />
+                  <div style={{ position: 'absolute', top: 0, right: 0 }}>
+                    <canvas id="canvas" />
+                  </div>
+                </div>
                 <Box
                   component={"div"}
                   sx={{

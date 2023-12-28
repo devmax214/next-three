@@ -282,6 +282,7 @@ export default function SWEATManModel(props: any) {
   if (customize.color.length > 0) {
     const color = customize.color;
     for (let key in materials) {
+      delete materials[key]['_listeners'];
       materials[key] = new THREE.MeshStandardMaterial({ ...materials[key], color: color })
     }
   }

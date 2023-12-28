@@ -284,6 +284,7 @@ export default function TShirtManModel(props: any) {
   if (!isEmpty(customize.color)) {
     const color = customize.color;
     for (let key in materials) {
+      delete materials[key]['_listeners'];
       materials[key] = new THREE.MeshStandardMaterial({ ...materials[key], color: color })
     }
   }
