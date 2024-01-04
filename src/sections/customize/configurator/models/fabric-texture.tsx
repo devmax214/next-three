@@ -9,12 +9,12 @@ interface Props {
   bumpMap: Texture;
   normalScale?: number;
   bumpScale?: number;
-  color? : string;
+  color?: string;
 }
 function FabricEditableTexture(props: Props) {
   const [map, setMap] = useState<Texture>()
-  useEffect(()=>{
-    if(props.color){
+  useEffect(() => {
+    if (props.color) {
       setMap(props.bumpMap)
     } else {
       setMap(props.textureRef.current)

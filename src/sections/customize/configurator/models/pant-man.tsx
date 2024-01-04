@@ -3,18 +3,12 @@ import React, {
   useCallback,
   useEffect,
   useState,
-  useRef,
-  useLayoutEffect,
 } from "react";
-import { Decal, useGLTF, useTexture } from "@react-three/drei";
+import { Decal, useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
-import { useFrame, useLoader, useThree } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import { isEmpty } from "@/helpers/common";
-import { getPosition } from "@/components/custom-popover/utils";
-import useFirstRenderModel from "@/hooks/use-first-render-model";
-import { getMousePosition } from "@/utils/fabric";
-import useStore, { setState } from "@/helpers/store";
 import FabricEditableTexture from "./fabric-texture";
 import { useRaycast } from "@/hooks/use-custom-raycast";
 import useCustomTextures from "@/hooks/use-custom-texture";
@@ -125,276 +119,19 @@ type GLTFResult = GLTF & {
   };
 };
 
-type ContextType = Record<
-  string,
-  React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
->;
-
 export default function PANTManModel(props: any) {
   const customize = useCustomizeContext();
+  const { embelIndex, canvasRef, textureRef, canvasRenderedRef, controlsRef } = props;
+
   const [tagName, setTagName] = useState("");
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
-  const [texture, setTexture] = useState({
-    0: new THREE.Texture(),
-    1: new THREE.Texture(),
-    2: new THREE.Texture(),
-    3: new THREE.Texture(),
-    4: new THREE.Texture(),
-  }) as any;
-  const { embelIndex, canvasRef, textureRef, canvasRenderedRef, controlsRef } =
-    props;
-
-  const modelRef = useRef<any>();
-  const [zoomFactor, setZoomFactor] = useState<number>(1);
 
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
 
-  useEffect(() => {
-    if (!isEmpty(customize.tag.file)) {
-      loader
-        .loadAsync(
-          typeof customize.tag.file === "string"
-            ? customize.tag.file
-            : URL.createObjectURL(customize.tag.file)
-        )
-        .then((result) => {
-          setTagTexture(result);
-        });
-    }
-  }, [customize.tag.file]);
-
-  const reverseIndex = [2, 3, 4],
-    embelSize = 5,
-    smallIndex = [3, 4];
-  const setTextTexture = (factor = 1) => {
-    let tmpTexture = texture;
-    for (let i = 0; i < embelSize; i++) {
-      if (customize.embellishment[i].type === "image") continue;
-      const textCanvas = document.createElement("canvas");
-      textCanvas.style.cssText = "border: 1px solid grey";
-      const baseWidth = smallIndex.includes(i) ? 100 : 150;
-      const baseHeight = smallIndex.includes(i) ? 200 : 250;
-      const fontSize = smallIndex.includes(i) ? 16 : 24;
-      const lineHeight = smallIndex.includes(i) ? 18 : 26;
-      textCanvas.width = baseWidth * factor;
-      textCanvas.height = baseHeight * factor;
-      var ctx = textCanvas.getContext("2d");
-      var fillTextX = 0,
-        fillTextY = 0;
-      const lines = customize.embellishment[i].textureText.split("\n");
-
-      if (ctx !== null && customize.embellishment[i].font) {
-        ctx.font = `${fontSize}pt ${customize.embellishment[i].font}`;
-        ctx.scale(factor, factor);
-        switch (customize.embellishment[i].position.type) {
-          case 0:
-            ctx.textAlign = "left";
-            ctx.textBaseline = "middle";
-            fillTextX = 0;
-            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-            break;
-          case 1:
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            fillTextX = baseWidth / 2;
-            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-            break;
-          case 2:
-            ctx.textAlign = "right";
-            ctx.textBaseline = "middle";
-            fillTextX = baseWidth;
-            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-            break;
-          case 3:
-            ctx.textAlign = "center";
-            ctx.textBaseline = "top";
-            fillTextX = baseWidth / 2;
-            fillTextY = 0;
-            break;
-          case 4:
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            fillTextX = baseWidth / 2;
-            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-            break;
-          case 5:
-            ctx.textAlign = "center";
-            ctx.textBaseline = "bottom";
-            fillTextX = baseWidth / 2;
-            fillTextY = baseHeight - lineHeight * lines.length + fontSize;
-            break;
-        }
-        for (let k = 0; k < lines.length; k++) {
-          ctx.fillText(lines[k], fillTextX, fillTextY + k * lineHeight);
-        }
-
-        const myTexture = new THREE.CanvasTexture(textCanvas);
-        if (reverseIndex.includes(i)) {
-          myTexture.wrapS = THREE.RepeatWrapping;
-          myTexture.repeat.x = -1;
-        }
-        tmpTexture[i] = myTexture;
-      }
-      setTexture({ ...texture, ...tmpTexture });
-    }
-  };
-
-  useEffect(() => {
-    if (customize.embellishment[embelIndex].type === "image") {
-      if (!isEmpty(customize.embellishment[embelIndex].file))
-        loader
-          .loadAsync(
-            typeof customize.embellishment[embelIndex].file === "string"
-              ? customize.embellishment[embelIndex].file
-              : URL.createObjectURL(customize.embellishment[embelIndex].file)
-          )
-          .then((result) => {
-            if (reverseIndex.includes(embelIndex)) {
-              result.wrapS = THREE.RepeatWrapping;
-              result.repeat.x = -1;
-            }
-            setTexture({ ...texture, [embelIndex]: result });
-          });
-    } else if (customize.embellishment[embelIndex].type === "text") {
-      setTextTexture();
-    }
-  }, [
-    customize.embellishment[embelIndex].position,
-    customize.embellishment[embelIndex].type,
-    customize.embellishment[embelIndex].file,
-    customize.embellishment[embelIndex].textureText,
-    customize.embellishment[embelIndex].font,
-  ]);
-
-  useEffect(() => {
-    let factor = 1;
-    let tmpTexture = {
-      0: new THREE.Texture(),
-      1: new THREE.Texture(),
-      2: new THREE.Texture(),
-      3: new THREE.Texture(),
-      4: new THREE.Texture(),
-    };
-    let tmpCtx = customize;
-
-    if (props.ctx.embellishment) {
-      tmpCtx = props.ctx;
-    }
-    let promises = [];
-    let indexes = [];
-    for (let i = 0; i < embelSize; i++) {
-      if (tmpCtx.embellishment[i].type === "image") {
-        if (!isEmpty(tmpCtx.embellishment[i].file)) {
-          indexes.push(i);
-          promises.push(
-            loader.loadAsync(
-              typeof tmpCtx.embellishment[i].file === "string"
-                ? tmpCtx.embellishment[i].file
-                : URL.createObjectURL(tmpCtx.embellishment[i].file)
-            )
-          );
-        }
-      } else if (tmpCtx.embellishment[i].type === "text") {
-        const textCanvas = document.createElement("canvas");
-        textCanvas.style.cssText = "border: 1px solid grey";
-        const baseWidth = smallIndex.includes(i) ? 100 : 150;
-        const baseHeight = smallIndex.includes(i) ? 200 : 250;
-        const fontSize = smallIndex.includes(i) ? 16 : 24;
-        const lineHeight = smallIndex.includes(i) ? 18 : 26;
-        textCanvas.width = baseWidth * factor;
-        textCanvas.height = baseHeight * factor;
-        var ctx = textCanvas.getContext("2d");
-        var fillTextX = 0,
-          fillTextY = 0;
-        const lines = tmpCtx.embellishment[i].textureText.split("\n");
-
-        if (ctx !== null && tmpCtx.embellishment[i].font) {
-          ctx.font = `${fontSize}pt ${tmpCtx.embellishment[i].font}`;
-          ctx.scale(factor, factor);
-          switch (tmpCtx.embellishment[i].position.type) {
-            case 0:
-              ctx.textAlign = "left";
-              ctx.textBaseline = "middle";
-              fillTextX = 0;
-              fillTextY =
-                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-              break;
-            case 1:
-              ctx.textAlign = "center";
-              ctx.textBaseline = "middle";
-              fillTextX = baseWidth / 2;
-              fillTextY =
-                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-              break;
-            case 2:
-              ctx.textAlign = "right";
-              ctx.textBaseline = "middle";
-              fillTextX = baseWidth;
-              fillTextY =
-                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-              break;
-            case 3:
-              ctx.textAlign = "center";
-              ctx.textBaseline = "top";
-              fillTextX = baseWidth / 2;
-              fillTextY = 0;
-              break;
-            case 4:
-              ctx.textAlign = "center";
-              ctx.textBaseline = "middle";
-              fillTextX = baseWidth / 2;
-              fillTextY =
-                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-              break;
-            case 5:
-              ctx.textAlign = "center";
-              ctx.textBaseline = "bottom";
-              fillTextX = baseWidth / 2;
-              fillTextY = baseHeight - lineHeight * lines.length + fontSize;
-              break;
-          }
-          for (let k = 0; k < lines.length; k++) {
-            ctx.fillText(lines[k], fillTextX, fillTextY + k * lineHeight);
-          }
-
-          const myTexture = new THREE.CanvasTexture(textCanvas);
-          if (reverseIndex.includes(i)) {
-            myTexture.wrapS = THREE.RepeatWrapping;
-            myTexture.repeat.x = -1;
-          }
-          tmpTexture[i] = myTexture;
-        }
-      }
-    }
-    Promise.all(promises).then((result) => {
-      for (let i = 0; i < result.length; i++) {
-        if (reverseIndex.includes(indexes[i])) {
-          result[i].wrapS = THREE.RepeatWrapping;
-          result[i].repeat.x = -1;
-        }
-        tmpTexture[indexes[i]] = result[i];
-      }
-      setTexture({ ...texture, ...tmpTexture });
-    });
-  }, []);
-
   const { nodes, materials } = useGLTF(
     "/models/PANTWR_man/PANTS_MAN2.glb"
   ) as GLTFResult;
-
-  if (customize.color.length > 0) {
-    // const rgb = hexToRgba(customize.color)
-    // const color = new THREE.Color(rgb.r, rgb.g, rgb.b);
-    const color = customize.color;
-    for (let key in materials) {
-      delete materials[key]["_listeners"];
-      materials[key] = new THREE.MeshStandardMaterial({
-        ...materials[key],
-        color: color,
-      });
-    }
-  }
 
   const tag = useCallback(() => {
     try {
@@ -409,17 +146,17 @@ export default function PANTManModel(props: any) {
         const positionY = customize.tag.size.startsWith("45x45")
           ? 1.088
           : customize.tag.size.startsWith("55")
-          ? 1.094
-          : 1.615;
+            ? 1.094
+            : 1.615;
         const scaleYZ = customize.tag.size.startsWith("45x45")
           ? 0.02
           : customize.tag.size.startsWith("55")
-          ? 0.017
-          : 0.025;
+            ? 0.017
+            : 0.025;
         const scaleX = !tagTexture.source.data
           ? 0
           : (scaleYZ * tagTexture.source.data.naturalWidth) /
-            tagTexture.source.data.naturalHeight;
+          tagTexture.source.data.naturalHeight;
 
         return (
           <group dispose={null}>
@@ -618,8 +355,29 @@ export default function PANTManModel(props: any) {
   }, [customize.tag]);
 
   useEffect(() => {
-    setTextTexture(zoomFactor);
-  }, [zoomFactor]);
+    if (!isEmpty(customize.tag.file)) {
+      loader
+        .loadAsync(
+          typeof customize.tag.file === "string"
+            ? customize.tag.file
+            : URL.createObjectURL(customize.tag.file)
+        )
+        .then((result) => {
+          setTagTexture(result);
+        });
+    }
+  }, [customize.tag.file]);
+
+  if (customize.color.length > 0) {
+    const color = customize.color;
+    for (let key in materials) {
+      delete materials[key]["_listeners"];
+      materials[key] = new THREE.MeshStandardMaterial({
+        ...materials[key],
+        color: color,
+      });
+    }
+  }
 
   /*
     30 DECEMBER 2023
@@ -763,14 +521,14 @@ export default function PANTManModel(props: any) {
       <mesh
         geometry={nodes.WRCALCABOLINF_1001_1.geometry}>
         <FabricEditableTexture
-            bumpMap={bumpInMap}
-            normalScale={0.001}
-            color={customize.color}
-            normalMap={normalInMap}
-            canvasRef={canvasRef}
-            textureRef={textureRef}
-          />
-        </mesh>
+          bumpMap={bumpInMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalInMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
       <mesh
         geometry={nodes.WRCALCABOLINF_1001_2.geometry}
         material={materials["Knit_Fleece_Terry_FRONT_2649.007"]}
@@ -782,14 +540,14 @@ export default function PANTManModel(props: any) {
       <mesh
         geometry={nodes.WRCALCABOLINF001_1.geometry}>
         <FabricEditableTexture
-            bumpMap={bumpInMap}
-            normalScale={0.001}
-            color={customize.color}
-            normalMap={normalInMap}
-            canvasRef={canvasRef}
-            textureRef={textureRef}
-          />
-        </mesh>
+          bumpMap={bumpInMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalInMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
       <mesh
         geometry={nodes.WRCALCABOLINF001_2.geometry}
         material={materials.Knit_Fleece_Terry_FRONT_2649}
@@ -821,14 +579,14 @@ export default function PANTManModel(props: any) {
       <mesh
         geometry={nodes.WRCALCACNTCOS001.geometry}>
         <FabricEditableTexture
-            bumpMap={bumpOutMap}
-            normalScale={0.001}
-            color={customize.color}
-            normalMap={normalOutMap}
-            canvasRef={canvasRef}
-            textureRef={textureRef}
-          />
-        </mesh>
+          bumpMap={bumpOutMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
       <mesh
         geometry={nodes.WRCALCACNTCOS001_1.geometry}
         material={materials["Knit_Fleece_Terry_BACK_2649.004"]}
@@ -840,14 +598,14 @@ export default function PANTManModel(props: any) {
       <mesh
         geometry={nodes.WRCALCACNTFRE001.geometry}>
         <FabricEditableTexture
-            bumpMap={bumpOutMap}
-            normalScale={0.001}
-            color={customize.color}
-            normalMap={normalOutMap}
-            canvasRef={canvasRef}
-            textureRef={textureRef}
-          />
-        </mesh>
+          bumpMap={bumpOutMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
       <mesh
         geometry={nodes.WRCALCACNTFRE001_1.geometry}
         material={materials["Knit_Fleece_Terry_BACK_2649.003"]}
@@ -858,26 +616,26 @@ export default function PANTManModel(props: any) {
       <mesh
         geometry={nodes.WRCALCACNTFRE001_2.geometry}>
         <FabricEditableTexture
-            bumpMap={bumpOutMap}
-            normalScale={0.001}
-            color={customize.color}
-            normalMap={normalOutMap}
-            canvasRef={canvasRef}
-            textureRef={textureRef}
-          />
-        </mesh>
+          bumpMap={bumpOutMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
 
       <mesh
         geometry={nodes.WRCALCACSDI_1001_1.geometry}>
         <FabricEditableTexture
-            bumpMap={bumpInMap}
-            normalScale={0.001}
-            color={customize.color}
-            normalMap={normalInMap}
-            canvasRef={canvasRef}
-            textureRef={textureRef}
-          />
-        </mesh>
+          bumpMap={bumpInMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalInMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
       <mesh
         geometry={nodes.WRCALCACSDI_1001_2.geometry}
         material={materials["Knit_Fleece_Terry_FRONT_2649.015"]}
@@ -891,7 +649,7 @@ export default function PANTManModel(props: any) {
         />
       </mesh>
       <mesh geometry={nodes.WRCALCACSDI_1001.geometry}>
-      <FabricEditableTexture
+        <FabricEditableTexture
           bumpMap={bumpOutMap}
           normalMap={normalOutMap}
           canvasRef={canvasRef}
@@ -929,14 +687,14 @@ export default function PANTManModel(props: any) {
       <mesh
         geometry={nodes.WRCALCACSDI_2001_1.geometry}>
         <FabricEditableTexture
-            bumpMap={bumpInMap}
-            normalScale={0.001}
-            color={customize.color}
-            normalMap={normalInMap}
-            canvasRef={canvasRef}
-            textureRef={textureRef}
-          />
-        </mesh>
+          bumpMap={bumpInMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalInMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
       <mesh
         geometry={nodes.WRCALCACSDI_2001_2.geometry}
         material={materials["Knit_Fleece_Terry_FRONT_2603.009"]}
@@ -945,14 +703,14 @@ export default function PANTManModel(props: any) {
       <mesh
         geometry={nodes.WRCALCACSDI_3001_1.geometry}>
         <FabricEditableTexture
-            bumpMap={bumpInMap}
-            normalScale={0.001}
-            color={customize.color}
-            normalMap={normalInMap}
-            canvasRef={canvasRef}
-            textureRef={textureRef}
-          />
-        </mesh>
+          bumpMap={bumpInMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalInMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
       <mesh
         geometry={nodes.WRCALCACSDI_3001_2.geometry}
         material={materials["Knit_Fleece_Terry_FRONT_2649.013"]}
@@ -964,14 +722,14 @@ export default function PANTManModel(props: any) {
       <mesh
         geometry={nodes.WRCALCACSDI_4001_1.geometry}>
         <FabricEditableTexture
-            bumpMap={bumpInMap}
-            normalScale={0.001}
-            color={customize.color}
-            normalMap={normalInMap}
-            canvasRef={canvasRef}
-            textureRef={textureRef}
-          />
-        </mesh>
+          bumpMap={bumpInMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalInMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
       <mesh
         geometry={nodes.WRCALCACSDI_4001_2.geometry}
         material={materials["Knit_Fleece_Terry_FRONT_2603.015"]}
@@ -992,14 +750,14 @@ export default function PANTManModel(props: any) {
       <mesh
         geometry={nodes.WRCALCAFRE_2001_1.geometry}>
         <FabricEditableTexture
-            bumpMap={bumpInMap}
-            normalScale={0.001}
-            color={customize.color}
-            normalMap={normalInMap}
-            canvasRef={canvasRef}
-            textureRef={textureRef}
-          />
-        </mesh>
+          bumpMap={bumpInMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalInMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
       <mesh
         geometry={nodes.WRCALCAFRE_2001_2.geometry}
         material={materials["Knit_Fleece_Terry_FRONT_2649.011"]}
@@ -1020,14 +778,14 @@ export default function PANTManModel(props: any) {
       <mesh
         geometry={nodes.WRCALCAFRE_4001_1.geometry}>
         <FabricEditableTexture
-            bumpMap={bumpInMap}
-            normalScale={0.001}
-            color={customize.color}
-            normalMap={normalInMap}
-            canvasRef={canvasRef}
-            textureRef={textureRef}
-          />
-        </mesh>
+          bumpMap={bumpInMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalInMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
       <mesh
         geometry={nodes.WRCALCAFRE_4001_2.geometry}
         material={materials["Knit_Fleece_Terry_FRONT_2649.016"]}

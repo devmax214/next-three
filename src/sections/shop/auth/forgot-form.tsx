@@ -37,7 +37,7 @@ export default function ForgotForm() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const response = await axios.post('/api/auth/forgot', { ...data });
-      console.log(response)
+
       if (response.data.success) {
         push({
           pathname: "/auth/auth",

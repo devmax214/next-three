@@ -32,13 +32,6 @@ export function useRaycast(
       customize.embellishment[embelIndex].visible
     ) {
       state.camera.position.set(0, 0, 2.5);
-    } else {
-      // u can change this code to normal
-      // const distance = state.camera.position.distanceTo(modelRef.current.position);
-      // const newZoomFactor = 2.5 / distance;
-      // if (newZoomFactor !== zoomFactor) {
-      //  setZoomFactor(newZoomFactor);
-      // }
     }
   });
   // NAO

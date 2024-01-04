@@ -44,8 +44,6 @@ export default function ProductSearchToolbar({
     const query = {} as { [key: string]: string };
     if (searchText) query.search = searchText;
 
-    console.log(color);
-
     router.push({
       pathname: PATH_SHOP.product.search,
       query: query,

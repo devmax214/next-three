@@ -16,7 +16,6 @@ type Props = {};
 export default function ContactAndShipping(props: Props) {
 
   const checkout = useCheckoutContext();
-  console.log(checkout)
 
   return (
     <>

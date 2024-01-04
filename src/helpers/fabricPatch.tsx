@@ -11,7 +11,7 @@ interface Props {
     scene: any
     raycaster: any
     mouse: any
-  gl: any
+    gl: any
   }
   canvasRenderedRef: MutableRefObject<HTMLCanvasElement>
   canvasRef: MutableRefObject<Canvas>
@@ -30,16 +30,15 @@ export const initPatch = ({
   }
 
   fabric.Object.prototype.transparentCorners = false;
-  fabric.Object.prototype.cornerColor = 'blue';
+  fabric.Object.prototype.cornerColor = '#F05A4A';
   fabric.Object.prototype.cornerStyle = 'rect';
   fabric.Object.prototype.cornerSize = 18;
-  // fabric.Object.prototype.borderDashArray = [10, 10]
   fabric.Object.prototype.borderDashArray = [10]
   fabric.Object.prototype.borderColor = 'black'
   fabric.Object.prototype.objectCaching = true;
 
   // if (editText || isAddText) {
-  fabric.Canvas.prototype.getPointer = (e:any, ignoreZoom) => {
+  fabric.Canvas.prototype.getPointer = (e: any, ignoreZoom) => {
     const canvasElement = canvasRef.current.getSelectionElement();
     const bounds = canvasElement.getBoundingClientRect();
     const boundsWidth = bounds.width || 0;

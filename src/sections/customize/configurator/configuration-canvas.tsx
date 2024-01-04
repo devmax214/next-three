@@ -1,11 +1,10 @@
-import { useContext, Suspense, useState, useEffect, useRef, MutableRefObject, useMemo } from "react";
+import { useContext, Suspense, useState, useEffect, useRef, useMemo } from "react";
 import * as THREE from "three";
-import { Canvas, useThree } from "@react-three/fiber";
-import { Center, Environment, OrbitControls,Stats } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { Center, Environment, OrbitControls, Stats } from "@react-three/drei";
 import { TShartMan, HoodyMan, PantMan, ShortMan, SWEATMAN, OversizeMan } from "@/sections/customize/configurator/models";
-import { CustomizeContext, useCustomizeContext } from '@/components/customize/context/customize-context';
+import { CustomizeContext } from '@/components/customize/context/customize-context';
 import { useFirstRender, useResponsive } from "@/hooks";
-import { Texture } from "three";
 import { initPatch } from "@/helpers/fabricPatch";
 import OversizeManModel from "./models/oversize-man";
 
@@ -121,8 +120,8 @@ export default function ConfigurationCanvas(props: Props) {
   }, [props.arrowRightCount]);
 
   const smDown = useResponsive("down", "sm");
-  const [objData, setObjData] = useState({ scale: null, position: null, rotation: null });
-  useFirstRender({canvasRef: props.canvasRef, textureRef:props.textureRef })
+
+  useFirstRender({ canvasRef: props.canvasRef, textureRef: props.textureRef })
   const [threeProps, setThreeProps] = useState({
     camera: null,
     pointer: null,
@@ -132,11 +131,11 @@ export default function ConfigurationCanvas(props: Props) {
     gl: null,
   })
   const memoizedInitPatch = useMemo(() => {
-    initPatch({ threeProps, canvasRenderedRef, canvasRef:props.canvasRef, textureRef:props.textureRef })
+    initPatch({ threeProps, canvasRenderedRef, canvasRef: props.canvasRef, textureRef: props.textureRef })
   }, [props.canvasRef, props.textureRef, threeProps])
   return (
     <Canvas
-    ref={canvasRenderedRef}
+      ref={canvasRenderedRef}
       id={props.id}
       shadows
       // flat
@@ -151,7 +150,7 @@ export default function ConfigurationCanvas(props: Props) {
         background: props.page === 'gallery' ? "" : "radial-gradient(circle, rgba(229,229,229,1) 0%, rgba(149,149,149,1) 100%)",
         borderRadius: 10
       }}
-      onCreated={({ camera, pointer, scene, raycaster, gl, mouse }:any) => {
+      onCreated={({ camera, pointer, scene, raycaster, gl, mouse }: any) => {
         gl.setClearAlpha(0)
         setThreeProps({ camera, pointer, scene, raycaster, gl, mouse })
       }}
@@ -164,24 +163,15 @@ export default function ConfigurationCanvas(props: Props) {
         <Center {...state} >
           {props.type === 'Hoodies' ?
             <HoodyMan controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef} ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Pants' ?
-              <PantMan controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef}  ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Shorts' ?
-                <ShortMan controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef}  ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Sweatshirts' ?
-                  <SWEATMAN controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef}  ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Oversize' ?
-                  <OversizeManModel controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef}  ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'T-Shirts' ?
-                    <TShartMan controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef}  ctx={props.ctx} embelIndex={embelIndex} /> : <OversizeMan ctx={props.ctx} embelIndex={embelIndex} />}
+              <PantMan controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef} ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Shorts' ?
+                <ShortMan controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef} ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Sweatshirts' ?
+                  <SWEATMAN controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef} ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'Oversize' ?
+                    <OversizeManModel controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef} ctx={props.ctx} embelIndex={embelIndex} /> : props.type === 'T-Shirts' ?
+                      <TShartMan controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef} ctx={props.ctx} embelIndex={embelIndex} /> : <OversizeMan controlsRef={controlsRef} canvasRenderedRef={canvasRenderedRef} textureRef={props.textureRef} canvasRef={props.canvasRef} ctx={props.ctx} embelIndex={embelIndex} />}
 
         </Center>
       </Suspense>
-      <Stats/>
-      <OrbitControls
-      
-      // minDistance={0.5}
-      // minZoom={0.5}
-      // maxDistance={3}
-      // maxZoom={3}
-      // minPolarAngle={Math.PI / 5}
-      // maxPolarAngle={Math.PI / 1.3}
-      ref={controlsRef} />
+      <OrbitControls ref={controlsRef} />
     </Canvas>
   );
 }

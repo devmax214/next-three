@@ -141,8 +141,6 @@ export default function ProductNewEditForm({
   }, [setValue]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-
     try {
       if (isEdit) {
         await editProduct({ ...currentProduct, ...data });

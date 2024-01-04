@@ -1,4 +1,4 @@
-import { useState, useContext, MouseEvent } from "react";
+import { useState, useContext, MouseEvent, useEffect } from "react";
 import CustomPopover, { usePopover } from "@/components/custom-popover";
 import ControlButton from "@/sections/customize/configurator/control-button";
 import {
@@ -13,6 +13,7 @@ import {
   Typography,
   Checkbox,
   SelectChangeEvent,
+  Popper,
   OutlinedInput as Input
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -70,27 +71,33 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
   const [font, setFont] = useState("ABeeZee")
 
   const customize = useContext(CustomizeContext);
-  const popover = usePopover();
+
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const clickConfirm = () => {
-    popover.onClose();
-    customize.onAllEmbelChange(embelIndex, { visible: !customize.embellishment[embelIndex].visible });
+    setAnchorEl(null);
+    setOpen((previousOpen) => !previousOpen);
   };
 
   const onOpen = (ev: MouseEvent<HTMLElement>) => {
-    popover.onOpen(ev);
-    customize.onAllEmbelChange(embelIndex, { visible: !customize.embellishment[embelIndex].visible });
+    for (let i = 0; i < customize.embellishment.length; i++) {
+      if (i != embelIndex && customize.embellishment[i].visible) return;
+    }
+    setAnchorEl(ev.currentTarget);
+    setOpen((previousOpen) => !previousOpen);
   }
 
-  const onClose = () => {
-    popover.onClose();
-    customize.onAllEmbelChange(embelIndex, { visible: !customize.embellishment[embelIndex].visible });
-  }
+  useEffect(() => {
+    customize.onAllEmbelChange(embelIndex, { visible: open });
+    if (!open && canvasRef != null) canvasRef.discardActiveObject();
+  }, [open])
 
   const checkImage = (ev: boolean, type: string) => {
     if (type == 'text') {
-      fabricAddText(canvasRef, 'Sample Text', maskPosition[ptype][embelIndex]);
-      customize.onAllEmbelChange(embelIndex, { textureText: 'Sample Text' });
+      fabricAddText(canvasRef, customize.embellishment[embelIndex].textureText, maskPosition[ptype][embelIndex]);
+    } else {
+      fabricAddImage(canvasRef, customize.embellishment[embelIndex].file, maskPosition[ptype][embelIndex])
     }
     if (ev) customize.onAllEmbelChange(embelIndex, { type: type });
     else customize.onAllEmbelChange(embelIndex, { type: "" });
@@ -123,7 +130,6 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
       reader.readAsDataURL(userImage);
     }
   }
-
 
   const changeTextureText = (value: string) => {
     customize.onAllEmbelChange(embelIndex, { textureText: value });
@@ -354,15 +360,16 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
     <>
       <ControlButton
         label={`Embellishment or Text - ${typeIndexToLabel(ptype, embelIndex)}`}
-        isOpen={Boolean(popover.open)}
+        isOpen={open}
         onClick={onOpen}
+        aria-describedby={'embelPop' + embelIndex}
       />
-
-      <CustomPopover
-        hiddenArrow
-        open={popover.open}
-        onClose={onClose}
-        sx={{ p: 2, width: 400, height: 600, overflowY: 'scroll' }}
+      <Popper
+        id={'embelPop' + embelIndex}
+        open={open}
+        anchorEl={anchorEl}
+        placement="bottom"
+        sx={{ p: 2, width: 400, zIndex: 1100, height: 600, overflowY: 'scroll', backgroundColor: 'white' }}
       >
         <Grid container spacing={2}>
           <Grid item md={12}>
@@ -420,7 +427,7 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
             </Typography>
           </Button>
         </Stack>
-      </CustomPopover>
+      </Popper>
     </>
   );
 }

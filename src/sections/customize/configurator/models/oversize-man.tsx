@@ -4,15 +4,12 @@ import React, {
   useEffect,
   useState,
   useRef,
-  useLayoutEffect,
 } from "react";
-import { Decal, useGLTF, useTexture } from "@react-three/drei";
+import { Decal, useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
-import { useFrame, useLoader, useThree } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import { isEmpty } from "@/helpers/common";
-import useStore, { setState } from "@/helpers/store";
-import useFirstRenderModel from "@/hooks/use-first-render-model";
 import FabricEditableTexture from "./fabric-texture";
 import { useRaycast } from "@/hooks/use-custom-raycast";
 import useCustomTextures from "@/hooks/use-custom-texture";
@@ -74,274 +71,20 @@ type GLTFResult = GLTF & {
   };
 };
 
-type ContextType = Record<
-  string,
-  React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
->;
-
 export default function OversizeManModel(props: any) {
   const customize = useCustomizeContext();
-  const [tagName, setTagName] = useState("");
-  const { embelIndex, canvasRef, textureRef, canvasRenderedRef, controlsRef } =
-    props;
-
+  const { embelIndex, canvasRef, textureRef, canvasRenderedRef, controlsRef } = props;
   const modelRef = useRef<any>();
-  const [zoomFactor, setZoomFactor] = useState<number>(1);
 
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
-  const [texture, setTexture] = useState({
-    0: new THREE.Texture(),
-    1: new THREE.Texture(),
-    2: new THREE.Texture(),
-    3: new THREE.Texture(),
-    4: new THREE.Texture(),
-  }) as any;
+
+  const [tagName, setTagName] = useState("");
   const [tagTexture, setTagTexture] = useState(new THREE.Texture()) as any;
-
-  useEffect(() => {
-    if (!isEmpty(customize.tag.file)) {
-      loader
-        .loadAsync(
-          typeof customize.tag.file === "string"
-            ? customize.tag.file
-            : URL.createObjectURL(customize.tag.file)
-        )
-        .then((result) => {
-          setTagTexture(result);
-        });
-    }
-  }, [customize.tag.file]);
-
-  const reverseIndex = [2, 3],
-    embelSize = 4,
-    smallIndex = [2, 3];
-  const setTextTexture = (factor = 1) => {
-    let tmpTexture = texture;
-    for (let i = 0; i < embelSize; i++) {
-      if (customize.embellishment[i].type === "image") continue;
-      const textCanvas = document.createElement("canvas");
-      textCanvas.style.cssText = "border: 1px solid grey";
-      const baseWidth = smallIndex.includes(i) ? 200 : 250;
-      const baseHeight = smallIndex.includes(i) ? 300 : 350;
-      const fontSize = smallIndex.includes(i) ? 30 : 35;
-      const lineHeight = smallIndex.includes(i) ? 32 : 37;
-      textCanvas.width = baseWidth * factor;
-      textCanvas.height = baseHeight * factor;
-      var ctx = textCanvas.getContext("2d");
-      var fillTextX = 0,
-        fillTextY = 0;
-      const lines = customize.embellishment[i].textureText.split("\n");
-
-      if (ctx !== null && customize.embellishment[i].font) {
-        ctx.font = `${fontSize}pt ${customize.embellishment[i].font}`;
-        ctx.scale(factor, factor);
-        switch (customize.embellishment[i].position.type) {
-          case 0:
-            ctx.textAlign = "left";
-            ctx.textBaseline = "middle";
-            fillTextX = 0;
-            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-            break;
-          case 1:
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            fillTextX = baseWidth / 2;
-            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-            break;
-          case 2:
-            ctx.textAlign = "right";
-            ctx.textBaseline = "middle";
-            fillTextX = baseWidth;
-            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-            break;
-          case 3:
-            ctx.textAlign = "center";
-            ctx.textBaseline = "top";
-            fillTextX = baseWidth / 2;
-            fillTextY = 0;
-            break;
-          case 4:
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            fillTextX = baseWidth / 2;
-            fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-            break;
-          case 5:
-            ctx.textAlign = "center";
-            ctx.textBaseline = "bottom";
-            fillTextX = baseWidth / 2;
-            fillTextY = baseHeight - lineHeight * lines.length + fontSize;
-            break;
-        }
-        for (let k = 0; k < lines.length; k++) {
-          ctx.fillText(lines[k], fillTextX, fillTextY + k * lineHeight);
-        }
-
-        const myTexture = new THREE.CanvasTexture(textCanvas);
-        if (reverseIndex.includes(i)) {
-          myTexture.wrapS = THREE.RepeatWrapping;
-          myTexture.repeat.x = -1;
-        }
-        tmpTexture[i] = myTexture;
-      }
-      setTexture({ ...texture, ...tmpTexture });
-    }
-  };
-
-  useEffect(() => {
-    if (customize.embellishment[embelIndex].type === "image") {
-      if (!isEmpty(customize.embellishment[embelIndex].file))
-        loader
-          .loadAsync(
-            typeof customize.embellishment[embelIndex].file === "string"
-              ? customize.embellishment[embelIndex].file
-              : URL.createObjectURL(customize.embellishment[embelIndex].file)
-          )
-          .then((result) => {
-            if (reverseIndex.includes(embelIndex)) {
-              result.wrapS = THREE.RepeatWrapping;
-              result.repeat.x = -1;
-            }
-            setTexture({ ...texture, [embelIndex]: result });
-          });
-    } else if (customize.embellishment[embelIndex].type === "text") {
-      setTextTexture();
-    }
-  }, [
-    customize.embellishment[embelIndex].position,
-    customize.embellishment[embelIndex].type,
-    customize.embellishment[embelIndex].file,
-    customize.embellishment[embelIndex].textureText,
-    customize.embellishment[embelIndex].font,
-  ]);
-
-  useEffect(() => {
-    let factor = 1;
-    let tmpTexture = {
-      0: new THREE.Texture(),
-      1: new THREE.Texture(),
-      2: new THREE.Texture(),
-      3: new THREE.Texture(),
-      4: new THREE.Texture(),
-    };
-    let tmpCtx = customize;
-    if (props.ctx.embellishment) {
-      tmpCtx = props.ctx;
-    }
-
-    let promises = [];
-    let indexes = [];
-    for (let i = 0; i < embelSize; i++) {
-      if (tmpCtx.embellishment[i].type === "image") {
-        if (!isEmpty(tmpCtx.embellishment[i].file)) {
-          indexes.push(i);
-          promises.push(
-            loader.loadAsync(
-              typeof tmpCtx.embellishment[i].file === "string"
-                ? tmpCtx.embellishment[i].file
-                : URL.createObjectURL(tmpCtx.embellishment[i].file)
-            )
-          );
-        }
-      } else if (tmpCtx.embellishment[i].type === "text") {
-        const textCanvas = document.createElement("canvas");
-        textCanvas.style.cssText = "border: 1px solid grey";
-        const baseWidth = smallIndex.includes(i) ? 200 : 250;
-        const baseHeight = smallIndex.includes(i) ? 300 : 350;
-        const fontSize = smallIndex.includes(i) ? 30 : 35;
-        const lineHeight = smallIndex.includes(i) ? 32 : 37;
-        textCanvas.width = baseWidth * factor;
-        textCanvas.height = baseHeight * factor;
-        var ctx = textCanvas.getContext("2d");
-        var fillTextX = 0,
-          fillTextY = 0;
-        const lines = tmpCtx.embellishment[i].textureText.split("\n");
-
-        if (ctx !== null && tmpCtx.embellishment[i].font) {
-          ctx.font = `${fontSize}pt ${tmpCtx.embellishment[i].font}`;
-          ctx.scale(factor, factor);
-          switch (tmpCtx.embellishment[i].position.type) {
-            case 0:
-              ctx.textAlign = "left";
-              ctx.textBaseline = "middle";
-              fillTextX = 0;
-              fillTextY =
-                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-              break;
-            case 1:
-              ctx.textAlign = "center";
-              ctx.textBaseline = "middle";
-              fillTextX = baseWidth / 2;
-              fillTextY =
-                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-              break;
-            case 2:
-              ctx.textAlign = "right";
-              ctx.textBaseline = "middle";
-              fillTextX = baseWidth;
-              fillTextY =
-                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-              break;
-            case 3:
-              ctx.textAlign = "center";
-              ctx.textBaseline = "top";
-              fillTextX = baseWidth / 2;
-              fillTextY = 0;
-              break;
-            case 4:
-              ctx.textAlign = "center";
-              ctx.textBaseline = "middle";
-              fillTextX = baseWidth / 2;
-              fillTextY =
-                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
-              break;
-            case 5:
-              ctx.textAlign = "center";
-              ctx.textBaseline = "bottom";
-              fillTextX = baseWidth / 2;
-              fillTextY = baseHeight - lineHeight * lines.length + fontSize;
-              break;
-          }
-          for (let k = 0; k < lines.length; k++) {
-            ctx.fillText(lines[k], fillTextX, fillTextY + k * lineHeight);
-          }
-
-          const myTexture = new THREE.CanvasTexture(textCanvas);
-          if (reverseIndex.includes(i)) {
-            myTexture.wrapS = THREE.RepeatWrapping;
-            myTexture.repeat.x = -1;
-          }
-          tmpTexture[i] = myTexture;
-        }
-      }
-    }
-    Promise.all(promises).then((result) => {
-      for (let i = 0; i < result.length; i++) {
-        if (reverseIndex.includes(indexes[i])) {
-          result[i].wrapS = THREE.RepeatWrapping;
-          result[i].repeat.x = -1;
-        }
-        tmpTexture[indexes[i]] = result[i];
-      }
-      setTexture({ ...texture, ...tmpTexture });
-    });
-  }, []);
 
   const { nodes, materials } = useGLTF(
     "/models/Oversize/Oversized2.glb"
   ) as GLTFResult;
-
-  if (customize.color.length > 0) {
-    const color = customize.color;
-    for (let key in materials) {
-      delete materials[key]["_listeners"];
-      materials[key] = new THREE.MeshStandardMaterial({
-        ...materials[key],
-        color: color,
-      });
-    }
-  }
 
   const tag = useCallback(() => {
     try {
@@ -356,17 +99,17 @@ export default function OversizeManModel(props: any) {
         const positionY = customize.tag.size.startsWith("45x45")
           ? 1.603
           : customize.tag.size.startsWith("55")
-          ? 1.609
-          : 1.615;
+            ? 1.609
+            : 1.615;
         const scaleYZ = customize.tag.size.startsWith("45x45")
           ? 0.02
           : customize.tag.size.startsWith("55")
-          ? 0.015
-          : 0.025;
+            ? 0.015
+            : 0.025;
         const scaleX = !tagTexture.source.data
           ? 0
           : (scaleYZ * tagTexture.source.data.naturalWidth) /
-            tagTexture.source.data.naturalHeight;
+          tagTexture.source.data.naturalHeight;
 
         return (
           <group dispose={null}>
@@ -405,38 +148,57 @@ export default function OversizeManModel(props: any) {
   }, [tagName, tagTexture]);
 
   useEffect(() => {
+    if (!isEmpty(customize.tag.file)) {
+      loader
+        .loadAsync(
+          typeof customize.tag.file === "string"
+            ? customize.tag.file
+            : URL.createObjectURL(customize.tag.file)
+        )
+        .then((result) => {
+          setTagTexture(result);
+        });
+    }
+  }, [customize.tag.file]);
+
+  useEffect(() => {
     if (customize.tag.neck) {
-      const newName = `label-${customize.tag.size}_${
-        customize.tag.color ? "black" : "white"
-      }`;
+      const newName = `label-${customize.tag.size}_${customize.tag.color ? "black" : "white"
+        }`;
       setTagName(newName);
     } else {
       setTagName(`print-label_${customize.tag.color ? "black" : "white"}`);
     }
   }, [customize.tag]);
 
-  useEffect(() => {
-    setTextTexture(zoomFactor);
-  }, [zoomFactor]);
-
-  let scaleY = 0.018,
-    scaleX = 0.038;
+  let scaleY = 0.018, scaleX = 0.038;
   try {
     scaleX = !tagTexture.source.data
       ? 0
       : (scaleY * tagTexture.source.data.naturalWidth) /
-        tagTexture.source.data.naturalHeight;
-  } catch (error) {}
+      tagTexture.source.data.naturalHeight;
+  } catch (error) { }
   var geometry = new THREE.BoxGeometry(scaleX, scaleY, 0); // give the cube it's dimensions (width, height, depth)
   var material = new THREE.MeshLambertMaterial({ transparent: true }); // creates material and gives it a color
   material.wireframe = false;
   material.map = tagTexture;
 
+  if (customize.color.length > 0) {
+    const color = customize.color;
+    for (let key in materials) {
+      delete materials[key]["_listeners"];
+      materials[key] = new THREE.MeshStandardMaterial({
+        ...materials[key],
+        color: color,
+      });
+    }
+  }
+
   /*
     30 DECEMBER 2023
     NAO ADDING RAYCAST FEATURE
-  */ const { normalShirt, bumpShirt, normalCollar, bumpCollar } =
-    useCustomTextures();
+  */
+  const { normalShirt, bumpShirt, normalCollar, bumpCollar } = useCustomTextures();
   const { camera, gl, raycaster, scene, mouse, pointer } = useThree();
   useRaycast(
     controlsRef,

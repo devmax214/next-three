@@ -6,14 +6,15 @@ import type { Group } from 'three/src/objects/Group'
 import type { Canvas } from 'fabric/fabric-impl'
 import useThreeFrame from './use-three-frame';
 import { clipPath } from '@/constant/fabricConst'
-import {fabric} from 'fabric'
+import { fabric } from 'fabric'
+import { useCustomizeContext } from "@/components/customize/context";
 
 interface Props {
   handleClick: (e: MouseEvent | TouchEvent) => void
   controlsRef: MutableRefObject<OrbitControls>
   textureRef: MutableRefObject<Texture>
   canvasRef: MutableRefObject<Canvas>
-  type:string
+  type: string
 }
 
 const useFirstRenderModel = ({
@@ -23,42 +24,43 @@ const useFirstRenderModel = ({
   handleClick,
   type
 }: Props) => {
+  const context = useCustomizeContext();
   useEffect(() => {
-    console.log(getState().isMaskAdded);
-    console.log(canvasRef.current.getObjects());
-    
-    if(!getState().isMaskAdded){
+    if (!getState().isMaskAdded) {
       const currentClipPath = (clipPath as any)[type]
-      currentClipPath.forEach((rect:any) => {
+      currentClipPath.forEach((rect: any) => {
         const mask = new fabric.Rect({
-            name:rect.id,
-            stroke: '#FDF010',
-            strokeWidth:2,
-            fill:'#f4f5f0',
-            width:rect.width,
-            height:rect.height,
-            left:rect.left,
-            top:rect.top,
-            absolutePositioned: true,
-            selectable:false,
+          name: rect.id,
+          stroke: '#FDF010',
+          strokeWidth: 2,
+          fill: '#f4f5f0',
+          width: rect.width,
+          height: rect.height,
+          left: rect.left,
+          top: rect.top,
+          absolutePositioned: true,
+          selectable: false,
         })
         canvasRef.current?.add(mask)
         canvasRef.current?.sendToBack(mask)
       });
       canvasRef.current?.renderAll()
       setState({
-        isMaskAdded:true
+        isMaskAdded: true
       })
     }
     if (
       canvasRef.current &&
       !getState().firstLoadTexture
-      ) {
-        document
-          .getElementsByTagName('canvas')[0]
-          .addEventListener('mousedown', (e) => {
-            handleClick(e)
-          })
+    ) {
+      document
+        .getElementsByTagName('canvas')[0]
+        .addEventListener('mousedown', (e) => {
+          for (let i = 0; i < context.embellishment.length; i++) {
+            if (context.embellishment[i].visible)
+              return handleClick(e);
+          }
+        })
     }
   }, [
     canvasRef,

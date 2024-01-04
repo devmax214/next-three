@@ -48,7 +48,7 @@ export default function ResetForm(props: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const response = await axios.put('/api/auth/reset', { ...data, token });
-      console.log(response)
+
       if (response.data.success) {
         push({
           pathname: "/auth/auth",

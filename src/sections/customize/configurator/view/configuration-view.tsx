@@ -92,14 +92,11 @@ export default function ConfigurationView(props: any) {
 
             <Grid container sx={{ pl: 2 }} spacing={6}>
               <Grid item md={8} xs={12}>
-                <div style={{ position: 'relative' }}>
-                  <ConfigurationCanvas
-                  canvasRef={canvasRef} textureRef={textureRef} 
-                   page="customize-view" ctx={typeof customProduct.context === "object" ? customProduct.context : {}} arrowLeftCount={0} arrowRightCount={0}  {...props} id="myCanvas" />
-                  <div style={{display:'none'}}>
-                    <canvas id="canvas" style={{width:'1024px', height:'1024px'}} />
-                  </div>
-                </div>
+                <ConfigurationCanvas
+                  canvasRef={canvasRef} textureRef={textureRef}
+                  page="customize-view" ctx={typeof customProduct.context === "object" ? customProduct.context : {}}
+                  arrowLeftCount={0} arrowRightCount={0}  {...props} id="myCanvas"
+                />
                 <Box
                   component={"div"}
                   sx={{
@@ -151,7 +148,7 @@ export default function ConfigurationView(props: any) {
               </Grid>
 
               <Grid item md={4} xs={12}>
-                <ConfigurationProperties 
+                <ConfigurationProperties
                   canvasRef={canvasRef.current} textureRef={textureRef}  {...props} {...customProduct} color={customProduct.context ? customProduct.context.color : ''} />
               </Grid>
             </Grid>

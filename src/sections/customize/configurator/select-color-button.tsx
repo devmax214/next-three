@@ -51,6 +51,7 @@ export default function SelectColorButton(props: Props) {
 
   useEffect(() => {
     customize.onColorChange(hsvaToHex(hsva));
+    if (props.canvasRef) fabricChangeColors(props.canvasRef, hsvaToHex(hsva))
   }, [hsva]);
 
   return (

@@ -13,6 +13,9 @@ export const fabricChangeColors = (canvas: Canvas, color: string) => {
 }
 export const fabricAddText = (canvas: Canvas, text: string, position: string) => {
     const mask: any = canvas.getObjects().find((mask: any) => mask.name == 'mask-' + position)
+    canvas.getObjects().map((m: any) => {
+        if (m.name == 'image-' + position || m.name == 'text-' + position) canvas.remove(m)
+    });
     if (!mask) return;
     const canvasText = new fabric.Text(text, {
         text: text,
@@ -37,6 +40,9 @@ export const fabricAddText = (canvas: Canvas, text: string, position: string) =>
 }
 export const fabricAddImage = (canvas: Canvas, url: string, position: string) => {
     const mask: any = canvas.getObjects().find((mask: any) => mask.name == 'mask-' + position)
+    canvas.getObjects().map((m: any) => {
+        if (m.name == 'image-' + position || m.name == 'text-' + position) canvas.remove(m)
+    });
     if (!mask) return;
     fabric.Image.fromURL(url, (image) => {
         image.set({
