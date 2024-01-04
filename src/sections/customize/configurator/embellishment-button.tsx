@@ -95,7 +95,12 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
 
   const checkImage = (ev: boolean, type: string) => {
     if (type == 'text') {
-      fabricAddText(canvasRef, customize.embellishment[embelIndex].textureText, maskPosition[ptype][embelIndex]);
+      if (!customize.embellishment[embelIndex].textureText) {
+        fabricAddText(canvasRef, 'Sample Text', maskPosition[ptype][embelIndex]);
+        customize.onAllEmbelChange(embelIndex, { textureText: 'Sample Text' })
+      } else {
+        fabricAddText(canvasRef, customize.embellishment[embelIndex].textureText, maskPosition[ptype][embelIndex]);
+      }
     } else {
       fabricAddImage(canvasRef, customize.embellishment[embelIndex].file, maskPosition[ptype][embelIndex])
     }

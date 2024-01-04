@@ -71,6 +71,9 @@ export default function EditTagButton(props: Props) {
   };
 
   const onOpen = (ev: MouseEvent<HTMLElement>) => {
+    for (let i = 0; i < context.embellishment.length; i++) {
+      if (context.embellishment[i].visible) return;
+    }
     popover.onOpen(ev);
     context.onTagEditVisible();
   }

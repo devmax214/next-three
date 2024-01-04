@@ -60,7 +60,12 @@ export default function SelectColorButton(props: Props) {
         label={!props.name ? "Garment Dye" : props.name}
         isShowIcon={props.isShowIcon == undefined ? true : props.isShowIcon}
         isOpen={Boolean(popover.open)}
-        onClick={popover.onOpen}
+        onClick={(e) => {
+          for (let i = 0; i < customize.embellishment.length; i++) {
+            if (customize.embellishment[i].visible) return;
+          }
+          popover.onOpen(e);
+        }}
         box={<Box component={"div"} sx={{ width: 20, height: 20, mr: 1, backgroundColor: `${hsvaToHex(hsva)}`, borderRadius: 1 }} />}
       />
 
