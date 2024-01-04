@@ -1,11 +1,16 @@
 import * as THREE from "three";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Decal, useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
 import { isEmpty } from "@/helpers/common";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { Texture } from "@mui/icons-material";
+import useStore,{ setState } from "@/helpers/store";
+import useFirstRenderModel from "@/hooks/use-first-render-model";
+import FabricEditableTexture from "./fabric-texture";
+import { useRaycast } from "@/hooks/use-custom-raycast";
+import useCustomTextures from "@/hooks/use-custom-texture";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -61,7 +66,7 @@ type ContextType = Record<
 
 export default function TShirtManModel(props: any) {
   const customize = useCustomizeContext();
-  const { embelIndex } = props;
+  const { embelIndex, canvasRef, textureRef,canvasRenderedRef,controlsRef } = props;
   const [tagName, setTagName] = useState("");
   let loader = new THREE.TextureLoader();
   loader.setCrossOrigin("");
@@ -278,7 +283,7 @@ export default function TShirtManModel(props: any) {
   }, []);
 
   const { nodes, materials } = useGLTF(
-    "/models/TSHIRTWR_man/TSHIRT_MAN.glb"
+    "/models/TSHIRTWR_man/TSHIRT_MAN2.glb"
   ) as GLTFResult;
 
   if (!isEmpty(customize.color)) {
@@ -342,18 +347,6 @@ export default function TShirtManModel(props: any) {
     setTextTexture(zoomFactor)
   }, [zoomFactor])
 
-  useFrame(state => {
-    if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
-      state.camera.position.set(0, 0, 2.5);
-    } else {
-      const distance = state.camera.position.distanceTo(modelRef.current.position);
-      const newZoomFactor = 2.5 / distance;
-      if (newZoomFactor !== zoomFactor) {
-        setZoomFactor(newZoomFactor);
-      }
-    }
-  })
-
   let scaleY = 0.021, scaleX = 0.043;
   try {
     scaleX = !tagTexture.source.data ? 0 : scaleY * tagTexture.source.data.naturalWidth / tagTexture.source.data.naturalHeight;
@@ -363,6 +356,29 @@ export default function TShirtManModel(props: any) {
   material.wireframe = false;
   material.map = tagTexture;
 
+  /*
+    30 DECEMBER 2023
+    NAO ADDING RAYCAST FEATURE
+  */
+
+    const { normalShirt, bumpShirt,normalCollar, bumpCollar } = useCustomTextures();
+    const { camera, gl, raycaster, scene, mouse, pointer } = useThree();
+    useRaycast(
+      controlsRef,
+      canvasRef,
+      canvasRenderedRef,
+      textureRef,
+      "T-Shirts",
+      customize,
+      embelIndex,
+      camera,
+      gl,
+      raycaster,
+      scene,
+      mouse,
+      pointer
+    );
+    // NAO
   return (
     <group position={[0, 0, 0]} {...props} dispose={null} ref={modelRef}>
       {customize.tag.edit && tagName.startsWith("print-label") && <mesh geometry={geometry} material={material} position={[0, 1.616, -0.08]} />}
@@ -384,78 +400,114 @@ export default function TShirtManModel(props: any) {
       <mesh geometry={nodes.Pattern2D_190184005.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.014']} />
       <mesh geometry={nodes.Pattern2D_190184005_1.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.014']} />
       <mesh geometry={nodes.Pattern2D_190184005_2.geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.014']} />
-      <mesh geometry={nodes['TSHIRTWR-COS005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} >
-        <Decal
-          position={customize.embellishment[0].type === 'text' ? [0, 1.27, 0.01] : [0.002, 1.43, -0.03]}
-          rotation={[THREE.MathUtils.degToRad(5), THREE.MathUtils.degToRad(180), 0]}
-          scale={customize.embellishment[0].type === 'text' ? [0.29, 0.64, 0.4] : [0.205, 0.28, 0.26]}
-        >
-          <meshPhysicalMaterial
-            transparent
-            polygonOffset
-            polygonOffsetFactor={-1}
-            map={texture[0]}
-            map-anisotropy={16}
-          />
-        </Decal>
+      <mesh geometry={nodes['TSHIRTWR-COS005'].geometry} >
+      
+      <FabricEditableTexture
+          bumpMap={bumpShirt}
+          normalScale={-0.5}
+          bumpScale={1}
+          normalMap={normalShirt}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
       </mesh>
-      <mesh geometry={nodes['TSHIRTWR-COS005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} >
-
-      </mesh>
+      <mesh geometry={nodes['TSHIRTWR-COS005_1'].geometry} >
+      
+      <FabricEditableTexture
+        bumpMap={bumpShirt}
+        normalScale={0.2}
+        bumpScale={1}
+        normalMap={normalShirt}
+        color={customize.color}
+        canvasRef={canvasRef}
+        textureRef={textureRef}
+      />
+    </mesh>
       <mesh geometry={nodes['TSHIRTWR-COS005_2'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.010']} />
-      <mesh geometry={nodes['TSHIRTWR-FRE005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.012']}>
-        <Decal
-          position={customize.embellishment[1].type === 'text' ? [0, 1.26, 0.01] : [0, 1.38, 0.02]}
-          rotation={[0, 0, 0]}
-          scale={customize.embellishment[1].type === 'text' ? [0.29, 0.57, 0.33] : [0.21, 0.28, 0.23]}
-        >
-          <meshPhysicalMaterial
-            transparent
-            polygonOffset
-            polygonOffsetFactor={-1}
-            map={texture[1]}
-            map-anisotropy={16}
-          />
-        </Decal>
+      <mesh geometry={nodes['TSHIRTWR-FRE005'].geometry} >
+      
+        <FabricEditableTexture
+          bumpMap={bumpShirt}
+          normalScale={-0.5}
+          bumpScale={1}
+          normalMap={normalShirt}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
       </mesh>
-      <mesh geometry={nodes['TSHIRTWR-FRE005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.012']} />
+      <mesh geometry={nodes['TSHIRTWR-FRE005_1'].geometry} >
+      
+      <FabricEditableTexture
+        bumpMap={bumpShirt}
+        normalScale={0.2}
+        bumpScale={1}
+        normalMap={normalShirt}
+        color={customize.color}
+        canvasRef={canvasRef}
+        textureRef={textureRef}
+      />
+    </mesh>
       <mesh geometry={nodes['TSHIRTWR-FRE005_2'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.012']} />
-      <mesh geometry={nodes['TSHIRTWR-GOLA005'].geometry} material={materials['Rib_1X1_319gsm_FRONT_2550.005']} />
+      <mesh geometry={nodes['TSHIRTWR-GOLA005'].geometry}  >
+      
+      <FabricEditableTexture
+        bumpMap={bumpCollar}
+        normalScale={-0.5}
+        bumpScale={1}
+        normalMap={normalCollar}
+        canvasRef={canvasRef}
+        textureRef={textureRef}
+      />
+    </mesh>
       <mesh geometry={nodes['TSHIRTWR-GOLA005_1'].geometry} material={materials['Rib_1X1_319gsm_FRONT_2550.005']} />
       <mesh geometry={nodes['TSHIRTWR-GOLA005_2'].geometry} material={materials['Rib_1X1_319gsm_FRONT_2550.005']} />
-      <mesh geometry={nodes['TSHIRTWR-MANGA_1005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.011']} >
-        <Decal
-          position={customize.embellishment[3].type === 'text' ? [-0.245, 1.45, -0.02] : [-0.245, 1.47, -0.02]}
-          rotation={[0, THREE.MathUtils.degToRad(90), 0]}
-          scale={customize.embellishment[3].type === 'text' ? [0.08, 0.175, 0.066] : [0.05, 0.078, 0.066]}
-        >
-          <meshPhysicalMaterial
-            transparent
-            polygonOffset
-            polygonOffsetFactor={-1}
-            map={texture[3]}
-            map-anisotropy={16}
-          />
-        </Decal>
+      <mesh geometry={nodes['TSHIRTWR-MANGA_1005'].geometry} >
+      
+        <FabricEditableTexture
+          bumpMap={bumpShirt}
+          normalScale={-0.5}
+          bumpScale={1}
+          normalMap={normalShirt}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
       </mesh>
-      <mesh geometry={nodes['TSHIRTWR-MANGA_1005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.011']} />
+      <mesh geometry={nodes['TSHIRTWR-MANGA_1005_1'].geometry} >
+      
+      <FabricEditableTexture
+        bumpMap={bumpShirt}
+        normalScale={0.2}
+        bumpScale={1}
+        normalMap={normalShirt}
+        color={customize.color}
+        canvasRef={canvasRef}
+        textureRef={textureRef}
+      />
+    </mesh>
       <mesh geometry={nodes['TSHIRTWR-MANGA_1005_2'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.011']} />
-      <mesh geometry={nodes['TSHIRTWR-MANGA005'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.013']} >
-        <Decal
-          position={customize.embellishment[2].type === 'text' ? [0.25, 1.45, -0.03] : [0.25, 1.46, -0.03]}
-          rotation={[0, THREE.MathUtils.degToRad(-90), 0]}
-          scale={customize.embellishment[2].type === 'text' ? [0.08, 0.175, 0.066] : [0.05, 0.078, 0.066]}
-        >
-          <meshPhysicalMaterial
-            transparent
-            polygonOffset
-            polygonOffsetFactor={-1}
-            map={texture[2]}
-            map-anisotropy={16}
-          />
-        </Decal>
+      <mesh geometry={nodes['TSHIRTWR-MANGA005'].geometry} >
+      
+        <FabricEditableTexture
+          bumpMap={bumpShirt}
+          normalScale={-0.5}
+          bumpScale={1}
+          normalMap={normalShirt}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
       </mesh>
-      <mesh geometry={nodes['TSHIRTWR-MANGA005_1'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.013']} />
+      <mesh geometry={nodes['TSHIRTWR-MANGA005_1'].geometry} >
+      
+      <FabricEditableTexture
+        bumpMap={bumpShirt}
+        normalScale={0.2}
+        bumpScale={1}
+        normalMap={normalShirt}
+        color={customize.color}
+        canvasRef={canvasRef}
+        textureRef={textureRef}
+      />
+    </mesh>
       <mesh geometry={nodes['TSHIRTWR-MANGA005_2'].geometry} material={materials['Knit_Cotton_Jersey_FRONT_2530.013']} />
     </group>
   );

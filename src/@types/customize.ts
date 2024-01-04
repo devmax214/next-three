@@ -1,4 +1,5 @@
 import { ICategoryItem } from "@/@types/product";
+import { Canvas } from "fabric/fabric-impl";
 
 type IQuoteItem = {
   seq: string;

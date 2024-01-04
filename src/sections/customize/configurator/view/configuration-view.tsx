@@ -1,6 +1,6 @@
 import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
 import { PATH_CONFIGURATOR } from "@/routers/path";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Box, Container, Grid, Button, Modal, Stack, Card, IconButton, TextField } from "@mui/material";
 import VideoIcon from "@/components/icons/icon-video";
 import ConfigurationCanvas from "../configuration-canvas";
@@ -20,6 +20,7 @@ import Image from "@/components/image";
 import { useRouter } from "next/router";
 import { PATH_SHOP } from "@/routers/path";
 import { isEmpty } from "@/helpers/common";
+import { Texture } from "three";
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
@@ -50,6 +51,10 @@ export default function ConfigurationView(props: any) {
   const router = useRouter();
   const isEdit = router.query.isEdit;
   const customProduct = router.query.customProduct ? JSON.parse(router.query.customProduct) : {};
+  // START REF NAO
+  const canvasRef = useRef<any>(null)
+  const textureRef = useRef<Texture>(null)
+  // END REF NAO
 
   return (
     <>
@@ -88,9 +93,11 @@ export default function ConfigurationView(props: any) {
             <Grid container sx={{ pl: 2 }} spacing={6}>
               <Grid item md={8} xs={12}>
                 <div style={{ position: 'relative' }}>
-                  <ConfigurationCanvas page="customize-view" ctx={typeof customProduct.context === "object" ? customProduct.context : {}} arrowLeftCount={0} arrowRightCount={0}  {...props} id="myCanvas" />
-                  <div style={{ position: 'absolute', top: 0, right: 0 }}>
-                    <canvas id="canvas" />
+                  <ConfigurationCanvas
+                  canvasRef={canvasRef} textureRef={textureRef} 
+                   page="customize-view" ctx={typeof customProduct.context === "object" ? customProduct.context : {}} arrowLeftCount={0} arrowRightCount={0}  {...props} id="myCanvas" />
+                  <div style={{display:'none'}}>
+                    <canvas id="canvas" style={{width:'1024px', height:'1024px'}} />
                   </div>
                 </div>
                 <Box
@@ -144,7 +151,8 @@ export default function ConfigurationView(props: any) {
               </Grid>
 
               <Grid item md={4} xs={12}>
-                <ConfigurationProperties {...props} {...customProduct} color={customProduct.context ? customProduct.context.color : ''} />
+                <ConfigurationProperties 
+                  canvasRef={canvasRef.current} textureRef={textureRef}  {...props} {...customProduct} color={customProduct.context ? customProduct.context.color : ''} />
               </Grid>
             </Grid>
           </Container>

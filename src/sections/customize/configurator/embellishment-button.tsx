@@ -24,6 +24,9 @@ import CheckedIcon from "@/components/icons/checked-icon";
 import UnCheckedIcon from "@/components/icons/unchecked-icon";
 import { typeIndexToLabel } from "@/helpers/common";
 import { fontList } from '@/helpers/common';
+import { Canvas } from "fabric/fabric-impl";
+import { fabricAddImage, fabricAddText, fabricModifyText } from "@/utils/fabric";
+import { maskPosition } from "@/constant/fabricConst";
 
 export const StyledHeader1 = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -60,9 +63,10 @@ const views = [{ label: "Front view" }, { label: "Back view" }];
 type Props = {
   embelIndex: number;
   ptype: string;
+  canvasRef: Canvas;
 };
 
-export default function EmbellishmentButton({ embelIndex, ptype }: Props) {
+export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Props) {
   const [font, setFont] = useState("ABeeZee")
 
   const customize = useContext(CustomizeContext);
@@ -84,6 +88,10 @@ export default function EmbellishmentButton({ embelIndex, ptype }: Props) {
   }
 
   const checkImage = (ev: boolean, type: string) => {
+    if (type == 'text') {
+      fabricAddText(canvasRef, 'Sample Text', maskPosition[ptype][embelIndex]);
+      customize.onAllEmbelChange(embelIndex, { textureText: 'Sample Text' });
+    }
     if (ev) customize.onAllEmbelChange(embelIndex, { type: type });
     else customize.onAllEmbelChange(embelIndex, { type: "" });
   }
@@ -103,16 +111,23 @@ export default function EmbellishmentButton({ embelIndex, ptype }: Props) {
   const checkNotPrint = () => {
     customize.onAllEmbelChange(embelIndex, { visibleText: !customize.embellishment[embelIndex].visibleText })
   }
-
   const fileSelect = (ev: any) => {
     if (ev.target.files && ev.target.files.length > 0) {
       var userImage = ev.target.files[0];
-      customize.onAllEmbelChange(embelIndex, { file: userImage });
+      var reader = new FileReader();
+      reader.onload = function (e: any) {
+        var blobUrl = e.target.result;
+        fabricAddImage(canvasRef, blobUrl, maskPosition[ptype][embelIndex])
+        customize.onAllEmbelChange(embelIndex, { file: blobUrl });
+      };
+      reader.readAsDataURL(userImage);
     }
   }
 
+
   const changeTextureText = (value: string) => {
     customize.onAllEmbelChange(embelIndex, { textureText: value });
+    fabricModifyText(canvasRef, value, maskPosition[ptype][embelIndex], 'text')
   }
 
   const changeReqText = (value: string) => {
@@ -122,6 +137,7 @@ export default function EmbellishmentButton({ embelIndex, ptype }: Props) {
   const handleChange = (event: SelectChangeEvent) => {
     setFont(event.target.value as string);
     customize.onAllEmbelChange(embelIndex, { font: event.target.value })
+    fabricModifyText(canvasRef, event.target.value, maskPosition[ptype][embelIndex], 'fontFamily')
   };
 
   const renderImage = (
@@ -284,7 +300,7 @@ export default function EmbellishmentButton({ embelIndex, ptype }: Props) {
 
       <Stack>
         <StyledHeader2>Position</StyledHeader2>
-        <PositionControl embelIndex={embelIndex} type="image" />
+        <PositionControl canvasRef={canvasRef} embelIndex={embelIndex} ptype={ptype} type="image" />
       </Stack>
     </Stack>
   );
@@ -323,13 +339,13 @@ export default function EmbellishmentButton({ embelIndex, ptype }: Props) {
 
         <Select fullWidth size="small" value={font} onChange={handleChange} disabled={customize.embellishment[embelIndex].type !== "text"}>
           {fontList.map((font) => (
-            <MenuItem value={font.family} >{font.family}</MenuItem>
+            <MenuItem value={font.family} sx={{ fontFamily: font.family }} >{font.family}</MenuItem>
           ))}
         </Select>
       </Stack>
       <Stack mt={1}>
         <StyledHeader2>Position</StyledHeader2>
-        <PositionControl embelIndex={embelIndex} type="text" />
+        <PositionControl canvasRef={canvasRef} embelIndex={embelIndex} ptype={ptype} type="text" />
       </Stack>
     </>
   );

@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import React, { useEffect, useRef, useState } from "react";
-import { extend, useThree } from "@react-three/fiber";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { extend, useThree, useFrame } from "@react-three/fiber";
 import { useCursor, Decal, PivotControls, useGLTF, useTexture } from "@react-three/drei";
 import { useCustomizeContext } from "@/components/customize/context";
 import { useControls } from 'leva'
@@ -23,11 +23,12 @@ function CustomTexture(props: Props) {
   const { textures, position, rotation, mainScale, subScale, index, ...other } = props;
   const customize = useCustomizeContext();
 
-  var raycaster = new THREE.Raycaster();
-  const mouse = new THREE.Vector2();
+  // var raycaster = new THREE.Raycaster();
+  // const mouse = new THREE.Vector2();
 
-  const snap = useSnapshot(proxyState)
-  const scene = useThree((proxyState) => proxyState.scene)
+  // const snap = useSnapshot(proxyState)
+  // const scene = useThree((proxyState) => proxyState.scene)
+  const { camera, gl, raycaster, scene, mouse, pointer } = useThree()
 
   const [canvas, setCanvas] = useState<fabric.Canvas>();
   const [texture, setTexture] = useState<THREE.CanvasTexture>();
@@ -35,9 +36,6 @@ function CustomTexture(props: Props) {
 
   const mainSize = 500;
 
-  const initCanvas = () => {
-
-  }
   useEffect(() => {
     if (index !== 1) return
     const textCanvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -112,6 +110,32 @@ function CustomTexture(props: Props) {
     return (<></>)
   }
 
+  const ray = useRef<THREE.Vector2>()
+  const getPosition = useCallback(
+    (e:any) => {
+      if (ray.current) {
+        let uv = ray.current
+        return {
+          x: Math.round(uv.x * (mainSize * mainScale[0])) - 4.5,
+          y: Math.round(uv.y * (mainSize * mainScale[0])) - 5.5,
+        }
+      }
+      return null
+    },
+    [
+      pointer,
+      mouse,
+      raycaster,
+      camera,
+      scene.children,
+    ]
+  )
+
+  canvas?.on('mouse:down',(e)=>{
+    console.log(e.e.target);
+  })
+  useFrame((state)=>{
+  })
   return (
     <>
       <Decal
@@ -119,7 +143,9 @@ function CustomTexture(props: Props) {
         rotation={rotation}
         scale={mainScale}
         name={"embel" + index}
-      // onClick={(e) => setMouseClicked(true)}
+        onClick={(e) => {
+          setMouseClicked(true)
+        }}
       // onPointerMissed={(e) => setMouseClicked(false)}
       >
         <meshPhysicalMaterial

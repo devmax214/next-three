@@ -8,8 +8,12 @@ import ShadeSlider from '@uiw/react-color-shade-slider';
 import { hsvaToHex, hsvaToRgba, ColorResult, hexToHsva } from '@uiw/color-convert';
 import { useCustomizeContext } from "@/components/customize/context";
 import { secondaryFont } from "@/theme/typography";
+import { fabricChangeColors } from "@/utils/fabric";
+import { Canvas } from "fabric/fabric-impl";
 
-type Props = {};
+type Props = {
+  canvasRef: Canvas;
+};
 
 export const StyledLabel = styled(Typography)(({ theme }) => ({
   fontSize: 14,
@@ -37,6 +41,7 @@ export default function SelectColorButton(props: Props) {
       ...color.hsva
     })
     customize.onColorChange(hsvaToHex(color.hsva))
+    fabricChangeColors(props.canvasRef, color.hex)
   }
 
   const changePantone = (e: any) => {

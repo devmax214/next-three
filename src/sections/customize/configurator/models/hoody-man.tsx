@@ -6,96 +6,110 @@ Files: GU22HOODIEWR_man_cord01_color_cru_end_silicone.gltf [214.63KB] > GU22HOOD
 
 import * as THREE from "three";
 import React, { useCallback, useEffect, useState, useRef } from "react";
-import { RenderTexture, OrbitControls, PerspectiveCamera, Text, useCursor, ContactShadows, Decal, useGLTF, useTexture } from "@react-three/drei";
+import {
+  RenderTexture,
+  OrbitControls,
+  PerspectiveCamera,
+  Text,
+  useCursor,
+  ContactShadows,
+  Decal,
+  useGLTF,
+  useTexture,
+} from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCustomizeContext } from "@/components/customize/context";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { isEmpty } from "@/helpers/common";
 import CustomTexture from "./custom-texture";
+import FabricEditableTexture from "./fabric-texture";
+import { useRaycast } from "@/hooks/use-custom-raycast";
+import useTextures from "@/hooks/use-custom-texture";
+import useCustomTextures from "@/hooks/use-custom-texture";
 
 type GLTFResult = GLTF & {
   nodes: {
-    StitchMatShape_18533_Node: THREE.Mesh
-    StitchMatShape_18643_Node: THREE.Mesh
-    StitchMatShape_18792_Node: THREE.Mesh
-    StitchMatShape_18904_Node: THREE.Mesh
-    StitchMatShape_19011_Node: THREE.Mesh
-    StitchMatShape_19136_Node: THREE.Mesh
-    StitchMatShape_19297_Node: THREE.Mesh
-    StitchMatShape_19398_Node: THREE.Mesh
-    StitchMatShape_19431_Node: THREE.Mesh
-    StitchMatShape_19464_Node: THREE.Mesh
-    StitchMatShape_19555_Node: THREE.Mesh
-    StitchMatShape_19646_Node: THREE.Mesh
-    StitchMatShape_19732_Node: THREE.Mesh
-    StitchMatShape_19818_Node: THREE.Mesh
-    StitchMatShape_19978_Node: THREE.Mesh
-    StitchMatShape_20397_Node: THREE.Mesh
-    StitchMatShape_20474_Node: THREE.Mesh
-    StitchMatShape_20546_Node: THREE.Mesh
-    StitchMatShape_20635_Node: THREE.Mesh
-    StitchMatShape_20724_Node: THREE.Mesh
-    ['HOODIE-BOLSO001']: THREE.Mesh
-    ['HOODIE-BOLSO001_1']: THREE.Mesh
-    ['HOODIE-BOLSO001_2']: THREE.Mesh
-    ['HOODIE-CA_1001']: THREE.Mesh
-    ['HOODIE-CA_1001_1']: THREE.Mesh
-    ['HOODIE-CA_1001_2']: THREE.Mesh
-    ['HOODIE-CINTO001']: THREE.Mesh
-    ['HOODIE-CINTO001_1']: THREE.Mesh
-    ['HOODIE-CINTO001_2']: THREE.Mesh
-    ['HOODIE-COSTA001']: THREE.Mesh
-    ['HOODIE-COSTA001_1']: THREE.Mesh
-    ['HOODIE-COSTA001_2']: THREE.Mesh
-    ['HOODIE-FRENTE001']: THREE.Mesh
-    ['HOODIE-FRENTE001_1']: THREE.Mesh
-    ['HOODIE-FRENTE001_2']: THREE.Mesh
-    ['HOODIE-MANGA_4001']: THREE.Mesh
-    ['HOODIE-MANGA_4001_1']: THREE.Mesh
-    ['HOODIE-MANGA_4001_2']: THREE.Mesh
-    ['HOODIE-MANGA_5001']: THREE.Mesh
-    ['HOODIE-MANGA_5001_1']: THREE.Mesh
-    ['HOODIE-MANGA_5001_2']: THREE.Mesh
-    ['HOODIE-MEIALUA001']: THREE.Mesh
-    ['HOODIE-MEIALUA001_1']: THREE.Mesh
-    ['HOODIE-MEIALUA001_2']: THREE.Mesh
-    ['HOODIE-PUNHO_1001']: THREE.Mesh
-    ['HOODIE-PUNHO_1001_1']: THREE.Mesh
-    ['HOODIE-PUNHO_1001_2']: THREE.Mesh
-    ['HOODIE-PUNHO_2001']: THREE.Mesh
-    ['HOODIE-PUNHO_2001_1']: THREE.Mesh
-    ['HOODIE-PUNHO_2001_2']: THREE.Mesh
-    Pattern_51588001: THREE.Mesh
-    Pattern_51588001_1: THREE.Mesh
-    Pattern_51588001_2: THREE.Mesh
-  }
+    StitchMatShape_18533_Node001: THREE.Mesh;
+    StitchMatShape_18643_Node001: THREE.Mesh;
+    StitchMatShape_18792_Node001: THREE.Mesh;
+    StitchMatShape_18904_Node001: THREE.Mesh;
+    StitchMatShape_19011_Node001: THREE.Mesh;
+    StitchMatShape_19136_Node001: THREE.Mesh;
+    StitchMatShape_19297_Node001: THREE.Mesh;
+    StitchMatShape_19398_Node001: THREE.Mesh;
+    StitchMatShape_19431_Node001: THREE.Mesh;
+    StitchMatShape_19464_Node001: THREE.Mesh;
+    StitchMatShape_19555_Node001: THREE.Mesh;
+    StitchMatShape_19646_Node001: THREE.Mesh;
+    StitchMatShape_19732_Node001: THREE.Mesh;
+    StitchMatShape_19818_Node001: THREE.Mesh;
+    StitchMatShape_19978_Node001: THREE.Mesh;
+    StitchMatShape_20397_Node001: THREE.Mesh;
+    StitchMatShape_20474_Node001: THREE.Mesh;
+    StitchMatShape_20546_Node001: THREE.Mesh;
+    StitchMatShape_20635_Node001: THREE.Mesh;
+    StitchMatShape_20724_Node001: THREE.Mesh;
+    ["HOODIE-BOLSO001001"]: THREE.Mesh;
+    ["HOODIE-BOLSO001_1001"]: THREE.Mesh;
+    ["HOODIE-BOLSO001_2001"]: THREE.Mesh;
+    ["HOODIE-CA_1001001"]: THREE.Mesh;
+    ["HOODIE-CA_1001_1001"]: THREE.Mesh;
+    ["HOODIE-CA_1001_2001"]: THREE.Mesh;
+    ["HOODIE-CINTO001001"]: THREE.Mesh;
+    ["HOODIE-CINTO001_1001"]: THREE.Mesh;
+    ["HOODIE-CINTO001_2001"]: THREE.Mesh;
+    ["HOODIE-COSTA001001"]: THREE.Mesh;
+    ["HOODIE-COSTA001_1001"]: THREE.Mesh;
+    ["HOODIE-COSTA001_2001"]: THREE.Mesh;
+    ["HOODIE-FRENTE001001"]: THREE.Mesh;
+    ["HOODIE-FRENTE001_1001"]: THREE.Mesh;
+    ["HOODIE-FRENTE001_2001"]: THREE.Mesh;
+    ["HOODIE-MANGA_4001001"]: THREE.Mesh;
+    ["HOODIE-MANGA_4001_1001"]: THREE.Mesh;
+    ["HOODIE-MANGA_4001_2001"]: THREE.Mesh;
+    ["HOODIE-MANGA_5001001"]: THREE.Mesh;
+    ["HOODIE-MANGA_5001_1001"]: THREE.Mesh;
+    ["HOODIE-MANGA_5001_2001"]: THREE.Mesh;
+    ["HOODIE-MEIALUA001001"]: THREE.Mesh;
+    ["HOODIE-MEIALUA001_1001"]: THREE.Mesh;
+    ["HOODIE-MEIALUA001_2001"]: THREE.Mesh;
+    ["HOODIE-PUNHO_1001001"]: THREE.Mesh;
+    ["HOODIE-PUNHO_1001_1001"]: THREE.Mesh;
+    ["HOODIE-PUNHO_1001_2001"]: THREE.Mesh;
+    ["HOODIE-PUNHO_2001001"]: THREE.Mesh;
+    ["HOODIE-PUNHO_2001_1001"]: THREE.Mesh;
+    ["HOODIE-PUNHO_2001_2001"]: THREE.Mesh;
+    Pattern_51588001001: THREE.Mesh;
+    Pattern_51588001_1001: THREE.Mesh;
+    Pattern_51588001_2001: THREE.Mesh;
+  };
   materials: {
-    ['Material3319.003']: THREE.MeshStandardMaterial
-    ['Material3555.003']: THREE.MeshStandardMaterial
-    ['Material3791.003']: THREE.MeshStandardMaterial
-    ['Material3083.003']: THREE.MeshStandardMaterial
-    ['Material4029.001']: THREE.MeshStandardMaterial
-    ['Material4263.001']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_FRONT_2603.027']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_BACK_2603.033']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry hood_FRONT_2709.003']: THREE.MeshStandardMaterial
-    ['Rib_1X1_486gsm_FRONT_2635.007']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_FRONT_2603.026']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_BACK_2603.030']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_FRONT_2603.025']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_BACK_2603.027']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_FRONT_2603.029']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_BACK_2603.039']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_FRONT_2603.030']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_BACK_2603.042']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_FRONT_2603.028']: THREE.MeshStandardMaterial
-    ['Knit_Fleece_Terry_BACK_2603.036']: THREE.MeshStandardMaterial
-    ['Rib_1X1_486gsm_FRONT_2635.010']: THREE.MeshStandardMaterial
-    ['Rib_1X1_486gsm_FRONT_2635.013']: THREE.MeshStandardMaterial
-    ['seam cover_FRONT_2731.002']: THREE.MeshStandardMaterial
-    ['seam cover_BACK_2731.002']: THREE.MeshStandardMaterial
-  }
-}
+    ["Material3319.003"]: THREE.MeshStandardMaterial;
+    ["Material3555.003"]: THREE.MeshStandardMaterial;
+    ["Material3791.003"]: THREE.MeshStandardMaterial;
+    ["Material3083.003"]: THREE.MeshStandardMaterial;
+    ["Material4029.001"]: THREE.MeshStandardMaterial;
+    ["Material4263.001"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_FRONT_2603.027"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_BACK_2603.033"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry hood_FRONT_2709.003"]: THREE.MeshStandardMaterial;
+    ["Rib_1X1_486gsm_FRONT_2635.007"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_FRONT_2603.026"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_BACK_2603.030"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_FRONT_2603.025"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_BACK_2603.027"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_FRONT_2603.029"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_BACK_2603.039"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_FRONT_2603.030"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_BACK_2603.042"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_FRONT_2603.028"]: THREE.MeshStandardMaterial;
+    ["Knit_Fleece_Terry_BACK_2603.036"]: THREE.MeshStandardMaterial;
+    ["Rib_1X1_486gsm_FRONT_2635.010"]: THREE.MeshStandardMaterial;
+    ["Rib_1X1_486gsm_FRONT_2635.013"]: THREE.MeshStandardMaterial;
+    ["seam cover_FRONT_2731.002"]: THREE.MeshStandardMaterial;
+    ["seam cover_BACK_2731.002"]: THREE.MeshStandardMaterial;
+  };
+};
 
 type ContextType = Record<
   string,
@@ -106,7 +120,8 @@ export default function Model(props: any) {
   const customize = useCustomizeContext();
   const [tagName, setTagName] = useState("");
   const [cords, setCords] = useState("");
-  const { embelIndex } = props;
+  const { embelIndex, canvasRef, textureRef, canvasRenderedRef, controlsRef } =
+    props;
 
   const modelRef = useRef<any>();
   const [zoomFactor, setZoomFactor] = useState<number>(1);
@@ -124,19 +139,27 @@ export default function Model(props: any) {
 
   useEffect(() => {
     if (!isEmpty(customize.tag.file)) {
-      loader.loadAsync(typeof customize.tag.file === "string" ? customize.tag.file : URL.createObjectURL(customize.tag.file)).then((result) => {
-        setTagTexture(result);
-      });
+      loader
+        .loadAsync(
+          typeof customize.tag.file === "string"
+            ? customize.tag.file
+            : URL.createObjectURL(customize.tag.file)
+        )
+        .then((result) => {
+          setTagTexture(result);
+        });
     }
-  }, [customize.tag.file])
+  }, [customize.tag.file]);
 
-  const reverseIndex = [3], embelSize = 4, smallIndex = [2, 3];
+  const reverseIndex = [3],
+    embelSize = 4,
+    smallIndex = [2, 3];
   const setTextTexture = (factor = 1) => {
     let tmpTexture = texture;
     for (let i = 0; i < embelSize; i++) {
       if (customize.embellishment[i].type === "image") continue;
       const textCanvas = document.createElement("canvas");
-      textCanvas.style.cssText = "border: 1px solid grey"
+      textCanvas.style.cssText = "border: 1px solid grey";
       const baseWidth = smallIndex.includes(i) ? 200 : 300;
       const baseHeight = smallIndex.includes(i) ? 300 : 400;
       const fontSize = smallIndex.includes(i) ? 16 : 30;
@@ -144,52 +167,53 @@ export default function Model(props: any) {
       textCanvas.width = baseWidth * factor;
       textCanvas.height = baseHeight * factor;
       var ctx = textCanvas.getContext("2d");
-      var fillTextX = 0, fillTextY = 0;
-      const lines = customize.embellishment[i].textureText.split('\n');
+      var fillTextX = 0,
+        fillTextY = 0;
+      const lines = customize.embellishment[i].textureText.split("\n");
 
       if (ctx !== null && customize.embellishment[i].font) {
         ctx.font = `${fontSize}pt ${customize.embellishment[i].font}`;
         ctx.scale(factor, factor);
         switch (customize.embellishment[i].position.type) {
           case 0:
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
+            ctx.textAlign = "left";
+            ctx.textBaseline = "middle";
             fillTextX = 0;
             fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
             break;
           case 1:
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
             fillTextX = baseWidth / 2;
             fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
             break;
           case 2:
-            ctx.textAlign = 'right';
-            ctx.textBaseline = 'middle';
+            ctx.textAlign = "right";
+            ctx.textBaseline = "middle";
             fillTextX = baseWidth;
             fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
             break;
           case 3:
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'top';
+            ctx.textAlign = "center";
+            ctx.textBaseline = "top";
             fillTextX = baseWidth / 2;
             fillTextY = fontSize;
             break;
           case 4:
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
             fillTextX = baseWidth / 2;
             fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
             break;
           case 5:
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'bottom';
+            ctx.textAlign = "center";
+            ctx.textBaseline = "bottom";
             fillTextX = baseWidth / 2;
-            fillTextY = (baseHeight - lineHeight * lines.length) + fontSize;
+            fillTextY = baseHeight - lineHeight * lines.length + fontSize;
             break;
         }
         for (let k = 0; k < lines.length; k++) {
-          ctx.fillText(lines[k], fillTextX, fillTextY + (k * lineHeight));
+          ctx.fillText(lines[k], fillTextX, fillTextY + k * lineHeight);
         }
 
         const myTexture = new THREE.CanvasTexture(textCanvas);
@@ -201,22 +225,36 @@ export default function Model(props: any) {
       }
       setTexture({ ...texture, ...tmpTexture });
     }
-  }
+  };
 
   useEffect(() => {
-    if (customize.embellishment[embelIndex].type === 'image') {
+    if (customize.embellishment[embelIndex].type === "image") {
       if (!isEmpty(customize.embellishment[embelIndex].file))
-        loader.loadAsync(typeof customize.embellishment[embelIndex].file === "string" ? customize.embellishment[embelIndex].file : typeof customize.embellishment[embelIndex].file === "string" ? customize.embellishment[embelIndex].file : URL.createObjectURL(customize.embellishment[embelIndex].file)).then((result) => {
-          if (reverseIndex.includes(embelIndex)) {
-            result.wrapS = THREE.RepeatWrapping;
-            result.repeat.x = -1;
-          }
-          setTexture({ ...texture, [embelIndex]: result });
-        })
-    } else if (customize.embellishment[embelIndex].type === 'text') {
+        loader
+          .loadAsync(
+            typeof customize.embellishment[embelIndex].file === "string"
+              ? customize.embellishment[embelIndex].file
+              : typeof customize.embellishment[embelIndex].file === "string"
+              ? customize.embellishment[embelIndex].file
+              : URL.createObjectURL(customize.embellishment[embelIndex].file)
+          )
+          .then((result) => {
+            if (reverseIndex.includes(embelIndex)) {
+              result.wrapS = THREE.RepeatWrapping;
+              result.repeat.x = -1;
+            }
+            setTexture({ ...texture, [embelIndex]: result });
+          });
+    } else if (customize.embellishment[embelIndex].type === "text") {
       setTextTexture();
     }
-  }, [customize.embellishment[embelIndex].position, customize.embellishment[embelIndex].type, customize.embellishment[embelIndex].file, customize.embellishment[embelIndex].textureText, customize.embellishment[embelIndex].font]);
+  }, [
+    customize.embellishment[embelIndex].position,
+    customize.embellishment[embelIndex].type,
+    customize.embellishment[embelIndex].file,
+    customize.embellishment[embelIndex].textureText,
+    customize.embellishment[embelIndex].font,
+  ]);
 
   useEffect(() => {
     let factor = 1;
@@ -234,14 +272,20 @@ export default function Model(props: any) {
     let promises = [];
     let indexes = [];
     for (let i = 0; i < embelSize; i++) {
-      if (tmpCtx.embellishment[i].type === 'image') {
+      if (tmpCtx.embellishment[i].type === "image") {
         if (!isEmpty(tmpCtx.embellishment[i].file)) {
           indexes.push(i);
-          promises.push(loader.loadAsync(typeof tmpCtx.embellishment[i].file === "string" ? tmpCtx.embellishment[i].file : URL.createObjectURL(tmpCtx.embellishment[i].file)))
+          promises.push(
+            loader.loadAsync(
+              typeof tmpCtx.embellishment[i].file === "string"
+                ? tmpCtx.embellishment[i].file
+                : URL.createObjectURL(tmpCtx.embellishment[i].file)
+            )
+          );
         }
-      } else if (tmpCtx.embellishment[i].type === 'text') {
+      } else if (tmpCtx.embellishment[i].type === "text") {
         const textCanvas = document.createElement("canvas");
-        textCanvas.style.cssText = "border: 1px solid grey"
+        textCanvas.style.cssText = "border: 1px solid grey";
         const baseWidth = smallIndex.includes(i) ? 200 : 300;
         const baseHeight = smallIndex.includes(i) ? 300 : 400;
         const fontSize = smallIndex.includes(i) ? 16 : 30;
@@ -249,52 +293,57 @@ export default function Model(props: any) {
         textCanvas.width = baseWidth * factor;
         textCanvas.height = baseHeight * factor;
         var ctx = textCanvas.getContext("2d");
-        var fillTextX = 0, fillTextY = 0;
-        const lines = tmpCtx.embellishment[i].textureText.split('\n');
+        var fillTextX = 0,
+          fillTextY = 0;
+        const lines = tmpCtx.embellishment[i].textureText.split("\n");
 
         if (ctx !== null && tmpCtx.embellishment[i].font) {
           ctx.font = `${fontSize}pt ${tmpCtx.embellishment[i].font}`;
           ctx.scale(factor, factor);
           switch (tmpCtx.embellishment[i].position.type) {
             case 0:
-              ctx.textAlign = 'left';
-              ctx.textBaseline = 'middle';
+              ctx.textAlign = "left";
+              ctx.textBaseline = "middle";
               fillTextX = 0;
-              fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+              fillTextY =
+                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
               break;
             case 1:
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
               fillTextX = baseWidth / 2;
-              fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+              fillTextY =
+                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
               break;
             case 2:
-              ctx.textAlign = 'right';
-              ctx.textBaseline = 'middle';
+              ctx.textAlign = "right";
+              ctx.textBaseline = "middle";
               fillTextX = baseWidth;
-              fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+              fillTextY =
+                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
               break;
             case 3:
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'top';
+              ctx.textAlign = "center";
+              ctx.textBaseline = "top";
               fillTextX = baseWidth / 2;
               fillTextY = 0;
               break;
             case 4:
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
+              ctx.textAlign = "center";
+              ctx.textBaseline = "middle";
               fillTextX = baseWidth / 2;
-              fillTextY = (baseHeight - lineHeight * lines.length) / 2 + fontSize;
+              fillTextY =
+                (baseHeight - lineHeight * lines.length) / 2 + fontSize;
               break;
             case 5:
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'bottom';
+              ctx.textAlign = "center";
+              ctx.textBaseline = "bottom";
               fillTextX = baseWidth / 2;
-              fillTextY = (baseHeight - lineHeight * lines.length) + fontSize;
+              fillTextY = baseHeight - lineHeight * lines.length + fontSize;
               break;
           }
           for (let k = 0; k < lines.length; k++) {
-            ctx.fillText(lines[k], fillTextX, fillTextY + (k * lineHeight));
+            ctx.fillText(lines[k], fillTextX, fillTextY + k * lineHeight);
           }
 
           const myTexture = new THREE.CanvasTexture(textCanvas);
@@ -319,15 +368,18 @@ export default function Model(props: any) {
   }, []);
 
   const { nodes, materials } = useGLTF(
-    "/models/Hoody/HOODIE_MAN.glb"
+    "/models/Hoody/HOODIE_MAN2.glb"
   ) as GLTFResult;
 
   if (customize.color.length > 0) {
     const color = customize.color;
 
     for (let key in materials) {
-      delete materials[key]['_listeners'];
-      materials[key] = new THREE.MeshStandardMaterial({ ...materials[key], color: color })
+      delete materials[key]["_listeners"];
+      materials[key] = new THREE.MeshStandardMaterial({
+        ...materials[key],
+        color: color,
+      });
     }
   }
 
@@ -340,16 +392,32 @@ export default function Model(props: any) {
 
         const material: any = materials[Object.keys(materials)[0]];
         let keys: string[] = Object.keys(nodes);
-        keys = keys.filter((key) => (nodes[key].isMesh));
-        const positionY = customize.tag.size.startsWith("45x45") ? 1.595 : customize.tag.size.startsWith("55") ? 1.603 : 1.615;
-        const scaleYZ = customize.tag.size.startsWith("45x45") ? 0.02 : customize.tag.size.startsWith("55") ? 0.016 : 0.025;
-        const scaleX = !tagTexture.source.data ? 0 : scaleYZ * tagTexture.source.data.naturalWidth / tagTexture.source.data.naturalHeight;
+        keys = keys.filter((key) => nodes[key].isMesh);
+        const positionY = customize.tag.size.startsWith("45x45")
+          ? 1.595
+          : customize.tag.size.startsWith("55")
+          ? 1.603
+          : 1.615;
+        const scaleYZ = customize.tag.size.startsWith("45x45")
+          ? 0.02
+          : customize.tag.size.startsWith("55")
+          ? 0.016
+          : 0.025;
+        const scaleX = !tagTexture.source.data
+          ? 0
+          : (scaleYZ * tagTexture.source.data.naturalWidth) /
+            tagTexture.source.data.naturalHeight;
 
         return (
           <group dispose={null}>
-            {keys.map((key: string, idx: number) => (
+            {keys.map((key: string, idx: number) =>
               idx === 0 ? (
-                <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key}>
+                <mesh
+                  name={`pattern_tag_${idx}`}
+                  geometry={nodes[key].geometry}
+                  material={material}
+                  key={key}
+                >
                   <Decal
                     position={[-0.002, positionY, -0.09]}
                     rotation={[0, 0, 0]}
@@ -360,314 +428,805 @@ export default function Model(props: any) {
                   />
                 </mesh>
               ) : (
-                <mesh name={`pattern_tag_${idx}`} geometry={nodes[key].geometry} material={material} key={key} />
-              )))}
+                <mesh
+                  name={`pattern_tag_${idx}`}
+                  geometry={nodes[key].geometry}
+                  material={material}
+                  key={key}
+                />
+              )
+            )}
           </group>
-        )
+        );
       } else {
-        return ''
+        return "";
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }, [tagName, tagTexture])
+  }, [tagName, tagTexture]);
 
   const cord = useCallback(() => {
     try {
       if (!!customize.cord) {
-        const { nodes, materials } = useGLTF(`/models/Hoody/cords/Man/${customize.cord}/${customize.cord}.gltf`) as any;
+        const { nodes, materials } = useGLTF(
+          `/models/Hoody/cords/Man/${customize.cord}/${customize.cord}.gltf`
+        ) as any;
         if (customize.cord === "Cord1") {
           return (
-            <group >
-              <mesh geometry={nodes.Pattern2D_244420.geometry} material={materials.Polyester_Taffeta_FRONT_2663} />
-              <mesh geometry={nodes.Pattern2D_244420_1.geometry} material={materials.Polyester_Taffeta_FRONT_2663} />
-              <mesh geometry={nodes.Pattern2D_244420_2.geometry} material={materials.Polyester_Taffeta_FRONT_2663} />
-              <mesh geometry={nodes.Pattern2D_244422.geometry} material={materials['Polyester_Taffeta_FRONT_2663.002']} />
-              <mesh geometry={nodes.Pattern2D_244422_1.geometry} material={materials['Polyester_Taffeta_FRONT_2663.002']} />
-              <mesh geometry={nodes.Pattern2D_244422_2.geometry} material={materials['Polyester_Taffeta_FRONT_2663.002']} />
+            <group>
+              <mesh
+                geometry={nodes.Pattern2D_244420.geometry}
+                material={materials.Polyester_Taffeta_FRONT_2663}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244420_1.geometry}
+                material={materials.Polyester_Taffeta_FRONT_2663}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244420_2.geometry}
+                material={materials.Polyester_Taffeta_FRONT_2663}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244422.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2663.002"]}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244422_1.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2663.002"]}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244422_2.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2663.002"]}
+              />
             </group>
-          )
+          );
         } else if (customize.cord === "Cord2") {
           return (
-            <group >
-              <mesh geometry={nodes.Pattern2D_244420_Node.geometry} material={materials.Polyester_Taffeta_FRONT_2480} />
-              <mesh geometry={nodes.Pattern2D_244422_Node.geometry} material={materials['Polyester_Taffeta_FRONT_2480.001']} />
+            <group>
+              <mesh
+                geometry={nodes.Pattern2D_244420_Node.geometry}
+                material={materials.Polyester_Taffeta_FRONT_2480}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244422_Node.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2480.001"]}
+              />
             </group>
-          )
+          );
         } else if (customize.cord === "Cord3") {
           return (
-            <group >
-              <mesh geometry={nodes.Pattern2D_244424_Node.geometry} material={materials['Polyester_Taffeta_FRONT_2487.004']} />
-              <mesh geometry={nodes.Pattern2D_244422_Node.geometry} material={materials['Polyester_Taffeta_FRONT_2487.005']} />
+            <group>
+              <mesh
+                geometry={nodes.Pattern2D_244424_Node.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2487.004"]}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244422_Node.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2487.005"]}
+              />
             </group>
-          )
+          );
         } else if (customize.cord === "Cord4") {
           return (
-            <group >
-              <mesh geometry={nodes.Pattern2D_244420009.geometry} material={materials['Polyester_Taffeta_FRONT_2663.020']} />
-              <mesh geometry={nodes.Pattern2D_244420009_1.geometry} material={materials['Polyester_Taffeta_FRONT_2663.020']} />
-              <mesh geometry={nodes.Pattern2D_244420009_2.geometry} material={materials['Polyester_Taffeta_FRONT_2663.020']} />
-              <mesh geometry={nodes.Pattern2D_244422012.geometry} material={materials['Polyester_Taffeta_FRONT_2663.022']} />
-              <mesh geometry={nodes.Pattern2D_244422012_1.geometry} material={materials['Polyester_Taffeta_FRONT_2663.022']} />
-              <mesh geometry={nodes.Pattern2D_244422012_2.geometry} material={materials['Polyester_Taffeta_FRONT_2663.022']} />
+            <group>
+              <mesh
+                geometry={nodes.Pattern2D_244420009.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2663.020"]}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244420009_1.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2663.020"]}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244420009_2.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2663.020"]}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244422012.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2663.022"]}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244422012_1.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2663.022"]}
+              />
+              <mesh
+                geometry={nodes.Pattern2D_244422012_2.geometry}
+                material={materials["Polyester_Taffeta_FRONT_2663.022"]}
+              />
             </group>
-          )
+          );
         }
       }
-    } catch (err) { }
+    } catch (err) {}
     return null;
   }, [customize.cord]);
 
   const cordTipItem = useCallback(() => {
     try {
       if (!!customize.cord && !!customize.cordTip) {
-        const { nodes, materials } = useGLTF(`/models/Hoody/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.glb`) as any;
+        const { nodes, materials } = useGLTF(
+          `/models/Hoody/cords/Man/${customize.cord}/${customize.cordTip}/${customize.cordTip}.glb`
+        ) as any;
         if (customize.cord === "Cord1") {
           if (customize.cordTip === "mental_end") {
             return (
-              <group >
-                <mesh geometry={nodes.MatShape_49527_Node.geometry} material={materials.Material4631} position={[-0.1488, 0.171, 0.55]} rotation={[2.946, 0.879, -3.115]} scale={[1.294, 0.941, 1.294]} />
-                <mesh geometry={nodes.MatShape_101039_Node.geometry} material={materials.Material4631} position={[-0.090, 0.171, 0.5665]} rotation={[2.98, 0.51, -3.134]} scale={[1.294, 0.941, 1.294]} />
+              <group>
+                <mesh
+                  geometry={nodes.MatShape_49527_Node.geometry}
+                  material={materials.Material4631}
+                  position={[-0.1488, 0.171, 0.55]}
+                  rotation={[2.946, 0.879, -3.115]}
+                  scale={[1.294, 0.941, 1.294]}
+                />
+                <mesh
+                  geometry={nodes.MatShape_101039_Node.geometry}
+                  material={materials.Material4631}
+                  position={[-0.09, 0.171, 0.5665]}
+                  rotation={[2.98, 0.51, -3.134]}
+                  scale={[1.294, 0.941, 1.294]}
+                />
               </group>
-            )
+            );
           } else if (customize.cordTip === "plastic_end") {
             return (
               <group {...props} dispose={null}>
-                <group {...props} dispose={null} position={[0.001, -0.002, 0.001]}>
-                  <mesh geometry={nodes.Pattern2D_244421.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687']} />
-                  <mesh geometry={nodes.Pattern2D_244421_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687']} />
-                  <mesh geometry={nodes.Pattern2D_244421_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687']} />
+                <group
+                  {...props}
+                  dispose={null}
+                  position={[0.001, -0.002, 0.001]}
+                >
+                  <mesh
+                    geometry={nodes.Pattern2D_244421.geometry}
+                    material={materials["Polyester_Taffeta Copy 1_FRONT_2687"]}
+                  />
+                  <mesh
+                    geometry={nodes.Pattern2D_244421_1.geometry}
+                    material={materials["Polyester_Taffeta Copy 1_FRONT_2687"]}
+                  />
+                  <mesh
+                    geometry={nodes.Pattern2D_244421_2.geometry}
+                    material={materials["Polyester_Taffeta Copy 1_FRONT_2687"]}
+                  />
                 </group>
-                <group {...props} dispose={null} position={[-0.004, -0.002, 0.0015]}>
-                  <mesh geometry={nodes.Pattern2D_244423.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687.002']} />
-                  <mesh geometry={nodes.Pattern2D_244423_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687.002']} />
-                  <mesh geometry={nodes.Pattern2D_244423_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2687.002']} />
+                <group
+                  {...props}
+                  dispose={null}
+                  position={[-0.004, -0.002, 0.0015]}
+                >
+                  <mesh
+                    geometry={nodes.Pattern2D_244423.geometry}
+                    material={
+                      materials["Polyester_Taffeta Copy 1_FRONT_2687.002"]
+                    }
+                  />
+                  <mesh
+                    geometry={nodes.Pattern2D_244423_1.geometry}
+                    material={
+                      materials["Polyester_Taffeta Copy 1_FRONT_2687.002"]
+                    }
+                  />
+                  <mesh
+                    geometry={nodes.Pattern2D_244423_2.geometry}
+                    material={
+                      materials["Polyester_Taffeta Copy 1_FRONT_2687.002"]
+                    }
+                  />
                 </group>
               </group>
-            )
+            );
           } else if (customize.cordTip === "silicone_end") {
             return (
               <group {...props} dispose={null}>
-                <mesh geometry={nodes.Pattern_55162001.geometry} material={materials['silicone_FRONT_2710.003']} />
-                <mesh geometry={nodes.Pattern_55162001_1.geometry} material={materials['silicone_FRONT_2710.003']} />
-                <mesh geometry={nodes.Pattern_55162001_2.geometry} material={materials['silicone_FRONT_2710.003']} />
-                <mesh geometry={nodes.Pattern_55163001.geometry} material={materials['silicone_FRONT_2710.005']} />
-                <mesh geometry={nodes.Pattern_55163001_1.geometry} material={materials['silicone_FRONT_2710.005']} />
-                <mesh geometry={nodes.Pattern_55163001_2.geometry} material={materials['silicone_FRONT_2710.005']} />
+                <mesh
+                  geometry={nodes.Pattern_55162001.geometry}
+                  material={materials["silicone_FRONT_2710.003"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55162001_1.geometry}
+                  material={materials["silicone_FRONT_2710.003"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55162001_2.geometry}
+                  material={materials["silicone_FRONT_2710.003"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55163001.geometry}
+                  material={materials["silicone_FRONT_2710.005"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55163001_1.geometry}
+                  material={materials["silicone_FRONT_2710.005"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55163001_2.geometry}
+                  material={materials["silicone_FRONT_2710.005"]}
+                />
               </group>
-            )
+            );
           }
         } else if (customize.cord === "Cord2") {
           if (customize.cordTip === "mental_end") {
             return (
               <group {...props} dispose={null}>
-                <mesh geometry={nodes.MatShape_54439_Node.geometry} material={materials['Material4631.002']} position={[-0.0145, 0.09, 0.103]} rotation={[-0.156, -0.165, -0.007]} scale={[0.975, 0.94, 0.975]} />
-                <mesh geometry={nodes.MatShape_83371_Node.geometry} material={materials['Material4631.002']} position={[-0.1695, 0.102, 0.174]} rotation={[-0.173, 0.362, -0.017]} scale={[0.975, 0.94, 0.975]} />
+                <mesh
+                  geometry={nodes.MatShape_54439_Node.geometry}
+                  material={materials["Material4631.002"]}
+                  position={[-0.0145, 0.09, 0.103]}
+                  rotation={[-0.156, -0.165, -0.007]}
+                  scale={[0.975, 0.94, 0.975]}
+                />
+                <mesh
+                  geometry={nodes.MatShape_83371_Node.geometry}
+                  material={materials["Material4631.002"]}
+                  position={[-0.1695, 0.102, 0.174]}
+                  rotation={[-0.173, 0.362, -0.017]}
+                  scale={[0.975, 0.94, 0.975]}
+                />
               </group>
-            )
+            );
           } else if (customize.cordTip === "plastic_end") {
             return (
-              <group >
-                <mesh geometry={nodes.Pattern2D_244421_Node.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2497']} position={[0.001, 0, 0]} />
-                <mesh geometry={nodes.Pattern2D_244423_Node.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2497.001']} position={[-0.0015, 0, 0]} />
+              <group>
+                <mesh
+                  geometry={nodes.Pattern2D_244421_Node.geometry}
+                  material={materials["Polyester_Taffeta Copy 1_FRONT_2497"]}
+                  position={[0.001, 0, 0]}
+                />
+                <mesh
+                  geometry={nodes.Pattern2D_244423_Node.geometry}
+                  material={
+                    materials["Polyester_Taffeta Copy 1_FRONT_2497.001"]
+                  }
+                  position={[-0.0015, 0, 0]}
+                />
               </group>
-            )
+            );
           } else if (customize.cordTip === "silicone_end") {
             return (
               <group {...props} dispose={null}>
-                <mesh geometry={nodes.Pattern_55162_Node.geometry} material={materials['silicone_FRONT_2499.002']} />
-                <mesh geometry={nodes.Pattern_55163_Node.geometry} material={materials['silicone_FRONT_2499.003']} />
+                <mesh
+                  geometry={nodes.Pattern_55162_Node.geometry}
+                  material={materials["silicone_FRONT_2499.002"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55163_Node.geometry}
+                  material={materials["silicone_FRONT_2499.003"]}
+                />
               </group>
-            )
+            );
           }
         } else if (customize.cord === "Cord3") {
           if (customize.cordTip === "mental_end") {
             return (
               <group {...props} dispose={null}>
-                <mesh geometry={nodes.MatShape_69312_Node.geometry} material={materials['Material4631.003']} position={[0.224, 0.062, 0.045]} rotation={[-0.138, -0.949, 0.01]} scale={[1.529, 0.958, 1.529]} />
-                <mesh geometry={nodes.MatShape_103875_Node.geometry} material={materials['Material4631.003']} position={[0.068, 0.056, 0.023]} rotation={[-0.163, -0.5, 0.021]} scale={[1.529, 0.958, 1.529]} />
+                <mesh
+                  geometry={nodes.MatShape_69312_Node.geometry}
+                  material={materials["Material4631.003"]}
+                  position={[0.224, 0.062, 0.045]}
+                  rotation={[-0.138, -0.949, 0.01]}
+                  scale={[1.529, 0.958, 1.529]}
+                />
+                <mesh
+                  geometry={nodes.MatShape_103875_Node.geometry}
+                  material={materials["Material4631.003"]}
+                  position={[0.068, 0.056, 0.023]}
+                  rotation={[-0.163, -0.5, 0.021]}
+                  scale={[1.529, 0.958, 1.529]}
+                />
               </group>
-            )
+            );
           } else if (customize.cordTip === "plastic_end") {
             return (
               <group {...props} dispose={null}>
                 <group {...props} dispose={null} position={[0, 0.001, 0]}>
-                  <mesh geometry={nodes.Pattern2D_244421002.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688']} />
-                  <mesh geometry={nodes.Pattern2D_244421002_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688']} />
-                  <mesh geometry={nodes.Pattern2D_244421002_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688']} />
+                  <mesh
+                    geometry={nodes.Pattern2D_244421002.geometry}
+                    material={materials["Polyester_Taffeta Copy 1_FRONT_2688"]}
+                  />
+                  <mesh
+                    geometry={nodes.Pattern2D_244421002_1.geometry}
+                    material={materials["Polyester_Taffeta Copy 1_FRONT_2688"]}
+                  />
+                  <mesh
+                    geometry={nodes.Pattern2D_244421002_2.geometry}
+                    material={materials["Polyester_Taffeta Copy 1_FRONT_2688"]}
+                  />
                 </group>
                 <group {...props} dispose={null} position={[-0.007, 0.001, 0]}>
-                  <mesh geometry={nodes.Pattern2D_244423002.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688.002']} />
-                  <mesh geometry={nodes.Pattern2D_244423002_1.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688.002']} />
-                  <mesh geometry={nodes.Pattern2D_244423002_2.geometry} material={materials['Polyester_Taffeta Copy 1_FRONT_2688.002']} />
+                  <mesh
+                    geometry={nodes.Pattern2D_244423002.geometry}
+                    material={
+                      materials["Polyester_Taffeta Copy 1_FRONT_2688.002"]
+                    }
+                  />
+                  <mesh
+                    geometry={nodes.Pattern2D_244423002_1.geometry}
+                    material={
+                      materials["Polyester_Taffeta Copy 1_FRONT_2688.002"]
+                    }
+                  />
+                  <mesh
+                    geometry={nodes.Pattern2D_244423002_2.geometry}
+                    material={
+                      materials["Polyester_Taffeta Copy 1_FRONT_2688.002"]
+                    }
+                  />
                 </group>
               </group>
-            )
+            );
           } else if (customize.cordTip === "silicone_end") {
             return (
               <group {...props} dispose={null}>
-                <mesh geometry={nodes.Pattern_55162_Node.geometry} material={materials['silicone_FRONT_2506.002']} />
-                <mesh geometry={nodes.Pattern_55163_Node.geometry} material={materials['silicone_FRONT_2506.003']} />
+                <mesh
+                  geometry={nodes.Pattern_55162_Node.geometry}
+                  material={materials["silicone_FRONT_2506.002"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55163_Node.geometry}
+                  material={materials["silicone_FRONT_2506.003"]}
+                />
               </group>
-            )
+            );
           }
         } else if (customize.cord === "Cord4") {
           if (customize.cordTip === "mental_end") {
             return (
               <group {...props} dispose={null}>
-                <mesh geometry={nodes.MatShape_69312_Node.geometry} material={materials['Material4631.004']} position={[0.2303, 0.056, 0.048]} rotation={[-0.138, -0.948, 0.01]} scale={[1.529, 0.958, 1.529]} />
-                <mesh geometry={nodes.MatShape_103875_Node.geometry} material={materials['Material4631.004']} position={[0.070, 0.05, 0.025]} rotation={[-0.163, -0.509, 0.02]} scale={[1.529, 0.958, 1.529]} />
+                <mesh
+                  geometry={nodes.MatShape_69312_Node.geometry}
+                  material={materials["Material4631.004"]}
+                  position={[0.2303, 0.056, 0.048]}
+                  rotation={[-0.138, -0.948, 0.01]}
+                  scale={[1.529, 0.958, 1.529]}
+                />
+                <mesh
+                  geometry={nodes.MatShape_103875_Node.geometry}
+                  material={materials["Material4631.004"]}
+                  position={[0.07, 0.05, 0.025]}
+                  rotation={[-0.163, -0.509, 0.02]}
+                  scale={[1.529, 0.958, 1.529]}
+                />
               </group>
-            )
+            );
           } else if (customize.cordTip === "plastic_end") {
             return (
               <group {...props} dispose={null}>
-                <mesh geometry={nodes.Pattern2D_244421003.geometry} material={materials['Polyester_Taffeta_FRONT_2685.002']} />
-                <mesh geometry={nodes.Pattern2D_244421003_1.geometry} material={materials['Polyester_Taffeta_FRONT_2685.002']} />
-                <mesh geometry={nodes.Pattern2D_244421003_2.geometry} material={materials['Polyester_Taffeta_FRONT_2685.002']} />
-                <mesh geometry={nodes.Pattern2D_244423003.geometry} material={materials['Polyester_Taffeta_FRONT_2685.005']} />
-                <mesh geometry={nodes.Pattern2D_244423003_1.geometry} material={materials['Polyester_Taffeta_FRONT_2685.005']} />
-                <mesh geometry={nodes.Pattern2D_244423003_2.geometry} material={materials['Polyester_Taffeta_FRONT_2685.005']} />
+                <mesh
+                  geometry={nodes.Pattern2D_244421003.geometry}
+                  material={materials["Polyester_Taffeta_FRONT_2685.002"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern2D_244421003_1.geometry}
+                  material={materials["Polyester_Taffeta_FRONT_2685.002"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern2D_244421003_2.geometry}
+                  material={materials["Polyester_Taffeta_FRONT_2685.002"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern2D_244423003.geometry}
+                  material={materials["Polyester_Taffeta_FRONT_2685.005"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern2D_244423003_1.geometry}
+                  material={materials["Polyester_Taffeta_FRONT_2685.005"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern2D_244423003_2.geometry}
+                  material={materials["Polyester_Taffeta_FRONT_2685.005"]}
+                />
               </group>
-            )
+            );
           } else if (customize.cordTip === "silicone_end") {
             return (
               <group {...props} dispose={null}>
-                <mesh geometry={nodes.Pattern_55162007.geometry} material={materials['silicone_FRONT_2711.002']} />
-                <mesh geometry={nodes.Pattern_55162007_1.geometry} material={materials['silicone_FRONT_2711.002']} />
-                <mesh geometry={nodes.Pattern_55162007_2.geometry} material={materials['silicone_FRONT_2711.002']} />
-                <mesh geometry={nodes.Pattern_55163007.geometry} material={materials['silicone_FRONT_2711.002']} />
-                <mesh geometry={nodes.Pattern_55163007_1.geometry} material={materials['silicone_FRONT_2711.002']} />
-                <mesh geometry={nodes.Pattern_55163007_2.geometry} material={materials['silicone_FRONT_2711.002']} />
+                <mesh
+                  geometry={nodes.Pattern_55162007.geometry}
+                  material={materials["silicone_FRONT_2711.002"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55162007_1.geometry}
+                  material={materials["silicone_FRONT_2711.002"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55162007_2.geometry}
+                  material={materials["silicone_FRONT_2711.002"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55163007.geometry}
+                  material={materials["silicone_FRONT_2711.002"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55163007_1.geometry}
+                  material={materials["silicone_FRONT_2711.002"]}
+                />
+                <mesh
+                  geometry={nodes.Pattern_55163007_2.geometry}
+                  material={materials["silicone_FRONT_2711.002"]}
+                />
               </group>
-            )
+            );
           }
         }
       }
-    } catch (err) { }
+    } catch (err) {}
     return null;
   }, [customize.cordTip, customize.cord]);
 
   useEffect(() => {
     if (customize.tag.neck)
-      setTagName(`label-${customize.tag.size}_${customize.tag.color ? "black" : "white"}`);
-    else
-      setTagName(`print-label_${customize.tag.color ? "black" : "white"}`);
-  }, [customize.tag])
+      setTagName(
+        `label-${customize.tag.size}_${customize.tag.color ? "black" : "white"}`
+      );
+    else setTagName(`print-label_${customize.tag.color ? "black" : "white"}`);
+  }, [customize.tag]);
 
   useEffect(() => {
-    setTextTexture(zoomFactor)
-  }, [zoomFactor])
+    setTextTexture(zoomFactor);
+  }, [zoomFactor]);
 
-  useFrame(state => {
-    if (customize.tag.visible || customize.cordVisible || customize.embellishment[embelIndex].visible) {
-      state.camera.position.set(0, 0, 2.5);
-    } else {
-      const distance = state.camera.position.distanceTo(modelRef.current.position);
-      const newZoomFactor = 2.5 / distance;
-      if (newZoomFactor !== zoomFactor) {
-        setZoomFactor(newZoomFactor);
-      }
-    }
-  })
+  /*
+    30 DECEMBER 2023
+    NAO ADDING RAYCAST FEATURE
+  */
+  const { bumpOutMap, normalOutMap, bumpInMap, normalInMap } = useCustomTextures();
+  const { camera, gl, raycaster, scene, mouse, pointer } = useThree();
+  useRaycast(
+    controlsRef,
+    canvasRef,
+    canvasRenderedRef,
+    textureRef,
+    "Hoodies",
+    customize,
+    embelIndex,
+    camera,
+    gl,
+    raycaster,
+    scene,
+    mouse,
+    pointer
+  );
+  // NAO
 
   return (
     <group position={[0, 0, 0]} {...props} dispose={null}>
-      <mesh geometry={nodes.StitchMatShape_18533_Node.geometry} material={materials['Material3319.003']}>
+      <mesh
+        geometry={nodes.StitchMatShape_18533_Node001.geometry}
+        material={materials["Material3319.003"]}
+      >
         {customize.tag.edit ? tag() : ""}
       </mesh>
-      <mesh geometry={nodes.StitchMatShape_18643_Node.geometry} material={materials['Material3319.003']} />
-      <mesh geometry={nodes.StitchMatShape_18792_Node.geometry} material={materials['Material3319.003']} />
-      <mesh geometry={nodes.StitchMatShape_18904_Node.geometry} material={materials['Material3319.003']} />
-      <mesh geometry={nodes.StitchMatShape_19011_Node.geometry} material={materials['Material3319.003']} />
-      <mesh geometry={nodes.StitchMatShape_19136_Node.geometry} material={materials['Material3555.003']} />
-      <mesh geometry={nodes.StitchMatShape_19297_Node.geometry} material={materials['Material3791.003']} />
-      <mesh geometry={nodes.StitchMatShape_19398_Node.geometry} material={materials['Material3083.003']} />
-      <mesh geometry={nodes.StitchMatShape_19431_Node.geometry} material={materials['Material3083.003']} />
-      <mesh geometry={nodes.StitchMatShape_19464_Node.geometry} material={materials['Material3083.003']} />
-      <mesh geometry={nodes.StitchMatShape_19555_Node.geometry} material={materials['Material3791.003']} />
-      <mesh geometry={nodes.StitchMatShape_19646_Node.geometry} material={materials['Material3791.003']} />
-      <mesh geometry={nodes.StitchMatShape_19732_Node.geometry} material={materials['Material3791.003']} />
-      <mesh geometry={nodes.StitchMatShape_19818_Node.geometry} material={materials['Material3791.003']} />
-      <mesh geometry={nodes.StitchMatShape_19978_Node.geometry} material={materials['Material4029.001']} />
-      <mesh geometry={nodes.StitchMatShape_20397_Node.geometry} material={materials['Material4029.001']} />
-      <mesh geometry={nodes.StitchMatShape_20474_Node.geometry} material={materials['Material4263.001']} />
-      <mesh geometry={nodes.StitchMatShape_20546_Node.geometry} material={materials['Material4263.001']} />
-      <mesh geometry={nodes.StitchMatShape_20635_Node.geometry} material={materials['Material4029.001']} />
-      <mesh geometry={nodes.StitchMatShape_20724_Node.geometry} material={materials['Material4029.001']} />
-      <mesh geometry={nodes['HOODIE-BOLSO001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.027']} />
-      <mesh geometry={nodes['HOODIE-BOLSO001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.033']} />
-      <mesh geometry={nodes['HOODIE-BOLSO001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.027']} />
-      <mesh geometry={nodes['HOODIE-CA_1001'].geometry} material={materials['Knit_Fleece_Terry hood_FRONT_2709.003']}>
+      <mesh
+        geometry={nodes.StitchMatShape_18643_Node001.geometry}
+        material={materials["Material3319.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_18792_Node001.geometry}
+        material={materials["Material3319.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_18904_Node001.geometry}
+        material={materials["Material3319.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_19011_Node001.geometry}
+        material={materials["Material3319.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_19136_Node001.geometry}
+        material={materials["Material3555.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_19297_Node001.geometry}
+        material={materials["Material3791.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_19398_Node001.geometry}
+        material={materials["Material3083.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_19431_Node001.geometry}
+        material={materials["Material3083.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_19464_Node001.geometry}
+        material={materials["Material3083.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_19555_Node001.geometry}
+        material={materials["Material3791.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_19646_Node001.geometry}
+        material={materials["Material3791.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_19732_Node001.geometry}
+        material={materials["Material3791.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_19818_Node001.geometry}
+        material={materials["Material3791.003"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_19978_Node001.geometry}
+        material={materials["Material4029.001"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_20397_Node001.geometry}
+        material={materials["Material4029.001"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_20474_Node001.geometry}
+        material={materials["Material4263.001"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_20546_Node001.geometry}
+        material={materials["Material4263.001"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_20635_Node001.geometry}
+        material={materials["Material4029.001"]}
+      />
+      <mesh
+        geometry={nodes.StitchMatShape_20724_Node001.geometry}
+        material={materials["Material4029.001"]}
+      />
+      <mesh geometry={nodes["HOODIE-BOLSO001001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh
+        geometry={nodes["HOODIE-BOLSO001_1001"].geometry}
+        material={materials["Knit_Fleece_Terry_BACK_2603.033"]}
+      />
+      <mesh
+        geometry={nodes["HOODIE-BOLSO001_2001"].geometry}
+        material={materials["Knit_Fleece_Terry_FRONT_2603.027"]}
+      />
+      <mesh geometry={nodes["HOODIE-CA_1001001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
         {cord()}
         {cordTipItem()}
       </mesh>
-      <mesh geometry={nodes['HOODIE-CA_1001_1'].geometry} material={materials['Knit_Fleece_Terry hood_FRONT_2709.003']} />
-      <mesh geometry={nodes['HOODIE-CA_1001_2'].geometry} material={materials['Knit_Fleece_Terry hood_FRONT_2709.003']} />
-      <mesh geometry={nodes['HOODIE-CINTO001'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2635.007']} />
-      <mesh geometry={nodes['HOODIE-CINTO001_1'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2635.007']} />
-      <mesh geometry={nodes['HOODIE-CINTO001_2'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2635.007']} />
-      <mesh geometry={nodes['HOODIE-COSTA001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.026']} >
-        <CustomTexture {...props} textures={texture} index={0} position={[0, 1.3, 0]} rotation={[0, Math.PI * 2, 0]} mainScale={[0.33, 0.6, 1]} subScale={[0.23, 0.31, 1]} />
+      <mesh geometry={nodes["HOODIE-CA_1001_1001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
       </mesh>
-      <mesh geometry={nodes['HOODIE-COSTA001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.030']} />
-      <mesh geometry={nodes['HOODIE-COSTA001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.026']} />
-      <mesh geometry={nodes['HOODIE-FRENTE001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.025']} ref={modelRef}>
-        <CustomTexture {...props} textures={texture} index={1} position={[0, 1.38, 0]} rotation={[0, 0, 0]} mainScale={[0.3, 0.35, 1]} subScale={[0.23, 0.31, 1]} />
+      <mesh geometry={nodes["HOODIE-CA_1001_2001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalScale={0.001}
+          color={customize.color}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
       </mesh>
-      <mesh geometry={nodes['HOODIE-FRENTE001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.027']} />
-      <mesh geometry={nodes['HOODIE-FRENTE001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.025']} />
-      <mesh geometry={nodes['HOODIE-MANGA_4001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.029']} >
-        <CustomTexture {...props} textures={texture} index={2} position={[0.351, 1.15, 0]} rotation={[-Math.PI / 36, Math.PI / 2, 0]} mainScale={[0.07, 0.52, 0.2]} subScale={[0.05, 0.26, 0.2]} />
+      <mesh
+        geometry={nodes["HOODIE-CINTO001001"].geometry}
+        material={materials["Rib_1X1_486gsm_FRONT_2635.007"]}
+      />
+      <mesh geometry={nodes["HOODIE-CINTO001_1001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
       </mesh>
-      <mesh geometry={nodes['HOODIE-MANGA_4001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.039']} />
-      <mesh geometry={nodes['HOODIE-MANGA_4001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.029']} />
-      <mesh geometry={nodes['HOODIE-MANGA_5001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.030']} >
-        <CustomTexture {...props} textures={texture} index={3} position={[-0.351, 1.15, 0]} rotation={[-Math.PI / 36, Math.PI / 2, 0]} mainScale={[0.07, 0.52, 0.2]} subScale={[0.05, 0.26, 0.2]} />
+      <mesh
+        geometry={nodes["HOODIE-CINTO001_2001"].geometry}
+        material={materials["Rib_1X1_486gsm_FRONT_2635.007"]}
+      />
+      <mesh geometry={nodes["HOODIE-COSTA001001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
       </mesh>
-      <mesh geometry={nodes['HOODIE-MANGA_5001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.042']} />
-      <mesh geometry={nodes['HOODIE-MANGA_5001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.030']} />
-      <mesh geometry={nodes['HOODIE-MEIALUA001'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.028']} />
-      <mesh geometry={nodes['HOODIE-MEIALUA001_1'].geometry} material={materials['Knit_Fleece_Terry_BACK_2603.036']} />
-      <mesh geometry={nodes['HOODIE-MEIALUA001_2'].geometry} material={materials['Knit_Fleece_Terry_FRONT_2603.028']} />
-      <mesh geometry={nodes['HOODIE-PUNHO_1001'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2635.010']} />
-      <mesh geometry={nodes['HOODIE-PUNHO_1001_1'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2635.010']} />
-      <mesh geometry={nodes['HOODIE-PUNHO_1001_2'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2635.010']} />
-      <mesh geometry={nodes['HOODIE-PUNHO_2001'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2635.013']} />
-      <mesh geometry={nodes['HOODIE-PUNHO_2001_1'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2635.013']} />
-      <mesh geometry={nodes['HOODIE-PUNHO_2001_2'].geometry} material={materials['Rib_1X1_486gsm_FRONT_2635.013']} />
-      <mesh geometry={nodes.Pattern_51588001.geometry} material={materials['seam cover_FRONT_2731.002']} />
-      <mesh geometry={nodes.Pattern_51588001_1.geometry} material={materials['seam cover_BACK_2731.002']} />
-      <mesh geometry={nodes.Pattern_51588001_2.geometry} material={materials['seam cover_FRONT_2731.002']} />
-    </group >
+      <mesh geometry={nodes["HOODIE-COSTA001_1001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpInMap}
+          normalScale={0}
+          color={customize.color}
+          bumpScale={2}
+          normalMap={normalInMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh
+        geometry={nodes["HOODIE-COSTA001_2001"].geometry}
+        material={materials["Knit_Fleece_Terry_FRONT_2603.026"]}
+      />
+      <mesh geometry={nodes["HOODIE-FRENTE001001"].geometry} ref={modelRef}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh geometry={nodes["HOODIE-FRENTE001_1001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh geometry={nodes["HOODIE-FRENTE001_2001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh geometry={nodes["HOODIE-MANGA_4001001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh geometry={nodes["HOODIE-MANGA_4001_1001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh geometry={nodes["HOODIE-MANGA_4001_2001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh geometry={nodes["HOODIE-MANGA_5001001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh geometry={nodes["HOODIE-MANGA_5001_1001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh geometry={nodes["HOODIE-MANGA_5001_2001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh geometry={nodes["HOODIE-MEIALUA001001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh
+        geometry={nodes["HOODIE-MEIALUA001_1001"].geometry}
+        material={materials["Knit_Fleece_Terry_BACK_2603.036"]}
+      />
+      <mesh
+        geometry={nodes["HOODIE-MEIALUA001_2001"].geometry}
+        material={materials["Knit_Fleece_Terry_FRONT_2603.028"]}
+      />
+      <mesh geometry={nodes["HOODIE-PUNHO_1001001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh
+        geometry={nodes["HOODIE-PUNHO_1001_1001"].geometry}
+        material={materials["Rib_1X1_486gsm_FRONT_2635.010"]}
+      />
+      <mesh
+        geometry={nodes["HOODIE-PUNHO_1001_2001"].geometry}
+        material={materials["Rib_1X1_486gsm_FRONT_2635.010"]}
+      />
+      <mesh geometry={nodes["HOODIE-PUNHO_2001001"].geometry}>
+        <FabricEditableTexture
+          bumpMap={bumpOutMap}
+          normalMap={normalOutMap}
+          canvasRef={canvasRef}
+          textureRef={textureRef}
+        />
+      </mesh>
+      <mesh
+        geometry={nodes["HOODIE-PUNHO_2001_1001"].geometry}
+        material={materials["Rib_1X1_486gsm_FRONT_2635.013"]}
+      />
+      <mesh
+        geometry={nodes["HOODIE-PUNHO_2001_2001"].geometry}
+        material={materials["Rib_1X1_486gsm_FRONT_2635.013"]}
+      />
+      <mesh
+        geometry={nodes.Pattern_51588001001.geometry}
+        material={materials["seam cover_FRONT_2731.002"]}
+      />
+      <mesh
+        geometry={nodes.Pattern_51588001_1001.geometry}
+        material={materials["seam cover_BACK_2731.002"]}
+      />
+      <mesh
+        geometry={nodes.Pattern_51588001_2001.geometry}
+        material={materials["seam cover_FRONT_2731.002"]}
+      />
+    </group>
   );
 }
 
+useGLTF.preload("/models/Hoody/HOODIE_MAN.glb");
+
 useGLTF.preload(
-  "/models/Hoody/HOODIE_MAN.glb"
+  "/models/Hoody/tags/Man/label-45x45_black/label-45x45_black.glb"
 );
+useGLTF.preload(
+  "/models/Hoody/tags/Man/label-45x45_white/label-45x45_white.glb"
+);
+useGLTF.preload(
+  "/models/Hoody/tags/Man/label-55x30_black/label-55x30_black.glb"
+);
+useGLTF.preload(
+  "/models/Hoody/tags/Man/label-55x30_white/label-55x30_white.glb"
+);
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/Cord1.gltf");
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/Cord2.gltf");
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/Cord3.gltf");
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/Cord4.gltf");
 
-useGLTF.preload("/models/Hoody/tags/Man/label-45x45_black/label-45x45_black.glb")
-useGLTF.preload("/models/Hoody/tags/Man/label-45x45_white/label-45x45_white.glb")
-useGLTF.preload("/models/Hoody/tags/Man/label-55x30_black/label-55x30_black.glb")
-useGLTF.preload("/models/Hoody/tags/Man/label-55x30_white/label-55x30_white.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord1/Cord1.gltf")
-useGLTF.preload("/models/Hoody/cords/Man/Cord2/Cord2.gltf")
-useGLTF.preload("/models/Hoody/cords/Man/Cord3/Cord3.gltf")
-useGLTF.preload("/models/Hoody/cords/Man/Cord4/Cord4.gltf")
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/mental_end/mental_end.glb");
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/plastic_end/plastic_end.glb");
+useGLTF.preload("/models/Hoody/cords/Man/Cord1/silicone_end/silicone_end.glb");
 
-useGLTF.preload("/models/Hoody/cords/Man/Cord1/mental_end/mental_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord1/plastic_end/plastic_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord1/silicone_end/silicone_end.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/mental_end/mental_end.glb");
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/plastic_end/plastic_end.glb");
+useGLTF.preload("/models/Hoody/cords/Man/Cord2/silicone_end/silicone_end.glb");
 
-useGLTF.preload("/models/Hoody/cords/Man/Cord2/mental_end/mental_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord2/plastic_end/plastic_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord2/silicone_end/silicone_end.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/mental_end/mental_end.glb");
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/plastic_end/plastic_end.glb");
+useGLTF.preload("/models/Hoody/cords/Man/Cord3/silicone_end/silicone_end.glb");
 
-useGLTF.preload("/models/Hoody/cords/Man/Cord3/mental_end/mental_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord3/plastic_end/plastic_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord3/silicone_end/silicone_end.glb")
-
-useGLTF.preload("/models/Hoody/cords/Man/Cord4/mental_end/mental_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord4/plastic_end/plastic_end.glb")
-useGLTF.preload("/models/Hoody/cords/Man/Cord4/silicone_end/silicone_end.glb")
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/mental_end/mental_end.glb");
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/plastic_end/plastic_end.glb");
+useGLTF.preload("/models/Hoody/cords/Man/Cord4/silicone_end/silicone_end.glb");

@@ -64,7 +64,6 @@ export default function ProductCard5(props: any) {
   const id = product._id;
   const name = product.name;
   const linkTo = PATH_CONFIGURATOR.product.edit(id);
-
   const remove = async () => {
     const result = await axios.delete(endpoints.customize.list, { data: { id: product._id } });
     if (result.data.success) router.push(PATH_CONFIGURATOR.gallery);

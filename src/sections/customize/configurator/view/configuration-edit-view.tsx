@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
 import { PATH_CONFIGURATOR } from "@/routers/path";
 import ConfigurationCanvas from "../configuration-canvas";
@@ -11,6 +11,8 @@ import { styled } from "@mui/material/styles";
 import { useBoolean } from "@/hooks";
 import { useRouter } from "next/router";
 import SvgColor from "@/components/svg-color";
+import { Canvas } from "fabric/fabric-impl";
+import { Texture } from "three";
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
@@ -39,6 +41,7 @@ type Props = {
 };
 
 export default function ConfigurationEditView({ customProduct }) {
+  
   const open = useBoolean();
   const props = {
     ...customProduct,
