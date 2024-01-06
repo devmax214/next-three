@@ -23,6 +23,7 @@ type IEmbellishmentItem = {
   view: number,
   visibleText: boolean,
   file: any,
+  fileName: string,
   position: {
     width: number,
     neck: number,

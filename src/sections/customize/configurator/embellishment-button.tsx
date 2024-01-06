@@ -129,10 +129,19 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
       var reader = new FileReader();
       reader.onload = function (e: any) {
         var blobUrl = e.target.result;
-        fabricAddImage(canvasRef, blobUrl, maskPosition[ptype][embelIndex])
-        customize.onAllEmbelChange(embelIndex, { file: blobUrl });
+        fabricAddImage(canvasRef, blobUrl, maskPosition[ptype][embelIndex], ptype)
+        customize.onAllEmbelChange(embelIndex, { file: blobUrl, fileName: ev.target.files[0].name });
       };
       reader.readAsDataURL(userImage);
+    } else {
+      try {
+        if (!customize.embellishment[embelIndex].fileName) return;
+        const fileInput = document.querySelector('input[id="embelfile-' + embelIndex + '"]') as HTMLElement;
+        const myFile = new File([customize.embellishment[embelIndex].file], customize.embellishment[embelIndex].fileName);
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(myFile);
+        fileInput.files = dataTransfer.files;
+      } catch (err) { }
     }
   }
 
@@ -234,11 +243,23 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
     </Stack>
   )
 
+  const initFile = () => {
+    try {
+      if (!customize.embellishment[embelIndex].fileName) return;
+      const fileInput = document.querySelector('input[id="embelfile-' + embelIndex + '"]') as HTMLElement;
+      const myFile = new File([customize.embellishment[embelIndex].file], customize.embellishment[embelIndex].fileName);
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(myFile);
+      fileInput.files = dataTransfer.files;
+    } catch (err) { }
+  }
+
   const renderFile = (
     <>
       <StyledHeader1>File</StyledHeader1>
 
-      <input type="file" disabled={customize.embellishment[embelIndex].type !== "image"} onChange={fileSelect} />
+      <input type="file" id={'embelfile-' + embelIndex} disabled={customize.embellishment[embelIndex].type !== "image"} onChange={fileSelect} />
+      {initFile()}
     </>
   );
 

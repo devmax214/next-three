@@ -2,6 +2,7 @@ import { Canvas } from "fabric/fabric-impl"
 import { fabric } from "fabric"
 import { useCallback } from "react";
 import { Camera, Raycaster, Scene, Vector2 } from "three";
+import { clipPath } from "@/constant/fabricConst";
 
 export const fabricChangeColors = (canvas: Canvas, color: string) => {
     let masks = canvas.getObjects().filter(obj => obj.name?.includes('mask'))
@@ -38,13 +39,14 @@ export const fabricAddText = (canvas: Canvas, text: string, position: string) =>
     canvas.bringToFront(canvasText);
     canvas.renderAll();
 }
-export const fabricAddImage = (canvas: Canvas, url: string, position: string) => {
+export const fabricAddImage = (canvas: Canvas, url: string, position: string, ptype: string) => {
+    const productData = clipPath[ptype].find((path: any) => path.id.includes('mask-' + position));
     const mask: any = canvas.getObjects().find((mask: any) => mask.name == 'mask-' + position)
     canvas.getObjects().map((m: any) => {
         if (m.name == 'image-' + position || m.name == 'text-' + position) canvas.remove(m)
     });
     if (!mask) return;
-    fabric.Image.fromURL(url, (image) => {
+    fabric.Image.fromURL(url, (image: any) => {
         image.set({
             angle: 0,
             left: mask?.left + mask?.width / 2,
@@ -60,7 +62,7 @@ export const fabricAddImage = (canvas: Canvas, url: string, position: string) =>
         canvas.add(image)
         image.objectCaching = false
         fabric.Object.prototype.objectCaching = false
-        image.scaleToWidth(250, false);
+        productData.cWidth < productData.cHeight ? image.scaleToWidth(productData.cWidth, false) : image.scaleToHeight(productData.cHeight, false)
         fabric.util.clearFabricFontCache();
         canvas.setActiveObject(image);
         canvas.bringToFront(image);

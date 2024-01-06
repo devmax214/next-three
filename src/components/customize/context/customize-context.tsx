@@ -38,6 +38,7 @@ const initialState = {
     view: 0,
     visibleText: false,
     file: null,
+    fileName: '',
     position: {
       width: 22,
       neck: 22,

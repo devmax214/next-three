@@ -68,7 +68,7 @@ const useFirstRenderModel = ({
     handleClick,
     textureRef,
   ])
-  useThreeFrame(canvasRef.current, controlsRef);
+  useThreeFrame(canvasRef.current, controlsRef, type);
 }
 
 export default useFirstRenderModel
