@@ -308,3 +308,48 @@ export const maskPosition: any = {
     Pants: ['f-left', 'f-right', 'b-left', 'b-right', 'pouch'],
     Shorts: ['f-left', 'f-right', 'b-left', 'b-right', 'pouch'],
 }
+
+export const hideControls = {
+    'tl': true,
+    'tr': true,
+    'bl': true,
+    'br': true,
+    'ml': false,
+    'mt': false,
+    'mr': false,
+    'mb': false,
+    'mtr': true
+};
+
+export const svgRotCursor = encodeURIComponent(`
+  <svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24' height='24'>
+    <defs>
+      <filter id='a' width='266.7%' height='156.2%' x='-75%' y='-21.9%' filterUnits='objectBoundingBox'>
+        <feOffset dy='1' in='SourceAlpha' result='shadowOffsetOuter1'/>
+        <feGaussianBlur in='shadowOffsetOuter1' result='shadowBlurOuter1' stdDeviation='1'/>
+        <feColorMatrix in='shadowBlurOuter1' result='shadowMatrixOuter1' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0'/>
+        <feMerge>
+          <feMergeNode in='shadowMatrixOuter1'/>
+          <feMergeNode in='SourceGraphic'/>
+        </feMerge>
+      </filter>
+      <path id='b' d='M1.67 12.67a7.7 7.7 0 0 0 0-9.34L0 5V0h5L3.24 1.76a9.9 9.9 0 0 1 0 12.48L5 16H0v-5l1.67 1.67z'/>
+    </defs>
+    <g fill='none' fill-rule='evenodd'><path d='M0 24V0h24v24z'/>
+      <g fill-rule='nonzero' filter='url(#a)' transform='rotate(-90 9.25 5.25)'>
+        <use fill='#000' fill-rule='evenodd' xlink:href='#b'/>
+        <path stroke='#FFF' d='M1.6 11.9a7.21 7.21 0 0 0 0-7.8L-.5 6.2V-.5h6.7L3.9 1.8a10.4 10.4 0 0 1 0 12.4l2.3 2.3H-.5V9.8l2.1 2.1z'/>
+      </g>
+    </g>
+  </svg>
+`);
+
+export const svgRotIcon = encodeURIComponent(`
+    <svg id="Camada_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90.02 83.15">
+        <defs><style>.cls-1{fill:#f05a4a;stroke-width:0px;}</style></defs>
+        <g id="OBJECTS">
+            <path class="cls-1" d="M38.61,83.05C18.13,81.62,1.54,65.02.1,44.54-1.57,20.62,17.13.56,40.57,0c.55-.01,1.01.44,1.01,1v8.59c0,.54-.44.97-.98.99-17.38.54-31.2,15.45-29.95,33.21,1.07,15.27,13.44,27.65,28.72,28.71,18.09,1.26,33.22-13.1,33.22-30.93h10.57c0,23.91-20.29,43.17-44.55,41.48Z"/>
+            <path class="cls-1" d="M77.01,20.77l-11.14,19.3c-.38.67.1,1.5.87,1.5h22.28c.77,0,1.25-.83.87-1.5l-11.14-19.3c-.38-.67-1.35-.67-1.73,0Z"/>
+        </g>
+    </svg>
+`);

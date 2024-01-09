@@ -4,6 +4,14 @@ import { Canvas } from "fabric/fabric-impl";
 import { clipPath } from "@/constant/fabricConst";
 
 const useThreeFrame = (canvas: Canvas, controlsRef: any, ptype: string) => {
+  const element = document.getElementsByTagName("body")[0];
+  const setCursor = (e: any) => {
+    element.style.cursor = "default";
+    if (e.target && (e.target.text || e.target.name.includes("image"))) {
+      element.style.cursor = canvas.upperCanvasEl.style.cursor;
+    }
+  }
+
   useFrame(() => {
     controlsRef.current?.update();
 
@@ -11,14 +19,17 @@ const useThreeFrame = (canvas: Canvas, controlsRef: any, ptype: string) => {
       controlsRef.current.enabled = true;
     });
     canvas.on("mouse:down", (e: any) => {
-      if (e.target && e.target.text) {
-        controlsRef.current.enabled = false;
-      } else if (e.target && e.target.name.includes("image")) {
+      setCursor(e);
+      if (e.target && (e.target.text || e.target.name.includes("image"))) {
         controlsRef.current.enabled = false;
       }
     });
+    canvas.on("mouse:move", (e: any) => {
+      setCursor(e)
+    });
     var zeroBeforeX = 0, zeroBeforeY = 0;
     canvas.on("object:moving", (e: any) => {
+      setCursor(e)
       const position = e.target.name.split("-").slice(1).join('-');
       const rect: any = canvas
         .getObjects()
@@ -67,24 +78,17 @@ const useThreeFrame = (canvas: Canvas, controlsRef: any, ptype: string) => {
       let targetWidth = e.target.scaleX * e.target.width;
       let targetHeight = e.target.scaleY * e.target.height;
 
-      if (targetWidth <= productData.cWidth) {
+      if (targetWidth <= productData.cWidth && targetHeight <= productData.cHeight) {
         gScaleX = e.target.scaleX;
-      } else {
-        e.target.set('scaleX', gScaleX);
-      }
-
-      if (targetHeight <= productData.cHeight) {
         gScaleY = e.target.scaleY;
       } else {
+        e.target.set('scaleX', gScaleX);
         e.target.set('scaleY', gScaleY);
       }
     });
-    // canvas?.on('mouse:move', () => {
-    // setState({
-    //   changed: true,
-    //   activeObject: canvas.getActiveObject(),
-    // });
-    // });
+    canvas.on("after:render", (e: any) => {
+      // setCursor(e)
+    })
   });
 };
 

@@ -20,6 +20,7 @@ const useFirstRender = ({ canvasRef, textureRef }: Props) => {
             height: 2048,
             backgroundColor: '#f4f5f0',
             renderOnAddRemove: false,
+            rotationCursor: 'move',
         })
 
         canvasRef.current = fabricCanvas;

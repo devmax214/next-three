@@ -31,8 +31,8 @@ const useFirstRenderModel = ({
       currentClipPath.forEach((rect: any) => {
         const mask = new fabric.Rect({
           name: rect.id,
-          stroke: '#FDF010',
-          strokeWidth: 2,
+          stroke: '#F05A4A',
+          strokeWidth: 0,
           fill: '#f4f5f0',
           width: rect.width,
           height: rect.height,
@@ -53,14 +53,14 @@ const useFirstRenderModel = ({
       canvasRef.current &&
       !getState().firstLoadTexture
     ) {
-      document
-        .getElementsByTagName('canvas')[0]
-        .addEventListener('mousedown', (e) => {
-          for (let i = 0; i < context.embellishment.length; i++) {
-            if (context.embellishment[i].visible)
-              return handleClick(e);
-          }
-        })
+      const handelEvent = (e: MouseEvent) => {
+        for (let i = 0; i < context.embellishment.length; i++) {
+          if (context.embellishment[i].visible)
+            return handleClick(e);
+        }
+      }
+      document.getElementsByTagName('canvas')[0].addEventListener('mousedown', handelEvent)
+      document.getElementsByTagName('canvas')[0].addEventListener('mousemove', handelEvent)
     }
   }, [
     canvasRef,

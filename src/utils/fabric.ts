@@ -1,8 +1,8 @@
 import { Canvas } from "fabric/fabric-impl"
 import { fabric } from "fabric"
 import { useCallback } from "react";
-import { Camera, Raycaster, Scene, Vector2 } from "three";
-import { clipPath } from "@/constant/fabricConst";
+import { Camera, CanvasTexture, Raycaster, Scene, Vector2 } from "three";
+import { clipPath, hideControls } from "@/constant/fabricConst";
 
 export const fabricChangeColors = (canvas: Canvas, color: string) => {
     let masks = canvas.getObjects().filter(obj => obj.name?.includes('mask'))
@@ -29,9 +29,11 @@ export const fabricAddText = (canvas: Canvas, text: string, position: string) =>
         originY: 'center',
         left: mask.left + (mask.width / 2),
         top: mask.top + (mask.height / 2),
-        clipPath: mask
+        clipPath: mask,
+        lockScalingFlip: true,
     })
     canvas.add(canvasText);
+    canvasText.setControlsVisibility(hideControls)
     canvasText.objectCaching = false
     fabric.Object.prototype.objectCaching = false
     fabric.util.clearFabricFontCache();
@@ -58,11 +60,12 @@ export const fabricAddImage = (canvas: Canvas, url: string, position: string, pt
             transparentCorners: false,
             centeredScaling: true,
             type: 'image',
+            lockScalingFlip: true,
         })
         canvas.add(image)
+        image.setControlsVisibility(hideControls)
         image.objectCaching = false
-        fabric.Object.prototype.objectCaching = false
-        productData.cWidth < productData.cHeight ? image.scaleToWidth(productData.cWidth, false) : image.scaleToHeight(productData.cHeight, false)
+        productData.cWidth < productData.cHeight ? image.scaleToWidth(productData.cWidth * 0.9, false) : image.scaleToHeight(productData.cHeight * 0.9, false)
         fabric.util.clearFabricFontCache();
         canvas.setActiveObject(image);
         canvas.bringToFront(image);

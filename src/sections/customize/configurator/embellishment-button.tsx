@@ -90,7 +90,14 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
 
   useEffect(() => {
     customize.onAllEmbelChange(embelIndex, { visible: open });
-    if (!open && canvasRef != null) canvasRef.discardActiveObject();
+    if (canvasRef == null) return;
+    canvasRef.getObjects().map((mask: any) => mask.set('strokeWidth', 0))
+    if (!open) canvasRef.discardActiveObject();
+    if (open) {
+      const mask: any = canvasRef.getObjects().find((mask: any) => mask.name == 'mask-' + maskPosition[ptype][embelIndex])
+      mask && mask.set('strokeWidth', 2);
+    }
+    canvasRef.renderAll();
   }, [open])
 
   const checkImage = (ev: boolean, type: string) => {
