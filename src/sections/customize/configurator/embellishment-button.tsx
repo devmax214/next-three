@@ -109,7 +109,7 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
         fabricAddText(canvasRef, customize.embellishment[embelIndex].textureText, maskPosition[ptype][embelIndex]);
       }
     } else {
-      fabricAddImage(canvasRef, customize.embellishment[embelIndex].file, maskPosition[ptype][embelIndex])
+      fabricAddImage(canvasRef, customize.embellishment[embelIndex].file, maskPosition[ptype][embelIndex], ptype)
     }
     if (ev) customize.onAllEmbelChange(embelIndex, { type: type });
     else customize.onAllEmbelChange(embelIndex, { type: "" });
@@ -130,6 +130,7 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
   const checkNotPrint = () => {
     customize.onAllEmbelChange(embelIndex, { visibleText: !customize.embellishment[embelIndex].visibleText })
   }
+
   const fileSelect = (ev: any) => {
     if (ev.target.files && ev.target.files.length > 0) {
       var userImage = ev.target.files[0];
@@ -235,7 +236,7 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
         sx={{ mt: -1 }}
         key={1}
         control={<Switch color="primary" checked={customize.embellishment[embelIndex].visibleText} onClick={checkNotPrint} />}
-        label={<StyledSwitchLabel>These arn't the printing options i want</StyledSwitchLabel>}
+        label={<StyledSwitchLabel>These aren't the printing options I want</StyledSwitchLabel>}
         disabled={customize.embellishment[embelIndex].type !== "image"}
       />
       <TextField
@@ -421,9 +422,11 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
             {/* {renderView} */}
           </Grid>
 
-          <Grid item md={12}>
-            {renderPrintingStyle}
-          </Grid>
+          {ptype === "Oversize" &&
+            <Grid item md={12}>
+              {renderPrintingStyle}
+            </Grid>
+          }
 
           <Grid item md={12}>
             {renderFile}

@@ -118,7 +118,12 @@ export default function EditTagButton(props: Props) {
   const fileSelect = (ev: any) => {
     if (ev.target.files && ev.target.files.length > 0) {
       var userImage = ev.target.files[0];
-      context.onTagSelectFile(userImage);
+      var reader = new FileReader();
+      reader.onload = function (e: any) {
+        var blobUrl = e.target.result;
+        context.onTagSelectFile(blobUrl);
+      };
+      reader.readAsDataURL(userImage);
     }
   }
 

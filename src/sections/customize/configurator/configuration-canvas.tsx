@@ -133,6 +133,7 @@ export default function ConfigurationCanvas(props: Props) {
   const memoizedInitPatch = useMemo(() => {
     initPatch({ threeProps, canvasRenderedRef, canvasRef: props.canvasRef, textureRef: props.textureRef })
   }, [props.canvasRef, props.textureRef, threeProps])
+
   return (
     <Canvas
       ref={canvasRenderedRef}

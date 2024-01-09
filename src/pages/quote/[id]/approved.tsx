@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Head from "next/head";
 import CustomBreadCrumbs from "@/components/custom-breadcrumbs";
 import CustomizeLayout from "@/layouts/customize";
@@ -9,6 +9,8 @@ import ConfigurationCanvas from "@/sections/customize/configurator/configuration
 import { typeIndexToLabel } from "@/helpers/common";
 import { CustomizeProvider } from "@/components/customize/context";
 import { useRouter } from "next/router";
+import { Texture } from "three";
+import useStore, { getState, setState } from '@/helpers/store'
 import {
   Box,
   Button,
@@ -254,7 +256,6 @@ export default function ApprovedQuotePage({ customProduct }: any) {
                 style={{
                   color: "#292F3D", fontWeight: 500, fontFamily: dbCtx.embellishment[embelIndex].font,
                   fontSize: 14,
-                  fontWeight: 500,
                 }}>
                 &nbsp;&nbsp;&nbsp;&nbsp;{dbCtx.embellishment[embelIndex].textureText}
               </span>
@@ -533,10 +534,12 @@ export default function ApprovedQuotePage({ customProduct }: any) {
       </Stack>
     </Box>
   )
-
+  const canvasRef = useRef<any>(null)
+  const textureRef = useRef<Texture>(null)
+  setState({ isMaskAdded: false })
   return (
     <>
-      <CustomizeProvider passInitState={context}>
+      <CustomizeProvider passInitState={dbCtx}>
         <Box
           component="div"
           sx={{
@@ -589,7 +592,16 @@ export default function ApprovedQuotePage({ customProduct }: any) {
             </Typography>
             <Grid container spacing={6}>
               <Grid item md={6} xs={12}>
-                <ConfigurationCanvas page="customize-edit-view" ctx={context} arrowLeftCount={0} arrowRightCount={0} id="myCanvas" type={productType} />
+                <ConfigurationCanvas
+                  canvasRef={canvasRef}
+                  textureRef={textureRef}
+                  page="customize-edit-view"
+                  ctx={context}
+                  arrowLeftCount={0}
+                  arrowRightCount={0}
+                  id="myCanvas"
+                  type={productType}
+                />
                 <Typography
                   sx={{
                     flexGrow: 1,

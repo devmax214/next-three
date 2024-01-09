@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import SvgColor from "@/components/svg-color";
 import { Canvas } from "fabric/fabric-impl";
 import { Texture } from "three";
+import { ICustomizeQuoteItem } from "@/@types/customize";
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
@@ -36,13 +37,11 @@ const Wrapper = styled(Box)<{}>(({ theme }) => ({
   }
 }));
 
-type Props = {
-  type: string;
-};
-
-export default function ConfigurationEditView({ customProduct }) {
-  
+export default function ConfigurationEditView(pro: any) {
+  const canvasRef = useRef<any>(null)
+  const textureRef = useRef<Texture>(null)
   const open = useBoolean();
+  const customProduct = pro.customProduct;
   const props = {
     ...customProduct,
     type: customProduct.product,
@@ -84,7 +83,15 @@ export default function ConfigurationEditView({ customProduct }) {
 
             <Grid container spacing={5}>
               <Grid item md={7.5} xs={12}>
-                <ConfigurationCanvas page="customize-edit-view" ctx={typeof customProduct.context === 'object' ? customProduct.context : {}} arrowLeftCount={0} arrowRightCount={0} id="myCanvas" {...props} />
+                <ConfigurationCanvas
+                  canvasRef={canvasRef}
+                  textureRef={textureRef}
+                  page="customize-edit-view"
+                  ctx={typeof customProduct.context === 'object' ? customProduct.context : {}}
+                  arrowLeftCount={0}
+                  arrowRightCount={0}
+                  id="myCanvas" {...props}
+                />
                 <Box
                   component={"div"}
                   sx={{

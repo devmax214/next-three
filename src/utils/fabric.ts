@@ -12,7 +12,7 @@ export const fabricChangeColors = (canvas: Canvas, color: string) => {
     });
     canvas.renderAll();
 }
-export const fabricAddText = (canvas: Canvas, text: string, position: string) => {
+export const fabricAddText = (canvas: Canvas, text: string, position: string, auto?: boolean) => {
     const mask: any = canvas.getObjects().find((mask: any) => mask.name == 'mask-' + position)
     canvas.getObjects().map((m: any) => {
         if (m.name == 'image-' + position || m.name == 'text-' + position) canvas.remove(m)
@@ -37,13 +37,14 @@ export const fabricAddText = (canvas: Canvas, text: string, position: string) =>
     canvasText.objectCaching = false
     fabric.Object.prototype.objectCaching = false
     fabric.util.clearFabricFontCache();
-    canvas.setActiveObject(canvasText);
+    !auto && canvas.setActiveObject(canvasText);
     canvas.bringToFront(canvasText);
     canvas.renderAll();
 }
-export const fabricAddImage = (canvas: Canvas, url: string, position: string, ptype: string) => {
+export const fabricAddImage = (canvas: Canvas, url: string, position: string, ptype: string, auto?: boolean) => {
     const productData = clipPath[ptype].find((path: any) => path.id.includes('mask-' + position));
     const mask: any = canvas.getObjects().find((mask: any) => mask.name == 'mask-' + position)
+
     canvas.getObjects().map((m: any) => {
         if (m.name == 'image-' + position || m.name == 'text-' + position) canvas.remove(m)
     });
@@ -67,7 +68,7 @@ export const fabricAddImage = (canvas: Canvas, url: string, position: string, pt
         image.objectCaching = false
         productData.cWidth < productData.cHeight ? image.scaleToWidth(productData.cWidth * 0.9, false) : image.scaleToHeight(productData.cHeight * 0.9, false)
         fabric.util.clearFabricFontCache();
-        canvas.setActiveObject(image);
+        !auto && canvas.setActiveObject(image);
         canvas.bringToFront(image);
         canvas.renderAll();
     })

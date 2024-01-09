@@ -22,7 +22,6 @@ const useFirstRender = ({ canvasRef, textureRef }: Props) => {
             renderOnAddRemove: false,
             rotationCursor: 'move',
         })
-
         canvasRef.current = fabricCanvas;
         canvasRef.current.skipOffscreen = true;
         textureRef.current = new Texture(canvasRef.current.getElement());

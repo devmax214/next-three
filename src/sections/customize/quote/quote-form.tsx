@@ -30,7 +30,7 @@ export default function QuoteForm(props: Props) {
     resolver: yupResolver(QuoteSchema),
     defaultValues,
   });
-  const context = JSON.parse(localStorage.getItem('context'));
+  const context = JSON.parse(localStorage.getItem('context') as string);
   const productType = localStorage.getItem('productType');
 
   const {

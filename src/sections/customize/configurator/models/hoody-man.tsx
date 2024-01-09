@@ -620,7 +620,6 @@ export default function Model(props: any) {
       });
     }
   }
-
   /*
     30 DECEMBER 2023
     NAO ADDING RAYCAST FEATURE

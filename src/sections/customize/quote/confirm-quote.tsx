@@ -1,105 +1,34 @@
-import React, { useContext } from "react";
-import { Box, FormControlLabel, ButtonBase, Button, Switch, Checkbox, Typography, Grid, TableCell, TableRow, TableContainer, Table, TableBody, Stack } from "@mui/material";
+import React, { useRef, useEffect } from "react";
+import useStore, { getState, setState } from '@/helpers/store'
+import { Box, FormControlLabel, Button, Switch, Checkbox, Typography, Grid, Stack } from "@mui/material";
 import Image from "@/components/image";
 import { secondaryFont } from "@/theme/typography";
-import { Canvas } from "@react-three/fiber";
 import { PATH_CONFIGURATOR } from "@/routers/path";
 import { useRouter } from "next/router"; "@next/router";
-import { Center, Environment, OrbitControls } from "@react-three/drei";
-import { TShartMan, HoodyMan, PantMan, ShortMan, SWEATMAN, OversizeMan } from "@/sections/customize/configurator/models";
 import { CustomizeProvider } from "@/components/customize/context";
 import ConfigurationCanvas from "../configurator/configuration-canvas";
 import { typeIndexToLabel } from "@/helpers/common";
 import CheckedIcon from "@/components/icons/checked-icon";
 import UnCheckedIcon from "@/components/icons/unchecked-icon";
+import { ICustomizeQuoteItem } from "@/@types/customize";
 import {
-  LeftPosition,
-  RightPosition,
-  TopCenterPosition,
-  TopPosition,
-  CenterPosition,
-  BottomPosition
-} from "@/components/icons/customize/position/position";
-import { styled } from "@mui/material/styles";
-import { CustomizeContext } from "@/components/customize/context/customize-context";
-
-export const StyledSwitchLabel = styled(Typography)(({ theme }) => ({
-  fontSize: 14,
-  fontWeight: 500,
-  color: "#292F3D",
-  fontFamily: secondaryFont.style.fontFamily,
-  textWrap: "nowrap",
-}));
-
-export const StyledButton = styled(ButtonBase)(({ theme }) => ({
-  padding: 4,
-}));
-
-const cordLabels = {
-  "Cord1": "Cord 01",
-  "Cord2": "Cord 02",
-  "Cord3": "Cord 03",
-  "Cord4": "Cord 04",
-}
-
-const tipLabels = {
-  "mental_end": "Tip 01",
-  "plastic_end": "Tip 01",
-  "silicone_end": "Tip 01",
-}
-
-const artworks = [
-  "Digital Print",
-  "Screen Print",
-  "Embroidery",
-];
-
-
-const positions = [
-  {
-    value: "left",
-    icon: <LeftPosition />,
-  },
-  {
-    value: "horizontal-center",
-    icon: <CenterPosition />,
-  },
-  {
-    value: "right",
-    icon: <RightPosition />,
-  },
-  {
-    value: "top",
-    icon: <TopPosition />,
-  },
-  {
-    value: "vertical-center",
-    icon: <TopCenterPosition />,
-  },
-  {
-    value: "bottom",
-    icon: <BottomPosition />,
-  },
-];
-
-const sizeLabels = [
-  "Size label sewn on the side the brand label",
-  "Brand label on the garment seam, 10cm from the bottom",
-  "Decide later, in a back office conversation",
-];
-
-const GENDERS = [
-  { value: "man", label: "Male" },
-  { value: "female", label: "Female" },
-  { value: "other", label: "Other" },
-];
-const sizes = ["XS", "S", "M", "L", "XL"];
+  StyledSwitchLabel,
+  StyledButton,
+  cordLabels,
+  tipLabels,
+  artworks,
+  positions,
+  sizeLabels,
+  GENDERS,
+  sizes,
+} from "@/constant/embelConst";
+import { Texture } from "three";
 
 export default function ConfirmQuote(props: any) {
   const router = useRouter();
-  const context = JSON.parse(localStorage.getItem('context'));
+  const context = JSON.parse(localStorage.getItem('context') as string) as ICustomizeQuoteItem;
   const dbCtx = context;
-  const productType = localStorage.getItem('productType');
+  const productType = localStorage.getItem('productType') as string;
 
   let isActiveLace = false;
   if (productType !== undefined) {
@@ -118,7 +47,7 @@ export default function ConfirmQuote(props: any) {
             fontSize: 16,
             fontWeight: 700,
           }}>
-          Cord: <span style={{ color: "#292F3D", fontWeight: 500 }}>{cordLabels[dbCtx.cord ? dbCtx.cord : "Cord1"]}</span>
+          Cord: <span style={{ color: "#292F3D", fontWeight: 500 }}>{cordLabels[dbCtx.cord ? dbCtx.cord : "Cord1" as string]}</span>
         </Typography>
       </Stack>
       <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
@@ -163,23 +92,14 @@ export default function ConfirmQuote(props: any) {
             }} />
           : (
             <Box
-              sx={{
-                flexGrow: 1,
-                mt: 0,
-                px: 2,
-                py: 0,
-                mr: 2,
-                color: "#292F3D",
-                fontSize: 14,
-                lineHeight: 2,
-                fontWeight: 700,
-              }}>
+              sx={{ flexGrow: 1, mt: 0, px: 2, py: 0, mr: 2, color: "#292F3D", fontSize: 14, lineHeight: 2, fontWeight: 700 }}>
               Text
               <span
                 style={{
-                  color: "#292F3D", fontWeight: 500, fontFamily: dbCtx.embellishment[embelIndex].font,
-                  fontSize: 14,
+                  color: "#292F3D",
                   fontWeight: 500,
+                  fontFamily: dbCtx.embellishment[embelIndex].font,
+                  fontSize: 14
                 }}>
                 &nbsp;&nbsp;&nbsp;&nbsp;{dbCtx.embellishment[embelIndex].textureText}
               </span>
@@ -458,13 +378,27 @@ export default function ConfirmQuote(props: any) {
       </Stack>
     </Box>
   )
+  const canvasRef = useRef<any>(null)
+  const textureRef = useRef<Texture>(null)
+  setState({ isMaskAdded: false })
+
   return (
     <CustomizeProvider passInitState={context}>
       <Box component={"div"} sx={{ textAlign: { xs: "center", md: "start" } }}>
         <Grid container spacing={5}>
           <Grid item md={7} xs={12}>
             <Box component={"div"} sx={{ mt: 2, mb: 2 }}>
-              <ConfigurationCanvas page="customize-edit-view" ctx={context} arrowLeftCount={0} arrowRightCount={0} id="myCanvas" {...props} type={productType} />
+              <ConfigurationCanvas
+                canvasRef={canvasRef}
+                textureRef={textureRef}
+                page="customize-edit-view"
+                ctx={context}
+                arrowLeftCount={0}
+                arrowRightCount={0}
+                id="myCanvas"
+                {...props}
+                type={productType}
+              />
             </Box>
 
           </Grid>

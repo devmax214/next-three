@@ -8,6 +8,8 @@ import useThreeFrame from './use-three-frame';
 import { clipPath } from '@/constant/fabricConst'
 import { fabric } from 'fabric'
 import { useCustomizeContext } from "@/components/customize/context";
+import { maskPosition } from "@/constant/fabricConst";
+import { fabricAddImage, fabricChangeColors, fabricAddText } from '@/utils/fabric'
 
 interface Props {
   handleClick: (e: MouseEvent | TouchEvent) => void
@@ -15,6 +17,7 @@ interface Props {
   textureRef: MutableRefObject<Texture>
   canvasRef: MutableRefObject<Canvas>
   type: string
+  customize: any
 }
 
 const useFirstRenderModel = ({
@@ -22,7 +25,8 @@ const useFirstRenderModel = ({
   canvasRef,
   textureRef,
   handleClick,
-  type
+  type,
+  customize,
 }: Props) => {
   const context = useCustomizeContext();
   useEffect(() => {
@@ -48,6 +52,16 @@ const useFirstRenderModel = ({
       setState({
         isMaskAdded: true
       })
+      setTimeout(() => {
+        for (let i = 0; i < customize.embellishment.length; i++) {
+          if (customize.embellishment[i].type == 'text' && customize.embellishment[i].textureText) {
+            fabricAddText(canvasRef.current, customize.embellishment[i].textureText, maskPosition[type][i], true);
+          } else if (customize.embellishment[i].file != null) {
+            fabricAddImage(canvasRef.current, customize.embellishment[i].file, maskPosition[type][i], type, true)
+          }
+        }
+        fabricChangeColors(canvasRef.current, customize.color);
+      }, 200);
     }
     if (
       canvasRef.current &&
@@ -58,6 +72,8 @@ const useFirstRenderModel = ({
           if (context.embellishment[i].visible)
             return handleClick(e);
         }
+        const element = document.getElementsByTagName("body")[0];
+        element.style.cursor = "default";
       }
       document.getElementsByTagName('canvas')[0].addEventListener('mousedown', handelEvent)
       document.getElementsByTagName('canvas')[0].addEventListener('mousemove', handelEvent)

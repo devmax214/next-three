@@ -124,6 +124,7 @@ export default function TShirtManModel(props: any) {
   }, [customize.tag])
 
   useEffect(() => {
+    console.log(customize.tag.file)
     if (!isEmpty(customize.tag.file)) {
       loader.loadAsync(typeof customize.tag.file === "string" ? customize.tag.file : URL.createObjectURL(customize.tag.file)).then((result) => {
         setTagTexture(result);

@@ -11,16 +11,12 @@ import ReactPlayer from "react-player";
 import { styled } from "@mui/material/styles";
 import axios from "axios";
 import { endpoints } from "../../../../../global-config";
-import { uploadImage } from "@/services/upload";
 import { useCustomizeContext } from "@/components/customize/context";
 import LoadingButton from "@mui/lab/LoadingButton";
-import Iconify from "@/components/iconify";
-import { RHFTextField } from "@/components/hook-form";
 import Image from "@/components/image";
 import { useRouter } from "next/router";
-import { PATH_SHOP } from "@/routers/path";
-import { isEmpty } from "@/helpers/common";
 import { Texture } from "three";
+import useStore, { getState, setState } from '@/helpers/store'
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
@@ -50,11 +46,15 @@ export default function ConfigurationView(props: any) {
   const name = props.type;
   const router = useRouter();
   const isEdit = router.query.isEdit;
-  const customProduct = router.query.customProduct ? JSON.parse(router.query.customProduct) : {};
-  // START REF NAO
+  const customProduct = router.query.customProduct ? JSON.parse(router.query.customProduct as string) : {};
+
   const canvasRef = useRef<any>(null)
   const textureRef = useRef<Texture>(null)
-  // END REF NAO
+  setState({ isMaskAdded: false })
+  const [current, setCurrent] = useState(canvasRef.current);
+  useEffect(() => {
+    setCurrent(canvasRef.current)
+  }, [canvasRef.current])
 
   return (
     <>
@@ -149,7 +149,7 @@ export default function ConfigurationView(props: any) {
 
               <Grid item md={4} xs={12}>
                 <ConfigurationProperties
-                  canvasRef={canvasRef.current} textureRef={textureRef}  {...props} {...customProduct} color={customProduct.context ? customProduct.context.color : ''} />
+                  canvasRef={current} textureRef={textureRef} {...props} {...customProduct} color={customProduct.context ? customProduct.context.color : ''} />
               </Grid>
             </Grid>
           </Container>
@@ -169,60 +169,19 @@ const SaveButton = (props: any) => {
   const [loading, setLoading] = useState(false);
 
   const save = async () => {
-    let tmpContext = context;
-    let promises = [];
-    if (!isEmpty(tmpContext.tag.file) && typeof tmpContext.tag.file !== "string") {
-      promises.push(
-        new Promise((resolve, reject) => {
-          const reader = new FileReader()
-          reader.readAsDataURL(tmpContext.tag.file)
-          reader.onload = () => {
-            resolve({ key: 'tag', value: reader.result })
-          }
-          reader.onerror = reject
-        })
-      )
+    const data = {
+      customizeId: props.customId,
+      name: name,
+      product: props.type,
+      context: context
     }
-    for (let i = 0; i < tmpContext.embellishment.length; i++) {
-      if (!isEmpty(tmpContext.embellishment[i].file) && typeof tmpContext.embellishment[i].file !== "string") {
-        promises.push(
-          new Promise((resolve, reject) => {
-            const reader = new FileReader()
-            reader.readAsDataURL(tmpContext.embellishment[i].file)
-            reader.onload = () => {
-              resolve({ key: [i], value: reader.result })
-            }
-            reader.onerror = reject
-          })
-        )
-      }
-    }
-
-    Promise.all(promises).then((result) => {
-      for (let i = 0; i < result.length; i++) {
-        const row = result[i];
-        if (row.key === 'tag') {
-          tmpContext.tag.file = row.value;
-        } else {
-          tmpContext.embellishment[row.key].file = row.value;
-        }
-      }
-      const data = {
-        customizeId: props.customId,
-        name: name,
-        product: props.type,
-        context: tmpContext
-      }
-
-      axios.post(endpoints.customize.list, data).then((result) => {
-        setLoading(false);
-        cart.onFalse();
-      }).catch((err) => {
-        // router.push(PATH_SHOP.login);
-        console.log(err)
-        setLoading(false);
-        cart.onFalse();
-      });
+    axios.post(endpoints.customize.list, data).then((result) => {
+      setLoading(false);
+      cart.onFalse();
+    }).catch((err) => {
+      // router.push(PATH_SHOP.login);
+      setLoading(false);
+      cart.onFalse();
     });
   }
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback, useLayoutEffect } from "react";
 import * as THREE from "three";
-import { useFrame, useLoader, useThree } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import useStore, { setState } from "@/helpers/store";
 import useFirstRenderModel from "./use-first-render-model";
 
@@ -99,5 +99,6 @@ export function useRaycast(
     textureRef,
     handleClick,
     type,
+    customize,
   });
 }

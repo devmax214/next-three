@@ -86,9 +86,6 @@ const useThreeFrame = (canvas: Canvas, controlsRef: any, ptype: string) => {
         e.target.set('scaleY', gScaleY);
       }
     });
-    canvas.on("after:render", (e: any) => {
-      // setCursor(e)
-    })
   });
 };
 

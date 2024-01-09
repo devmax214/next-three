@@ -514,48 +514,9 @@ export default function ConfigurationProperties(props: any) {
             "&:hover": { bgcolor: "#550248" },
           }}
           onClick={() => {
-            let tmpContext = context;
-            let promises = [];
-            if (!isEmpty(tmpContext.tag.file) && typeof tmpContext.tag.file !== "string") {
-              promises.push(
-                new Promise((resolve, reject) => {
-                  const reader = new FileReader()
-                  reader.readAsDataURL(tmpContext.tag.file)
-                  reader.onload = () => {
-                    resolve({ key: 'tag', value: reader.result })
-                  }
-                  reader.onerror = reject
-                })
-              )
-            }
-            for (let i = 0; i < tmpContext.embellishment.length; i++) {
-              if (!isEmpty(tmpContext.embellishment[i].file) && typeof tmpContext.embellishment[i].file !== "string") {
-                promises.push(
-                  new Promise((resolve, reject) => {
-                    const reader = new FileReader()
-                    reader.readAsDataURL(tmpContext.embellishment[i].file)
-                    reader.onload = () => {
-                      resolve({ key: [i], value: reader.result })
-                    }
-                    reader.onerror = reject
-                  })
-                )
-              }
-            }
-
-            Promise.all(promises).then((result) => {
-              for (let i = 0; i < result.length; i++) {
-                const row = result[i];
-                if (row.key === 'tag') {
-                  tmpContext.tag.file = row.value;
-                } else {
-                  tmpContext.embellishment[row.key].file = row.value;
-                }
-              }
-              localStorage.setItem('productType', props.type);
-              localStorage.setItem('context', JSON.stringify(tmpContext));
-              push('/quote')
-            });
+            localStorage.setItem('productType', props.type);
+            localStorage.setItem('context', JSON.stringify(context));
+            push('/quote')
           }}
         >
           REQUEST FOR QUOTE
