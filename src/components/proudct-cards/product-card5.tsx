@@ -25,6 +25,8 @@ import ConfigurationCanvas from "../../sections/customize/configurator/configura
 import { CustomizeContext } from '@/components/customize/context/customize-context';
 import { useContext, useState, useEffect, useRef } from "react";
 import { CustomizeProvider } from "@/components/customize/context";
+import useStore, { getState, setState } from '@/helpers/store';
+import { Texture } from "three";
 
 const StyledTypography1 = styled(Typography)(({ theme }) => ({
   fontSize: "14px",
@@ -72,6 +74,10 @@ export default function ProductCard5(props: any) {
   const [arrowLeftCount, setArrowLeftCount] = useState(0);
   const [arrowRightCount, setArrowRightCount] = useState(0);
 
+  const canvasRef = useRef<any>(null)
+  const textureRef = useRef<Texture>(null)
+  setState({ isMaskAdded: false })
+
   return (
     <>
       <CustomizeProvider passInitState={product.context}>
@@ -92,7 +98,16 @@ export default function ProductCard5(props: any) {
               "&:hover .product-image": { transform: "scale(1.1)" },
             }}
           >
-            <ConfigurationCanvas page="gallery" ctx={typeof product.context === "object" ? product.context : {}} arrowLeftCount={arrowLeftCount} arrowRightCount={arrowRightCount} id={`myCanvas_${id}`} type={product.product} />
+            <ConfigurationCanvas
+              canvasRef={canvasRef}
+              textureRef={textureRef}
+              page="gallery"
+              ctx={typeof product.context === "object" ? product.context : {}}
+              arrowLeftCount={arrowLeftCount}
+              arrowRightCount={arrowRightCount}
+              id={`myCanvas_${id}`}
+              type={product.product}
+            />
 
             <Box
               className="add-cart-btn"

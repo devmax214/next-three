@@ -39,6 +39,7 @@ import { useCheckoutContext } from "@/components/checkout/context";
 import { endpoints } from "../../../../global-config";
 import axios from "axios";
 import { isEmpty } from "@/helpers/common";
+import { embelRenders } from "@/constant/embelConst";
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   fontSize: "16px",
@@ -52,13 +53,6 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
 }));
 
 const defaultValues = {};
-
-const prices = [
-  { items: 50, price: 12.5 },
-  { items: 100, price: 14.5 },
-  { items: 150, price: 16.5 },
-  { items: 300, price: 19.5 },
-];
 
 const cords = [
   {
@@ -127,6 +121,8 @@ export default function ConfigurationProperties(props: any) {
   const checkoutContext = useCheckoutContext();
   const { onAddToCart } = checkoutContext;
   const { push } = useRouter();
+
+  const { renderPrices, renderPeriod } = embelRenders(props.type, context);
 
   const methods = useForm({
     defaultValues,
@@ -536,57 +532,6 @@ export default function ConfigurationProperties(props: any) {
     </>
   )
 
-  const renderPrice = (
-    <>
-      <TableContainer sx={{ width: 1 }}>
-        <Table>
-          <TableHead sx={{ px: 2, py: 1, bgcolor: "#EDE9DC" }}>
-            <TableCell
-              sx={{
-                py: 1,
-                fontSize: 14,
-                fontFamily: 500,
-                color: '#5C6166'
-              }}
-            >From </TableCell>
-            <TableCell
-              sx={{
-                py: 1,
-                fontSize: 14,
-                fontFamily: 500,
-                color: '#5C6166'
-              }}
-            >Price per item </TableCell>
-          </TableHead>
-          <TableBody>
-            {prices.map((price, index) => (
-              <TableRow key={index} sx={{ borderBottom: "1px solid #EDE9DC" }}>
-                <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '32px' }}>{price.items} items</TableCell>
-                <TableCell sx={{ py: 1, fontSize: 16, lineHeight: '32px' }}>{price.price} {JSON.parse(localStorage.getItem('currency')).value}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
-  );
-
-  const renderPeriod = (
-    <>
-      <Box component="div" sx={{ px: 2, py: 1, bgcolor: "#EDE9DC" }}>
-        <Typography sx={{ fontSize: 14, fontWeight: 500, color: "#5C6166", fontFamily: secondaryFont.style.fontFamily }}>
-          Lead time:{" "}
-          <Typography
-            component="span"
-            sx={{ fontSize: 16, fontWeight: 500, color: "#292F3D", fontFamily: secondaryFont.style.fontFamily }}
-          >
-            to 2-4 weeks
-          </Typography>
-        </Typography>
-      </Box>
-    </>
-
-  );
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack gap={3}>
@@ -609,7 +554,7 @@ export default function ConfigurationProperties(props: any) {
 
         {renderButtons}
 
-        {renderPrice}
+        {renderPrices}
 
         {renderPeriod}
       </Stack>

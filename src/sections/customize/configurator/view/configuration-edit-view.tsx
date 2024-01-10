@@ -11,9 +11,8 @@ import { styled } from "@mui/material/styles";
 import { useBoolean } from "@/hooks";
 import { useRouter } from "next/router";
 import SvgColor from "@/components/svg-color";
-import { Canvas } from "fabric/fabric-impl";
 import { Texture } from "three";
-import { ICustomizeQuoteItem } from "@/@types/customize";
+import { setState } from '@/helpers/store';
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
@@ -40,6 +39,7 @@ const Wrapper = styled(Box)<{}>(({ theme }) => ({
 export default function ConfigurationEditView(pro: any) {
   const canvasRef = useRef<any>(null)
   const textureRef = useRef<Texture>(null)
+  setState({ isMaskAdded: false })
   const open = useBoolean();
   const customProduct = pro.customProduct;
   const props = {

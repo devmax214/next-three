@@ -19,6 +19,7 @@
     "@mui/material": "^5.13.7",
     "@mui/x-date-pickers": "^6.10.0",
     "@next/font": "^13.4.9",
+    "@progress/kendo-react-pdf": "^7.0.2",
     "@react-spring/three": "^9.7.3",
     "@react-three/drei": "^9.78.1",
     "@react-three/fiber": "^8.13.4",
