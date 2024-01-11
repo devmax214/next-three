@@ -132,6 +132,10 @@ export default function TShirtManModel(props: any) {
     }
   }, [customize.tag.file])
 
+  useEffect(() => {
+    props.setLoading(false)
+  }, [])
+
   if (!isEmpty(customize.color)) {
     const color = customize.color;
     for (let key in materials) {

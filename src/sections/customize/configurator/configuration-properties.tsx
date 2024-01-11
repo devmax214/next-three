@@ -537,13 +537,13 @@ export default function ConfigurationProperties(props: any) {
       <Stack gap={3}>
         <SelectColorButton {...props} />
 
-        <EditTagButton {...props} />
+        <EditTagButton canvasAllRef={props.canvasAllRef} {...props} />
 
-        <EmbellishmentButton canvasRef={props.canvasRef} embelIndex={1} ptype={props.type} />
-        <EmbellishmentButton canvasRef={props.canvasRef} embelIndex={0} ptype={props.type} />
-        <EmbellishmentButton canvasRef={props.canvasRef} embelIndex={3} ptype={props.type} />
-        <EmbellishmentButton canvasRef={props.canvasRef} embelIndex={2} ptype={props.type} />
-        {props.type === 'Pants' || props.type === 'Shorts' ? <EmbellishmentButton canvasRef={props.canvasRef} embelIndex={4} ptype={props.type} /> : ""}
+        <EmbellishmentButton canvasRef={props.canvasRef} canvasAllRef={props.canvasAllRef} embelIndex={1} ptype={props.type} />
+        <EmbellishmentButton canvasRef={props.canvasRef} canvasAllRef={props.canvasAllRef} embelIndex={0} ptype={props.type} />
+        <EmbellishmentButton canvasRef={props.canvasRef} canvasAllRef={props.canvasAllRef} embelIndex={3} ptype={props.type} />
+        <EmbellishmentButton canvasRef={props.canvasRef} canvasAllRef={props.canvasAllRef} embelIndex={2} ptype={props.type} />
+        {props.type === 'Pants' || props.type === 'Shorts' ? <EmbellishmentButton canvasRef={props.canvasRef} canvasAllRef={props.canvasAllRef} embelIndex={4} ptype={props.type} /> : ""}
 
         {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderCardType : ""}
         {props.type === 'Pants' || props.type === 'Shorts' || props.type === 'Hoodies' ? renderCardTip : ""}

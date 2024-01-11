@@ -59,6 +59,7 @@ export default function GlobalStyles() {
             opacity: 1,
             WebkitAppearance: "auto",
           },
+
         },
         img: {
           display: "block",

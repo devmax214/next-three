@@ -11,6 +11,7 @@ import { CustomizeContext } from "@/components/customize/context/customize-conte
 import { useRouter } from "next/router";
 import CheckedIcon from "@/components/icons/checked-icon";
 import UnCheckedIcon from "@/components/icons/unchecked-icon";
+import { Edit } from "@mui/icons-material";
 
 export const StyledHeader1 = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -117,13 +118,20 @@ export default function EditTagButton(props: Props) {
 
   const fileSelect = (ev: any) => {
     if (ev.target.files && ev.target.files.length > 0) {
+      props.canvasAllRef.setLoading && props.canvasAllRef.setLoading(true);
       var userImage = ev.target.files[0];
       var reader = new FileReader();
       reader.onload = function (e: any) {
         var blobUrl = e.target.result;
-        context.onTagSelectFile(blobUrl);
+        context.onTagSelectFile(blobUrl, ev.target.files[0].name);
+        if (props.canvasAllRef.setLoading) {
+          setTimeout(() => {
+            props.canvasAllRef.setLoading(false);
+          }, 200);
+        }
       };
       reader.readAsDataURL(userImage);
+    } else {
     }
   }
 
@@ -340,14 +348,31 @@ export default function EditTagButton(props: Props) {
     </Stack>
   );
 
+  const initFile = () => {
+    try {
+      setTimeout(() => {
+        if (!context.tag.fileName) return;
+        const fileInput = document.querySelector('input[id="tagfile"]') as HTMLElement;
+        const myFile = new File([context.tag.file], context.tag.fileName);
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(myFile);
+        fileInput.files = dataTransfer.files;
+      }, 100);
+    } catch (err) { }
+  }
+
   const renderArtwork = (
-    <Stack>
+    <>
       <StyledHeader1>Artwork</StyledHeader1>
 
       <StyledHeader2>File</StyledHeader2>
-      <input type="file" onChange={fileSelect} />
-    </Stack>
+      <input type="file" id={'tagfile'} onChange={fileSelect} />
+    </>
   );
+
+  useEffect(() => {
+    context.tag.visible && initFile()
+  }, [context.tag.visible])
 
   const renderAttachment = (
     <Stack>

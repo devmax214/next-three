@@ -580,6 +580,10 @@ export default function ShortManModel(props: any) {
     }
   }, [customize.tag.file]);
 
+  useEffect(() => {
+    props.setLoading(false)
+  }, [])
+
   if (customize.color.length > 0) {
     const color = customize.color;
     for (let key in materials) {

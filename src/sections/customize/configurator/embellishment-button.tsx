@@ -11,6 +11,7 @@ import {
   Switch,
   TextField,
   Typography,
+  Box,
   Checkbox,
   SelectChangeEvent,
   Popper,
@@ -26,8 +27,9 @@ import UnCheckedIcon from "@/components/icons/unchecked-icon";
 import { typeIndexToLabel } from "@/helpers/common";
 import { fontList } from '@/helpers/common';
 import { Canvas } from "fabric/fabric-impl";
-import { fabricAddImage, fabricAddText, fabricModifyText } from "@/utils/fabric";
-import { maskPosition } from "@/constant/fabricConst";
+import { fabricAddImage, fabricAddText, fabricModifyText, fabricChangeSize } from "@/utils/fabric";
+import { maskPosition, clipPath } from "@/constant/fabricConst";
+import { UpSpinIcon, DownSpinIcon } from "@/components/carousel/arrow-icons";
 
 export const StyledHeader1 = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -65,9 +67,10 @@ type Props = {
   embelIndex: number;
   ptype: string;
   canvasRef: Canvas;
+  canvasAllRef: any;
 };
 
-export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Props) {
+export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canvasAllRef }: Props) {
   const [font, setFont] = useState("ABeeZee")
 
   const customize = useContext(CustomizeContext);
@@ -109,7 +112,7 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
         fabricAddText(canvasRef, customize.embellishment[embelIndex].textureText, maskPosition[ptype][embelIndex]);
       }
     } else {
-      fabricAddImage(canvasRef, customize.embellishment[embelIndex].file, maskPosition[ptype][embelIndex], ptype)
+      fabricAddImage(canvasRef, canvasAllRef, customize.embellishment[embelIndex].file, maskPosition[ptype][embelIndex], ptype)
     }
     if (ev) customize.onAllEmbelChange(embelIndex, { type: type });
     else customize.onAllEmbelChange(embelIndex, { type: "" });
@@ -137,7 +140,7 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
       var reader = new FileReader();
       reader.onload = function (e: any) {
         var blobUrl = e.target.result;
-        fabricAddImage(canvasRef, blobUrl, maskPosition[ptype][embelIndex], ptype)
+        fabricAddImage(canvasRef, canvasAllRef, blobUrl, maskPosition[ptype][embelIndex], ptype)
         customize.onAllEmbelChange(embelIndex, { file: blobUrl, fileName: ev.target.files[0].name });
       };
       reader.readAsDataURL(userImage);
@@ -271,79 +274,101 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
     </>
   );
 
-  const renderSizeAndPosition = (
-    <Stack gap={1}>
-      <StyledHeader1>Size and position</StyledHeader1>
+  const getImageSize = () => {
+    try {
+      const productData = clipPath[ptype].find((path: any) => path.id.includes('mask-' + maskPosition[ptype][embelIndex]));
 
-      <Stack>
-        <StyledHeader2>Position</StyledHeader2>
-        <Grid container spacing={1}>
-          <Grid item md={4}>
-            <StyledSwitchLabel sx={{ fontSize: 11 }}>
-              Artwork width (cm)
-            </StyledSwitchLabel>
-            <Input
-              size="small"
-              defaultValue={22}
-              fullWidth
-              disabled={customize.embellishment[embelIndex].type !== "image"}
-              onChange={(e) => customize.onAllEmbelChange(embelIndex, { position: { ...customize.embellishment[embelIndex].position, width: e.target.value } })}
-              inputProps={{
-                step: 1,
-                min: 0,
-                max: 22,
-                type: 'number',
-                className: 'showspin',
-                'aria-labelledby': 'input-slider',
-              }} />
-          </Grid>
-          <Grid item md={4}>
-            <StyledSwitchLabel sx={{ fontSize: 11 }}>
-              From neck seam (cm)
-            </StyledSwitchLabel>
-            <Input
-              size="small"
-              defaultValue={22}
-              fullWidth
-              disabled={customize.embellishment[embelIndex].type !== "image"}
-              onChange={(e) => customize.onAllEmbelChange(embelIndex, { position: { ...customize.embellishment[embelIndex].position, neck: e.target.value } })}
-              inputProps={{
-                step: 1,
-                min: 0,
-                max: 22,
-                type: 'number',
-                className: 'showspin',
-                'aria-labelledby': 'input-slider',
-              }} />
-          </Grid>
-          <Grid item md={4}>
-            <StyledSwitchLabel sx={{ fontSize: 11 }}>
-              From center (cm)
-            </StyledSwitchLabel>
-            <Input
-              size="small"
-              defaultValue={22}
-              fullWidth
-              disabled={customize.embellishment[embelIndex].type !== "image"}
-              onChange={(e) => customize.onAllEmbelChange(embelIndex, { position: { ...customize.embellishment[embelIndex].position, center: e.target.value } })}
-              inputProps={{
-                step: 1,
-                min: 0,
-                max: 22,
-                type: 'number',
-                className: 'showspin',
-                'aria-labelledby': 'input-slider',
-              }} />
-          </Grid>
-        </Grid>
-      </Stack>
+      return {
+        width: productData.rWidth,
+        height: productData.rHeight,
+        wmax: productData.rWidth,
+        hmax: productData.rHeight,
+      }
+    } catch (err) { }
 
-      <Stack>
-        <StyledHeader2>Position</StyledHeader2>
-        <PositionControl canvasRef={canvasRef} embelIndex={embelIndex} ptype={ptype} type="image" />
+    return { width: 22, height: 22, wmax: 22, hmax: 22 }
+  }
+
+  const [imageSize, setImageSize] = useState(getImageSize());
+
+  useEffect(() => {
+    setImageSize(getImageSize());
+  }, [ptype])
+
+  useEffect(() => {
+    if (!ptype) return;
+    if (!canvasAllRef.setImageSize) canvasAllRef.setImageSize = {};
+    canvasAllRef.setImageSize = { ...canvasAllRef.setImageSize, [maskPosition[ptype][embelIndex]]: setImageSize };
+  }, [ptype, imageSize])
+
+  const changeArtworkSize = (e: any, calcType: number) => {
+    const type = fabricChangeSize(canvasRef, imageSize, calcType, maskPosition[ptype][embelIndex], ptype, setImageSize);
+    if (type == 'width') {
+      customize.onAllEmbelChange(embelIndex, { position: { ...customize.embellishment[embelIndex].position, neck: e.target.value } });
+    } else if (type == 'height') {
+      customize.onAllEmbelChange(embelIndex, { position: { ...customize.embellishment[embelIndex].position, neck: e.target.value } });
+    }
+  }
+
+  const renderSizeAndPosition = (wh: any) => {
+    return (
+      <Stack gap={1}>
+        <StyledHeader1>Size and position</StyledHeader1>
+
+        <Stack>
+          <StyledHeader2>Size</StyledHeader2>
+          <Grid container spacing={1}>
+            <Grid item md={5}>
+              <StyledSwitchLabel sx={{ fontSize: 11 }}>
+                Artwork Width (cm)
+              </StyledSwitchLabel>
+              <Input
+                size="small"
+                value={wh.width}
+                fullWidth
+                readOnly
+                disabled={customize.embellishment[embelIndex].type !== "image"}
+                inputProps={{
+                  step: 1,
+                  min: 0,
+                  max: wh.wmax,
+                  type: 'number',
+                  'aria-labelledby': 'input-slider',
+                }} />
+            </Grid>
+            <Grid item md={5}>
+              <StyledSwitchLabel sx={{ fontSize: 11 }}>
+                Artwork Height (cm)
+              </StyledSwitchLabel>
+              <Input
+                size="small"
+                value={wh.height}
+                fullWidth
+                readOnly
+                disabled={customize.embellishment[embelIndex].type !== "image"}
+                inputProps={{
+                  min: 0,
+                  max: wh.hmax,
+                  type: 'number',
+                  'aria-labelledby': 'input-slider',
+                }} />
+            </Grid>
+            <Grid item md={2}>
+              <Stack style={{ width: 23, height: 23, marginTop: 17, cursor: "pointer" }}>
+                <Stack onClick={(e) => changeArtworkSize(e, 1)} style={{ padding: 5, borderRadius: "5px", border: "1px solid lightgrey" }}><UpSpinIcon></UpSpinIcon></Stack>
+                <Stack onClick={(e) => changeArtworkSize(e, -1)} style={{ padding: 5, borderRadius: "5px", border: "1px solid lightgrey" }}><DownSpinIcon></DownSpinIcon></Stack>
+              </Stack>
+            </Grid>
+          </Grid>
+        </Stack>
+
+        <Stack>
+          <StyledHeader2>Position</StyledHeader2>
+          <PositionControl canvasRef={canvasRef} embelIndex={embelIndex} ptype={ptype} type="image" />
+        </Stack>
       </Stack>
-    </Stack>
-  );
+    )
+  };
 
   const renderText = (
     <>
@@ -433,7 +458,7 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef }: Pr
           </Grid>
 
           <Grid item md={12}>
-            {renderSizeAndPosition}
+            {renderSizeAndPosition(imageSize)}
           </Grid>
 
           <Grid item md={12}>

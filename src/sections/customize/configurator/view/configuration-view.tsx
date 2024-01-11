@@ -176,7 +176,7 @@ export default function ConfigurationView(props: any) {
 
               <Grid item md={4} xs={12}>
                 <ConfigurationProperties
-                  canvasRef={current} textureRef={textureRef} {...props} {...customProduct} color={customProduct.context ? customProduct.context.color : ''} />
+                  canvasRef={current} canvasAllRef={canvasRef} textureRef={textureRef} {...props} {...customProduct} color={customProduct.context ? customProduct.context.color : ''} />
               </Grid>
             </Grid>
           </Container>

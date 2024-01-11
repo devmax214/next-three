@@ -171,6 +171,10 @@ export default function OversizeManModel(props: any) {
     }
   }, [customize.tag]);
 
+  useEffect(() => {
+    props.setLoading(false)
+  }, [])
+
   let scaleY = 0.018, scaleX = 0.038;
   try {
     scaleX = !tagTexture.source.data

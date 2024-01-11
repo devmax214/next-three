@@ -3,7 +3,8 @@ import { getState, setState } from "@/helpers/store";
 import { Canvas } from "fabric/fabric-impl";
 import { clipPath } from "@/constant/fabricConst";
 
-const useThreeFrame = (canvas: Canvas, controlsRef: any, ptype: string) => {
+const useThreeFrame = (canvasRef: any, controlsRef: any, ptype: string) => {
+  const canvas = canvasRef.current as Canvas;
   const element = document.getElementsByTagName("body")[0];
   const setCursor = (e: any) => {
     element.style.cursor = "default";
@@ -78,12 +79,41 @@ const useThreeFrame = (canvas: Canvas, controlsRef: any, ptype: string) => {
       let targetWidth = e.target.scaleX * e.target.width;
       let targetHeight = e.target.scaleY * e.target.height;
 
-      if (targetWidth <= productData.cWidth && targetHeight <= productData.cHeight) {
+      var imgWidth = e.target.width * e.target.scaleX * productData.rWidth / productData.cWidth;
+      var imgHeight = e.target.height * e.target.scaleY * productData.rHeight / productData.cHeight;
+
+      if (imgWidth <= productData.rWidth && imgHeight <= productData.rHeight) {
         gScaleX = e.target.scaleX;
         gScaleY = e.target.scaleY;
       } else {
         e.target.set('scaleX', gScaleX);
         e.target.set('scaleY', gScaleY);
+      }
+
+      if (e.target.name.split("-")[0] == 'image' && canvasRef.setImageSize && canvasRef.setImageSize[position]) {
+        const limitRatio = productData.cWidth / productData.cHeight;
+        const imageRatio = e.target.width / e.target.height;
+        if (limitRatio < imageRatio) {
+          canvasRef.setImageSize[position]((prevState: any) => {
+            return ({
+              ...prevState,
+              ...{
+                width: Math.ceil(imgWidth),
+                height: imgHeight.toFixed(2)
+              }
+            })
+          });
+        } else {
+          canvasRef.setImageSize[position]((prevState: any) => {
+            return ({
+              ...prevState,
+              ...{
+                width: imgWidth.toFixed(2),
+                height: Math.ceil(imgHeight)
+              }
+            })
+          });
+        }
       }
     });
   });

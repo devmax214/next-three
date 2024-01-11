@@ -610,6 +610,10 @@ export default function Model(props: any) {
     else setTagName(`print-label_${customize.tag.color ? "black" : "white"}`);
   }, [customize.tag]);
 
+  useEffect(() => {
+    props.setLoading(false)
+  }, [])
+
   if (customize.color.length > 0) {
     const color = customize.color;
     for (let key in materials) {

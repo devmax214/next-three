@@ -57,7 +57,7 @@ const useFirstRenderModel = ({
           if (customize.embellishment[i].type == 'text' && customize.embellishment[i].textureText) {
             fabricAddText(canvasRef.current, customize.embellishment[i].textureText, maskPosition[type][i], true);
           } else if (customize.embellishment[i].file != null) {
-            fabricAddImage(canvasRef.current, customize.embellishment[i].file, maskPosition[type][i], type, true)
+            fabricAddImage(canvasRef.current, canvasRef, customize.embellishment[i].file, maskPosition[type][i], type, true)
           }
         }
         fabricChangeColors(canvasRef.current, customize.color);
@@ -84,7 +84,7 @@ const useFirstRenderModel = ({
     handleClick,
     textureRef,
   ])
-  useThreeFrame(canvasRef.current, controlsRef, type);
+  useThreeFrame(canvasRef, controlsRef, type);
 }
 
 export default useFirstRenderModel

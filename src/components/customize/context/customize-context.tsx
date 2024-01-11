@@ -28,7 +28,8 @@ const initialState = {
     neck: true,
     color: true,
     size: "45x45",
-    file: null
+    file: null,
+    fileName: "",
   },
   embellishment: [{
     visible: false,
@@ -220,12 +221,13 @@ export function CustomizeProvider({ children, passInitState = {} }: CustomizePro
     }, [values.tag.visible]
   )
 
-  const onTagSelectFile = useCallback((file: any) => {
+  const onTagSelectFile = useCallback((file: any, fileName: string) => {
     setValues((prevStatus: any) => ({
       ...prevStatus,
       tag: {
         ...prevStatus.tag,
-        file: file
+        file: file,
+        fileName: fileName
       }
     }))
   }, [values.tag.file]);

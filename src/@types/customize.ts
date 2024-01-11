@@ -12,7 +12,8 @@ type ICustomizeTagItem = {
   neck: boolean,
   color: boolean,
   size: string,
-  file: any
+  file: any,
+  fileName: string,
 };
 
 type IEmbellishmentItem = {
@@ -80,7 +81,7 @@ export type CustomizeContextProps = ICustomizeQuoteItem & {
   onTagColorChange: () => void;
   onTagSizeChange: (size: string) => void;
   onTagEditVisible: () => void;
-  onTagSelectFile: (file: any) => void;
+  onTagSelectFile: (file: any, fileName: string) => void;
   onAllEmbelChange: (index: number, data: object) => void;
   onAllContextChange: (data: object) => void;
   onCordTypeChange: (value: string) => void;

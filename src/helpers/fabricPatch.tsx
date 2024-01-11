@@ -39,7 +39,6 @@ export const initPatch = ({
   fabric.Object.prototype.borderDashArray = [10]
   fabric.Object.prototype.borderColor = 'black'
   fabric.Object.prototype.objectCaching = true;
-  fabric.Object.prototype.minScaleLimit = 0.1;
 
   // if (editText || isAddText) {
   fabric.Canvas.prototype.getPointer = (e: any, ignoreZoom) => {

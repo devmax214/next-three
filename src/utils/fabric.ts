@@ -41,7 +41,8 @@ export const fabricAddText = (canvas: Canvas, text: string, position: string, au
     canvas.bringToFront(canvasText);
     canvas.renderAll();
 }
-export const fabricAddImage = (canvas: Canvas, url: string, position: string, ptype: string, auto?: boolean) => {
+export const fabricAddImage = (canvas: Canvas, canvasAllRef: any, url: string, position: string, ptype: string, auto?: boolean) => {
+    if (canvasAllRef.setLoading) canvasAllRef.setLoading(true);
     const productData = clipPath[ptype].find((path: any) => path.id.includes('mask-' + position));
     const mask: any = canvas.getObjects().find((mask: any) => mask.name == 'mask-' + position)
 
@@ -66,11 +67,31 @@ export const fabricAddImage = (canvas: Canvas, url: string, position: string, pt
         canvas.add(image)
         image.setControlsVisibility(hideControls)
         image.objectCaching = false
-        productData.cWidth < productData.cHeight ? image.scaleToWidth(productData.cWidth * 0.9, false) : image.scaleToHeight(productData.cHeight * 0.9, false)
+        const limitRatio = productData.cWidth / productData.cHeight;
+        const imageRatio = image.width / image.height;
+        limitRatio < imageRatio
+            ? image.scaleToWidth(productData.cWidth, false)
+            : image.scaleToHeight(productData.cHeight, false)
         fabric.util.clearFabricFontCache();
         !auto && canvas.setActiveObject(image);
         canvas.bringToFront(image);
         canvas.renderAll();
+        if (canvasAllRef.setImageSize && canvasAllRef.setImageSize[position]) {
+            canvasAllRef.setImageSize[position]((prevState: any) => {
+                return ({
+                    ...prevState,
+                    ...{
+                        width: (image.width * image.scaleX * productData.rWidth / productData.cWidth).toFixed(2),
+                        height: (image.height * image.scaleY * productData.rHeight / productData.cHeight).toFixed(2)
+                    }
+                })
+            });
+        }
+        if (canvasAllRef.setLoading) {
+            setTimeout(() => {
+                canvasAllRef.setLoading(false);
+            }, 200);
+        }
     })
 }
 export const fabricModifyText = (canvas: Canvas, value: string, position: string, property: string) => {
@@ -81,6 +102,40 @@ export const fabricModifyText = (canvas: Canvas, value: string, position: string
     canvas.renderAll();
 }
 
+export const fabricChangeSize = (canvas: Canvas, state: any, calcType: number, position: string, ptype: string, setImageSize: any) => {
+    const pd = clipPath[ptype].find((path: any) => path.id.includes('mask-' + position));
+    const image: any = canvas.getObjects().find((mask: any) => mask.name == 'image-' + position)
+    if (!image) {
+        setImageSize((prevState: any) => ({
+            ...prevState,
+            ...{ width: pd.rWidth, height: pd.rHeight }
+        }))
+        return;
+    }
+
+    const limitRatio = pd.cWidth / pd.cHeight;
+    const imageRatio = image.width / image.height;
+    if (limitRatio < imageRatio) {
+        const value = calcType == -1 ? (state.width > 0 ? state.width - 1 : state.width) : state.width < pd.rWidth ? state.width + 1 : state.width;
+        image.scaleToWidth(pd.cWidth / pd.rWidth * parseFloat(value), false)
+        canvas.renderAll();
+        setImageSize((prevState: any) => ({
+            ...prevState,
+            ...{ width: Math.ceil(parseFloat(value)), height: (image.height * image.scaleY * pd.rHeight / pd.cHeight).toFixed(2) }
+        }));
+        return 'width';
+    } else {
+        const value = calcType == -1 ? (state.height > 0 ? state.height - 1 : state.height) : state.height < pd.rHeight ? state.height + 1 : state.height;
+        image.scaleToHeight(pd.cHeight / pd.rHeight * parseFloat(value), false);
+        canvas.renderAll();
+        setImageSize((prevState: any) => ({
+            ...prevState,
+            ...{ width: (image.width * image.scaleX * pd.rWidth / pd.cWidth).toFixed(2), height: Math.ceil(parseFloat(value)) }
+        }));
+
+        return 'height';
+    }
+}
 
 export const getMousePosition = (e: any, canvasRenderedRef: any, pointer: Vector2, mouse: Vector2, raycaster: Raycaster, camera: Camera, scene: Scene, textureRef: any) => {
     const rect = canvasRenderedRef.current.getBoundingClientRect()

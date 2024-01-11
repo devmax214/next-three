@@ -379,6 +379,9 @@ export default function PANTManModel(props: any) {
     }
   }
 
+  useEffect(() => {
+    props.setLoading(false)
+  }, [])
   /*
     30 DECEMBER 2023
     NAO ADDING RAYCAST FEATURE
@@ -398,7 +401,7 @@ export default function PANTManModel(props: any) {
     raycaster,
     scene,
     mouse,
-    pointer
+    pointer,
   );
   // NAO
   return (
