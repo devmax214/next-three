@@ -106,10 +106,10 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
   const checkImage = (ev: boolean, type: string) => {
     if (type == 'text') {
       if (!customize.embellishment[embelIndex].textureText) {
-        fabricAddText(canvasRef, 'Sample Text', maskPosition[ptype][embelIndex]);
+        fabricAddText(canvasRef, canvasAllRef, 'Sample Text', maskPosition[ptype][embelIndex]);
         customize.onAllEmbelChange(embelIndex, { textureText: 'Sample Text' })
       } else {
-        fabricAddText(canvasRef, customize.embellishment[embelIndex].textureText, maskPosition[ptype][embelIndex]);
+        fabricAddText(canvasRef, canvasAllRef, customize.embellishment[embelIndex].textureText, maskPosition[ptype][embelIndex]);
       }
     } else {
       fabricAddImage(canvasRef, canvasAllRef, customize.embellishment[embelIndex].file, maskPosition[ptype][embelIndex], ptype)
@@ -355,8 +355,28 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
             </Grid>
             <Grid item md={2}>
               <Stack style={{ width: 23, height: 23, marginTop: 17, cursor: "pointer" }}>
-                <Stack onClick={(e) => changeArtworkSize(e, 1)} style={{ padding: 5, borderRadius: "5px", border: "1px solid lightgrey" }}><UpSpinIcon></UpSpinIcon></Stack>
-                <Stack onClick={(e) => changeArtworkSize(e, -1)} style={{ padding: 5, borderRadius: "5px", border: "1px solid lightgrey" }}><DownSpinIcon></DownSpinIcon></Stack>
+                <Stack
+                  onClick={(e) => changeArtworkSize(e, 1)}
+                  sx={{
+                    boxShadow: "-2px -2px 2px 0px #717070 inset",
+                    padding: "5px", borderRadius: "4px", border: "1px solid lightgrey",
+                    "&:hover": { bgcolor: "lightgrey" },
+                    "&:active": { bgColor: "#919191", boxShadow: "none" },
+                  }}
+                >
+                  <UpSpinIcon></UpSpinIcon>
+                </Stack>
+                <Stack
+                  onClick={(e) => changeArtworkSize(e, -1)}
+                  sx={{
+                    boxShadow: "-2px -2px 2px 0px #717070 inset",
+                    padding: "5px", borderRadius: "4px", border: "1px solid lightgrey",
+                    "&:hover": { bgcolor: "lightgrey" },
+                    "&:active": { bgColor: "#919191", boxShadow: "none" },
+                  }}
+                >
+                  <DownSpinIcon></DownSpinIcon>
+                </Stack>
               </Stack>
             </Grid>
           </Grid>
@@ -364,7 +384,7 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
 
         <Stack>
           <StyledHeader2>Position</StyledHeader2>
-          <PositionControl canvasRef={canvasRef} embelIndex={embelIndex} ptype={ptype} type="image" />
+          <PositionControl positionType={"image"} canvasRef={canvasRef} canvasAllRef={canvasAllRef} embelIndex={embelIndex} ptype={ptype} type="image" />
         </Stack>
       </Stack>
     )
@@ -410,7 +430,7 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
       </Stack>
       <Stack mt={1}>
         <StyledHeader2>Position</StyledHeader2>
-        <PositionControl canvasRef={canvasRef} embelIndex={embelIndex} ptype={ptype} type="text" />
+        <PositionControl positionType={"text"} canvasRef={canvasRef} canvasAllRef={canvasAllRef} embelIndex={embelIndex} ptype={ptype} type="text" />
       </Stack>
     </>
   );

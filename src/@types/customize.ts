@@ -29,7 +29,10 @@ type IEmbellishmentItem = {
     width: number,
     neck: number,
     center: number,
-    type: number
+    type: {
+      content: number,
+      item: number,
+    }
   },
   reqText: string,
   textureText: string,

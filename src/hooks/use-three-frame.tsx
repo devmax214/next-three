@@ -70,6 +70,9 @@ const useThreeFrame = (canvasRef: any, controlsRef: any, ptype: string) => {
         e.target.top = boundingRect.top + boundingRect.height - targetHeight / 2;
       }
       e.target.setCoords();
+      if (canvasRef.handleChangePosition && canvasRef.handleChangePosition[e.target.name.split("-")[0] + '-' + position]) {
+        canvasRef.handleChangePosition[e.target.name.split("-")[0] + '-' + position](0, 2);
+      }
     });
 
     var gScaleX = 0, gScaleY = 0;

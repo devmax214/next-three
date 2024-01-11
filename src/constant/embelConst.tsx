@@ -297,18 +297,39 @@ export const embelRenders = (productType: string, dbCtx: any) => {
           fontWeight: 600,
         }}>
         Position &nbsp;&nbsp;&nbsp;&nbsp;
-        <StyledButton sx={{
-          border: "2px solid #f38565",
-          borderRadius: 1,
-          "svg": {
-            "path": {
-              stroke: "#5C6166",
-            },
-            "rect": {
-              fill: "#5C6166"
-            },
-          }
-        }}>{positions[dbCtx.embellishment[embelIndex].position.type].icon}</StyledButton>
+        {positions[dbCtx.embellishment[embelIndex].position.type.content] &&
+          <StyledButton sx={{
+            border: "2px solid #f38565",
+            mr: "10px",
+            width: "40px",
+            height: "40px",
+            borderRadius: 1,
+            "svg": {
+              "path": {
+                stroke: "#5C6166",
+              },
+              "rect": {
+                fill: "#5C6166"
+              },
+            }
+          }}>{positions[dbCtx.embellishment[embelIndex].position.type.content].icon}</StyledButton>
+        }
+        {positions[dbCtx.embellishment[embelIndex].position.type.item] &&
+          <StyledButton sx={{
+            border: "2px solid #f38565",
+            width: "40px",
+            height: "40px",
+            borderRadius: 1,
+            "svg": {
+              "path": {
+                stroke: "#5C6166",
+              },
+              "rect": {
+                fill: "#5C6166"
+              },
+            }
+          }}>{positions[dbCtx.embellishment[embelIndex].position.type.item].icon}</StyledButton>
+        }
       </Typography >
     </Stack >
   )))
@@ -361,11 +382,20 @@ export const embelRenders = (productType: string, dbCtx: any) => {
           Garment Dye: &nbsp;&nbsp;&nbsp;&nbsp;
           <Box
             sx={{
-              backgroundColor: (!dbCtx.color ? "lightgrey" : dbCtx.color),
+              backgroundColor: dbCtx.color,
               borderRadius: "3px",
               width: "20px",
               maxHeight: "20px",
-            }} />
+            }}
+          />
+          <Box sx={{ mr: "30px", ml: "5px" }}>
+            {dbCtx.color}
+          </Box>
+          {dbCtx.pantone != "11-0601 TCX" &&
+            <Box>
+              {dbCtx.pantone}
+            </Box>
+          }
         </Box>
       </Stack>
       <Stack sx={{ borderBottom: "1px solid lightgrey" }}>

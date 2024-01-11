@@ -3,6 +3,8 @@ import { fabric } from "fabric"
 import { useCallback } from "react";
 import { Camera, CanvasTexture, Raycaster, Scene, Vector2 } from "three";
 import { clipPath, hideControls } from "@/constant/fabricConst";
+import { CustomizeContext } from "@/components/customize/context/customize-context";
+
 
 export const fabricChangeColors = (canvas: Canvas, color: string) => {
     let masks = canvas.getObjects().filter(obj => obj.name?.includes('mask'))
@@ -12,7 +14,7 @@ export const fabricChangeColors = (canvas: Canvas, color: string) => {
     });
     canvas.renderAll();
 }
-export const fabricAddText = (canvas: Canvas, text: string, position: string, auto?: boolean) => {
+export const fabricAddText = (canvas: Canvas, canvasAllRef: any, text: string, position: string, auto?: boolean) => {
     const mask: any = canvas.getObjects().find((mask: any) => mask.name == 'mask-' + position)
     canvas.getObjects().map((m: any) => {
         if (m.name == 'image-' + position || m.name == 'text-' + position) canvas.remove(m)
@@ -40,6 +42,9 @@ export const fabricAddText = (canvas: Canvas, text: string, position: string, au
     !auto && canvas.setActiveObject(canvasText);
     canvas.bringToFront(canvasText);
     canvas.renderAll();
+    if (canvasAllRef.handleChangePosition && canvasAllRef.handleChangePosition['text-' + position]) {
+        canvasAllRef.handleChangePosition['text-' + position](0, 1);
+    }
 }
 export const fabricAddImage = (canvas: Canvas, canvasAllRef: any, url: string, position: string, ptype: string, auto?: boolean) => {
     if (canvasAllRef.setLoading) canvasAllRef.setLoading(true);
@@ -86,6 +91,9 @@ export const fabricAddImage = (canvas: Canvas, canvasAllRef: any, url: string, p
                     }
                 })
             });
+        }
+        if (url != null && canvasAllRef.handleChangePosition && canvasAllRef.handleChangePosition['image-' + position]) {
+            canvasAllRef.handleChangePosition['image-' + position](0, 1);
         }
         if (canvasAllRef.setLoading) {
             setTimeout(() => {

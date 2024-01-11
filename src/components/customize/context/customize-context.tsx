@@ -44,7 +44,10 @@ const initialState = {
       width: 22,
       neck: 22,
       center: 22,
-      type: 0
+      type: {
+        content: -1,
+        item: -1,
+      }
     },
     reqText: "",
     textureText: "",
@@ -78,7 +81,10 @@ const initialState = {
       width: 22,
       neck: 22,
       center: 22,
-      type: 0
+      type: {
+        content: -1,
+        item: -1,
+      }
     },
     reqText: "",
     textureText: "",
@@ -95,7 +101,10 @@ const initialState = {
       width: 22,
       neck: 22,
       center: 22,
-      type: 0
+      type: {
+        content: -1,
+        item: -1,
+      }
     },
     reqText: "",
     textureText: "",
@@ -112,7 +121,10 @@ const initialState = {
       width: 22,
       neck: 22,
       center: 22,
-      type: 0
+      type: {
+        content: -1,
+        item: -1,
+      }
     },
     reqText: "",
     textureText: "",

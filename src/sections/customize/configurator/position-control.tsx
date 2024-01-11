@@ -8,8 +8,8 @@ import {
   TopCenterPosition,
   TopPosition,
 } from "@/components/icons/customize/position/position";
-import { styled } from "@mui/material/styles";
 import { CustomizeContext } from "@/components/customize/context/customize-context";
+import { styled } from "@mui/material/styles";
 import { Canvas } from "fabric/fabric-impl";
 import { clipPath, maskPosition } from "@/constant/fabricConst";
 
@@ -45,26 +45,53 @@ const positions = [
 ];
 
 type Props = {
+  positionType: string;
   type: string;
   ptype: string;
   embelIndex: number;
   canvasRef: Canvas;
+  canvasAllRef: any;
 };
 
 export default function PositionControl(props: Props) {
   const customize = useContext(CustomizeContext);
-  const [state, setState] = useState(0);
+  const [state, setState] = useState({
+    content: customize.embellishment[props.embelIndex].position.type.content,
+    item: customize.embellishment[props.embelIndex].position.type.item
+  });
   const { canvasRef, ptype, type, embelIndex } = props;
   useEffect(() => {
-    setState(customize.embellishment[props.embelIndex].position.type);
+    if (customize.embellishment[props.embelIndex].type == props.positionType) {
+      if (props.positionType == 'image' && !customize.embellishment[props.embelIndex].file) return;
+      setState({
+        content: customize.embellishment[props.embelIndex].position.type.content,
+        item: customize.embellishment[props.embelIndex].position.type.item,
+      });
+    }
   }, [customize.embellishment[props.embelIndex].type]);
-  const handleChangePosition = (index: number) => {
+
+  const handleChangePosition = (index: number, callLocation: number) => {
+    if (props.positionType == 'image' && !customize.embellishment[props.embelIndex].file) return;
+    const contentIndex = callLocation == 1 ? 1 : callLocation == 2 ? -1 : [0, 1, 2].includes(index) ? index : customize.embellishment[props.embelIndex].position.type.content;
+    const itemIndex = callLocation == 1 ? 4 : callLocation == 2 ? -1 : ![0, 1, 2].includes(index) ? index : customize.embellishment[props.embelIndex].position.type.item;
     customize.onAllEmbelChange(embelIndex, {
       position: {
         ...customize.embellishment[embelIndex].position,
-        type: index,
+        type: {
+          content: contentIndex,
+          item: itemIndex,
+        }
       },
     });
+    setState({
+      content: contentIndex,
+      item: itemIndex,
+    });
+    console.log(index, {
+      content: contentIndex,
+      item: itemIndex,
+    })
+    if (callLocation) return;
     const currentObj: any = canvasRef
       .getObjects()
       .find(
@@ -90,8 +117,18 @@ export default function PositionControl(props: Props) {
           : currentObj.width * currentObj.scaleX;
       changePosition(currentMaskData, currentObj, index, objWidth, objHeight);
     }
-    setState(index);
+
   };
+
+  useEffect(() => {
+    if (!ptype) return;
+    if (!props.canvasAllRef.handleChangePosition) props.canvasAllRef.handleChangePosition = {};
+    props.canvasAllRef.handleChangePosition = {
+      ...props.canvasAllRef.handleChangePosition,
+      [`${props.positionType}-${maskPosition[ptype][embelIndex]}`]: handleChangePosition
+    };
+  }, [props.ptype, props.positionType])
+
   const changePosition = (
     currentMaskData: any,
     currentObj: any,
@@ -145,18 +182,18 @@ export default function PositionControl(props: Props) {
             <StyledButton
               disabled={customize.embellishment[props.embelIndex].type !== type}
               sx={{
-                border: state == index ? "1px solid red" : "",
+                border: state.content == index || state.item == index ? "1px solid red" : "",
                 borderRadius: 1,
                 svg: {
                   path: {
-                    stroke: state == index ? "#5C6166" : "#ACB1B8",
+                    stroke: state.content == index || state.item == index ? "#5C6166" : "#ACB1B8",
                   },
                   rect: {
-                    fill: state === index ? "#5C6166" : "#ACB1B8",
+                    fill: state.content == index || state.item == index ? "#5C6166" : "#ACB1B8",
                   },
                 },
               }}
-              onClick={() => handleChangePosition(index)}
+              onClick={() => handleChangePosition(index, 0)}
             >
               {pos.icon}
             </StyledButton>
