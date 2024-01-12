@@ -43,6 +43,8 @@ const initialState = {
     position: {
       width: 22,
       neck: 22,
+      top: -1,
+      left: -1,
       center: 22,
       type: {
         content: -1,
@@ -65,25 +67,8 @@ const initialState = {
     position: {
       width: 22,
       neck: 22,
-      center: 22,
-      type: 0
-    },
-    reqText: "",
-    textureText: "",
-    textureTextColor: "",
-    textureTextPantone: "11-0601 TCX",
-    font: "Arial"
-  }, {
-    visible: false,
-    type: "image",
-    size: 0,
-    artwork: 0,
-    view: 0,
-    visibleText: false,
-    file: null,
-    position: {
-      width: 22,
-      neck: 22,
+      top: -1,
+      left: -1,
       center: 22,
       type: {
         content: -1,
@@ -106,6 +91,8 @@ const initialState = {
     position: {
       width: 22,
       neck: 22,
+      top: -1,
+      left: -1,
       center: 22,
       type: {
         content: -1,
@@ -128,6 +115,32 @@ const initialState = {
     position: {
       width: 22,
       neck: 22,
+      top: -1,
+      left: -1,
+      center: 22,
+      type: {
+        content: -1,
+        item: -1,
+      }
+    },
+    reqText: "",
+    textureText: "",
+    textureTextColor: "",
+    textureTextPantone: "11-0601 TCX",
+    font: "Arial"
+  }, {
+    visible: false,
+    type: "image",
+    size: 0,
+    artwork: 0,
+    view: 0,
+    visibleText: false,
+    file: null,
+    position: {
+      width: 22,
+      neck: 22,
+      top: -1,
+      left: -1,
       center: 22,
       type: {
         content: -1,

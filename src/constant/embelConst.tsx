@@ -274,22 +274,31 @@ export const embelRenders = (productType: string, dbCtx: any) => {
           />&nbsp;
         </Typography>
       }
-      < Typography
-        sx={{
-          flexGrow: 1,
-          mt: 0,
-          px: 2,
-          py: 0,
-          mr: 2,
-          color: "#292F3D",
-          fontSize: 14,
-          lineHeight: 2,
-          fontWeight: 700,
-        }}>
-        Size and position
-      </Typography >
       {
-        dbCtx.embellishment[embelIndex].type === "image" &&
+        dbCtx.embellishment[embelIndex].type === "text"
+          && dbCtx.embellishment[embelIndex].position.type.content == -1
+          && dbCtx.embellishment[embelIndex].position.type.item == -1 ? null :
+          dbCtx.embellishment[embelIndex].type === "image"
+            && !dbCtx.embellishment[embelIndex].file
+            && dbCtx.embellishment[embelIndex].position.type.content == -1
+            && dbCtx.embellishment[embelIndex].position.type.item == -1 ? null :
+            < Typography
+              sx={{
+                flexGrow: 1,
+                mt: 0,
+                px: 2,
+                py: 0,
+                mr: 2,
+                color: "#292F3D",
+                fontSize: 14,
+                lineHeight: 2,
+                fontWeight: 700,
+              }}>
+              Size and position
+            </Typography >
+      }
+      {
+        dbCtx.embellishment[embelIndex].type === "image" && dbCtx.embellishment[embelIndex].file &&
         <Typography
           sx={{
             flexGrow: 1,
@@ -297,64 +306,71 @@ export const embelRenders = (productType: string, dbCtx: any) => {
             py: 0,
             px: 2,
             mr: 2,
+            mb: (dbCtx.embellishment[embelIndex].position.type.content == -1 && dbCtx.embellishment[embelIndex].position.type.item == -1 ? 2 : 0),
             color: "#5C6166",
             fontSize: 12,
             lineHeight: 2,
             fontWeight: 600,
           }}>
-          artwork with: {dbCtx.embellishment[embelIndex].position.width}cm &nbsp;
-          From neck seam: {dbCtx.embellishment[embelIndex].position.neck}cm &nbsp;
-          From center: {dbCtx.embellishment[embelIndex].position.center}cm
+          Artwork With: {dbCtx.embellishment[embelIndex].position.width}cm &nbsp;
+          Artwork Height: {dbCtx.embellishment[embelIndex].position.neck}cm &nbsp;
         </Typography>
       }
-      < Typography
-        sx={{
-          flexGrow: 1,
-          mt: 0,
-          py: 2,
-          px: 2,
-          mr: 2,
-          color: "#292F3D",
-          fontSize: 14,
-          fontWeight: 600,
-        }}>
-        Position &nbsp;&nbsp;&nbsp;&nbsp;
-        {
-          positions[dbCtx.embellishment[embelIndex].position.type.content] &&
-          <StyledButton sx={{
-            border: "2px solid #f38565",
-            mr: "10px",
-            width: "40px",
-            height: "40px",
-            borderRadius: 1,
-            "svg": {
-              "path": {
-                stroke: "#5C6166",
-              },
-              "rect": {
-                fill: "#5C6166"
-              },
-            }
-          }}>{positions[dbCtx.embellishment[embelIndex].position.type.content].icon}</StyledButton>
-        }
-        {
-          positions[dbCtx.embellishment[embelIndex].position.type.item] &&
-          <StyledButton sx={{
-            border: "2px solid #f38565",
-            width: "40px",
-            height: "40px",
-            borderRadius: 1,
-            "svg": {
-              "path": {
-                stroke: "#5C6166",
-              },
-              "rect": {
-                fill: "#5C6166"
-              },
-            }
-          }}>{positions[dbCtx.embellishment[embelIndex].position.type.item].icon}</StyledButton>
-        }
-      </Typography >
+      {
+        ((dbCtx.embellishment[embelIndex].type === "image" && dbCtx.embellishment[embelIndex].file) &&
+          (dbCtx.embellishment[embelIndex].position.type.content != -1 || dbCtx.embellishment[embelIndex].position.type.item != -1)) ||
+        ((dbCtx.embellishment[embelIndex].type === "text" && dbCtx.embellishment[embelIndex].textureText) &&
+          (dbCtx.embellishment[embelIndex].position.type.content != -1 || dbCtx.embellishment[embelIndex].position.type.item != -1)) &&
+
+        < Typography
+          sx={{
+            flexGrow: 1,
+            mt: 0,
+            py: 2,
+            px: 2,
+            mr: 2,
+            color: "#292F3D",
+            fontSize: 14,
+            fontWeight: 600,
+          }}>
+          Position &nbsp;&nbsp;&nbsp;&nbsp;
+          {
+            positions[dbCtx.embellishment[embelIndex].position.type.content] &&
+            <StyledButton sx={{
+              border: "2px solid #f38565",
+              mr: "10px",
+              width: "40px",
+              height: "40px",
+              borderRadius: 1,
+              "svg": {
+                "path": {
+                  stroke: "#5C6166",
+                },
+                "rect": {
+                  fill: "#5C6166"
+                },
+              }
+            }}>{positions[dbCtx.embellishment[embelIndex].position.type.content].icon}</StyledButton>
+          }
+          {
+            positions[dbCtx.embellishment[embelIndex].position.type.item] &&
+            <StyledButton sx={{
+              border: "2px solid #f38565",
+              width: "40px",
+              height: "40px",
+              borderRadius: 1,
+              "svg": {
+                "path": {
+                  stroke: "#5C6166",
+                },
+                "rect": {
+                  fill: "#5C6166"
+                },
+              }
+            }}>{positions[dbCtx.embellishment[embelIndex].position.type.item].icon}</StyledButton>
+          }
+        </Typography >
+      }
     </Stack >
   )))
 

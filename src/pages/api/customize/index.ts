@@ -14,8 +14,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const session = await getServerSession(req, res, authOptions);
   if (!session) {
-    res.status(401).json(true);
-    return res.status(401);
+    res.status(200).json({ isLogin: false, error: true });
+    return res.status(200);
   }
 
   const userId = session.user?.id as string;

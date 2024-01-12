@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormProvider, { RHFTextField } from "@/components/hook-form";
@@ -10,6 +10,8 @@ import axios from "axios";
 import { endpoints, QUOTE_STATE } from "../../../../global-config";
 import { CustomizeContext } from "@/components/customize/context/customize-context";
 import { redirect } from "next/dist/server/api-utils";
+import CommonConfirmModal from '@/components/confirm-modal';
+import { loginConfirmContent } from '@/helpers/common';
 
 const QuoteSchema = Yup.object().shape({
   email: Yup.string()
@@ -39,10 +41,20 @@ export default function QuoteForm(props: Props) {
   } = methods;
 
   const { push } = useRouter();
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const onSubmit = handleSubmit(async (data) => {
-    const result = await axios.post(endpoints.customize.list, { context: context, product: productType, name: "customize" + Date.now(), quoteState: QUOTE_STATE.review });
+    // const result = await axios.post(endpoints.customize.list, { context: context, product: productType, name: "customize" + Date.now(), quoteState: QUOTE_STATE.review });
+    // try {
+    //   if (result.data[0].error && !result.data[0].login) {
+    //   setOpenConfirm(true);
+    //   return;
+    // }
     push('/user/quote');
+    // } catch (err) {
+
+    // }
+
   });
 
   const renderForm = (
@@ -67,6 +79,7 @@ export default function QuoteForm(props: Props) {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       {renderForm}
+      <CommonConfirmModal opened={openConfirm} setOpened={setOpenConfirm} content={loginConfirmContent} />
     </FormProvider>
   );
 }

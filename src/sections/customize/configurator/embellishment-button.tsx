@@ -319,6 +319,7 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
     if (!ptype) return;
     if (!canvasAllRef.setImageSize) canvasAllRef.setImageSize = {};
     canvasAllRef.setImageSize = { ...canvasAllRef.setImageSize, [maskPosition[ptype][embelIndex]]: setImageSize };
+    customize.onAllEmbelChange(embelIndex, { position: { ...customize.embellishment[embelIndex].position, width: imageSize.width, neck: imageSize.height } });
   }, [ptype, imageSize])
 
   const changeArtworkSize = (e: any, calcType: number) => {

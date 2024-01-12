@@ -79,3 +79,5 @@ export function isEmpty(data: any) {
 
   return true;
 }
+
+export const loginConfirmContent = "Please register an account or login to proceed";

@@ -117,6 +117,7 @@ type Props = {
 };
 
 export default function ConfigurationProperties(props: any) {
+  const SaveButton = props.SaveButton;
   const context = useContext(CustomizeContext);
   const checkoutContext = useCheckoutContext();
   const { onAddToCart } = checkoutContext;
@@ -465,6 +466,8 @@ export default function ConfigurationProperties(props: any) {
     { label: "XL" },
   ];
 
+  const [href, setHref] = useState('');
+
   const handleAddCart = async () => {
     try {
       const selectedSize = sizes[context.embellishment[0].size].label;
@@ -486,7 +489,7 @@ export default function ConfigurationProperties(props: any) {
 
       localStorage.setItem('productType', props.type);
       localStorage.setItem('context', JSON.stringify(context));
-      push(`/quote/${props.type}/ordersample`)
+      setHref('ordersample')
 
     } catch (error) { }
   }
@@ -515,7 +518,7 @@ export default function ConfigurationProperties(props: any) {
           onClick={() => {
             localStorage.setItem('productType', props.type);
             localStorage.setItem('context', JSON.stringify(context));
-            push('/quote')
+            setHref('/quote')
           }}
         >
           REQUEST FOR QUOTE
@@ -560,6 +563,7 @@ export default function ConfigurationProperties(props: any) {
         {renderPrices}
 
         {renderPeriod}
+        <SaveButton href={href} setHref={setHref} type={props.type} isEdit={false} name={''} customId={null} />
       </Stack>
     </FormProvider>
   );

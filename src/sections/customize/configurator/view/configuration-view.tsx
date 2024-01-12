@@ -35,6 +35,8 @@ import Icon1 from '@/components/icons/auth/icon1';
 import Icon2 from '@/components/icons/auth/icon2';
 import Icon3 from '@/components/icons/auth/icon3';
 import Icon4 from '@/components/icons/auth/icon4';
+import CommonConfirmModal from '@/components/confirm-modal';
+import { loginConfirmContent } from '@/helpers/common';
 
 const Wrapper = styled(Box)<{}>(({ theme }) => ({
   position: "absolute",
@@ -176,6 +178,7 @@ export default function ConfigurationView(props: any) {
 
               <Grid item md={4} xs={12}>
                 <ConfigurationProperties
+                  SaveButton={SaveButton}
                   canvasRef={current} canvasAllRef={canvasRef} textureRef={textureRef} {...props} {...customProduct} color={customProduct.context ? customProduct.context.color : ''} />
               </Grid>
             </Grid>
@@ -194,6 +197,7 @@ const SaveButton = (props: any) => {
 
   const [name, setName] = useState(props.name);
   const [loading, setLoading] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const save = async () => {
     const data = {
@@ -202,11 +206,25 @@ const SaveButton = (props: any) => {
       product: props.type,
       context: context
     }
-    axios.post(endpoints.customize.list, data).then((result) => {
+    axios.post(endpoints.customize.list, data).then((result: any) => {
+      try {
+        if (result.data.error && !result.data.login) {
+          setLoading(false);
+          setOpenConfirm(true);
+          return;
+        }
+      } catch (e) { }
+      if (props.href && result.data[0]._id) {
+        if (props.href == 'ordersample') {
+          router.push(`/quote/${result.data[0]._id}/ordersample`);
+          return;
+        }
+        router.push(props.href);
+      }
       setLoading(false);
       cart.onFalse();
     }).catch((err) => {
-      // router.push(PATH_SHOP.login);
+      console.log(err)
       setLoading(false);
       cart.onFalse();
     });
@@ -221,6 +239,11 @@ const SaveButton = (props: any) => {
     }
   }
 
+  useEffect(() => {
+    if (!props.href) return;
+    openModal();
+  }, [props.href])
+
   const renderModal = (
     <>
       <Modal className={"save-custom"} open={cart.value} sx={{ height: { xs: "70%", md: "100%" } }}>
@@ -228,6 +251,7 @@ const SaveButton = (props: any) => {
           <Stack alignItems="end">
             <IconButton
               onClick={() => {
+                if (props.setHref) props.setHref('');
                 cart.onFalse();
               }}
             >
@@ -282,6 +306,7 @@ const SaveButton = (props: any) => {
       </Button>
 
       {renderModal}
+      <CommonConfirmModal opened={openConfirm} setOpened={setOpenConfirm} content={loginConfirmContent} />
     </>
   )
 }

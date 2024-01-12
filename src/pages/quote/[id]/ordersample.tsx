@@ -5,24 +5,25 @@ import { PATH_SHOP } from "@/routers/path";
 import ConfigurationCanvas from "@/sections/customize/configurator/configuration-canvas";
 import { CustomizeProvider } from "@/components/customize/context";
 import { setState } from '@/helpers/store';
-import { Box, Grid, Stack, Typography, Container } from "@mui/material";
+import { Box, Grid, Stack, Typography, Container, Button } from "@mui/material";
 import { secondaryFont } from "@/theme/typography";
 import { useCheckoutContext } from "@/components/checkout/context";
 import { useRouter } from "next/router";
 import { ICustomizeQuoteItem } from "@/@types/customize";
 import { embelRenders } from "@/constant/embelConst";
 import { Texture } from "three";
+import { Customize, dbConnect } from "@/helpers/db";
 
 OrderSamplePage.getLayout = (page: React.ReactElement) => (
   <CustomizeLayout>{page}</CustomizeLayout>
 );
 
-export default function OrderSamplePage(props: any) {
-  const router = useRouter();
-  const context = JSON.parse(localStorage.getItem('context') as string) as ICustomizeQuoteItem;
+export default function OrderSamplePage({ customProduct }: any) {
+  const { push } = useRouter();
+  const context = customProduct.context;
   const dbCtx = context;
-  const productType = localStorage.getItem('productType') as string;
-  const { renderPrices, renderMain } = embelRenders(productType, dbCtx);
+  const productType = customProduct.product;
+  const { renderMain } = embelRenders(productType, dbCtx);
   const canvasRef = useRef<any>(null)
   const textureRef = useRef<Texture>(null)
   setState({ isMaskAdded: false })
@@ -87,7 +88,6 @@ export default function OrderSamplePage(props: any) {
                   arrowLeftCount={0}
                   arrowRightCount={0}
                   id="myCanvas"
-                  {...props}
                   type={productType}
                 />
                 <Typography
@@ -104,8 +104,25 @@ export default function OrderSamplePage(props: any) {
               </Grid>
               <Grid item md={1}></Grid>
               <Grid item md={5}>
-                <Stack gap={6} sx={{ mt: 0 }}>
-                  {renderPrices}
+                <Stack gap={6} sx={{ mt: 0, textAlign: 'center' }}>
+                  {"For samples we allow a maximum quantity of two sample per customization"}
+                  <Button
+                    size="large"
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      bgcolor: "#292F3D",
+                      width: 337,
+                      height: 40,
+                      margin: "0 auto",
+                      "&:hover": { bgcolor: "#550248" }
+                    }}
+                    onClick={() => push(`/customize/${customProduct._id}/review`)}
+                  >
+                    <Typography sx={{ fontSize: 14, fontWeight: 500, fontFamily: secondaryFont.style.fontFamily }}>
+                      ORDER PRODUCTS
+                    </Typography>
+                  </Button>
                 </Stack>
               </Grid>
             </Grid>
@@ -115,4 +132,10 @@ export default function OrderSamplePage(props: any) {
       </CustomizeProvider>
     </>
   )
+}
+
+export async function getServerSideProps({ params }) {
+  await dbConnect();
+  const res = await Customize.findById(params.id);
+  return { props: { customProduct: JSON.parse(JSON.stringify(res)) } };
 }

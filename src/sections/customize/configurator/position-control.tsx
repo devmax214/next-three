@@ -113,7 +113,6 @@ export default function PositionControl(props: Props) {
           : currentObj.width * currentObj.scaleX;
       changePosition(currentMaskData, currentObj, index, objWidth, objHeight);
     }
-
   };
 
   useEffect(() => {
