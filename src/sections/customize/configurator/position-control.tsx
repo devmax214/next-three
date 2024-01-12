@@ -87,10 +87,6 @@ export default function PositionControl(props: Props) {
       content: contentIndex,
       item: itemIndex,
     });
-    console.log(index, {
-      content: contentIndex,
-      item: itemIndex,
-    })
     if (callLocation) return;
     const currentObj: any = canvasRef
       .getObjects()

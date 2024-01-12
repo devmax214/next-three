@@ -14,14 +14,16 @@ export const fabricChangeColors = (canvas: Canvas, color: string) => {
     });
     canvas.renderAll();
 }
-export const fabricAddText = (canvas: Canvas, canvasAllRef: any, text: string, position: string, auto?: boolean) => {
+export const fabricAddText = (canvas: Canvas, canvasAllRef: any, text: any, position: string, auto?: boolean) => {
     const mask: any = canvas.getObjects().find((mask: any) => mask.name == 'mask-' + position)
     canvas.getObjects().map((m: any) => {
         if (m.name == 'image-' + position || m.name == 'text-' + position) canvas.remove(m)
     });
     if (!mask) return;
     const canvasText = new fabric.Text(text, {
-        text: text,
+        text: text.text,
+        fontFamily: text.fontFamily,
+        fill: text.color,
         angle: 0,
         fontSize: 50,
         textAlign: 'center',
@@ -103,6 +105,14 @@ export const fabricAddImage = (canvas: Canvas, canvasAllRef: any, url: string, p
     })
 }
 export const fabricModifyText = (canvas: Canvas, value: string, position: string, property: string) => {
+    const canvasText: any = canvas.getObjects().find((mask: any) => mask.name == 'text-' + position)
+    if (!canvasText) return;
+    canvasText.set(property, value);
+    canvas.setActiveObject(canvasText);
+    canvas.renderAll();
+}
+
+export const fabricTextChangeColors = (canvas: Canvas, value: string, position: string, property: string) => {
     const canvasText: any = canvas.getObjects().find((mask: any) => mask.name == 'text-' + position)
     if (!canvasText) return;
     canvasText.set(property, value);

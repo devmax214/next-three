@@ -21,6 +21,7 @@ export default function RequestQuoteView(props: Props) {
           bgcolor: "#F9F5EE",
           position: "relative",
           pt: { xs: 10, md: 10 },
+          height: "100%"
         }}
       >
         <Container

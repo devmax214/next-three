@@ -327,7 +327,10 @@ export default function PANTManModel(props: any) {
             position={[
               0,
               0,
-              customize.cordTip === "silicone_end" ? -0.007 : -0.005,
+              customize.cordTip === "silicone_end" ? -0.008 : -0.005,
+            ]}
+            rotation={[
+              customize.cordTip === "silicone_end" ? 0.006 : 0, 0, 0,
             ]}
           >
             {keys.map((key: string, idx: number) => (

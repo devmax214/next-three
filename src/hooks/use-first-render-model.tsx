@@ -55,7 +55,11 @@ const useFirstRenderModel = ({
       setTimeout(() => {
         for (let i = 0; i < customize.embellishment.length; i++) {
           if (customize.embellishment[i].type == 'text' && customize.embellishment[i].textureText) {
-            fabricAddText(canvasRef.current, canvasRef, customize.embellishment[i].textureText, maskPosition[type][i], true);
+            fabricAddText(canvasRef.current, canvasRef, {
+              text: customize.embellishment[i].textureText,
+              color: customize.embellishment[i].textureTextColor,
+              fontFamily: customize.embellishment[i].font,
+            }, maskPosition[type][i], true);
           } else if (customize.embellishment[i].file != null) {
             fabricAddImage(canvasRef.current, canvasRef, customize.embellishment[i].file, maskPosition[type][i], type, true)
           }

@@ -51,6 +51,8 @@ const initialState = {
     },
     reqText: "",
     textureText: "",
+    textureTextColor: "",
+    textureTextPantone: "11-0601 TCX",
     font: "Arial"
   }, {
     visible: false,
@@ -68,6 +70,8 @@ const initialState = {
     },
     reqText: "",
     textureText: "",
+    textureTextColor: "",
+    textureTextPantone: "11-0601 TCX",
     font: "Arial"
   }, {
     visible: false,
@@ -88,6 +92,8 @@ const initialState = {
     },
     reqText: "",
     textureText: "",
+    textureTextColor: "",
+    textureTextPantone: "11-0601 TCX",
     font: "Arial"
   }, {
     visible: false,
@@ -108,6 +114,8 @@ const initialState = {
     },
     reqText: "",
     textureText: "",
+    textureTextColor: "",
+    textureTextPantone: "11-0601 TCX",
     font: "Arial"
   }, {
     visible: false,
@@ -128,6 +136,8 @@ const initialState = {
     },
     reqText: "",
     textureText: "",
+    textureTextColor: "",
+    textureTextPantone: "11-0601 TCX",
     font: "Arial"
   }],
   color: "",

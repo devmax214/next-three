@@ -36,6 +36,8 @@ type IEmbellishmentItem = {
   },
   reqText: string,
   textureText: string,
+  textureTextColor: string,
+  textureTextPantone: string,
   font: string
 }
 

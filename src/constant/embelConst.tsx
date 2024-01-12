@@ -196,7 +196,7 @@ export const embelRenders = (productType: string, dbCtx: any) => {
           fontSize: 16,
           fontWeight: 700,
         }}>
-        {`Embelleshment or Text - ${typeIndexToLabel(productType, embelIndex)}`}: &nbsp;&nbsp;&nbsp;&nbsp;
+        {`Embellishment or Text - ${typeIndexToLabel(productType, embelIndex)}`}: &nbsp;&nbsp;&nbsp;&nbsp;
         {dbCtx.embellishment[embelIndex].type === "image" ?
           dbCtx.embellishment[embelIndex].file && <Image
             src={dbCtx.embellishment[embelIndex].file}
@@ -209,8 +209,10 @@ export const embelRenders = (productType: string, dbCtx: any) => {
           : (
             <Box
               sx={{
-                flexGrow: 1,
-                mt: 0,
+                display: "flex",
+                justifyContent: "flex-start",
+                alignContent: "center",
+                mt: 2,
                 px: 2,
                 py: 0,
                 mr: 2,
@@ -220,13 +222,21 @@ export const embelRenders = (productType: string, dbCtx: any) => {
                 fontWeight: 700,
               }}>
               Text
-              <span
-                style={{
-                  color: "#292F3D", fontWeight: 500, fontFamily: dbCtx.embellishment[embelIndex].font,
-                  fontSize: 14,
+              <Box
+                sx={{
+                  mr: "5px", ml: "15px",
+                  color: dbCtx.embellishment[embelIndex].textureTextColor, fontWeight: 500, fontFamily: dbCtx.embellishment[embelIndex].font,
                 }}>
-                &nbsp;&nbsp;&nbsp;&nbsp;{dbCtx.embellishment[embelIndex].textureText}
-              </span>
+                {dbCtx.embellishment[embelIndex].textureText}
+              </Box>
+              <Box sx={{ mr: "30px", ml: "0px" }}>
+                {dbCtx.embellishment[embelIndex].textureTextColor}
+              </Box>
+              {dbCtx.embellishment[embelIndex].textureTextPantone != "11-0601 TCX" &&
+                <Box>
+                  {dbCtx.embellishment[embelIndex].textureTextPantone}
+                </Box>
+              }
             </Box>
           )}
       </Typography>
@@ -354,7 +364,7 @@ export const embelRenders = (productType: string, dbCtx: any) => {
 
   const renderMain = (
     <Box component={"div"}>
-      <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
+      {/* <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
         <Typography
           sx={{
             flexGrow: 1,
@@ -366,7 +376,7 @@ export const embelRenders = (productType: string, dbCtx: any) => {
           }}>
           SIZE: <span style={{ color: "#292F3D", fontWeight: 500 }}>{sizes[dbCtx.embellishment[0].size]}</span>
         </Typography>
-      </Stack>
+      </Stack> */}
       <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
         <Box
           sx={{
@@ -443,7 +453,7 @@ export const embelRenders = (productType: string, dbCtx: any) => {
                   fontFamily: secondaryFont.style.fontFamily,
                 }}
               >
-                {isPrintLabel ? "Printed Neck label" : "Waven Neck label"};
+                {isPrintLabel ? "Printed Neck label" : "Woven Neck label"};
               </Typography>
             } />
         </Box>
@@ -473,7 +483,7 @@ export const embelRenders = (productType: string, dbCtx: any) => {
                   fontFamily: secondaryFont.style.fontFamily,
                 }}
               >
-                {dbCtx.tag.color ? "Balck" : "White"}
+                {dbCtx.tag.color ? "Black" : "White"}
               </Typography>
             } />
         </Box>

@@ -27,9 +27,20 @@ import UnCheckedIcon from "@/components/icons/unchecked-icon";
 import { typeIndexToLabel } from "@/helpers/common";
 import { fontList } from '@/helpers/common';
 import { Canvas } from "fabric/fabric-impl";
-import { fabricAddImage, fabricAddText, fabricModifyText, fabricChangeSize } from "@/utils/fabric";
+import { fabricAddImage, fabricAddText, fabricModifyText, fabricChangeSize, fabricTextChangeColors } from "@/utils/fabric";
 import { maskPosition, clipPath } from "@/constant/fabricConst";
 import { UpSpinIcon, DownSpinIcon } from "@/components/carousel/arrow-icons";
+import Wheel from '@uiw/react-color-wheel';
+import ShadeSlider from '@uiw/react-color-shade-slider';
+import { hsvaToHex, hsvaToRgba, ColorResult, hexToHsva } from '@uiw/color-convert';
+
+
+export const StyledLabel = styled(Typography)(({ theme }) => ({
+  fontSize: 14,
+  color: "#5C6166",
+  fontFamily: secondaryFont.style.fontFamily,
+  marginBottom: "10px",
+}));
 
 export const StyledHeader1 = styled(Typography)(({ theme }) => ({
   fontSize: 12,
@@ -106,10 +117,18 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
   const checkImage = (ev: boolean, type: string) => {
     if (type == 'text') {
       if (!customize.embellishment[embelIndex].textureText) {
-        fabricAddText(canvasRef, canvasAllRef, 'Sample Text', maskPosition[ptype][embelIndex]);
+        fabricAddText(canvasRef, canvasAllRef, {
+          text: 'Sample Text',
+          color: customize.embellishment[embelIndex].textureTextColor,
+          fontFamily: customize.embellishment[embelIndex].font,
+        }, maskPosition[ptype][embelIndex]);
         customize.onAllEmbelChange(embelIndex, { textureText: 'Sample Text' })
       } else {
-        fabricAddText(canvasRef, canvasAllRef, customize.embellishment[embelIndex].textureText, maskPosition[ptype][embelIndex]);
+        fabricAddText(canvasRef, canvasAllRef, {
+          text: customize.embellishment[embelIndex].textureText,
+          color: customize.embellishment[embelIndex].textureTextColor,
+          fontFamily: customize.embellishment[embelIndex].font,
+        }, maskPosition[ptype][embelIndex]);
       }
     } else {
       fabricAddImage(canvasRef, canvasAllRef, customize.embellishment[embelIndex].file, maskPosition[ptype][embelIndex], ptype)
@@ -358,10 +377,9 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
                 <Stack
                   onClick={(e) => changeArtworkSize(e, 1)}
                   sx={{
-                    boxShadow: "-2px -2px 2px 0px #717070 inset",
                     padding: "5px", borderRadius: "4px", border: "1px solid lightgrey",
                     "&:hover": { bgcolor: "lightgrey" },
-                    "&:active": { bgColor: "#919191", boxShadow: "none" },
+                    "&:active": { bgcolor: "#9F9F9F", borderColor: "#9F9F9F" },
                   }}
                 >
                   <UpSpinIcon></UpSpinIcon>
@@ -369,10 +387,9 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
                 <Stack
                   onClick={(e) => changeArtworkSize(e, -1)}
                   sx={{
-                    boxShadow: "-2px -2px 2px 0px #717070 inset",
                     padding: "5px", borderRadius: "4px", border: "1px solid lightgrey",
                     "&:hover": { bgcolor: "lightgrey" },
-                    "&:active": { bgColor: "#919191", boxShadow: "none" },
+                    "&:active": { bgcolor: "#9F9F9F", borderColor: "#9F9F9F" },
                   }}
                 >
                   <DownSpinIcon></DownSpinIcon>
@@ -389,6 +406,73 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
       </Stack>
     )
   };
+
+  const hexColor = customize.embellishment[embelIndex].textureTextColor;
+  const [hsva, setHsva] = useState(hexColor ? hexToHsva(hexColor) : { h: 0, s: 0, v: 0, a: 1 });
+  const [pantone, setPantone] = useState(customize.embellishment[embelIndex].textureTextPantone);
+
+  const changeColor = (color: ColorResult) => {
+    setHsva({
+      ...hsva,
+      ...color.hsva
+    })
+    customize.onAllEmbelChange(embelIndex, { textureTextColor: hsvaToHex(color.hsva) });
+    fabricModifyText(canvasRef, color.hex, maskPosition[ptype][embelIndex], 'fill')
+  }
+
+  const changePantone = (e: any) => {
+    setPantone(e.target.value);
+    customize.onAllEmbelChange(embelIndex, { textureTextPantone: e.target.value });
+  }
+
+  useEffect(() => {
+    customize.onAllEmbelChange(embelIndex, { textureTextColor: hsvaToHex(hsva) });
+    if (canvasRef) fabricModifyText(canvasRef, hsvaToHex(hsva), maskPosition[ptype][embelIndex], 'fill')
+  }, [hsva]);
+
+  const renderTextColor = (
+    <Stack gap={1}>
+      <StyledHeader2>Text Color</StyledHeader2>
+      <Grid container spacing={3}>
+        <Grid item md={6}>
+          <Stack alignItems="center">
+            <Wheel color={hsva} width={150} height={150} onChange={changeColor} />
+            <ShadeSlider
+              hsva={hsva}
+              width={150}
+              style={{ marginTop: 3 }}
+              bgProps={{ style: { borderRadius: 5 } }}
+              onChange={(newShade) => {
+                setHsva({ ...hsva, ...newShade });
+                customize.onAllEmbelChange(embelIndex, { textureTextColor: hsvaToHex({ ...hsva, ...newShade }) });
+              }}
+            />
+          </Stack>
+        </Grid>
+
+        <Grid item md={6} sx={{ mt: 3 }}>
+          <Stack direction={"row"} alignItems={"center"} spacing={0.6}>
+            <Box component={"div"} sx={{ width: 20, height: 20, borderRadius: 1, mb: 1.3, mr: 1, backgroundColor: `${hsvaToHex(hsva)}` }} />
+            <StyledLabel>{`R: ${hsvaToRgba(hsva).r}`}</StyledLabel>
+            <StyledLabel>{`G: ${hsvaToRgba(hsva).g}`}</StyledLabel>
+            <StyledLabel>{`B: ${hsvaToRgba(hsva).b}`}</StyledLabel>
+          </Stack>
+          <StyledLabel sx={{ ml: 4, mt: -1 }}>{`${hsvaToHex(hsva)}`}</StyledLabel>
+          <Typography
+            sx={{
+              fontSize: 12,
+              fontWeight: 500,
+              color: "#5C6166",
+              fontFamily: secondaryFont.style.fontFamily,
+            }}
+          >
+            Insert Pantone Reference
+          </Typography>
+          <TextField value={pantone} onChange={changePantone} variant="outlined" size="small" inputProps={{ style: { backgroundColor: "#f8f8f8" } }} />
+        </Grid>
+      </Grid>
+    </Stack>
+  )
 
   const renderText = (
     <>
@@ -422,6 +506,8 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
           />
         </Stack>
 
+        {renderTextColor}
+
         <Select fullWidth size="small" value={font} onChange={handleChange} disabled={customize.embellishment[embelIndex].type !== "text"}>
           {fontList.map((font) => (
             <MenuItem value={font.family} sx={{ fontFamily: font.family }} >{font.family}</MenuItem>
@@ -453,10 +539,6 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
         <Grid container spacing={2}>
           <Grid item md={12}>
             {renderImage}
-          </Grid>
-
-          <Grid item md={12}>
-            {renderLabel}
           </Grid>
 
           <Grid item md={6}>
