@@ -15,7 +15,8 @@ import {
   Checkbox,
   SelectChangeEvent,
   Popper,
-  OutlinedInput as Input
+  OutlinedInput as Input,
+  Pagination
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { secondaryFont } from "@/theme/typography";
@@ -33,7 +34,7 @@ import { UpSpinIcon, DownSpinIcon } from "@/components/carousel/arrow-icons";
 import Wheel from '@uiw/react-color-wheel';
 import ShadeSlider from '@uiw/react-color-shade-slider';
 import { hsvaToHex, hsvaToRgba, ColorResult, hexToHsva } from '@uiw/color-convert';
-
+import usePagination from "@/hooks/use-pagination";
 
 export const StyledLabel = styled(Typography)(({ theme }) => ({
   fontSize: 14,
@@ -474,6 +475,17 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
     </Stack>
   )
 
+  let [page, setPage] = useState(1);
+  const PER_PAGE = 20;
+
+  const pageCount = Math.ceil(fontList.length / PER_PAGE);
+  const _DATA = usePagination(fontList, PER_PAGE);
+
+  const handlePageChange = (e: any, p: number) => {
+    setPage(p);
+    _DATA.jump(p);
+  };
+
   const renderText = (
     <>
       <Stack gap={2}>
@@ -509,9 +521,17 @@ export default function EmbellishmentButton({ embelIndex, ptype, canvasRef, canv
         {renderTextColor}
 
         <Select fullWidth size="small" value={font} onChange={handleChange} disabled={customize.embellishment[embelIndex].type !== "text"}>
-          {fontList.map((font) => (
+          {_DATA.currentData().map((font: any) => (
             <MenuItem value={font.family} sx={{ fontFamily: font.family }} >{font.family}</MenuItem>
           ))}
+          <Pagination
+            count={pageCount}
+            size="large"
+            page={page}
+            variant="outlined"
+            shape="rounded"
+            onChange={handlePageChange}
+          />
         </Select>
       </Stack>
       <Stack mt={1}>

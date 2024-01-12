@@ -220,26 +220,38 @@ export const embelRenders = (productType: string, dbCtx: any) => {
                 fontSize: 14,
                 lineHeight: 2,
                 fontWeight: 700,
-              }}>
+              }}
+            >
               Text
-              <Box
-                sx={{
-                  mr: "5px", ml: "15px",
-                  color: dbCtx.embellishment[embelIndex].textureTextColor, fontWeight: 500, fontFamily: dbCtx.embellishment[embelIndex].font,
-                }}>
-                {dbCtx.embellishment[embelIndex].textureText}
-              </Box>
-              <Box sx={{ mr: "30px", ml: "0px" }}>
-                {dbCtx.embellishment[embelIndex].textureTextColor}
-              </Box>
-              {dbCtx.embellishment[embelIndex].textureTextPantone != "11-0601 TCX" &&
-                <Box>
-                  {dbCtx.embellishment[embelIndex].textureTextPantone}
+              <Box>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+                  <Box
+                    sx={{
+                      mr: "5px", ml: "15px",
+                      color: dbCtx.embellishment[embelIndex].textureTextColor, fontWeight: 500, fontFamily: dbCtx.embellishment[embelIndex].font,
+                    }}>
+                    {dbCtx.embellishment[embelIndex].textureText}
+                  </Box>
+                  <Box sx={{ ml: "0px" }}>
+                    {dbCtx.embellishment[embelIndex].textureTextColor}
+                  </Box>
                 </Box>
-              }
-            </Box>
+                {dbCtx.pantone != "11-0601 TCX" &&
+                  <Typography>
+                    <Box sx={{
+                      marginLeft: "15px",
+                      color: "#292F3D",
+                      fontWeight: 700,
+                    }}>
+                      Pantone Reference:
+                      <span style={{ marginLeft: "15px", fontWeight: 500 }}>{dbCtx.embellishment[embelIndex].textureTextPantone}</span>
+                    </Box>
+                  </Typography>
+                }
+              </Box>
+            </Box >
           )}
-      </Typography>
+      </Typography >
       {
         dbCtx.embellishment[embelIndex].type === "image" &&
         <Typography
@@ -307,7 +319,8 @@ export const embelRenders = (productType: string, dbCtx: any) => {
           fontWeight: 600,
         }}>
         Position &nbsp;&nbsp;&nbsp;&nbsp;
-        {positions[dbCtx.embellishment[embelIndex].position.type.content] &&
+        {
+          positions[dbCtx.embellishment[embelIndex].position.type.content] &&
           <StyledButton sx={{
             border: "2px solid #f38565",
             mr: "10px",
@@ -324,7 +337,8 @@ export const embelRenders = (productType: string, dbCtx: any) => {
             }
           }}>{positions[dbCtx.embellishment[embelIndex].position.type.content].icon}</StyledButton>
         }
-        {positions[dbCtx.embellishment[embelIndex].position.type.item] &&
+        {
+          positions[dbCtx.embellishment[embelIndex].position.type.item] &&
           <StyledButton sx={{
             border: "2px solid #f38565",
             width: "40px",
@@ -390,24 +404,35 @@ export const embelRenders = (productType: string, dbCtx: any) => {
             fontWeight: 700,
           }}>
           Garment Dye: &nbsp;&nbsp;&nbsp;&nbsp;
-          <Box
-            sx={{
-              backgroundColor: dbCtx.color,
-              borderRadius: "3px",
-              width: "20px",
-              maxHeight: "20px",
-            }}
-          />
-          <Box sx={{ mr: "30px", ml: "5px" }}>
-            {dbCtx.color}
-          </Box>
-          {dbCtx.pantone != "11-0601 TCX" &&
-            <Box>
-              {dbCtx.pantone}
+          <Box>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+              <Box
+                sx={{
+                  backgroundColor: dbCtx.color,
+                  borderRadius: "3px",
+                  width: "20px",
+                  maxHeight: "20px",
+                }}
+              />
+              <Box sx={{ ml: "5px" }}>
+                {dbCtx.color}
+              </Box>
             </Box>
-          }
+
+            {dbCtx.pantone != "11-0601 TCX" &&
+              <Box>
+                <Box sx={{
+                  color: "#292F3D",
+                  fontWeight: 700,
+                }}>
+                  Pantone Reference:
+                  <span style={{ marginLeft: "15px", fontWeight: 500 }}>{dbCtx.pantone}</span>
+                </Box>
+              </Box>
+            }
+          </Box>
         </Box>
-      </Stack>
+      </Stack >
       <Stack sx={{ borderBottom: "1px solid lightgrey" }}>
         <Typography
           sx={{
@@ -558,7 +583,7 @@ export const embelRenders = (productType: string, dbCtx: any) => {
           Notes: <span style={{ color: "#292F3D", fontWeight: 500 }}>{dbCtx.text}</span>
         </Typography>
       </Stack>
-    </Box>
+    </Box >
   )
 
   return {

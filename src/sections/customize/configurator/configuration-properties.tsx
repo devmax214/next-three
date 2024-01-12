@@ -483,6 +483,9 @@ export default function ConfigurationProperties(props: any) {
       };
 
       onAddToCart(newProduct);
+
+      localStorage.setItem('productType', props.type);
+      localStorage.setItem('context', JSON.stringify(context));
       push(`/quote/${props.type}/ordersample`)
 
     } catch (error) { }

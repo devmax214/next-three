@@ -20,7 +20,7 @@ export default function MyDocument({
         <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.png" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
-        {fontList.map((font, i) => (
+        {fontList.map((font: any, i: number) => (
           <link key={font.family} href={`https://fonts.googleapis.com/css2?family=${font.family}&display=swap`} rel="stylesheet" />
         ))}
         {emotionStyleTags}

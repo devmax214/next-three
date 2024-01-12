@@ -51,9 +51,53 @@ export default function ConfigurationCanvas(props: Props) {
   const canvasRenderedRef = useRef<any>(null)
   const controlsRef = useRef<any>(null)
   // END REF NAO
+
+  useEffect(() => {
+    if (customize.cordVisible) {
+      if (props.type === "Shorts") {
+        setState({ scale: [2, 2, 2], position: [0, -0.2, 0], rotation: [THREE.MathUtils.degToRad(60), THREE.MathUtils.degToRad(-140), 0] });
+      } else if (props.type === "Pants") {
+        setState({ scale: [2, 2, 2], position: [0, -0.4, 0], rotation: [THREE.MathUtils.degToRad(60), THREE.MathUtils.degToRad(-140), 0] });
+      } else {
+        setState({ scale: [2, 2, 2], position: [0, -0.4, 0], rotation: [0, 0, 0] });
+      }
+    } else {
+      setState({});
+    }
+  }, [customize.cordVisible]);
+
+  useEffect(() => {
+    setState({ rotation: [0, THREE.MathUtils.degToRad(props.arrowLeftCount * -90), 0] });
+  }, [props.arrowLeftCount]);
+
+  useEffect(() => {
+    setState({ rotation: [0, THREE.MathUtils.degToRad(props.arrowRightCount * 90), 0] });
+  }, [props.arrowRightCount]);
+
+  const smDown = useResponsive("down", "sm");
+
+  useFirstRender({ canvasRef: props.canvasRef, textureRef: props.textureRef })
+  const [threeProps, setThreeProps] = useState({
+    camera: null,
+    pointer: null,
+    scene: null,
+    raycaster: null,
+    mouse: null,
+    gl: null,
+  })
+  const memoizedInitPatch = useMemo(() => {
+    initPatch({ threeProps, canvasRenderedRef, canvasRef: props.canvasRef, textureRef: props.textureRef })
+  }, [props.canvasRef, props.textureRef, threeProps])
+  const loadingIcon = `data:image/svg+xml;utf8,${svgLoadingIcon}`
+
+  const [loading, setLoading] = useState(true);
+  props.canvasRef.setLoading = setLoading;
+
   useEffect(() => {
     setEmbelIndex(customize.embelIndex);
-
+    try {
+      controlsRef.current.reset();
+    } catch (error) { }
     if (customize.tag.visible) {
       setState({ scale: [10, 10, 10], bottom: true, position: [0, 0.4, 0.4], rotation: [0.1, 0, 0] })
     } else if (customize.embellishment[embelIndex].visible) {
@@ -118,49 +162,7 @@ export default function ConfigurationCanvas(props: Props) {
     } else {
       setState({});
     };
-
   }, [customize.tag.visible, customize.embelIndex, customize.embellishment[embelIndex].visible]);
-
-  useEffect(() => {
-    if (customize.cordVisible) {
-      if (props.type === "Shorts") {
-        setState({ scale: [2, 2, 2], position: [0, -0.2, 0], rotation: [THREE.MathUtils.degToRad(60), THREE.MathUtils.degToRad(-140), 0] });
-      } else if (props.type === "Pants") {
-        setState({ scale: [2, 2, 2], position: [0, -0.4, 0], rotation: [THREE.MathUtils.degToRad(60), THREE.MathUtils.degToRad(-140), 0] });
-      } else {
-        setState({ scale: [2, 2, 2], position: [0, -0.4, 0], rotation: [0, 0, 0] });
-      }
-    } else {
-      setState({});
-    }
-  }, [customize.cordVisible]);
-
-  useEffect(() => {
-    setState({ rotation: [0, THREE.MathUtils.degToRad(props.arrowLeftCount * -90), 0] });
-  }, [props.arrowLeftCount]);
-
-  useEffect(() => {
-    setState({ rotation: [0, THREE.MathUtils.degToRad(props.arrowRightCount * 90), 0] });
-  }, [props.arrowRightCount]);
-
-  const smDown = useResponsive("down", "sm");
-
-  useFirstRender({ canvasRef: props.canvasRef, textureRef: props.textureRef })
-  const [threeProps, setThreeProps] = useState({
-    camera: null,
-    pointer: null,
-    scene: null,
-    raycaster: null,
-    mouse: null,
-    gl: null,
-  })
-  const memoizedInitPatch = useMemo(() => {
-    initPatch({ threeProps, canvasRenderedRef, canvasRef: props.canvasRef, textureRef: props.textureRef })
-  }, [props.canvasRef, props.textureRef, threeProps])
-  const loadingIcon = `data:image/svg+xml;utf8,${svgLoadingIcon}`
-
-  const [loading, setLoading] = useState(true);
-  props.canvasRef.setLoading = setLoading;
 
   return (
     <ScreenWrapper>
